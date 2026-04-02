@@ -324,12 +324,13 @@ defineProps({
   100% { opacity: 0;    transform: translateX(-50%) translateY(-10px) scaleX(1.15); }
 }
 
-/* ── 카드 방사 별 파티클 ── */
+/* ── 카드 방사 별 파티클 (카드 뒤에서 나옴) ── */
 .card-image-block__spark {
   position: absolute;
   border-radius: 50%;
   pointer-events: none;
-  z-index: 6;
+  z-index: 0;
+  filter: blur(0.4px);
 }
 
 /* 금색 sparks */
@@ -337,10 +338,10 @@ defineProps({
 .card-image-block__spark--3,
 .card-image-block__spark--5,
 .card-image-block__spark--7 {
-  width: 2.5px;
-  height: 2.5px;
-  background: rgba(212, 184, 122, 1);
-  box-shadow: 0 0 4px 1px rgba(200, 169, 110, 0.8);
+  width: 3px;
+  height: 3px;
+  background: rgba(212, 184, 122, 0.95);
+  box-shadow: 0 0 5px 2px rgba(200, 169, 110, 0.55);
 }
 
 /* 흰/파란 sparks */
@@ -348,10 +349,10 @@ defineProps({
 .card-image-block__spark--4,
 .card-image-block__spark--6,
 .card-image-block__spark--8 {
-  width: 2px;
-  height: 2px;
-  background: rgba(220, 235, 255, 1);
-  box-shadow: 0 0 4px 1px rgba(143, 211, 255, 0.7);
+  width: 2.5px;
+  height: 2.5px;
+  background: rgba(220, 235, 255, 0.9);
+  box-shadow: 0 0 5px 2px rgba(143, 211, 255, 0.5);
 }
 
 /* 위치 + 애니메이션 */
@@ -390,37 +391,37 @@ defineProps({
 
 @keyframes spark-ul {
   0%   { opacity: 0;   transform: translate(0, 0) scale(1); }
-  15%  { opacity: 1; }
+  15%  { opacity: 0.9; }
   100% { opacity: 0;   transform: translate(-38px, -55px) scale(0.3); }
 }
 @keyframes spark-up {
   0%   { opacity: 0;   transform: translate(0, 0) scale(1); }
-  15%  { opacity: 1; }
+  15%  { opacity: 0.9; }
   100% { opacity: 0;   transform: translate(6px, -65px) scale(0.3); }
 }
 @keyframes spark-ur {
   0%   { opacity: 0;   transform: translate(0, 0) scale(1); }
-  15%  { opacity: 1; }
+  15%  { opacity: 0.9; }
   100% { opacity: 0;   transform: translate(38px, -50px) scale(0.3); }
 }
 @keyframes spark-left {
   0%   { opacity: 0;   transform: translate(0, 0) scale(1); }
-  15%  { opacity: 1; }
+  15%  { opacity: 0.85; }
   100% { opacity: 0;   transform: translate(-52px, -18px) scale(0.3); }
 }
 @keyframes spark-right {
   0%   { opacity: 0;   transform: translate(0, 0) scale(1); }
-  15%  { opacity: 1; }
+  15%  { opacity: 0.85; }
   100% { opacity: 0;   transform: translate(52px, -15px) scale(0.3); }
 }
 @keyframes spark-dl {
   0%   { opacity: 0;   transform: translate(0, 0) scale(1); }
-  15%  { opacity: 1; }
+  15%  { opacity: 0.8; }
   100% { opacity: 0;   transform: translate(-32px, 42px) scale(0.3); }
 }
 @keyframes spark-dr {
   0%   { opacity: 0;   transform: translate(0, 0) scale(1); }
-  15%  { opacity: 1; }
+  15%  { opacity: 0.8; }
   100% { opacity: 0;   transform: translate(32px, 42px) scale(0.3); }
 }
 

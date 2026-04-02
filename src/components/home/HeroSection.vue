@@ -120,12 +120,12 @@ const router = useRouter()
 }
 
 .hero-section__title {
-  font-size: 2.4rem;
+  font-size: 1.65rem;
   font-weight: 300;
   color: var(--lt-text-strong);
-  line-height: 1.3;
+  line-height: 1.4;
   margin: var(--lt-space-sm) 0 0;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
   position: relative;
 }
 
