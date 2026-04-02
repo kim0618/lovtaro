@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Noto+Sans+KR:wght@300;400;500&display=swap');
+@import './variables.css';
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--lt-font-sans);
+  font-weight: 400;
+  color: var(--lt-text);
+  background-color: var(--lt-bg-0);
+  background-image:
+    radial-gradient(ellipse at 50% 0%, rgba(45, 108, 223, 0.04) 0%, transparent 60%),
+    radial-gradient(ellipse at 50% 100%, rgba(13, 21, 40, 0.3) 0%, transparent 50%);
+  line-height: 1.6;
+  min-height: 100dvh;
+}
+
+/* ── 앱 컨테이너 ── */
+#app {
+  max-width: var(--lt-container-max);
+  margin: 0 auto;
+  min-height: 100dvh;
+  position: relative;
+}
+
+@media (min-width: 520px) {
+  #app {
+    border-left: 1px solid rgba(199, 215, 248, 0.04);
+    border-right: 1px solid rgba(199, 215, 248, 0.04);
+  }
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--lt-font-sans);
+  line-height: 1.3;
+  font-weight: 300;
+  color: var(--lt-text-strong);
+}
+
+p {
+  line-height: 1.8;
+}
+
+/* ── 페이지 단계 전환 페이드 ── */
+.phase-fade-enter-active {
+  transition: opacity 320ms ease, transform 320ms ease;
+}
+.phase-fade-leave-active {
+  transition: opacity 200ms ease;
+  position: absolute;
+  width: 100%;
+}
+.phase-fade-enter-from {
+  opacity: 0;
+  transform: translateY(10px);
+}
+.phase-fade-leave-to {
+  opacity: 0;
+}
+
+/* ── 요소 등장 애니메이션 ── */
+@keyframes lt-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes lt-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── 별빛 반짝임 (섹션 장식용) ── */
+@keyframes lt-shimmer {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.8; }
+}
+
+.lt-appear {
+  animation: lt-fade-up 480ms ease both;
+}
+.lt-appear--delay-1 { animation-delay: 80ms; }
+.lt-appear--delay-2 { animation-delay: 180ms; }
+.lt-appear--delay-3 { animation-delay: 300ms; }
+.lt-appear--delay-4 { animation-delay: 420ms; }
+.lt-appear--delay-5 { animation-delay: 560ms; }
+
+/* 접근성: 움직임 감소 설정 시 애니메이션 비활성화 */
+@media (prefers-reduced-motion: reduce) {
+  .lt-appear,
+  .lt-appear--delay-1,
+  .lt-appear--delay-2,
+  .lt-appear--delay-3,
+  .lt-appear--delay-4,
+  .lt-appear--delay-5 {
+    animation: none;
+  }
+}

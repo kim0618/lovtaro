@@ -1,0 +1,19 @@
+{
+  "name": "Lovtaro",
+  "short_name": "Lovtaro",
+  "description": "감정의 흐름을 읽는 타로",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#05070D",
+  "theme_color": "#05070D",
+  "orientation": "portrait",
+  "lang": "ko",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

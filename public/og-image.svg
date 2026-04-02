@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#05070D"/>
+  <radialGradient id="glow" cx="50%" cy="40%" r="50%">
+    <stop offset="0%" stop-color="#2D6CDF" stop-opacity="0.12"/>
+    <stop offset="100%" stop-color="#05070D" stop-opacity="0"/>
+  </radialGradient>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <!-- Frame border -->
+  <rect x="40" y="40" width="1120" height="550" rx="16" stroke="rgba(199,215,248,0.08)" stroke-width="1" fill="none"/>
+
+  <!-- Decorative top line -->
+  <line x1="280" y1="160" x2="920" y2="160" stroke="rgba(77,163,255,0.2)" stroke-width="1"/>
+
+  <!-- Eye icon -->
+  <path d="M570 280 C610 240 650 235 700 235 S790 240 830 280 C790 320 750 325 700 325 S610 320 570 280Z" stroke="rgba(143,211,255,0.45)" stroke-width="1.2" fill="none"/>
+  <circle cx="700" cy="280" r="22" stroke="rgba(143,211,255,0.6)" stroke-width="1.2" fill="none"/>
+  <circle cx="700" cy="280" r="7" fill="rgba(143,211,255,0.8)"/>
+
+  <!-- Title -->
+  <text x="600" y="410" font-family="Georgia, serif" font-size="72" font-weight="300" font-style="italic" fill="#F4F8FF" text-anchor="middle" letter-spacing="4">Lovtaro</text>
+
+  <!-- Subtitle -->
+  <text x="600" y="460" font-family="'Noto Sans KR', sans-serif" font-size="22" font-weight="300" fill="rgba(126,138,168,0.8)" text-anchor="middle" letter-spacing="6">감정의 흐름을 읽는 타로</text>
+
+  <!-- Bottom decorative line -->
+  <line x1="280" y1="500" x2="920" y2="500" stroke="rgba(77,163,255,0.2)" stroke-width="1"/>
+
+  <!-- Star dots -->
+  <circle cx="320" cy="200" r="1.5" fill="rgba(143,211,255,0.5)"/>
+  <circle cx="880" cy="180" r="1.2" fill="rgba(143,211,255,0.4)"/>
+  <circle cx="200" cy="380" r="1" fill="rgba(143,211,255,0.35)"/>
+  <circle cx="1000" cy="350" r="1.5" fill="rgba(143,211,255,0.45)"/>
+</svg>

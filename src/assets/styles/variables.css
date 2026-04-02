@@ -1,0 +1,77 @@
+:root {
+  /* ── Backgrounds (Midnight Blue hierarchy) ──────── */
+  --lt-bg-0: #05070D;
+  --lt-bg-1: #0A1020;
+  --lt-bg-2: #0D1528;
+  --lt-bg-3: #101A31;
+  --lt-bg: var(--lt-bg-0);
+  --lt-bg-soft: var(--lt-bg-1);
+  --lt-bg-card: var(--lt-bg-2);
+  --lt-surface-raised: var(--lt-bg-3);
+
+  /* ── Text (Moonlight Silver hierarchy) ──────────── */
+  --lt-text-strong: #F4F8FF;
+  --lt-text: #DCE8FF;
+  --lt-text-sub: #A7B7D6;
+  --lt-text-muted: #7E8AA8;
+
+  /* ── Accent Blues ────────────────────────────────── */
+  --lt-accent-1: #2D6CDF;
+  --lt-accent-2: #4DA3FF;
+  --lt-accent-3: #8FD3FF;
+  --lt-primary: var(--lt-accent-2);
+  --lt-primary-hover: var(--lt-accent-3);
+  --lt-primary-light: rgba(77, 163, 255, 0.10);
+
+  /* ── Lines / Surfaces ───────────────────────────── */
+  --lt-line-soft: rgba(199, 215, 248, 0.14);
+  --lt-line-strong: rgba(143, 211, 255, 0.28);
+  --lt-border: var(--lt-line-soft);
+  --lt-border-soft: rgba(199, 215, 248, 0.07);
+  --lt-panel: rgba(13, 21, 40, 0.82);
+  --lt-panel-2: rgba(16, 26, 49, 0.9);
+
+  /* ── Glow / Shadow ──────────────────────────────── */
+  --lt-glow-soft: rgba(77, 163, 255, 0.18);
+  --lt-glow-strong: rgba(143, 211, 255, 0.22);
+  --lt-shadow-deep: 0 20px 60px rgba(0, 0, 0, 0.45);
+  --lt-shadow-sm: 0 1px 6px rgba(0, 0, 0, 0.5);
+  --lt-shadow-md: 0 4px 20px rgba(0, 0, 0, 0.6);
+  --lt-shadow-card: 0 4px 24px rgba(0, 0, 0, 0.55);
+
+  /* ── Accent alias (for section titles) ──────────── */
+  --lt-accent: var(--lt-accent-2);
+  --lt-accent-light: rgba(77, 163, 255, 0.08);
+
+  /* ── Fonts ─────────────────────────────────────── */
+  --lt-font-display: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+  --lt-font-title: 'Cinzel', 'Cormorant Garamond', Georgia, serif;
+  --lt-font-serif: 'Playfair Display', Georgia, serif;
+  --lt-font-sans: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+
+  /* ── Spacing ───────────────────────────────────── */
+  --lt-space-xs: 4px;
+  --lt-space-sm: 8px;
+  --lt-space-md: 16px;
+  --lt-space-lg: 24px;
+  --lt-space-xl: 40px;
+  --lt-space-2xl: 64px;
+
+  /* ── Layout ────────────────────────────────────── */
+  --lt-container-max: 480px;
+  --lt-radius-sm: 4px;
+  --lt-radius-md: 8px;
+  --lt-radius-lg: 14px;
+  --lt-radius-full: 9999px;
+
+  /* ── Transition ────────────────────────────────── */
+  --lt-transition: 200ms ease;
+
+  /* ── Button gradients ──────────────────────────── */
+  --lt-btn-primary-bg: linear-gradient(160deg, #0A1830 0%, #142650 40%, #0D1E42 70%, #091428 100%);
+  --lt-btn-primary-border: rgba(77, 163, 255, 0.32);
+  --lt-btn-primary-hover: linear-gradient(160deg, #122040 0%, #1E3668 40%, #152E58 70%, #0F1E3A 100%);
+  --lt-btn-primary-hover-border: rgba(100, 180, 255, 0.55);
+  --lt-btn-secondary-bg: var(--lt-panel);
+  --lt-btn-secondary-border: var(--lt-line-soft);
+}
