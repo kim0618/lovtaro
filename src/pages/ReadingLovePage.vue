@@ -19,16 +19,19 @@ import AdviceSection from '../components/result/AdviceSection.vue'
 import ShareSaveSection from '../components/result/ShareSaveSection.vue'
 import DisclaimerBlock from '../components/result/DisclaimerBlock.vue'
 import OtherReadingsNav from '../components/common/OtherReadingsNav.vue'
+import RelationshipStatusSelect from '../components/reading/RelationshipStatusSelect.vue'
 import { saveLastReading } from '../composables/useLastReading.js'
 import { saveReadingHistory } from '../composables/useReadingHistory.js'
 import { useCardDraw } from '../composables/useCardDraw.js'
 import { LOVE_CARD_INTERPRETATIONS, getLoveOverall } from '../data/readings/love.js'
+import { applyRelationshipModifierToOverall } from '../data/relationshipModifiers.js'
 
 const POSITIONS = ['myHeart', 'theirEnergy', 'direction']
 const POSITION_LABELS = { myHeart: '나의 마음', theirEnergy: '상대의 에너지', direction: '관계의 방향' }
 
 const { deck, selectedIds, selectedCards, canConfirm, onSelect, reset } = useCardDraw({ maxSelect: 3 })
-const phase = ref('intro') // 'intro' | 'draw' | 'reveal' | 'result'
+const phase = ref('intro') // 'intro' | 'status' | 'draw' | 'reveal' | 'result'
+const relationshipStatus = ref(null)
 
 const drawnTriple = computed(() =>
   selectedCards.value.slice(0, 3).map((card, i) => ({
@@ -40,7 +43,8 @@ const drawnTriple = computed(() =>
 
 const overall = computed(() => {
   if (drawnTriple.value.length < 3) return null
-  return getLoveOverall(drawnTriple.value.map(c => c.energy))
+  const base = getLoveOverall(drawnTriple.value.map(c => c.energy))
+  return applyRelationshipModifierToOverall(base, relationshipStatus.value)
 })
 
 const flowPoints = [
@@ -49,7 +53,8 @@ const flowPoints = [
   { label: '관계의 방향', text: '두 사람 사이의 흐름이 어디로 향하는지 비춰봅니다.' },
 ]
 
-function startReading() { phase.value = 'draw' }
+function startReading() { phase.value = 'status' }
+function selectStatus(s) { relationshipStatus.value = s; phase.value = 'draw' }
 
 function confirm() {
   if (!canConfirm.value) return
@@ -102,6 +107,11 @@ function retry() { reset(); phase.value = 'draw' }
       <SectionBlock spacing="md">
         <OtherReadingsNav current="love" />
       </SectionBlock>
+    </template>
+
+    <!-- ── STATUS ────────────────────────────────────── -->
+    <template v-else-if="phase === 'status'">
+      <RelationshipStatusSelect reading-type="러브 타로" @select="selectStatus" />
     </template>
 
     <!-- ── DRAW ───────────────────────────────────── -->
@@ -218,6 +228,10 @@ function retry() { reset(); phase.value = 'draw' }
             :reversed="card.reversed"
           />
         </div>
+      </SectionBlock>
+
+      <SectionBlock v-if="overall.spreadNarrative" spacing="md" class="lt-appear lt-appear--delay-5">
+        <EmotionFlowSection title="카드가 함께 말하는 것" :lines="overall.spreadNarrative" />
       </SectionBlock>
 
       <SectionBlock spacing="md" class="lt-appear lt-appear--delay-5">

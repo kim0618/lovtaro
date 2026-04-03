@@ -19,10 +19,12 @@ import AdviceSection from '../components/result/AdviceSection.vue'
 import ShareSaveSection from '../components/result/ShareSaveSection.vue'
 import DisclaimerBlock from '../components/result/DisclaimerBlock.vue'
 import OtherReadingsNav from '../components/common/OtherReadingsNav.vue'
+import RelationshipStatusSelect from '../components/reading/RelationshipStatusSelect.vue'
 import { saveLastReading } from '../composables/useLastReading.js'
 import { saveReadingHistory } from '../composables/useReadingHistory.js'
 import { useCardDraw } from '../composables/useCardDraw.js'
 import { THREE_CARD_INTERPRETATIONS, getThreeCardOverall } from '../data/readings/threecards.js'
+import { applyRelationshipModifierToOverall } from '../data/relationshipModifiers.js'
 
 const REVEAL_DURATION = 1800
 
@@ -30,7 +32,8 @@ const POSITIONS = ['past', 'present', 'future']
 const POSITION_LABELS = { past: '과거', present: '현재', future: '미래' }
 
 const { deck, selectedIds, selectedCards, canConfirm, onSelect, reset } = useCardDraw({ maxSelect: 3 })
-const phase = ref('intro') // 'intro' | 'draw' | 'reveal' | 'result'
+const phase = ref('intro') // 'intro' | 'status' | 'draw' | 'reveal' | 'result'
+const relationshipStatus = ref(null)
 
 // 카드 3장 + 포지션 배정
 const drawnTriple = computed(() =>
@@ -43,7 +46,8 @@ const drawnTriple = computed(() =>
 
 const overall = computed(() => {
   if (drawnTriple.value.length < 3) return null
-  return getThreeCardOverall(drawnTriple.value.map(c => c.energy))
+  const base = getThreeCardOverall(drawnTriple.value.map(c => c.energy))
+  return applyRelationshipModifierToOverall(base, relationshipStatus.value)
 })
 
 const flowPoints = [
@@ -52,7 +56,8 @@ const flowPoints = [
   { label: '미래 - 앞으로의 방향',      text: '현재 기류가 이어지면 어떤 흐름으로 향하는지 읽어냅니다.' },
 ]
 
-function startReading() { phase.value = 'draw' }
+function startReading() { phase.value = 'status' }
+function selectStatus(s) { relationshipStatus.value = s; phase.value = 'draw' }
 function confirm() {
   if (!canConfirm.value) return
   const names = drawnTriple.value.map(c => c.name).join(' · ')
@@ -103,6 +108,11 @@ function retry() { reset(); phase.value = 'draw' }
       <SectionBlock spacing="md">
         <OtherReadingsNav current="3cards" />
       </SectionBlock>
+    </template>
+
+    <!-- ── STATUS ────────────────────────────────────── -->
+    <template v-else-if="phase === 'status'">
+      <RelationshipStatusSelect reading-type="3장 리딩" @select="selectStatus" />
     </template>
 
     <!-- ── DRAW ───────────────────────────────────── -->
@@ -196,6 +206,11 @@ function retry() { reset(); phase.value = 'draw' }
             :reversed="card.reversed"
           />
         </div>
+      </SectionBlock>
+
+      <!-- 카드 간 연결 해석 -->
+      <SectionBlock v-if="overall.spreadNarrative" spacing="md" class="lt-appear lt-appear--delay-5">
+        <EmotionFlowSection title="카드가 함께 말하는 것" :lines="overall.spreadNarrative" />
       </SectionBlock>
 
       <!-- 종합 요약 -->

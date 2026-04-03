@@ -22,14 +22,17 @@ import ShareSaveSection from '../components/result/ShareSaveSection.vue'
 import DisclaimerBlock from '../components/result/DisclaimerBlock.vue'
 import OtherReadingsNav from '../components/common/OtherReadingsNav.vue'
 import CardRevealTransition from '../components/result/CardRevealTransition.vue'
+import RelationshipStatusSelect from '../components/reading/RelationshipStatusSelect.vue'
 import { saveLastReading } from '../composables/useLastReading.js'
 import { useCardDraw } from '../composables/useCardDraw.js'
 import { REUNION_RESULTS } from '../data/readings/reunion.js'
 import { applyReversedModifier } from '../data/reversedModifiers.js'
+import { applyRelationshipModifier } from '../data/relationshipModifiers.js'
 import { saveReadingHistory } from '../composables/useReadingHistory.js'
 
 const { deck, selectedIds, selectedCards, canConfirm, onSelect, reset } = useCardDraw({ maxSelect: 1 })
-const phase = ref('intro')
+const phase = ref('intro') // 'intro' | 'status' | 'draw' | 'reveal' | 'result'
+const relationshipStatus = ref(null)
 
 const drawnCard = computed(() => selectedCards.value[0] ?? null)
 const isReversed = computed(() => drawnCard.value?.reversed ?? false)
@@ -37,7 +40,8 @@ const result = computed(() => {
   if (!drawnCard.value) return null
   const upright = REUNION_RESULTS[drawnCard.value.id]
   if (!upright) return null
-  return applyReversedModifier(drawnCard.value.id, upright, isReversed.value)
+  const withReversed = applyReversedModifier(drawnCard.value.id, upright, isReversed.value)
+  return applyRelationshipModifier(drawnCard.value.id, withReversed, relationshipStatus.value)
 })
 
 const flowPoints = [
@@ -46,7 +50,8 @@ const flowPoints = [
   { label: '지금의 방향', text: '이 흐름에서 어떤 태도가 맞는지 살펴봅니다.' },
 ]
 
-function startReading() { phase.value = 'draw' }
+function startReading() { phase.value = 'status' }
+function selectStatus(s) { relationshipStatus.value = s; phase.value = 'draw' }
 function confirm() {
   if (!canConfirm.value) return
   const card = drawnCard.value
@@ -97,6 +102,11 @@ function retry() { reset(); phase.value = 'draw' }
       <SectionBlock spacing="md">
         <OtherReadingsNav current="reunion" />
       </SectionBlock>
+    </template>
+
+    <!-- ── STATUS ────────────────────────────────────── -->
+    <template v-else-if="phase === 'status'">
+      <RelationshipStatusSelect reading-type="재회 가능성" @select="selectStatus" />
     </template>
 
     <!-- ── DRAW ───────────────────────────────────── -->
