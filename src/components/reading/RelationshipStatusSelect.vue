@@ -1,4 +1,6 @@
 <script setup>
+import { ref } from 'vue'
+
 const emit = defineEmits(['select'])
 
 defineProps({
@@ -27,6 +29,13 @@ const statuses = [
     desc: '이별하거나 재회를 생각 중인 상태',
   },
 ]
+
+const selected = ref(null)
+
+function onSelect(value) {
+  selected.value = value
+  setTimeout(() => emit('select', value), 180)
+}
 </script>
 
 <template>
@@ -42,7 +51,8 @@ const statuses = [
         v-for="s in statuses"
         :key="s.value"
         class="rs-select__option"
-        @click="emit('select', s.value)"
+        :class="{ 'rs-select__option--selected': selected === s.value }"
+        @click="onSelect(s.value)"
       >
         <span class="rs-select__option-label">{{ s.label }}</span>
         <span class="rs-select__option-desc">{{ s.desc }}</span>
@@ -68,13 +78,14 @@ const statuses = [
   display: flex;
   flex-direction: column;
   gap: var(--lt-space-sm);
+  animation: rs-header-in 480ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .rs-select__eyebrow {
   font-size: 0.7rem;
   letter-spacing: 0.16em;
   color: var(--lt-accent-2);
-  opacity: 0.7;
+  opacity: 0.85;
   text-transform: uppercase;
 }
 
@@ -108,7 +119,7 @@ const statuses = [
   flex-direction: column;
   align-items: flex-start;
   gap: 5px;
-  padding: var(--lt-space-md) var(--lt-space-md);
+  padding: 20px var(--lt-space-md);
   background: var(--lt-bg-card);
   border: 1px solid var(--lt-line-soft);
   border-radius: var(--lt-radius-md);
@@ -121,6 +132,23 @@ const statuses = [
     transform var(--lt-transition);
   position: relative;
   overflow: hidden;
+  opacity: 0;
+  animation: rs-option-in 400ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.rs-select__option:nth-child(1) { animation-delay: 80ms; }
+.rs-select__option:nth-child(2) { animation-delay: 140ms; }
+.rs-select__option:nth-child(3) { animation-delay: 200ms; }
+.rs-select__option:nth-child(4) { animation-delay: 260ms; }
+
+@keyframes rs-header-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes rs-option-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .rs-select__option::before {
@@ -160,9 +188,31 @@ const statuses = [
   transition: all 120ms ease;
 }
 
-.rs-select__option:active .rs-select__option-label {
-  color: var(--lt-accent-3);
-  text-shadow: 0 0 12px rgba(143, 211, 255, 0.4);
+/* ── 선택된 상태 ── */
+.rs-select__option--selected {
+  transform: translateY(-1px);
+  border-color: rgba(143, 211, 255, 0.65);
+  background: linear-gradient(160deg, #0F1D38 0%, #142A52 45%, #0D1E42 100%);
+  box-shadow:
+    0 0 0 1px rgba(77, 163, 255, 0.2),
+    0 0 20px rgba(77, 163, 255, 0.18),
+    0 0 48px rgba(45, 108, 223, 0.1),
+    0 6px 24px rgba(0, 0, 0, 0.45);
+  transition: all 120ms ease;
+}
+
+.rs-select__option--selected::before {
+  opacity: 1;
+  background: linear-gradient(135deg, rgba(77, 163, 255, 0.1) 0%, transparent 55%);
+}
+
+.rs-select__option--selected .rs-select__option-label {
+  color: #F4F8FF;
+  text-shadow: 0 0 14px rgba(143, 211, 255, 0.35);
+}
+
+.rs-select__option--selected .rs-select__option-desc {
+  color: var(--lt-text-sub);
 }
 
 .rs-select__option-label {
@@ -171,6 +221,7 @@ const statuses = [
   font-weight: 300;
   color: var(--lt-text);
   letter-spacing: 0.06em;
+  transition: color var(--lt-transition), text-shadow var(--lt-transition);
 }
 
 .rs-select__option-desc {
@@ -178,6 +229,7 @@ const statuses = [
   color: var(--lt-text-muted);
   line-height: 1.5;
   letter-spacing: 0.02em;
+  transition: color var(--lt-transition);
 }
 
 .rs-select__note {
@@ -186,5 +238,13 @@ const statuses = [
   opacity: 0.5;
   text-align: center;
   letter-spacing: 0.04em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rs-select__header,
+  .rs-select__option {
+    animation: none;
+    opacity: 1;
+  }
 }
 </style>

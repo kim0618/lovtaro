@@ -17,6 +17,8 @@ import ThreeCardSummaryBox from '../components/threecards/ThreeCardSummaryBox.vu
 import EmotionFlowSection from '../components/result/EmotionFlowSection.vue'
 import AdviceSection from '../components/result/AdviceSection.vue'
 import ShareSaveSection from '../components/result/ShareSaveSection.vue'
+import SectionDivider from '../components/result/SectionDivider.vue'
+import ReadingClosingBlock from '../components/result/ReadingClosingBlock.vue'
 import DisclaimerBlock from '../components/result/DisclaimerBlock.vue'
 import OtherReadingsNav from '../components/common/OtherReadingsNav.vue'
 import RelationshipStatusSelect from '../components/reading/RelationshipStatusSelect.vue'
@@ -71,6 +73,14 @@ function confirm() {
 }
 
 function retry() { reset(); phase.value = 'draw' }
+
+const DRAW_INSTRUCTIONS = [
+  '나의 마음 자리의 카드를 먼저 고르세요',
+  '상대의 에너지 자리의 카드를 고르세요',
+  '마지막으로 관계의 방향 카드를 고르세요',
+  '3장이 모두 선택되었습니다',
+]
+const drawInstruction = computed(() => DRAW_INSTRUCTIONS[Math.min(selectedIds.value.length, 3)])
 </script>
 
 <template>
@@ -119,8 +129,8 @@ function retry() { reset(); phase.value = 'draw' }
       <PageContainer>
         <CardDrawHeader
           title="세 장의 카드를 순서대로 골라보세요"
-          instruction="나의 마음 → 상대의 에너지 → 관계의 방향 순으로 선택합니다."
-          :current-step="selectedIds.length < 3 ? selectedIds.length + 1 : 3"
+          :instruction="drawInstruction"
+          :selected-count="selectedIds.length"
           :total-steps="3"
         />
       </PageContainer>
@@ -142,6 +152,8 @@ function retry() { reset(); phase.value = 'draw' }
           confirm-label="러브 타로 결과 보기"
           reset-label="다시 선택"
           :show-reset="selectedIds.length > 0"
+          :selected-count="selectedIds.length"
+          :total-count="3"
           @confirm="confirm"
           @reset="reset"
         />
@@ -238,8 +250,21 @@ function retry() { reset(); phase.value = 'draw' }
         <ThreeCardSummaryBox :summary="overall.summary" label="전체 흐름 요약" />
       </SectionBlock>
 
+      <SectionBlock spacing="md" class="lt-appear lt-appear--delay-5">
+        <SectionDivider />
+      </SectionBlock>
+
+      <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-5">
+        <ReadingClosingBlock message="세 장의 카드가 비춘 흐름이 마음에 조용히 남기를 바랍니다." />
+      </SectionBlock>
+
       <SectionBlock spacing="md">
-        <OtherReadingsNav current="love" />
+        <ShareSaveSection
+          reading-type="러브 타로"
+          mode="three"
+          :cards="drawnTriple"
+          :summary="overall.summary"
+        />
       </SectionBlock>
 
       <SectionBlock spacing="sm">
@@ -248,13 +273,8 @@ function retry() { reset(); phase.value = 'draw' }
         </div>
       </SectionBlock>
 
-      <SectionBlock spacing="sm">
-        <ShareSaveSection
-          reading-type="러브 타로"
-          mode="three"
-          :cards="drawnTriple"
-          :summary="overall.summary"
-        />
+      <SectionBlock spacing="md">
+        <OtherReadingsNav current="love" />
       </SectionBlock>
 
       <SectionBlock spacing="sm">

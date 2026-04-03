@@ -5,19 +5,12 @@ import SectionBlock from '../components/ui/SectionBlock.vue'
 import HeroSection from '../components/home/HeroSection.vue'
 import TarotMenuGrid from '../components/home/TarotMenuGrid.vue'
 import TodayCardBanner from '../components/home/TodayCardBanner.vue'
-import LoveSpreadPromo from '../components/home/LoveSpreadPromo.vue'
 import ThreeCardPromo from '../components/home/ThreeCardPromo.vue'
+import LoveSpreadPromo from '../components/home/LoveSpreadPromo.vue'
 import TrustNoticeBlock from '../components/home/TrustNoticeBlock.vue'
 import BottomNavSection from '../components/home/BottomNavSection.vue'
 
-const menuItems = [
-  {
-    title: '러브 타로',
-    description: '나의 마음, 상대의 에너지, 관계의 방향을 세 장으로 읽어봅니다.',
-    to: '/reading/love',
-    tag: 'LOVE',
-    featured: true,
-  },
+const scenarioItems = [
   {
     title: '상대방 속마음 타로',
     description: '그 사람의 마음이 어디에 머물고 있는지 읽어봅니다.',
@@ -48,7 +41,8 @@ const menuItems = [
       <HeroSection />
 
       <SectionBlock spacing="sm">
-        <TarotMenuGrid :items="menuItems" />
+        <p class="scenario-label">상황별 리딩</p>
+        <TarotMenuGrid :items="scenarioItems" />
       </SectionBlock>
 
       <SectionBlock spacing="md">
@@ -73,3 +67,14 @@ const menuItems = [
     </PageContainer>
   </AppShell>
 </template>
+
+<style scoped>
+.scenario-label {
+  font-size: 0.68rem;
+  color: var(--lt-text-muted);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 0 var(--lt-space-md);
+  margin-bottom: var(--lt-space-sm);
+}
+</style>

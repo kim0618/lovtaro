@@ -17,6 +17,8 @@ import ThreeCardSummaryBox from '../components/threecards/ThreeCardSummaryBox.vu
 import EmotionFlowSection from '../components/result/EmotionFlowSection.vue'
 import AdviceSection from '../components/result/AdviceSection.vue'
 import ShareSaveSection from '../components/result/ShareSaveSection.vue'
+import SectionDivider from '../components/result/SectionDivider.vue'
+import ReadingClosingBlock from '../components/result/ReadingClosingBlock.vue'
 import DisclaimerBlock from '../components/result/DisclaimerBlock.vue'
 import OtherReadingsNav from '../components/common/OtherReadingsNav.vue'
 import RelationshipStatusSelect from '../components/reading/RelationshipStatusSelect.vue'
@@ -218,25 +220,31 @@ function retry() { reset(); phase.value = 'draw' }
         <ThreeCardSummaryBox :summary="overall.summary" label="전체 흐름 요약" />
       </SectionBlock>
 
-      <!-- 다른 리딩 보기 - PRIMARY CTA -->
+      <SectionBlock spacing="md" class="lt-appear lt-appear--delay-5">
+        <SectionDivider />
+      </SectionBlock>
+
+      <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-5">
+        <ReadingClosingBlock message="세 장의 카드가 비춘 흐름이 마음에 조용히 남기를 바랍니다." />
+      </SectionBlock>
+
       <SectionBlock spacing="md">
-        <OtherReadingsNav current="3cards" />
-      </SectionBlock>
-
-      <!-- 다시 뽑기 - secondary -->
-      <SectionBlock spacing="sm">
-        <div class="three-result__retry-wrap">
-          <button class="three-result__retry" @click="retry">다시 뽑기</button>
-        </div>
-      </SectionBlock>
-
-      <SectionBlock spacing="sm">
         <ShareSaveSection
           reading-type="3장 리딩"
           mode="three"
           :cards="drawnTriple"
           :summary="overall.summary"
         />
+      </SectionBlock>
+
+      <SectionBlock spacing="sm">
+        <div class="three-result__retry-wrap">
+          <button class="three-result__retry" @click="retry">다시 뽑기</button>
+        </div>
+      </SectionBlock>
+
+      <SectionBlock spacing="md">
+        <OtherReadingsNav current="3cards" />
       </SectionBlock>
 
       <SectionBlock spacing="sm">

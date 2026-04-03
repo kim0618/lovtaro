@@ -90,46 +90,60 @@ async function handleShare() {
 
 <template>
   <div class="share-save-section">
-    <button
-      class="share-save-section__btn"
-      :disabled="generating"
-      :aria-label="generating ? '이미지 생성 중' : '공유하기'"
-      @click="handleShare"
-    >
-      <span v-if="generating" class="share-save-section__spinner" />
-      <span v-else>공유하기</span>
-    </button>
-    <button
-      class="share-save-section__btn"
-      :class="{ 'share-save-section__btn--done': generated }"
-      :disabled="generating"
-      :aria-label="generating ? '이미지 생성 중' : '이미지 저장'"
-      @click="handleSave"
-    >
-      <span v-if="generating" class="share-save-section__spinner" />
-      <span v-else-if="generated">저장 완료</span>
-      <span v-else>이미지 저장</span>
-    </button>
+    <p class="share-save-section__heading">이 리딩을 간직하세요</p>
+    <div class="share-save-section__actions">
+      <button
+        class="share-save-section__btn"
+        :disabled="generating"
+        :aria-label="generating ? '이미지 생성 중' : '이미지 저장'"
+        @click="handleSave"
+      >
+        <span v-if="generating" class="share-save-section__spinner" />
+        <span v-else-if="generated">저장 완료</span>
+        <span v-else>이미지 저장</span>
+      </button>
+      <button
+        class="share-save-section__btn share-save-section__btn--secondary"
+        :disabled="generating"
+        :aria-label="generating ? '이미지 생성 중' : '공유하기'"
+        @click="handleShare"
+      >
+        <span v-if="generating" class="share-save-section__spinner" />
+        <span v-else>공유하기</span>
+      </button>
+    </div>
   </div>
 </template>
 
 <style scoped>
 .share-save-section {
+  padding: 0 var(--lt-space-md);
+}
+
+.share-save-section__heading {
+  font-size: 0.68rem;
+  color: var(--lt-text-muted);
+  letter-spacing: 0.08em;
+  text-align: center;
+  margin-bottom: var(--lt-space-md);
+  opacity: 0.6;
+}
+
+.share-save-section__actions {
   display: flex;
   justify-content: center;
-  gap: var(--lt-space-md);
-  padding: 0 var(--lt-space-md);
+  gap: var(--lt-space-sm);
 }
 
 .share-save-section__btn {
   flex: 1;
   max-width: 140px;
   padding: 11px var(--lt-space-md);
-  border: 1px solid var(--lt-line-soft);
+  border: 1px solid var(--lt-btn-primary-border);
   border-radius: var(--lt-radius-sm);
   font-size: 0.82rem;
-  color: var(--lt-text-sub);
-  background: var(--lt-panel);
+  color: var(--lt-text);
+  background: var(--lt-btn-primary-bg);
   letter-spacing: 0.04em;
   cursor: pointer;
   transition:
@@ -145,7 +159,20 @@ async function handleShare() {
 }
 
 .share-save-section__btn:hover:not(:disabled) {
+  border-color: var(--lt-btn-primary-hover-border);
+  background: var(--lt-btn-primary-hover);
+  box-shadow: 0 0 16px rgba(77, 163, 255, 0.12);
+}
+
+.share-save-section__btn--secondary {
+  background: var(--lt-panel);
+  border-color: var(--lt-line-soft);
+  color: var(--lt-text-sub);
+}
+
+.share-save-section__btn--secondary:hover:not(:disabled) {
   border-color: rgba(77, 163, 255, 0.3);
+  background: var(--lt-panel);
   color: var(--lt-accent-2);
   box-shadow: 0 0 12px rgba(77, 163, 255, 0.08);
 }

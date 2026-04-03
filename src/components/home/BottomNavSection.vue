@@ -37,13 +37,16 @@ const links = [
 }
 
 .bottom-nav-section__item {
-  padding: var(--lt-space-sm) var(--lt-space-md);
+  padding: 10px var(--lt-space-lg);
   border: 1px solid var(--lt-border-soft);
   border-radius: var(--lt-radius-sm);
   font-size: 0.8rem;
   color: var(--lt-text-muted);
   background: var(--lt-panel);
   letter-spacing: 0.04em;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
   transition:
     border-color var(--lt-transition),
     color var(--lt-transition),

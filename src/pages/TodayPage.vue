@@ -15,6 +15,8 @@ import EmotionFlowSection from '../components/result/EmotionFlowSection.vue'
 import AdviceSection from '../components/result/AdviceSection.vue'
 import CautionSection from '../components/result/CautionSection.vue'
 import ShareSaveSection from '../components/result/ShareSaveSection.vue'
+import SectionDivider from '../components/result/SectionDivider.vue'
+import ReadingClosingBlock from '../components/result/ReadingClosingBlock.vue'
 import DisclaimerBlock from '../components/result/DisclaimerBlock.vue'
 import OtherReadingsNav from '../components/common/OtherReadingsNav.vue'
 import CardRevealTransition from '../components/result/CardRevealTransition.vue'
@@ -167,12 +169,15 @@ function handleResetToday() {
         />
       </SectionBlock>
 
-      <!-- 다른 리딩 보기 - PRIMARY CTA -->
-      <SectionBlock spacing="md">
-        <OtherReadingsNav current="today" />
+      <SectionBlock spacing="md" class="lt-appear lt-appear--delay-5">
+        <SectionDivider />
       </SectionBlock>
 
-      <SectionBlock spacing="sm">
+      <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-5">
+        <ReadingClosingBlock message="오늘 카드가 전한 에너지가 하루를 조용히 비추기를 바랍니다." />
+      </SectionBlock>
+
+      <SectionBlock spacing="md">
         <ShareSaveSection
           reading-type="오늘의 연애 카드"
           :card-name="drawnCard.name"
@@ -180,6 +185,10 @@ function handleResetToday() {
           :summary="result.summary"
           :emotion-tags="result.emotionTags"
         />
+      </SectionBlock>
+
+      <SectionBlock spacing="md">
+        <OtherReadingsNav current="today" />
       </SectionBlock>
 
       <SectionBlock spacing="sm">

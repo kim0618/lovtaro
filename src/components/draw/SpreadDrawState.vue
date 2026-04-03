@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 
 const props = defineProps({
   selectedCards: {
@@ -13,6 +13,11 @@ const props = defineProps({
 })
 
 const justFilled = ref(props.positions.map(() => false))
+
+// The slot that will receive the next card
+const nextSlotIndex = computed(() =>
+  props.selectedCards.length < props.positions.length ? props.selectedCards.length : -1
+)
 
 watch(
   () => props.selectedCards.length,
@@ -36,6 +41,7 @@ watch(
         :class="{
           'spread-draw-state__slot--filled': !!props.selectedCards[i],
           'spread-draw-state__slot--just-filled': justFilled[i],
+          'spread-draw-state__slot--next': i === nextSlotIndex && !justFilled[i],
         }"
       >
         <div class="spread-draw-state__card-area">
@@ -214,11 +220,38 @@ watch(
   letter-spacing: 0.05em;
 }
 
+/* ── 다음에 채워질 슬롯 ── */
+.spread-draw-state__slot--next .spread-draw-state__card-empty {
+  border-style: dashed;
+  border-color: rgba(143, 211, 255, 0.45);
+  animation: next-slot-pulse 1.8s ease-in-out infinite;
+}
+
+.spread-draw-state__slot--next .spread-draw-state__num {
+  color: rgba(143, 211, 255, 0.7);
+}
+
+.spread-draw-state__slot--next .spread-draw-state__hint {
+  color: var(--lt-accent-2);
+  opacity: 0.7;
+}
+
+@keyframes next-slot-pulse {
+  0%, 100% {
+    border-color: rgba(143, 211, 255, 0.35);
+    box-shadow: none;
+  }
+  50% {
+    border-color: rgba(143, 211, 255, 0.65);
+    box-shadow: 0 0 12px rgba(77, 163, 255, 0.12), inset 0 0 8px rgba(77, 163, 255, 0.06);
+  }
+}
+
 .spread-draw-state__card-chosen {
   font-size: 0.68rem;
   color: var(--lt-accent-2);
   letter-spacing: 0.05em;
-  opacity: 0.7;
+  opacity: 0.85;
 }
 
 .spread-draw-state__hint {
@@ -268,7 +301,8 @@ watch(
 
 @media (prefers-reduced-motion: reduce) {
   .spread-draw-state__card-back,
-  .spread-draw-state__card-shimmer {
+  .spread-draw-state__card-shimmer,
+  .spread-draw-state__slot--next .spread-draw-state__card-empty {
     animation: none;
   }
   .slot-fill-enter-active,

@@ -21,8 +21,8 @@ const router = useRouter()
     <h1 class="hero-section__title">그 사람을 떠올린 채,<br><em>카드가 말하게 하세요</em></h1>
     <p class="hero-section__subtitle">감정의 결을 읽고, 관계의 흐름을 비춰봅니다</p>
     <div class="hero-section__divider" aria-hidden="true" />
-    <button class="hero-section__cta" @click="router.push('/today')">
-      오늘의 카드 뽑기
+    <button class="hero-section__cta" @click="router.push('/reading/love')">
+      러브 타로 시작하기
     </button>
   </div>
 </template>

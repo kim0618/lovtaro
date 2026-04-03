@@ -1,9 +1,20 @@
 <script setup>
-defineProps({
+import { computed } from 'vue'
+
+const props = defineProps({
   canConfirm: { type: Boolean, default: false },
   confirmLabel: { type: String, default: '이 카드로 결과 보기' },
   resetLabel: { type: String, default: '다시 선택' },
   showReset: { type: Boolean, default: false },
+  selectedCount: { type: Number, default: null },
+  totalCount: { type: Number, default: null },
+})
+
+const remainingHint = computed(() => {
+  if (props.canConfirm || props.totalCount === null || props.selectedCount === null) return null
+  const remaining = props.totalCount - props.selectedCount
+  if (remaining <= 0) return null
+  return `${remaining}장을 더 선택하면 결과를 볼 수 있어요`
 })
 
 const emit = defineEmits(['confirm', 'reset'])
@@ -25,6 +36,7 @@ const emit = defineEmits(['confirm', 'reset'])
     >
       {{ confirmLabel }}
     </button>
+    <p v-if="remainingHint" class="draw-action-bar__hint">{{ remainingHint }}</p>
   </div>
 </template>
 
@@ -106,5 +118,19 @@ const emit = defineEmits(['confirm', 'reset'])
 .draw-action-bar__reset:hover {
   opacity: 1;
   color: var(--lt-text-sub);
+}
+
+.draw-action-bar__hint {
+  font-size: 0.72rem;
+  color: var(--lt-text-muted);
+  opacity: 0.6;
+  letter-spacing: 0.03em;
+  text-align: center;
+  animation: hint-fade-in 300ms ease both;
+}
+
+@keyframes hint-fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 0.6; transform: translateY(0); }
 }
 </style>

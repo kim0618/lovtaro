@@ -36,7 +36,7 @@ defineProps({
   letter-spacing: 0.12em;
   text-transform: uppercase;
   margin-bottom: var(--lt-space-md);
-  opacity: 0.7;
+  opacity: 0.75;
 }
 
 .advice-section__list {

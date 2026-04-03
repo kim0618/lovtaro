@@ -19,6 +19,8 @@ import EmotionFlowSection from '../components/result/EmotionFlowSection.vue'
 import AdviceSection from '../components/result/AdviceSection.vue'
 import CautionSection from '../components/result/CautionSection.vue'
 import ShareSaveSection from '../components/result/ShareSaveSection.vue'
+import SectionDivider from '../components/result/SectionDivider.vue'
+import ReadingClosingBlock from '../components/result/ReadingClosingBlock.vue'
 import DisclaimerBlock from '../components/result/DisclaimerBlock.vue'
 import OtherReadingsNav from '../components/common/OtherReadingsNav.vue'
 import CardRevealTransition from '../components/result/CardRevealTransition.vue'
@@ -183,8 +185,22 @@ function retry() { reset(); phase.value = 'draw' }
         <CautionSection title="조심할 점" :lines="result.caution" />
       </SectionBlock>
 
+      <SectionBlock spacing="md" class="lt-appear lt-appear--delay-5">
+        <SectionDivider />
+      </SectionBlock>
+
+      <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-5">
+        <ReadingClosingBlock />
+      </SectionBlock>
+
       <SectionBlock spacing="md">
-        <OtherReadingsNav current="mind" />
+        <ShareSaveSection
+          reading-type="상대방 속마음"
+          :card-name="drawnCard.name"
+          :card-name-en="drawnCard.nameEn"
+          :summary="result.summary"
+          :emotion-tags="result.emotionTags"
+        />
       </SectionBlock>
 
       <SectionBlock spacing="sm">
@@ -193,14 +209,8 @@ function retry() { reset(); phase.value = 'draw' }
         </div>
       </SectionBlock>
 
-      <SectionBlock spacing="sm">
-        <ShareSaveSection
-          reading-type="상대방 속마음"
-          :card-name="drawnCard.name"
-          :card-name-en="drawnCard.nameEn"
-          :summary="result.summary"
-          :emotion-tags="result.emotionTags"
-        />
+      <SectionBlock spacing="md">
+        <OtherReadingsNav current="mind" />
       </SectionBlock>
 
       <SectionBlock spacing="sm">
