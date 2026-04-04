@@ -30,13 +30,12 @@ defineProps({
 
 .advice-section__title {
   font-family: var(--lt-font-sans);
-  font-size: 0.68rem;
+  font-size: 0.74rem;
   font-weight: 400;
   color: var(--lt-accent-2);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  letter-spacing: 0.08em;
   margin-bottom: var(--lt-space-md);
-  opacity: 0.75;
+  opacity: 0.8;
 }
 
 .advice-section__list {

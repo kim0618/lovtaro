@@ -19,7 +19,7 @@
   line-height: 1.9;
   padding: var(--lt-space-md) 0;
   border-top: 1px solid var(--lt-border-soft);
-  letter-spacing: 0.01em;
-  opacity: 0.6;
+  letter-spacing: 0.02em;
+  opacity: 0.65;
 }
 </style>

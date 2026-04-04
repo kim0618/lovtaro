@@ -30,7 +30,7 @@ const router = useRouter()
 <style scoped>
 .hero-section {
   text-align: center;
-  padding: var(--lt-space-2xl) var(--lt-space-md) var(--lt-space-xl);
+  padding: var(--lt-space-2xl) var(--lt-space-md) var(--lt-space-2xl);
   display: flex;
   flex-direction: column;
   align-items: center;

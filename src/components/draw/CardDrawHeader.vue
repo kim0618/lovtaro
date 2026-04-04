@@ -69,6 +69,13 @@ function dotState(i) {
   height: 6px;
   background: var(--lt-accent-2);
   opacity: 0.55;
+  animation: dot-fill-pulse 400ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes dot-fill-pulse {
+  0%   { transform: scale(1.8); opacity: 0.8; }
+  60%  { transform: scale(0.9); opacity: 0.5; }
+  100% { transform: scale(1); opacity: 0.55; }
 }
 
 /* current step: wider pill, glowing */
@@ -103,6 +110,9 @@ function dotState(i) {
 @media (prefers-reduced-motion: reduce) {
   .card-draw-header__dot {
     transition: none;
+  }
+  .card-draw-header__dot--filled {
+    animation: none;
   }
 }
 </style>

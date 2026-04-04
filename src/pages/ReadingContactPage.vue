@@ -12,15 +12,13 @@ import CardDrawHeader from '../components/draw/CardDrawHeader.vue'
 import CardDeck from '../components/draw/CardDeck.vue'
 import SelectedCardState from '../components/draw/SelectedCardState.vue'
 import DrawActionBar from '../components/draw/DrawActionBar.vue'
-import ResultHeroCard from '../components/result/ResultHeroCard.vue'
 import CardImageBlock from '../components/result/CardImageBlock.vue'
 import EmotionTagList from '../components/result/EmotionTagList.vue'
-import ResultSummaryBox from '../components/result/ResultSummaryBox.vue'
+import CoreInsightBlock from '../components/result/CoreInsightBlock.vue'
 import EmotionFlowSection from '../components/result/EmotionFlowSection.vue'
 import AdviceSection from '../components/result/AdviceSection.vue'
 import CautionSection from '../components/result/CautionSection.vue'
 import ShareSaveSection from '../components/result/ShareSaveSection.vue'
-import SectionDivider from '../components/result/SectionDivider.vue'
 import ReadingClosingBlock from '../components/result/ReadingClosingBlock.vue'
 import DisclaimerBlock from '../components/result/DisclaimerBlock.vue'
 import OtherReadingsNav from '../components/common/OtherReadingsNav.vue'
@@ -152,14 +150,9 @@ function retry() { reset(); phase.value = 'draw' }
 
     <!-- ── RESULT ─────────────────────────────────── -->
     <template v-else-if="phase === 'result' && drawnCard && result">
-      <PageContainer>
-        <ResultHeroCard
-          reading-type="연락 올까"
-          :card-name="drawnCard.name"
-          :card-name-en="drawnCard.nameEn"
-          :reversed="isReversed"
-        />
-      </PageContainer>
+      <div class="reading-result__hero lt-appear">
+        <p class="reading-result__hero-label">연락 올까</p>
+      </div>
 
       <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-1">
         <CardImageBlock :card-name="drawnCard.name" :card-name-en="drawnCard.nameEn" :energy="drawnCard.energy" :keywords="drawnCard.keywords" :reversed="isReversed" />
@@ -170,23 +163,19 @@ function retry() { reset(); phase.value = 'draw' }
       </SectionBlock>
 
       <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-2">
-        <ResultSummaryBox :summary="result.summary" label="핵심 해석" />
+        <CoreInsightBlock :insight="result.summary" label="핵심 해석" />
       </SectionBlock>
 
-      <SectionBlock spacing="md" class="lt-appear lt-appear--delay-3">
+      <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-3">
         <EmotionFlowSection title="지금 감정의 흐름" :lines="result.emotionFlow" />
       </SectionBlock>
 
-      <SectionBlock spacing="md" class="lt-appear lt-appear--delay-4">
+      <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-4">
         <AdviceSection title="지금 할 수 있는 것" :lines="result.advice" />
       </SectionBlock>
 
-      <SectionBlock spacing="md" class="lt-appear lt-appear--delay-5">
+      <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-5">
         <CautionSection title="조심할 점" :lines="result.caution" />
-      </SectionBlock>
-
-      <SectionBlock spacing="md" class="lt-appear lt-appear--delay-5">
-        <SectionDivider />
       </SectionBlock>
 
       <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-5">
@@ -223,6 +212,23 @@ function retry() { reset(); phase.value = 'draw' }
 </template>
 
 <style scoped>
+.reading-result__hero {
+  background: linear-gradient(180deg, var(--lt-bg-1) 0%, var(--lt-bg-0) 100%);
+  padding-bottom: var(--lt-space-md);
+  border-bottom: 1px solid var(--lt-border-soft);
+}
+
+.reading-result__hero-label {
+  text-align: center;
+  font-family: var(--lt-font-sans);
+  font-size: 0.75rem;
+  font-weight: 300;
+  color: var(--lt-accent-3);
+  letter-spacing: 0.12em;
+  padding: var(--lt-space-lg) 0 var(--lt-space-md);
+  opacity: 0.7;
+}
+
 .reading-result__retry-wrap {
   display: flex;
   justify-content: center;
@@ -230,15 +236,19 @@ function retry() { reset(); phase.value = 'draw' }
 }
 
 .reading-result__retry {
-  font-size: 0.85rem;
-  color: var(--lt-text-muted);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  padding: var(--lt-space-xs) var(--lt-space-md);
-  transition: color var(--lt-transition);
+  font-size: 0.72rem;
+  color: var(--lt-accent-2);
+  letter-spacing: 0.06em;
+  opacity: 0.7;
+  border: 1px solid rgba(77, 163, 255, 0.2);
+  border-radius: var(--lt-radius-full);
+  padding: 5px 16px;
+  background: rgba(77, 163, 255, 0.06);
+  transition: opacity var(--lt-transition), border-color var(--lt-transition);
 }
 
 .reading-result__retry:hover {
-  color: var(--lt-text-sub);
+  opacity: 1;
+  border-color: rgba(77, 163, 255, 0.4);
 }
 </style>

@@ -68,11 +68,10 @@ const effectiveKeywords = computed(() => {
 }
 
 .three-card-meaning__position {
-  font-size: 0.62rem;
+  font-size: 0.65rem;
   color: var(--lt-accent-2);
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   flex-shrink: 0;
-  text-transform: uppercase;
   opacity: 0.7;
 }
 

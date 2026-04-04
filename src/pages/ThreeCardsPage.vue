@@ -13,11 +13,10 @@ import DrawActionBar from '../components/draw/DrawActionBar.vue'
 import ThreeCardDrawState from '../components/draw/ThreeCardDrawState.vue'
 import ThreeCardLayout from '../components/threecards/ThreeCardLayout.vue'
 import ThreeCardMeaningBlock from '../components/threecards/ThreeCardMeaningBlock.vue'
-import ThreeCardSummaryBox from '../components/threecards/ThreeCardSummaryBox.vue'
 import EmotionFlowSection from '../components/result/EmotionFlowSection.vue'
 import AdviceSection from '../components/result/AdviceSection.vue'
 import ShareSaveSection from '../components/result/ShareSaveSection.vue'
-import SectionDivider from '../components/result/SectionDivider.vue'
+import CoreInsightBlock from '../components/result/CoreInsightBlock.vue'
 import ReadingClosingBlock from '../components/result/ReadingClosingBlock.vue'
 import DisclaimerBlock from '../components/result/DisclaimerBlock.vue'
 import OtherReadingsNav from '../components/common/OtherReadingsNav.vue'
@@ -28,7 +27,7 @@ import { useCardDraw } from '../composables/useCardDraw.js'
 import { THREE_CARD_INTERPRETATIONS, getThreeCardOverall } from '../data/readings/threecards.js'
 import { applyRelationshipModifierToOverall } from '../data/relationshipModifiers.js'
 
-const REVEAL_DURATION = 1800
+const REVEAL_DURATION = 2800
 
 const POSITIONS = ['past', 'present', 'future']
 const POSITION_LABELS = { past: '과거', present: '현재', future: '미래' }
@@ -123,7 +122,7 @@ function retry() { reset(); phase.value = 'draw' }
         <CardDrawHeader
           title="카드를 3장 순서대로 골라보세요"
           instruction="과거 → 현재 → 미래 순으로 손이 머무는 카드를 선택합니다."
-          :current-step="selectedIds.length < 3 ? selectedIds.length + 1 : 3"
+          :selected-count="selectedIds.length"
           :total-steps="3"
         />
       </PageContainer>
@@ -158,13 +157,115 @@ function retry() { reset(); phase.value = 'draw' }
             v-for="(card, i) in drawnTriple"
             :key="card.id"
             class="three-reveal__card"
-            :style="{ animationDelay: `${i * 400}ms` }"
+            :style="{ '--card-delay': `${i * 400}ms` }"
           >
-            <div class="three-reveal__card-inner">
-              <span class="three-reveal__card-name">{{ card.name }}</span>
-              <span class="three-reveal__card-pos">{{ card.position }}</span>
+            <span class="three-reveal__card-pos">{{ card.position }}</span>
+            <div class="three-reveal__card-body">
+              <div class="three-reveal__card-flipper">
+                <!-- 뒷면: 만다라/눈 -->
+                <div class="three-reveal__card-back">
+                  <svg viewBox="0 0 120 198" fill="none" class="three-reveal__card-svg">
+                    <rect x="4" y="4" width="112" height="190" rx="6" stroke="#C8A96E" stroke-opacity="0.35" stroke-width="1"/>
+                    <rect x="9" y="9" width="102" height="180" rx="4" stroke="#C8A96E" stroke-opacity="0.18" stroke-width="0.5"/>
+                    <path d="M13 21 Q13 13 21 13" stroke="#C8A96E" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+                    <path d="M107 21 Q107 13 99 13" stroke="#C8A96E" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+                    <path d="M13 177 Q13 185 21 185" stroke="#C8A96E" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+                    <path d="M107 177 Q107 185 99 185" stroke="#C8A96E" stroke-opacity="0.5" stroke-width="0.7" fill="none"/>
+                    <!-- 달 위상 상단 -->
+                    <circle cx="40" cy="32" r="5" stroke="#C8A96E" stroke-opacity="0.4" stroke-width="0.6" fill="none"/>
+                    <circle cx="42.5" cy="30.5" r="4" fill="#0A1020"/>
+                    <circle cx="60" cy="32" r="5" stroke="#C8A96E" stroke-opacity="0.45" stroke-width="0.6" fill="#C8A96E" fill-opacity="0.12"/>
+                    <circle cx="80" cy="32" r="5" stroke="#C8A96E" stroke-opacity="0.4" stroke-width="0.6" fill="none"/>
+                    <circle cx="77.5" cy="30.5" r="4" fill="#0A1020"/>
+                    <line x1="60" y1="40" x2="60" y2="68" stroke="#C8A96E" stroke-opacity="0.15" stroke-width="0.4"/>
+                    <!-- 중앙 눈 -->
+                    <circle cx="60" cy="99" r="29" stroke="#C8A96E" stroke-opacity="0.2" stroke-width="0.5" fill="none"/>
+                    <path d="M60 73 L86 99 L60 125 L34 99Z" stroke="#C8A96E" stroke-opacity="0.28" stroke-width="0.6" fill="none"/>
+                    <circle cx="60" cy="99" r="18" stroke="#C8A96E" stroke-opacity="0.32" stroke-width="0.5" fill="none"/>
+                    <path d="M40 99 C48 85 54 81 60 81 C66 81 72 85 80 99 C72 113 66 117 60 117 C54 117 48 113 40 99Z" stroke="#C8A96E" stroke-opacity="0.6" stroke-width="0.8" fill="none"/>
+                    <circle cx="60" cy="99" r="8" stroke="#C8A96E" stroke-opacity="0.5" stroke-width="0.6" fill="none"/>
+                    <circle cx="60" cy="99" r="3.5" fill="#C8A96E" fill-opacity="0.6"/>
+                    <line x1="60" y1="130" x2="60" y2="158" stroke="#C8A96E" stroke-opacity="0.15" stroke-width="0.4"/>
+                    <!-- 달 위상 하단 -->
+                    <circle cx="40" cy="166" r="5" stroke="#C8A96E" stroke-opacity="0.4" stroke-width="0.6" fill="none"/>
+                    <circle cx="37.5" cy="167.5" r="4" fill="#0A1020"/>
+                    <circle cx="60" cy="166" r="5" stroke="#C8A96E" stroke-opacity="0.45" stroke-width="0.6" fill="#C8A96E" fill-opacity="0.12"/>
+                    <circle cx="80" cy="166" r="5" stroke="#C8A96E" stroke-opacity="0.4" stroke-width="0.6" fill="none"/>
+                    <circle cx="82.5" cy="167.5" r="4" fill="#0A1020"/>
+                  </svg>
+                </div>
+                <!-- 앞면: 별자리 + 카드이름 -->
+                <div class="three-reveal__card-front">
+                  <svg viewBox="0 0 120 198" fill="none" class="three-reveal__card-svg" aria-hidden="true">
+                    <!-- 내부 테두리 -->
+                    <rect x="8" y="8" width="104" height="182" rx="4" stroke="#C8A96E" stroke-opacity="0.12" stroke-width="0.4"/>
+                    <!-- 코너 장식 -->
+                    <path d="M13 21 Q13 13 21 13" stroke="#C8A96E" stroke-opacity="0.3" stroke-width="0.5" fill="none"/>
+                    <path d="M107 21 Q107 13 99 13" stroke="#C8A96E" stroke-opacity="0.3" stroke-width="0.5" fill="none"/>
+                    <path d="M13 177 Q13 185 21 185" stroke="#C8A96E" stroke-opacity="0.3" stroke-width="0.5" fill="none"/>
+                    <path d="M107 177 Q107 185 99 185" stroke="#C8A96E" stroke-opacity="0.3" stroke-width="0.5" fill="none"/>
+                    <!-- 상단 달 위상 -->
+                    <circle cx="40" cy="30" r="4" stroke="#C8A96E" stroke-opacity="0.25" stroke-width="0.5" fill="none"/>
+                    <circle cx="42" cy="28.5" r="3" fill="#0A1020"/>
+                    <circle cx="60" cy="30" r="4" stroke="#C8A96E" stroke-opacity="0.3" stroke-width="0.5" fill="#C8A96E" fill-opacity="0.06"/>
+                    <circle cx="80" cy="30" r="4" stroke="#C8A96E" stroke-opacity="0.25" stroke-width="0.5" fill="none"/>
+                    <circle cx="78" cy="28.5" r="3" fill="#0A1020"/>
+                    <!-- 상단 성좌 -->
+                    <circle cx="38" cy="62" r="3" fill="#C8A96E" fill-opacity="0.7"/>
+                    <circle cx="38" cy="62" r="6" stroke="#C8A96E" stroke-opacity="0.2" stroke-width="0.5" fill="none"/>
+                    <circle cx="84" cy="55" r="2.5" fill="#C8A96E" fill-opacity="0.6"/>
+                    <circle cx="84" cy="55" r="5" stroke="#C8A96E" stroke-opacity="0.18" stroke-width="0.5" fill="none"/>
+                    <line x1="38" y1="62" x2="84" y2="55" stroke="#C8A96E" stroke-opacity="0.3" stroke-width="0.6"/>
+                    <!-- 보조 별 -->
+                    <circle cx="26" cy="50" r="1.5" fill="#C8A96E" fill-opacity="0.45"/>
+                    <circle cx="60" cy="52" r="1.8" fill="#C8A96E" fill-opacity="0.4"/>
+                    <circle cx="96" cy="66" r="1.3" fill="#C8A96E" fill-opacity="0.35"/>
+                    <circle cx="48" cy="74" r="1.2" fill="#C8A96E" fill-opacity="0.3"/>
+                    <circle cx="72" cy="70" r="1" fill="#C8A96E" fill-opacity="0.25"/>
+                    <!-- 연결선 -->
+                    <line x1="26" y1="50" x2="38" y2="62" stroke="#C8A96E" stroke-opacity="0.15" stroke-width="0.4"/>
+                    <line x1="38" y1="62" x2="60" y2="52" stroke="#C8A96E" stroke-opacity="0.12" stroke-width="0.4"/>
+                    <line x1="60" y1="52" x2="84" y2="55" stroke="#C8A96E" stroke-opacity="0.12" stroke-width="0.4"/>
+                    <line x1="84" y1="55" x2="96" y2="66" stroke="#C8A96E" stroke-opacity="0.1" stroke-width="0.3"/>
+                    <line x1="38" y1="62" x2="48" y2="74" stroke="#C8A96E" stroke-opacity="0.1" stroke-width="0.3"/>
+                    <!-- 중앙 원형 장식 -->
+                    <circle cx="60" cy="99" r="16" stroke="#C8A96E" stroke-opacity="0.08" stroke-width="0.4" fill="none"/>
+                    <circle cx="60" cy="99" r="8" stroke="#C8A96E" stroke-opacity="0.12" stroke-width="0.4" fill="none"/>
+                    <circle cx="60" cy="99" r="2" fill="#C8A96E" fill-opacity="0.15"/>
+                    <!-- 하단 성좌 -->
+                    <circle cx="34" cy="138" r="2" fill="#C8A96E" fill-opacity="0.5"/>
+                    <circle cx="34" cy="138" r="4.5" stroke="#C8A96E" stroke-opacity="0.15" stroke-width="0.4" fill="none"/>
+                    <circle cx="78" cy="132" r="1.8" fill="#C8A96E" fill-opacity="0.4"/>
+                    <circle cx="92" cy="145" r="1.2" fill="#C8A96E" fill-opacity="0.3"/>
+                    <circle cx="50" cy="148" r="1" fill="#C8A96E" fill-opacity="0.25"/>
+                    <line x1="34" y1="138" x2="78" y2="132" stroke="#C8A96E" stroke-opacity="0.12" stroke-width="0.4"/>
+                    <line x1="78" y1="132" x2="92" y2="145" stroke="#C8A96E" stroke-opacity="0.08" stroke-width="0.3"/>
+                    <line x1="34" y1="138" x2="50" y2="148" stroke="#C8A96E" stroke-opacity="0.08" stroke-width="0.3"/>
+                    <!-- 별먼지 -->
+                    <circle cx="22" cy="58" r="0.6" fill="#C8A96E" fill-opacity="0.22"/>
+                    <circle cx="68" cy="46" r="0.7" fill="#C8A96E" fill-opacity="0.16"/>
+                    <circle cx="100" cy="58" r="0.4" fill="#C8A96E" fill-opacity="0.1"/>
+                    <circle cx="24" cy="128" r="0.5" fill="#C8A96E" fill-opacity="0.14"/>
+                    <circle cx="88" cy="126" r="0.5" fill="#C8A96E" fill-opacity="0.12"/>
+                    <circle cx="60" cy="150" r="0.4" fill="#C8A96E" fill-opacity="0.1"/>
+                    <!-- 하단 달 위상 -->
+                    <circle cx="40" cy="168" r="4" stroke="#C8A96E" stroke-opacity="0.25" stroke-width="0.5" fill="none"/>
+                    <circle cx="38" cy="169.5" r="3" fill="#0A1020"/>
+                    <circle cx="60" cy="168" r="4" stroke="#C8A96E" stroke-opacity="0.3" stroke-width="0.5" fill="#C8A96E" fill-opacity="0.06"/>
+                    <circle cx="80" cy="168" r="4" stroke="#C8A96E" stroke-opacity="0.25" stroke-width="0.5" fill="none"/>
+                    <circle cx="82" cy="169.5" r="3" fill="#0A1020"/>
+                  </svg>
+                  <div class="three-reveal__card-front-content">
+                    <span class="three-reveal__card-name">{{ card.name }}</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
+        </div>
+        <p class="three-reveal__hint">잠시 후 해석이 펼쳐집니다</p>
+        <div class="three-reveal__dots" aria-hidden="true">
+          <span /><span /><span />
         </div>
       </div>
     </template>
@@ -179,23 +280,23 @@ function retry() { reset(); phase.value = 'draw' }
         </SectionBlock>
       </div>
 
-      <!-- 현재 감정 -->
-      <SectionBlock spacing="md" class="lt-appear lt-appear--delay-2">
+      <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-1">
+        <CoreInsightBlock :insight="overall.summary" label="핵심 메시지" />
+      </SectionBlock>
+
+      <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-2">
         <EmotionFlowSection title="현재 감정" :lines="overall.currentEmotion" />
       </SectionBlock>
 
-      <!-- 관계 흐름 -->
-      <SectionBlock spacing="md" class="lt-appear lt-appear--delay-3">
+      <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-3">
         <EmotionFlowSection title="관계의 흐름" :lines="overall.relationshipFlow" />
       </SectionBlock>
 
-      <!-- 조언 -->
-      <SectionBlock spacing="md" class="lt-appear lt-appear--delay-4">
+      <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-4">
         <AdviceSection title="지금 할 수 있는 것" :lines="overall.advice" />
       </SectionBlock>
 
-      <!-- 카드별 해석 -->
-      <SectionBlock spacing="md" class="lt-appear lt-appear--delay-5">
+      <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-5">
         <div class="three-result__meanings">
           <ThreeCardMeaningBlock
             v-for="card in drawnTriple"
@@ -211,17 +312,8 @@ function retry() { reset(); phase.value = 'draw' }
       </SectionBlock>
 
       <!-- 카드 간 연결 해석 -->
-      <SectionBlock v-if="overall.spreadNarrative" spacing="md" class="lt-appear lt-appear--delay-5">
+      <SectionBlock v-if="overall.spreadNarrative" spacing="sm" class="lt-appear lt-appear--delay-5">
         <EmotionFlowSection title="카드가 함께 말하는 것" :lines="overall.spreadNarrative" />
-      </SectionBlock>
-
-      <!-- 종합 요약 -->
-      <SectionBlock spacing="md" class="lt-appear lt-appear--delay-5">
-        <ThreeCardSummaryBox :summary="overall.summary" label="전체 흐름 요약" />
-      </SectionBlock>
-
-      <SectionBlock spacing="md" class="lt-appear lt-appear--delay-5">
-        <SectionDivider />
       </SectionBlock>
 
       <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-5">
@@ -266,14 +358,13 @@ function retry() { reset(); phase.value = 'draw' }
 
 .three-result__hero-label {
   text-align: center;
-  font-family: var(--lt-font-display);
-  font-size: 0.9rem;
+  font-family: var(--lt-font-sans);
+  font-size: 0.75rem;
   font-weight: 300;
-  font-style: italic;
   color: var(--lt-accent-3);
-  letter-spacing: 0.08em;
-  padding: var(--lt-space-xl) 0 var(--lt-space-md);
-  opacity: 0.8;
+  letter-spacing: 0.12em;
+  padding: var(--lt-space-lg) 0 var(--lt-space-md);
+  opacity: 0.7;
 }
 
 .three-result__meanings {
@@ -289,16 +380,20 @@ function retry() { reset(); phase.value = 'draw' }
 }
 
 .three-result__retry {
-  font-size: 0.85rem;
-  color: var(--lt-text-muted);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  padding: var(--lt-space-xs) var(--lt-space-md);
-  transition: color var(--lt-transition);
+  font-size: 0.72rem;
+  color: var(--lt-accent-2);
+  letter-spacing: 0.06em;
+  opacity: 0.7;
+  border: 1px solid rgba(77, 163, 255, 0.2);
+  border-radius: var(--lt-radius-full);
+  padding: 5px 16px;
+  background: rgba(77, 163, 255, 0.06);
+  transition: opacity var(--lt-transition), border-color var(--lt-transition);
 }
 
 .three-result__retry:hover {
-  color: var(--lt-text-sub);
+  opacity: 1;
+  border-color: rgba(77, 163, 255, 0.4);
 }
 
 /* ── Reveal Phase ── */
@@ -307,27 +402,28 @@ function retry() { reset(); phase.value = 'draw' }
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 70vh;
-  padding: var(--lt-space-xl) var(--lt-space-md);
+  min-height: calc(100vh - 60px);
+  min-height: calc(100dvh - 60px);
+  padding: var(--lt-space-xl) var(--lt-space-md) var(--lt-space-2xl);
   position: relative;
   overflow: hidden;
 }
 
 .three-reveal__glow {
   position: absolute;
-  top: 30%;
+  top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 300px;
-  height: 300px;
-  background: radial-gradient(circle, rgba(77, 163, 255, 0.08) 0%, transparent 70%);
-  animation: three-reveal-pulse 2s ease-in-out infinite;
+  width: 340px;
+  height: 340px;
+  background: radial-gradient(circle, rgba(200, 169, 110, 0.06) 0%, rgba(77, 163, 255, 0.04) 40%, transparent 70%);
+  animation: three-reveal-pulse 2.5s ease-in-out infinite;
   pointer-events: none;
 }
 
 @keyframes three-reveal-pulse {
   0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
-  50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+  50% { opacity: 1; transform: translate(-50%, -50%) scale(1.08); }
 }
 
 .three-reveal__text {
@@ -340,55 +436,153 @@ function retry() { reset(); phase.value = 'draw' }
 
 .three-reveal__cards {
   display: flex;
-  gap: var(--lt-space-lg);
+  gap: var(--lt-space-md);
 }
 
 .three-reveal__card {
-  width: 80px;
-  height: 130px;
-  animation: three-reveal-appear 800ms cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-@keyframes three-reveal-appear {
-  0% { opacity: 0; transform: translateY(30px) scale(0.8); }
-  60% { opacity: 1; transform: translateY(-4px) scale(1.02); }
-  100% { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-.three-reveal__card-inner {
-  width: 100%;
-  height: 100%;
-  border-radius: var(--lt-radius-md);
-  background: linear-gradient(170deg, var(--lt-bg-3) 0%, var(--lt-bg-1) 100%);
-  border: 1px solid rgba(77, 163, 255, 0.25);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 20px rgba(77, 163, 255, 0.1);
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 8px;
+  opacity: 0;
+  animation: three-reveal-appear 700ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: var(--card-delay, 0ms);
+}
+
+@keyframes three-reveal-appear {
+  0%   { opacity: 0; transform: translateY(40px) scale(0.75); }
+  60%  { opacity: 1; transform: translateY(-6px) scale(1.04); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.three-reveal__card-pos {
+  font-size: 0.58rem;
+  color: var(--lt-accent-2);
+  letter-spacing: 0.06em;
+  opacity: 0.65;
+}
+
+.three-reveal__card-body {
+  width: 100px;
+  height: 165px;
+  perspective: 800px;
+}
+
+.three-reveal__card-flipper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  animation: three-card-flip 1.4s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  animation-delay: calc(var(--card-delay, 0ms) + 300ms);
+}
+
+@keyframes three-card-flip {
+  0%   { transform: rotateY(0deg) scale(0.95); }
+  30%  { transform: rotateY(0deg) scale(1) translateY(-6px); }
+  50%  { transform: rotateY(90deg) scale(1) translateY(-6px); }
+  75%  { transform: rotateY(180deg) scale(1.02) translateY(-3px); }
+  100% { transform: rotateY(180deg) scale(1) translateY(0); }
+}
+
+.three-reveal__card-back,
+.three-reveal__card-front {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border-radius: var(--lt-radius-sm);
+  overflow: hidden;
+}
+
+.three-reveal__card-back {
+  background: linear-gradient(170deg, #101A31 0%, #0A1020 50%, #060A14 100%);
+  border: 1px solid rgba(200, 169, 110, 0.35);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.5),
+    0 0 16px rgba(200, 169, 110, 0.12);
+}
+
+.three-reveal__card-front {
+  transform: rotateY(180deg);
+  background: linear-gradient(170deg, var(--lt-bg-3) 0%, var(--lt-bg-2) 100%);
+  border: 1px solid rgba(200, 169, 110, 0.25);
+  display: flex;
+  align-items: center;
   justify-content: center;
-  gap: 6px;
-  padding: 8px;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.5),
+    0 0 24px rgba(200, 169, 110, 0.08);
+}
+
+.three-reveal__card-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.three-reveal__card-front .three-reveal__card-svg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.three-reveal__card-front-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1;
 }
 
 .three-reveal__card-name {
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   color: var(--lt-text-strong);
   font-weight: 300;
   letter-spacing: 0.04em;
 }
 
-.three-reveal__card-pos {
-  font-size: 0.6rem;
-  color: var(--lt-accent-2);
-  letter-spacing: 0.08em;
-  opacity: 0.7;
+.three-reveal__hint {
+  font-size: 0.62rem;
+  color: var(--lt-text-muted);
+  letter-spacing: 0.1em;
+  opacity: 0;
+  margin-top: var(--lt-space-lg);
+  animation: lt-fade-in 400ms ease 1.6s both;
+}
+
+.three-reveal__dots {
+  display: flex;
+  gap: 12px;
+  margin-top: var(--lt-space-xl);
+  opacity: 0;
+  animation: lt-fade-in 500ms ease 2s both;
+}
+
+.three-reveal__dots span {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(200, 169, 110, 0.3);
+  animation: three-dot-blink 1.4s ease-in-out infinite;
+}
+
+.three-reveal__dots span:nth-child(2) { animation-delay: 0.2s; }
+.three-reveal__dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes three-dot-blink {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .three-reveal__card,
+  .three-reveal__card-flipper,
   .three-reveal__glow,
   .three-reveal__text {
     animation: none;
+    opacity: 1;
+  }
+  .three-reveal__card-flipper {
+    transform: rotateY(180deg);
   }
 }
 </style>

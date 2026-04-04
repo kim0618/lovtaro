@@ -36,7 +36,7 @@ defineProps({
           class="card-image-block__img"
         />
 
-        <!-- 이미지 없는 fallback: 카드 뒷면 스타일 디자인 -->
+        <!-- 이미지 없는 fallback: 앞면 성좌 디자인 -->
         <svg v-else class="card-image-block__fallback-svg" viewBox="0 0 130 214" fill="none">
           <!-- 외곽 테두리 -->
           <rect x="4" y="4" width="122" height="206" rx="7" stroke="#C8A96E" stroke-opacity="0.3" stroke-width="0.8"/>
@@ -52,31 +52,51 @@ defineProps({
           <circle cx="65" cy="36" r="5.5" stroke="#C8A96E" stroke-opacity="0.42" stroke-width="0.6" fill="#C8A96E" fill-opacity="0.1"/>
           <circle cx="83" cy="36" r="5.5" stroke="#C8A96E" stroke-opacity="0.38" stroke-width="0.6" fill="none"/>
           <circle cx="80.5" cy="34.5" r="4.3" fill="#060A14"/>
-          <!-- 중심 만다라 -->
-          <line x1="65" y1="47" x2="65" y2="73" stroke="#C8A96E" stroke-opacity="0.12" stroke-width="0.4"/>
-          <circle cx="65" cy="107" r="32" stroke="#C8A96E" stroke-opacity="0.18" stroke-width="0.5" fill="none"/>
-          <path d="M65 78 L93 107 L65 136 L37 107Z" stroke="#C8A96E" stroke-opacity="0.25" stroke-width="0.6" fill="none"/>
-          <circle cx="65" cy="107" r="20" stroke="#C8A96E" stroke-opacity="0.28" stroke-width="0.5" fill="none"/>
-          <!-- 눈 -->
-          <path d="M47 107 C54 94 59 90 65 90 C71 90 76 94 83 107 C76 120 71 124 65 124 C59 124 54 120 47 107Z" stroke="#C8A96E" stroke-opacity="0.6" stroke-width="0.8" fill="none"/>
-          <circle cx="65" cy="107" r="8.5" stroke="#C8A96E" stroke-opacity="0.48" stroke-width="0.6" fill="none"/>
-          <circle cx="65" cy="107" r="3.8" fill="#C8A96E" fill-opacity="0.6"/>
+          <!-- 성좌: 인연의 별자리 -->
+          <!-- 주 별 (큰 별 2개) -->
+          <circle cx="43" cy="72" r="3.5" fill="#C8A96E" fill-opacity="0.7"/>
+          <circle cx="43" cy="72" r="7" stroke="#C8A96E" stroke-opacity="0.2" stroke-width="0.5" fill="none"/>
+          <circle cx="43" cy="72" r="10" stroke="#C8A96E" stroke-opacity="0.08" stroke-width="0.3" fill="none"/>
+          <circle cx="88" cy="63" r="2.8" fill="#C8A96E" fill-opacity="0.6"/>
+          <circle cx="88" cy="63" r="5.5" stroke="#C8A96E" stroke-opacity="0.18" stroke-width="0.5" fill="none"/>
+          <!-- 주 연결선 -->
+          <line x1="43" y1="72" x2="88" y2="63" stroke="#C8A96E" stroke-opacity="0.3" stroke-width="0.6"/>
+          <!-- 보조 별 -->
+          <circle cx="30" cy="56" r="1.8" fill="#C8A96E" fill-opacity="0.45"/>
+          <circle cx="65" cy="58" r="2" fill="#C8A96E" fill-opacity="0.4"/>
+          <circle cx="100" cy="76" r="1.5" fill="#C8A96E" fill-opacity="0.35"/>
+          <circle cx="54" cy="82" r="1.3" fill="#C8A96E" fill-opacity="0.3"/>
+          <circle cx="78" cy="80" r="1.1" fill="#C8A96E" fill-opacity="0.25"/>
+          <!-- 보조 연결선 -->
+          <line x1="30" y1="56" x2="43" y2="72" stroke="#C8A96E" stroke-opacity="0.15" stroke-width="0.4"/>
+          <line x1="43" y1="72" x2="65" y2="58" stroke="#C8A96E" stroke-opacity="0.12" stroke-width="0.4"/>
+          <line x1="65" y1="58" x2="88" y2="63" stroke="#C8A96E" stroke-opacity="0.12" stroke-width="0.4"/>
+          <line x1="88" y1="63" x2="100" y2="76" stroke="#C8A96E" stroke-opacity="0.1" stroke-width="0.3"/>
+          <line x1="43" y1="72" x2="54" y2="82" stroke="#C8A96E" stroke-opacity="0.1" stroke-width="0.3"/>
+          <!-- 별먼지 -->
+          <circle cx="22" cy="64" r="0.7" fill="#C8A96E" fill-opacity="0.22"/>
+          <circle cx="38" cy="50" r="0.6" fill="#C8A96E" fill-opacity="0.18"/>
+          <circle cx="73" cy="54" r="0.8" fill="#C8A96E" fill-opacity="0.16"/>
+          <circle cx="96" cy="56" r="0.5" fill="#C8A96E" fill-opacity="0.14"/>
+          <circle cx="50" cy="64" r="0.5" fill="#C8A96E" fill-opacity="0.15"/>
+          <circle cx="82" cy="72" r="0.6" fill="#C8A96E" fill-opacity="0.12"/>
+          <circle cx="60" cy="76" r="0.5" fill="#C8A96E" fill-opacity="0.1"/>
+          <circle cx="108" cy="68" r="0.5" fill="#C8A96E" fill-opacity="0.1"/>
+          <circle cx="20" cy="78" r="0.4" fill="#C8A96E" fill-opacity="0.08"/>
+          <circle cx="35" cy="86" r="0.5" fill="#C8A96E" fill-opacity="0.08"/>
           <!-- 카드명 -->
-          <text x="65" y="156" text-anchor="middle" font-size="13" fill="#F4F8FF" fill-opacity="0.92" font-weight="300" letter-spacing="2">{{ cardName }}</text>
-          <text x="65" y="170" text-anchor="middle" font-size="7.5" fill="#C8A96E" fill-opacity="0.6" font-style="italic" letter-spacing="1.5">{{ cardNameEn }}</text>
+          <text x="65" y="120" text-anchor="middle" font-size="14" fill="#F4F8FF" fill-opacity="0.92" font-weight="300" letter-spacing="2">{{ cardName }}</text>
+          <text x="65" y="136" text-anchor="middle" font-size="7.5" fill="#C8A96E" fill-opacity="0.55" font-style="italic" letter-spacing="1.5">{{ cardNameEn }}</text>
           <!-- 하단 달 위상 -->
           <circle cx="47" cy="187" r="5.5" stroke="#C8A96E" stroke-opacity="0.38" stroke-width="0.6" fill="none"/>
           <circle cx="44.5" cy="188.5" r="4.3" fill="#060A14"/>
           <circle cx="65" cy="187" r="5.5" stroke="#C8A96E" stroke-opacity="0.42" stroke-width="0.6" fill="#C8A96E" fill-opacity="0.1"/>
           <circle cx="83" cy="187" r="5.5" stroke="#C8A96E" stroke-opacity="0.38" stroke-width="0.6" fill="none"/>
           <circle cx="85.5" cy="188.5" r="4.3" fill="#060A14"/>
-          <!-- 연결선 -->
-          <line x1="65" y1="141" x2="65" y2="178" stroke="#C8A96E" stroke-opacity="0.1" stroke-width="0.4"/>
-          <!-- 산포 별 -->
-          <circle cx="26" cy="60" r="0.7" fill="#C8A96E" fill-opacity="0.22"/>
-          <circle cx="104" cy="60" r="0.7" fill="#C8A96E" fill-opacity="0.22"/>
-          <circle cx="26" cy="155" r="0.7" fill="#C8A96E" fill-opacity="0.22"/>
-          <circle cx="104" cy="155" r="0.7" fill="#C8A96E" fill-opacity="0.22"/>
+          <!-- 하단 별먼지 -->
+          <circle cx="30" cy="175" r="0.6" fill="#C8A96E" fill-opacity="0.15"/>
+          <circle cx="100" cy="178" r="0.5" fill="#C8A96E" fill-opacity="0.12"/>
+          <circle cx="55" cy="170" r="0.5" fill="#C8A96E" fill-opacity="0.1"/>
         </svg>
 
         <!-- 이미지 있을 때 하단 그라디언트 -->

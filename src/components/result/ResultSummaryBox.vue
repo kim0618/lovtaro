@@ -15,19 +15,20 @@ defineProps({
 <style scoped>
 .result-summary-box {
   margin: 0 var(--lt-space-md);
-  padding: var(--lt-space-lg) var(--lt-space-lg) var(--lt-space-lg) var(--lt-space-xl);
+  padding: var(--lt-space-lg);
+  padding-left: var(--lt-space-xl);
   background: none;
   border: none;
-  border-left: 1px solid rgba(77, 163, 255, 0.25);
+  border-left: 2px solid rgba(77, 163, 255, 0.25);
 }
 
 .result-summary-box__label {
-  font-size: 0.62rem;
+  font-size: 0.65rem;
   color: var(--lt-accent-2);
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   margin-bottom: 10px;
   text-transform: uppercase;
-  opacity: 0.7;
+  opacity: 0.8;
 }
 
 .result-summary-box__text {

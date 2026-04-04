@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { generateSingleCardShareImage, generateThreeCardShareImage, downloadImage } from '../../composables/useShareCard.js'
 
 const props = defineProps({
@@ -13,32 +13,38 @@ const props = defineProps({
 })
 
 const generating = ref(false)
-const generated = ref(false)
+const saveState = ref('idle') // 'idle' | 'done'
+const copyState = ref('idle') // 'idle' | 'done'
+
+const canNativeShare = computed(() =>
+  typeof navigator !== 'undefined' && !!navigator.share && !!navigator.canShare
+)
+
+async function generateImage() {
+  if (props.mode === 'three' && props.cards.length >= 3) {
+    return generateThreeCardShareImage({
+      readingType: props.readingType,
+      cards: props.cards,
+      summary: props.summary,
+    })
+  }
+  return generateSingleCardShareImage({
+    readingType: props.readingType,
+    cardName: props.cardName,
+    cardNameEn: props.cardNameEn,
+    summary: props.summary,
+    emotionTags: props.emotionTags,
+  })
+}
 
 async function handleSave() {
   if (generating.value) return
   generating.value = true
-
   try {
-    let dataUrl
-    if (props.mode === 'three' && props.cards.length >= 3) {
-      dataUrl = await generateThreeCardShareImage({
-        readingType: props.readingType,
-        cards: props.cards,
-        summary: props.summary,
-      })
-    } else {
-      dataUrl = await generateSingleCardShareImage({
-        readingType: props.readingType,
-        cardName: props.cardName,
-        cardNameEn: props.cardNameEn,
-        summary: props.summary,
-        emotionTags: props.emotionTags,
-      })
-    }
+    const dataUrl = await generateImage()
     downloadImage(dataUrl, `lovtaro-${props.readingType || 'reading'}.png`)
-    generated.value = true
-    setTimeout(() => { generated.value = false }, 2000)
+    saveState.value = 'done'
+    setTimeout(() => { saveState.value = 'idle' }, 2200)
   } finally {
     generating.value = false
   }
@@ -47,27 +53,9 @@ async function handleSave() {
 async function handleShare() {
   if (generating.value) return
   generating.value = true
-
   try {
-    let dataUrl
-    if (props.mode === 'three' && props.cards.length >= 3) {
-      dataUrl = await generateThreeCardShareImage({
-        readingType: props.readingType,
-        cards: props.cards,
-        summary: props.summary,
-      })
-    } else {
-      dataUrl = await generateSingleCardShareImage({
-        readingType: props.readingType,
-        cardName: props.cardName,
-        cardNameEn: props.cardNameEn,
-        summary: props.summary,
-        emotionTags: props.emotionTags,
-      })
-    }
-
-    // Try native share if available
-    if (navigator.share && navigator.canShare) {
+    const dataUrl = await generateImage()
+    if (canNativeShare.value) {
       const blob = await (await fetch(dataUrl)).blob()
       const file = new File([blob], 'lovtaro-reading.png', { type: 'image/png' })
       if (navigator.canShare({ files: [file] })) {
@@ -80,36 +68,65 @@ async function handleShare() {
     }
     // Fallback: download
     downloadImage(dataUrl, `lovtaro-${props.readingType || 'reading'}.png`)
-    generated.value = true
-    setTimeout(() => { generated.value = false }, 2000)
+    saveState.value = 'done'
+    setTimeout(() => { saveState.value = 'idle' }, 2200)
   } finally {
     generating.value = false
+  }
+}
+
+async function handleCopyLink() {
+  try {
+    await navigator.clipboard.writeText(window.location.href)
+    copyState.value = 'done'
+    setTimeout(() => { copyState.value = 'idle' }, 2200)
+  } catch {
+    // Fallback for older browsers
+    const textarea = document.createElement('textarea')
+    textarea.value = window.location.href
+    textarea.style.position = 'fixed'
+    textarea.style.opacity = '0'
+    document.body.appendChild(textarea)
+    textarea.select()
+    document.execCommand('copy')
+    document.body.removeChild(textarea)
+    copyState.value = 'done'
+    setTimeout(() => { copyState.value = 'idle' }, 2200)
   }
 }
 </script>
 
 <template>
   <div class="share-save-section">
-    <p class="share-save-section__heading">이 리딩을 간직하세요</p>
+    <p class="share-save-section__heading">이 리딩을 간직하거나 공유하세요</p>
     <div class="share-save-section__actions">
       <button
         class="share-save-section__btn"
         :disabled="generating"
-        :aria-label="generating ? '이미지 생성 중' : '이미지 저장'"
+        :aria-label="generating ? '이미지 생성 중' : '이미지로 저장'"
         @click="handleSave"
       >
         <span v-if="generating" class="share-save-section__spinner" />
-        <span v-else-if="generated">저장 완료</span>
+        <span v-else-if="saveState === 'done'" class="share-save-section__done-text">저장 완료</span>
         <span v-else>이미지 저장</span>
       </button>
       <button
-        class="share-save-section__btn share-save-section__btn--secondary"
+        v-if="canNativeShare"
+        class="share-save-section__btn"
         :disabled="generating"
         :aria-label="generating ? '이미지 생성 중' : '공유하기'"
         @click="handleShare"
       >
         <span v-if="generating" class="share-save-section__spinner" />
         <span v-else>공유하기</span>
+      </button>
+      <button
+        class="share-save-section__btn share-save-section__btn--secondary"
+        :aria-label="copyState === 'done' ? '복사 완료' : '링크 복사'"
+        @click="handleCopyLink"
+      >
+        <span v-if="copyState === 'done'" class="share-save-section__done-text">복사 완료</span>
+        <span v-else>링크 복사</span>
       </button>
     </div>
   </div>
@@ -121,27 +138,29 @@ async function handleShare() {
 }
 
 .share-save-section__heading {
-  font-size: 0.68rem;
+  font-size: 0.72rem;
   color: var(--lt-text-muted);
   letter-spacing: 0.08em;
   text-align: center;
   margin-bottom: var(--lt-space-md);
-  opacity: 0.6;
+  opacity: 0.7;
 }
 
 .share-save-section__actions {
   display: flex;
   justify-content: center;
-  gap: var(--lt-space-sm);
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .share-save-section__btn {
   flex: 1;
-  max-width: 140px;
-  padding: 11px var(--lt-space-md);
+  min-width: 100px;
+  max-width: 150px;
+  padding: 12px var(--lt-space-md);
   border: 1px solid var(--lt-btn-primary-border);
   border-radius: var(--lt-radius-sm);
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   color: var(--lt-text);
   background: var(--lt-btn-primary-bg);
   letter-spacing: 0.04em;
@@ -155,7 +174,7 @@ async function handleShare() {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  min-height: 42px;
+  min-height: 44px;
 }
 
 .share-save-section__btn:hover:not(:disabled) {
@@ -177,13 +196,13 @@ async function handleShare() {
   box-shadow: 0 0 12px rgba(77, 163, 255, 0.08);
 }
 
+
 .share-save-section__btn:disabled {
   opacity: 0.6;
   cursor: wait;
 }
 
-.share-save-section__btn--done {
-  border-color: rgba(77, 163, 255, 0.3);
+.share-save-section__done-text {
   color: var(--lt-accent-2);
 }
 

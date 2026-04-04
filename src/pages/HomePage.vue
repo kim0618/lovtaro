@@ -40,24 +40,25 @@ const scenarioItems = [
     <PageContainer>
       <HeroSection />
 
-      <SectionBlock spacing="sm">
-        <p class="scenario-label">상황별 리딩</p>
+      <SectionBlock spacing="md">
+        <p class="section-label">상황별 리딩</p>
         <TarotMenuGrid :items="scenarioItems" />
       </SectionBlock>
 
       <SectionBlock spacing="md">
+        <p class="section-label">스프레드 리딩</p>
         <LoveSpreadPromo />
-      </SectionBlock>
-
-      <SectionBlock spacing="md">
-        <TodayCardBanner />
       </SectionBlock>
 
       <SectionBlock spacing="sm">
         <ThreeCardPromo />
       </SectionBlock>
 
-      <SectionBlock spacing="md">
+      <SectionBlock spacing="sm">
+        <TodayCardBanner />
+      </SectionBlock>
+
+      <SectionBlock spacing="sm">
         <TrustNoticeBlock />
       </SectionBlock>
 
@@ -69,12 +70,14 @@ const scenarioItems = [
 </template>
 
 <style scoped>
-.scenario-label {
+.section-label {
   font-size: 0.68rem;
   color: var(--lt-text-muted);
-  letter-spacing: 0.16em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   padding: 0 var(--lt-space-md);
-  margin-bottom: var(--lt-space-sm);
+  margin-bottom: var(--lt-space-md);
+  opacity: 0.8;
 }
+
 </style>

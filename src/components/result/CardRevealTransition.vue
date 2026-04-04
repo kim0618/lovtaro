@@ -42,13 +42,71 @@ defineProps({
           </svg>
         </div>
         <div class="card-reveal__card-front">
-          <span class="card-reveal__card-name">{{ cardName }}</span>
-          <span v-if="cardNameEn" class="card-reveal__card-en">{{ cardNameEn }}</span>
-          <span v-if="reversed" class="card-reveal__card-orientation">역방향</span>
+          <svg class="card-reveal__card-front-art" viewBox="0 0 120 198" fill="none" aria-hidden="true">
+            <!-- 내부 테두리 -->
+            <rect x="8" y="8" width="104" height="182" rx="4" stroke="#C8A96E" stroke-opacity="0.12" stroke-width="0.4"/>
+            <!-- 코너 장식 -->
+            <path d="M13 21 Q13 13 21 13" stroke="#C8A96E" stroke-opacity="0.3" stroke-width="0.5" fill="none"/>
+            <path d="M107 21 Q107 13 99 13" stroke="#C8A96E" stroke-opacity="0.3" stroke-width="0.5" fill="none"/>
+            <path d="M13 177 Q13 185 21 185" stroke="#C8A96E" stroke-opacity="0.3" stroke-width="0.5" fill="none"/>
+            <path d="M107 177 Q107 185 99 185" stroke="#C8A96E" stroke-opacity="0.3" stroke-width="0.5" fill="none"/>
+            <!-- 상단 달 위상 -->
+            <circle cx="40" cy="30" r="4" stroke="#C8A96E" stroke-opacity="0.25" stroke-width="0.5" fill="none"/>
+            <circle cx="42" cy="28.5" r="3" fill="#0A1020"/>
+            <circle cx="60" cy="30" r="4" stroke="#C8A96E" stroke-opacity="0.3" stroke-width="0.5" fill="#C8A96E" fill-opacity="0.06"/>
+            <circle cx="80" cy="30" r="4" stroke="#C8A96E" stroke-opacity="0.25" stroke-width="0.5" fill="none"/>
+            <circle cx="78" cy="28.5" r="3" fill="#0A1020"/>
+            <!-- 성좌: 인연의 별자리 -->
+            <!-- 주 별 (큰 별 2개) -->
+            <circle cx="40" cy="68" r="3" fill="#C8A96E" fill-opacity="0.7"/>
+            <circle cx="40" cy="68" r="6" stroke="#C8A96E" stroke-opacity="0.2" stroke-width="0.5" fill="none"/>
+            <circle cx="40" cy="68" r="9" stroke="#C8A96E" stroke-opacity="0.08" stroke-width="0.3" fill="none"/>
+            <circle cx="82" cy="60" r="2.5" fill="#C8A96E" fill-opacity="0.6"/>
+            <circle cx="82" cy="60" r="5" stroke="#C8A96E" stroke-opacity="0.18" stroke-width="0.5" fill="none"/>
+            <!-- 주 연결선 -->
+            <line x1="40" y1="68" x2="82" y2="60" stroke="#C8A96E" stroke-opacity="0.3" stroke-width="0.6"/>
+            <!-- 보조 별 -->
+            <circle cx="28" cy="54" r="1.5" fill="#C8A96E" fill-opacity="0.45"/>
+            <circle cx="60" cy="56" r="1.8" fill="#C8A96E" fill-opacity="0.4"/>
+            <circle cx="94" cy="72" r="1.3" fill="#C8A96E" fill-opacity="0.35"/>
+            <circle cx="50" cy="78" r="1.2" fill="#C8A96E" fill-opacity="0.3"/>
+            <circle cx="72" cy="76" r="1" fill="#C8A96E" fill-opacity="0.25"/>
+            <!-- 보조 연결선 -->
+            <line x1="28" y1="54" x2="40" y2="68" stroke="#C8A96E" stroke-opacity="0.15" stroke-width="0.4"/>
+            <line x1="40" y1="68" x2="60" y2="56" stroke="#C8A96E" stroke-opacity="0.12" stroke-width="0.4"/>
+            <line x1="60" y1="56" x2="82" y2="60" stroke="#C8A96E" stroke-opacity="0.12" stroke-width="0.4"/>
+            <line x1="82" y1="60" x2="94" y2="72" stroke="#C8A96E" stroke-opacity="0.1" stroke-width="0.3"/>
+            <line x1="40" y1="68" x2="50" y2="78" stroke="#C8A96E" stroke-opacity="0.1" stroke-width="0.3"/>
+            <!-- 별먼지 -->
+            <circle cx="22" cy="62" r="0.6" fill="#C8A96E" fill-opacity="0.22"/>
+            <circle cx="35" cy="48" r="0.5" fill="#C8A96E" fill-opacity="0.18"/>
+            <circle cx="68" cy="52" r="0.7" fill="#C8A96E" fill-opacity="0.16"/>
+            <circle cx="90" cy="54" r="0.5" fill="#C8A96E" fill-opacity="0.14"/>
+            <circle cx="46" cy="60" r="0.4" fill="#C8A96E" fill-opacity="0.15"/>
+            <circle cx="76" cy="68" r="0.5" fill="#C8A96E" fill-opacity="0.12"/>
+            <circle cx="56" cy="72" r="0.4" fill="#C8A96E" fill-opacity="0.1"/>
+            <circle cx="100" cy="64" r="0.4" fill="#C8A96E" fill-opacity="0.1"/>
+            <circle cx="18" cy="74" r="0.4" fill="#C8A96E" fill-opacity="0.08"/>
+            <!-- 하단 달 위상 -->
+            <circle cx="40" cy="168" r="4" stroke="#C8A96E" stroke-opacity="0.25" stroke-width="0.5" fill="none"/>
+            <circle cx="38" cy="169.5" r="3" fill="#0A1020"/>
+            <circle cx="60" cy="168" r="4" stroke="#C8A96E" stroke-opacity="0.3" stroke-width="0.5" fill="#C8A96E" fill-opacity="0.06"/>
+            <circle cx="80" cy="168" r="4" stroke="#C8A96E" stroke-opacity="0.25" stroke-width="0.5" fill="none"/>
+            <circle cx="82" cy="169.5" r="3" fill="#0A1020"/>
+            <!-- 하단 별먼지 -->
+            <circle cx="35" cy="155" r="0.5" fill="#C8A96E" fill-opacity="0.15"/>
+            <circle cx="85" cy="158" r="0.6" fill="#C8A96E" fill-opacity="0.12"/>
+          </svg>
+          <div class="card-reveal__card-front-content">
+            <span class="card-reveal__card-name">{{ cardName }}</span>
+            <span v-if="cardNameEn" class="card-reveal__card-en">{{ cardNameEn }}</span>
+            <span v-if="reversed" class="card-reveal__card-orientation">역방향</span>
+          </div>
         </div>
       </div>
     </div>
     <p class="card-reveal__message">카드가 당신에게 전하는 이야기</p>
+    <p class="card-reveal__hint">잠시 후 해석이 펼쳐집니다</p>
   </div>
 </template>
 
@@ -57,16 +115,14 @@ defineProps({
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  min-height: 72vh;
-  padding: var(--lt-space-xl) var(--lt-space-md);
+  padding: 16vh var(--lt-space-md) var(--lt-space-2xl);
   position: relative;
   overflow: hidden;
 }
 
 .card-reveal__glow {
   position: absolute;
-  top: 35%;
+  top: 28%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 280px;
@@ -148,15 +204,30 @@ defineProps({
 .card-reveal__card-front {
   transform: rotateY(180deg);
   background: linear-gradient(170deg, var(--lt-bg-3) 0%, var(--lt-bg-2) 100%);
-  border: 1px solid rgba(77, 163, 255, 0.25);
+  border: 1px solid rgba(200, 169, 110, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 8px 40px rgba(0, 0, 0, 0.5),
+    0 0 30px rgba(200, 169, 110, 0.08);
+}
+
+.card-reveal__card-front-art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.card-reveal__card-front-content {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   gap: 8px;
-  box-shadow:
-    0 8px 40px rgba(0, 0, 0, 0.5),
-    0 0 30px rgba(77, 163, 255, 0.12);
+  z-index: 1;
 }
 
 .card-reveal__card-name {
@@ -194,11 +265,21 @@ defineProps({
   animation: lt-fade-in 500ms ease 1.6s both;
 }
 
+.card-reveal__hint {
+  font-size: 0.62rem;
+  color: var(--lt-text-muted);
+  letter-spacing: 0.1em;
+  opacity: 0;
+  margin-top: 40px;
+  animation: lt-fade-in 400ms ease 1.9s both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .card-reveal__glow,
   .card-reveal__card-inner,
   .card-reveal__type,
-  .card-reveal__message {
+  .card-reveal__message,
+  .card-reveal__hint {
     animation: none;
     opacity: 1;
   }

@@ -24,15 +24,16 @@ defineProps({
   justify-content: center;
   gap: 6px;
   padding: 0 var(--lt-space-md);
+  padding-bottom: var(--lt-space-sm);
 }
 
 .emotion-tag-list__tag {
   font-size: 0.75rem;
   color: var(--lt-text-sub);
   letter-spacing: 0.04em;
-  padding: 4px 12px;
-  border: 1px solid rgba(77, 163, 255, 0.15);
+  padding: 5px 14px;
+  border: 1px solid rgba(77, 163, 255, 0.2);
   border-radius: var(--lt-radius-full);
-  background: rgba(77, 163, 255, 0.04);
+  background: rgba(77, 163, 255, 0.06);
 }
 </style>
