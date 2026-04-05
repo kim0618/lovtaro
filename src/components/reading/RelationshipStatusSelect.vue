@@ -72,7 +72,7 @@ function onConfirm() {
       </p>
     </div>
 
-    <div class="rs-select__grid">
+    <div class="rs-select__grid" role="radiogroup" aria-label="연애 상태 선택">
       <button
         v-for="s in statuses"
         :key="s.value"
@@ -81,6 +81,9 @@ function onConfirm() {
           'rs-select__option--selected': selected === s.value,
           'rs-select__option--dimmed': selected && selected !== s.value,
         }"
+        role="radio"
+        :aria-checked="selected === s.value"
+        :aria-label="`${s.label}: ${s.desc}`"
         :disabled="confirmed"
         @click="onSelect(s.value)"
       >

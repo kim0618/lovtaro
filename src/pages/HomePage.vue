@@ -1,5 +1,11 @@
 <script setup>
+import { useHead } from '../composables/useHead.js'
 import AppShell from '../components/common/AppShell.vue'
+
+useHead({
+  title: 'Lovtaro | 무료 연애 타로 - 감정의 흐름을 읽는 타로',
+  description: '무료 연애 타로 리딩. 상대방 속마음, 재회 가능성, 연락 올까 타로, 러브 스프레드까지. 관계의 결을 깊고 조용하게 해석하는 프리미엄 타로, Lovtaro.',
+})
 import PageContainer from '../components/ui/PageContainer.vue'
 import SectionBlock from '../components/ui/SectionBlock.vue'
 import HeroSection from '../components/home/HeroSection.vue'

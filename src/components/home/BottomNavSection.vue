@@ -10,6 +10,7 @@ const links = [
   { label: '연락',   to: '/reading/contact' },
   { label: '3장',    to: '/reading/3cards' },
   { label: '오늘',   to: '/today' },
+  { label: '카드사전', to: '/cards' },
   { label: '기록',   to: '/history' },
 ]
 </script>

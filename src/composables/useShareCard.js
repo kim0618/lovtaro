@@ -3,8 +3,10 @@
  * Creates a premium portrait-oriented image suitable for Instagram sharing.
  */
 
-const CARD_WIDTH = 1080
-const CARD_HEIGHT = 1920
+const STORY_WIDTH = 1080
+const STORY_HEIGHT = 1920
+const FEED_WIDTH = 1080
+const FEED_HEIGHT = 1350
 const DPR = 1
 
 /**
@@ -56,157 +58,227 @@ function wrapText(ctx, text, maxWidth) {
  * @param {string[]} options.emotionTags - Keyword tags
  * @returns {Promise<string>} Data URL of the generated image
  */
-export function generateSingleCardShareImage({ readingType, cardName, cardNameEn, summary, emotionTags = [] }) {
-  return new Promise((resolve) => {
-    const canvas = document.createElement('canvas')
-    canvas.width = CARD_WIDTH * DPR
-    canvas.height = CARD_HEIGHT * DPR
-    const ctx = canvas.getContext('2d')
-    ctx.scale(DPR, DPR)
+export async function generateSingleCardShareImage({ readingType, cardName, cardNameEn, summary, emotionTags = [], cardImage = '', reversed = false, format = 'story' }) {
+  const W = format === 'feed' ? FEED_WIDTH : STORY_WIDTH
+  const H = format === 'feed' ? FEED_HEIGHT : STORY_HEIGHT
+  // 카드 이미지 로드
+  const img = cardImage
+    ? await new Promise((resolve) => {
+        const i = new Image()
+        i.crossOrigin = 'anonymous'
+        i.onload = () => resolve(i)
+        i.onerror = () => resolve(null)
+        i.src = cardImage
+      })
+    : null
 
-    // Background
-    const bgGrad = ctx.createLinearGradient(0, 0, 0, CARD_HEIGHT)
-    bgGrad.addColorStop(0, '#05070D')
-    bgGrad.addColorStop(0.4, '#0A1020')
-    bgGrad.addColorStop(1, '#05070D')
-    ctx.fillStyle = bgGrad
-    ctx.fillRect(0, 0, CARD_WIDTH, CARD_HEIGHT)
+  const canvas = document.createElement('canvas')
+  canvas.width = W * DPR
+  canvas.height = H * DPR
+  const ctx = canvas.getContext('2d')
+  ctx.scale(DPR, DPR)
 
-    // Ambient glow
-    const glowGrad = ctx.createRadialGradient(CARD_WIDTH / 2, CARD_HEIGHT * 0.35, 0, CARD_WIDTH / 2, CARD_HEIGHT * 0.35, 400)
-    glowGrad.addColorStop(0, 'rgba(45, 108, 223, 0.08)')
-    glowGrad.addColorStop(0.5, 'rgba(77, 163, 255, 0.03)')
-    glowGrad.addColorStop(1, 'transparent')
-    ctx.fillStyle = glowGrad
-    ctx.fillRect(0, 0, CARD_WIDTH, CARD_HEIGHT)
+  // Background
+  const bgGrad = ctx.createLinearGradient(0, 0, 0, H)
+  bgGrad.addColorStop(0, '#05070D')
+  bgGrad.addColorStop(0.4, '#0A1020')
+  bgGrad.addColorStop(1, '#05070D')
+  ctx.fillStyle = bgGrad
+  ctx.fillRect(0, 0, W, H)
 
-    // Inner border frame
-    ctx.strokeStyle = 'rgba(199, 215, 248, 0.08)'
+  // Ambient glow
+  const glowGrad = ctx.createRadialGradient(W / 2, H * 0.35, 0, W / 2, H * 0.35, 400)
+  glowGrad.addColorStop(0, 'rgba(45, 108, 223, 0.08)')
+  glowGrad.addColorStop(0.5, 'rgba(77, 163, 255, 0.03)')
+  glowGrad.addColorStop(1, 'transparent')
+  ctx.fillStyle = glowGrad
+  ctx.fillRect(0, 0, W, H)
+
+  // Inner border frame
+  ctx.strokeStyle = 'rgba(199, 215, 248, 0.08)'
+  ctx.lineWidth = 1
+  roundRect(ctx, 60, 60, W - 120, H - 120, 20)
+  ctx.stroke()
+
+  const lineGrad = ctx.createLinearGradient(200, 0, W - 200, 0)
+  lineGrad.addColorStop(0, 'transparent')
+  lineGrad.addColorStop(0.5, 'rgba(77, 163, 255, 0.3)')
+  lineGrad.addColorStop(1, 'transparent')
+
+  // Feed: 좌측 카드 + 우측 텍스트 / Story: 위 텍스트 + 아래 카드
+  const isFeed = format === 'feed'
+
+  if (isFeed) {
+    // ── Feed 레이아웃 (4:5) ──
+    const cardW = 380
+    const cardH = 630
+    const cardX = 100
+    const cardY = (H - cardH) / 2
+
+    // 카드 그리기
+    _drawCardFrame(ctx, img, cardX, cardY, cardW, cardH, reversed)
+
+    // 우측 텍스트 영역
+    const textX = cardX + cardW + 60
+    const textW = W - textX - 100
+    ctx.textAlign = 'left'
+
+    ctx.font = '300 24px "Noto Sans KR", sans-serif'
+    ctx.fillStyle = 'rgba(77, 163, 255, 0.7)'
+    ctx.fillText(readingType, textX, cardY + 40)
+
+    ctx.font = '300 64px "Noto Sans KR", sans-serif'
+    ctx.fillStyle = '#F4F8FF'
+    ctx.fillText(cardName, textX, cardY + 120)
+
+    if (cardNameEn) {
+      ctx.font = 'italic 300 28px "Cormorant Garamond", Georgia, serif'
+      ctx.fillStyle = 'rgba(126, 138, 168, 0.7)'
+      ctx.fillText(cardNameEn, textX, cardY + 160)
+    }
+
+    // 구분선
+    ctx.strokeStyle = 'rgba(77, 163, 255, 0.2)'
     ctx.lineWidth = 1
-    roundRect(ctx, 60, 60, CARD_WIDTH - 120, CARD_HEIGHT - 120, 20)
+    ctx.beginPath()
+    ctx.moveTo(textX, cardY + 190)
+    ctx.lineTo(textX + textW, cardY + 190)
     ctx.stroke()
 
-    // Decorative line top
-    const lineGrad = ctx.createLinearGradient(200, 0, CARD_WIDTH - 200, 0)
-    lineGrad.addColorStop(0, 'transparent')
-    lineGrad.addColorStop(0.5, 'rgba(77, 163, 255, 0.3)')
-    lineGrad.addColorStop(1, 'transparent')
+    // 요약
+    if (summary) {
+      ctx.font = '400 28px "Noto Sans KR", sans-serif'
+      ctx.fillStyle = 'rgba(220, 232, 255, 0.85)'
+      const lines = wrapText(ctx, summary, textW)
+      lines.slice(0, 5).forEach((line, i) => {
+        ctx.fillText(line, textX, cardY + 230 + i * 44)
+      })
+    }
+
+    // 하단 CTA
+    ctx.textAlign = 'left'
+    ctx.font = '400 26px "Noto Sans KR", sans-serif'
+    ctx.fillStyle = 'rgba(143, 211, 255, 0.7)'
+    ctx.fillText('나도 뽑아보기', textX, cardY + cardH - 70)
+
+    ctx.font = '300 22px "Noto Sans KR", sans-serif'
+    ctx.fillStyle = 'rgba(167, 183, 214, 0.5)'
+    ctx.fillText('lovtaro.pages.dev', textX, cardY + cardH - 36)
+  } else {
+    // ── Story 레이아웃 (9:16) ──
     ctx.strokeStyle = lineGrad
     ctx.lineWidth = 1
     ctx.beginPath()
     ctx.moveTo(200, 280)
-    ctx.lineTo(CARD_WIDTH - 200, 280)
+    ctx.lineTo(W - 200, 280)
     ctx.stroke()
 
-    // Reading type label
     ctx.font = '300 28px "Noto Sans KR", sans-serif'
     ctx.fillStyle = 'rgba(77, 163, 255, 0.7)'
     ctx.textAlign = 'center'
-    ctx.letterSpacing = '4px'
-    ctx.fillText(readingType.toUpperCase(), CARD_WIDTH / 2, 240)
+    ctx.fillText(readingType, W / 2, 240)
 
-    // Card name (large)
     ctx.font = '300 96px "Noto Sans KR", sans-serif'
     ctx.fillStyle = '#F4F8FF'
-    ctx.fillText(cardName, CARD_WIDTH / 2, 440)
+    ctx.fillText(cardName, W / 2, 440)
 
-    // Card English name
     if (cardNameEn) {
       ctx.font = 'italic 300 36px "Cormorant Garamond", Georgia, serif'
       ctx.fillStyle = 'rgba(126, 138, 168, 0.8)'
-      ctx.fillText(cardNameEn, CARD_WIDTH / 2, 500)
+      ctx.fillText(cardNameEn, W / 2, 500)
     }
 
-    // Card visual placeholder (elegant frame)
-    const cardX = (CARD_WIDTH - 280) / 2
-    const cardY = 560
-    const cardW = 280
-    const cardH = 460
+    const cardW = 320
+    const cardH = 530
+    const cardX = (W - cardW) / 2
+    const cardY = 540
 
-    // Card shadow
-    ctx.shadowColor = 'rgba(0, 0, 0, 0.5)'
-    ctx.shadowBlur = 40
-    ctx.shadowOffsetY = 10
+    _drawCardFrame(ctx, img, cardX, cardY, cardW, cardH, reversed)
 
-    const cardBgGrad = ctx.createLinearGradient(cardX, cardY, cardX, cardY + cardH)
-    cardBgGrad.addColorStop(0, '#101A31')
-    cardBgGrad.addColorStop(1, '#0A1020')
-    ctx.fillStyle = cardBgGrad
-    roundRect(ctx, cardX, cardY, cardW, cardH, 16)
-    ctx.fill()
-
-    // Reset shadow
-    ctx.shadowColor = 'transparent'
-    ctx.shadowBlur = 0
-    ctx.shadowOffsetY = 0
-
-    // Card border
-    ctx.strokeStyle = 'rgba(77, 163, 255, 0.2)'
-    ctx.lineWidth = 1
-    roundRect(ctx, cardX, cardY, cardW, cardH, 16)
-    ctx.stroke()
-
-    // Card inner frame
-    ctx.strokeStyle = 'rgba(199, 215, 248, 0.08)'
-    roundRect(ctx, cardX + 12, cardY + 12, cardW - 24, cardH - 24, 10)
-    ctx.stroke()
-
-    // Card name inside frame
-    ctx.font = '300 44px "Noto Sans KR", sans-serif'
-    ctx.fillStyle = '#F4F8FF'
-    ctx.fillText(cardName, CARD_WIDTH / 2, cardY + cardH / 2 - 10)
-
-    if (cardNameEn) {
-      ctx.font = 'italic 300 24px "Cormorant Garamond", Georgia, serif'
-      ctx.fillStyle = 'rgba(126, 138, 168, 0.7)'
-      ctx.fillText(cardNameEn, CARD_WIDTH / 2, cardY + cardH / 2 + 30)
-    }
-
-    // Decorative line after card
     ctx.strokeStyle = lineGrad
-    ctx.lineWidth = 1
     ctx.beginPath()
     ctx.moveTo(200, cardY + cardH + 60)
-    ctx.lineTo(CARD_WIDTH - 200, cardY + cardH + 60)
+    ctx.lineTo(W - 200, cardY + cardH + 60)
     ctx.stroke()
 
-    // Emotion tags
     if (emotionTags.length > 0) {
-      const tagY = cardY + cardH + 110
       ctx.font = '400 28px "Noto Sans KR", sans-serif'
       ctx.fillStyle = 'rgba(167, 183, 214, 0.7)'
-      const tagStr = emotionTags.join('  ·  ')
-      ctx.fillText(tagStr, CARD_WIDTH / 2, tagY)
+      ctx.textAlign = 'center'
+      ctx.fillText(emotionTags.join('  ·  '), W / 2, cardY + cardH + 110)
     }
 
-    // Summary text
     if (summary) {
-      const summaryY = cardY + cardH + 180
+      const summaryY = cardY + cardH + 170
       ctx.font = '400 34px "Noto Sans KR", sans-serif'
       ctx.fillStyle = 'rgba(220, 232, 255, 0.9)'
       ctx.textAlign = 'center'
-      const lines = wrapText(ctx, summary, CARD_WIDTH - 200)
+      const lines = wrapText(ctx, summary, W - 200)
       lines.forEach((line, i) => {
-        ctx.fillText(line, CARD_WIDTH / 2, summaryY + i * 54)
+        ctx.fillText(line, W / 2, summaryY + i * 54)
       })
     }
 
-    // Bottom branding
-    ctx.font = 'italic 300 28px "Cormorant Garamond", Georgia, serif'
-    ctx.fillStyle = 'rgba(126, 138, 168, 0.4)'
-    ctx.textAlign = 'center'
-    ctx.fillText('Lovtaro', CARD_WIDTH / 2, CARD_HEIGHT - 120)
-
-    // Bottom decorative line
+    // Bottom CTA
+    const bottomLineY = H - 200
     ctx.strokeStyle = lineGrad
-    ctx.lineWidth = 1
     ctx.beginPath()
-    ctx.moveTo(CARD_WIDTH / 2 - 40, CARD_HEIGHT - 90)
-    ctx.lineTo(CARD_WIDTH / 2 + 40, CARD_HEIGHT - 90)
+    ctx.moveTo(200, bottomLineY)
+    ctx.lineTo(W - 200, bottomLineY)
     ctx.stroke()
 
-    resolve(canvas.toDataURL('image/png'))
-  })
+    ctx.font = '400 30px "Noto Sans KR", sans-serif'
+    ctx.fillStyle = 'rgba(143, 211, 255, 0.8)'
+    ctx.textAlign = 'center'
+    ctx.fillText('나도 뽑아보기', W / 2, bottomLineY + 52)
+
+    ctx.font = '300 26px "Noto Sans KR", sans-serif'
+    ctx.fillStyle = 'rgba(167, 183, 214, 0.6)'
+    ctx.fillText('lovtaro.pages.dev', W / 2, bottomLineY + 92)
+
+    ctx.font = 'italic 300 24px "Cormorant Garamond", Georgia, serif'
+    ctx.fillStyle = 'rgba(126, 138, 168, 0.35)'
+    ctx.fillText('Lovtaro', W / 2, H - 60)
+  }
+
+  return canvas.toDataURL('image/png')
+}
+
+/** 카드 프레임 + 이미지 공통 헬퍼 */
+function _drawCardFrame(ctx, img, x, y, w, h, reversed) {
+  ctx.shadowColor = 'rgba(0, 0, 0, 0.5)'
+  ctx.shadowBlur = 40
+  ctx.shadowOffsetY = 10
+
+  const bgGrad = ctx.createLinearGradient(x, y, x, y + h)
+  bgGrad.addColorStop(0, '#101A31')
+  bgGrad.addColorStop(1, '#0A1020')
+  ctx.fillStyle = bgGrad
+  roundRect(ctx, x, y, w, h, 16)
+  ctx.fill()
+
+  ctx.shadowColor = 'transparent'
+  ctx.shadowBlur = 0
+  ctx.shadowOffsetY = 0
+
+  if (img) {
+    ctx.save()
+    roundRect(ctx, x, y, w, h, 16)
+    ctx.clip()
+    if (reversed) {
+      ctx.translate(x + w / 2, y + h / 2)
+      ctx.rotate(Math.PI)
+      ctx.drawImage(img, -w / 2, -h / 2, w, h)
+    } else {
+      ctx.drawImage(img, x, y, w, h)
+    }
+    ctx.restore()
+  }
+
+  ctx.strokeStyle = 'rgba(200, 169, 110, 0.3)'
+  ctx.lineWidth = 1.5
+  roundRect(ctx, x, y, w, h, 16)
+  ctx.stroke()
 }
 
 /**
@@ -217,144 +289,162 @@ export function generateSingleCardShareImage({ readingType, cardName, cardNameEn
  * @param {string} options.summary - Overall summary
  * @returns {Promise<string>} Data URL of the generated image
  */
-export function generateThreeCardShareImage({ readingType, cards, summary }) {
-  return new Promise((resolve) => {
-    const canvas = document.createElement('canvas')
-    canvas.width = CARD_WIDTH * DPR
-    canvas.height = CARD_HEIGHT * DPR
-    const ctx = canvas.getContext('2d')
-    ctx.scale(DPR, DPR)
+export async function generateThreeCardShareImage({ readingType, cards, summary, format = 'story' }) {
+  const W = format === 'feed' ? FEED_WIDTH : STORY_WIDTH
+  const H = format === 'feed' ? FEED_HEIGHT : STORY_HEIGHT
 
-    // Background
-    const bgGrad = ctx.createLinearGradient(0, 0, 0, CARD_HEIGHT)
-    bgGrad.addColorStop(0, '#05070D')
-    bgGrad.addColorStop(0.4, '#0A1020')
-    bgGrad.addColorStop(1, '#05070D')
-    ctx.fillStyle = bgGrad
-    ctx.fillRect(0, 0, CARD_WIDTH, CARD_HEIGHT)
+  // 카드 이미지 로드
+  const cardImages = await Promise.all(
+    cards.slice(0, 3).map(card =>
+      card.image
+        ? new Promise((resolve) => {
+            const img = new Image()
+            img.crossOrigin = 'anonymous'
+            img.onload = () => resolve(img)
+            img.onerror = () => resolve(null)
+            img.src = card.image
+          })
+        : Promise.resolve(null)
+    )
+  )
 
-    // Ambient glow
-    const glowGrad = ctx.createRadialGradient(CARD_WIDTH / 2, CARD_HEIGHT * 0.3, 0, CARD_WIDTH / 2, CARD_HEIGHT * 0.3, 400)
-    glowGrad.addColorStop(0, 'rgba(45, 108, 223, 0.08)')
-    glowGrad.addColorStop(1, 'transparent')
-    ctx.fillStyle = glowGrad
-    ctx.fillRect(0, 0, CARD_WIDTH, CARD_HEIGHT)
+  const canvas = document.createElement('canvas')
+  canvas.width = W * DPR
+  canvas.height = H * DPR
+  const ctx = canvas.getContext('2d')
+  ctx.scale(DPR, DPR)
 
-    // Inner border frame
-    ctx.strokeStyle = 'rgba(199, 215, 248, 0.08)'
-    ctx.lineWidth = 1
-    roundRect(ctx, 60, 60, CARD_WIDTH - 120, CARD_HEIGHT - 120, 20)
-    ctx.stroke()
+  // Background
+  const bgGrad = ctx.createLinearGradient(0, 0, 0, H)
+  bgGrad.addColorStop(0, '#05070D')
+  bgGrad.addColorStop(0.4, '#0A1020')
+  bgGrad.addColorStop(1, '#05070D')
+  ctx.fillStyle = bgGrad
+  ctx.fillRect(0, 0, W, H)
 
-    // Decorative line top
-    const lineGrad = ctx.createLinearGradient(200, 0, CARD_WIDTH - 200, 0)
-    lineGrad.addColorStop(0, 'transparent')
-    lineGrad.addColorStop(0.5, 'rgba(77, 163, 255, 0.3)')
-    lineGrad.addColorStop(1, 'transparent')
-    ctx.strokeStyle = lineGrad
-    ctx.lineWidth = 1
-    ctx.beginPath()
-    ctx.moveTo(200, 260)
-    ctx.lineTo(CARD_WIDTH - 200, 260)
-    ctx.stroke()
+  // Ambient glow
+  const glowGrad = ctx.createRadialGradient(W / 2, H * 0.3, 0, W / 2, H * 0.3, 400)
+  glowGrad.addColorStop(0, 'rgba(45, 108, 223, 0.08)')
+  glowGrad.addColorStop(1, 'transparent')
+  ctx.fillStyle = glowGrad
+  ctx.fillRect(0, 0, W, H)
 
-    // Reading type
-    ctx.font = '300 28px "Noto Sans KR", sans-serif'
-    ctx.fillStyle = 'rgba(77, 163, 255, 0.7)'
-    ctx.textAlign = 'center'
-    ctx.fillText(readingType, CARD_WIDTH / 2, 220)
+  // Inner border frame
+  ctx.strokeStyle = 'rgba(199, 215, 248, 0.08)'
+  ctx.lineWidth = 1
+  roundRect(ctx, 60, 60, W - 120, H - 120, 20)
+  ctx.stroke()
 
-    // Title
+  const lineGrad = ctx.createLinearGradient(200, 0, W - 200, 0)
+  lineGrad.addColorStop(0, 'transparent')
+  lineGrad.addColorStop(0.5, 'rgba(77, 163, 255, 0.3)')
+  lineGrad.addColorStop(1, 'transparent')
+
+  const isFeed = format === 'feed'
+  const headerLineY = isFeed ? 200 : 260
+  const titleY = isFeed ? 310 : 380
+  const cardW = isFeed ? 280 : 240
+  const cardH = isFeed ? 460 : 400
+  const gap = isFeed ? 24 : 36
+  const totalW = cardW * 3 + gap * 2
+  const startX = (W - totalW) / 2
+  const cardY = isFeed ? 360 : 440
+
+  // Decorative line top
+  ctx.strokeStyle = lineGrad
+  ctx.lineWidth = 1
+  ctx.beginPath()
+  ctx.moveTo(200, headerLineY)
+  ctx.lineTo(W - 200, headerLineY)
+  ctx.stroke()
+
+  // Reading type
+  ctx.font = '300 28px "Noto Sans KR", sans-serif'
+  ctx.fillStyle = 'rgba(77, 163, 255, 0.7)'
+  ctx.textAlign = 'center'
+  ctx.fillText(readingType, W / 2, headerLineY - 40)
+
+  // Title (story only)
+  if (!isFeed) {
     ctx.font = '300 64px "Noto Sans KR", sans-serif'
     ctx.fillStyle = '#F4F8FF'
-    ctx.fillText('세 장의 이야기', CARD_WIDTH / 2, 380)
+    ctx.fillText('세 장의 이야기', W / 2, titleY)
+  }
 
-    // Three card frames
-    const cardW = 220
-    const cardH = 360
-    const gap = 40
-    const totalW = cardW * 3 + gap * 2
-    const startX = (CARD_WIDTH - totalW) / 2
-    const cardY = 460
+  // Three card frames
+  cards.slice(0, 3).forEach((card, i) => {
+    const x = startX + i * (cardW + gap)
+    const img = cardImages[i]
 
-    cards.slice(0, 3).forEach((card, i) => {
-      const x = startX + i * (cardW + gap)
+    _drawCardFrame(ctx, img, x, cardY, cardW, cardH, card.reversed)
 
-      // Card shadow
-      ctx.shadowColor = 'rgba(0, 0, 0, 0.4)'
-      ctx.shadowBlur = 30
-      ctx.shadowOffsetY = 8
-
-      const cardBgGrad = ctx.createLinearGradient(x, cardY, x, cardY + cardH)
-      cardBgGrad.addColorStop(0, '#101A31')
-      cardBgGrad.addColorStop(1, '#0A1020')
-      ctx.fillStyle = cardBgGrad
-      roundRect(ctx, x, cardY, cardW, cardH, 14)
-      ctx.fill()
-
-      ctx.shadowColor = 'transparent'
-      ctx.shadowBlur = 0
-      ctx.shadowOffsetY = 0
-
-      // Border
-      ctx.strokeStyle = 'rgba(77, 163, 255, 0.18)'
-      ctx.lineWidth = 1
-      roundRect(ctx, x, cardY, cardW, cardH, 14)
-      ctx.stroke()
-
-      // Inner frame
-      ctx.strokeStyle = 'rgba(199, 215, 248, 0.06)'
-      roundRect(ctx, x + 10, cardY + 10, cardW - 20, cardH - 20, 8)
-      ctx.stroke()
-
-      // Card name
+    if (!img) {
       ctx.font = '300 34px "Noto Sans KR", sans-serif'
       ctx.fillStyle = '#F4F8FF'
       ctx.textAlign = 'center'
       ctx.fillText(card.name, x + cardW / 2, cardY + cardH / 2)
-
-      // Position label below card
-      ctx.font = '400 24px "Noto Sans KR", sans-serif'
-      ctx.fillStyle = 'rgba(77, 163, 255, 0.6)'
-      ctx.fillText(card.position, x + cardW / 2, cardY + cardH + 44)
-    })
-
-    // Decorative line after cards
-    const afterCardsY = cardY + cardH + 100
-    ctx.strokeStyle = lineGrad
-    ctx.lineWidth = 1
-    ctx.beginPath()
-    ctx.moveTo(200, afterCardsY)
-    ctx.lineTo(CARD_WIDTH - 200, afterCardsY)
-    ctx.stroke()
-
-    // Summary
-    if (summary) {
-      const summaryY = afterCardsY + 80
-      ctx.font = '400 34px "Noto Sans KR", sans-serif'
-      ctx.fillStyle = 'rgba(220, 232, 255, 0.9)'
-      ctx.textAlign = 'center'
-      const lines = wrapText(ctx, summary, CARD_WIDTH - 200)
-      lines.forEach((line, i) => {
-        ctx.fillText(line, CARD_WIDTH / 2, summaryY + i * 54)
-      })
     }
 
-    // Branding
-    ctx.font = 'italic 300 28px "Cormorant Garamond", Georgia, serif'
-    ctx.fillStyle = 'rgba(126, 138, 168, 0.4)'
+    // Card name below
+    ctx.font = isFeed ? '300 24px "Noto Sans KR", sans-serif' : '300 28px "Noto Sans KR", sans-serif'
+    ctx.fillStyle = '#F4F8FF'
     ctx.textAlign = 'center'
-    ctx.fillText('Lovtaro', CARD_WIDTH / 2, CARD_HEIGHT - 120)
+    ctx.fillText(card.name, x + cardW / 2, cardY + cardH + 34)
 
-    ctx.strokeStyle = lineGrad
-    ctx.lineWidth = 1
-    ctx.beginPath()
-    ctx.moveTo(CARD_WIDTH / 2 - 40, CARD_HEIGHT - 90)
-    ctx.lineTo(CARD_WIDTH / 2 + 40, CARD_HEIGHT - 90)
-    ctx.stroke()
-
-    resolve(canvas.toDataURL('image/png'))
+    // Position label
+    ctx.font = isFeed ? '400 20px "Noto Sans KR", sans-serif' : '400 22px "Noto Sans KR", sans-serif'
+    ctx.fillStyle = 'rgba(77, 163, 255, 0.6)'
+    ctx.fillText(card.position, x + cardW / 2, cardY + cardH + 60)
   })
+
+  // After cards content
+  const afterCardsY = cardY + cardH + (isFeed ? 90 : 110)
+  ctx.strokeStyle = lineGrad
+  ctx.lineWidth = 1
+  ctx.beginPath()
+  ctx.moveTo(200, afterCardsY)
+  ctx.lineTo(W - 200, afterCardsY)
+  ctx.stroke()
+
+  // Summary
+  if (summary) {
+    const summaryY = afterCardsY + (isFeed ? 50 : 70)
+    const fontSize = isFeed ? 28 : 34
+    ctx.font = `400 ${fontSize}px "Noto Sans KR", sans-serif`
+    ctx.fillStyle = 'rgba(220, 232, 255, 0.9)'
+    ctx.textAlign = 'center'
+    const lines = wrapText(ctx, summary, W - 200)
+    const maxLines = isFeed ? 3 : 5
+    lines.slice(0, maxLines).forEach((line, i) => {
+      ctx.fillText(line, W / 2, summaryY + i * (isFeed ? 44 : 54))
+    })
+  }
+
+  // ── Bottom CTA + Branding ──
+  const bottomLineY = H - (isFeed ? 140 : 200)
+  ctx.strokeStyle = lineGrad
+  ctx.lineWidth = 1
+  ctx.beginPath()
+  ctx.moveTo(200, bottomLineY)
+  ctx.lineTo(W - 200, bottomLineY)
+  ctx.stroke()
+
+  ctx.font = isFeed ? '400 26px "Noto Sans KR", sans-serif' : '400 30px "Noto Sans KR", sans-serif'
+  ctx.fillStyle = 'rgba(143, 211, 255, 0.8)'
+  ctx.textAlign = 'center'
+  ctx.fillText('나도 뽑아보기', W / 2, bottomLineY + (isFeed ? 40 : 52))
+
+  ctx.font = isFeed ? '300 22px "Noto Sans KR", sans-serif' : '300 26px "Noto Sans KR", sans-serif'
+  ctx.fillStyle = 'rgba(167, 183, 214, 0.6)'
+  ctx.fillText('lovtaro.pages.dev', W / 2, bottomLineY + (isFeed ? 72 : 92))
+
+  if (!isFeed) {
+    ctx.font = 'italic 300 24px "Cormorant Garamond", Georgia, serif'
+    ctx.fillStyle = 'rgba(126, 138, 168, 0.35)'
+    ctx.fillText('Lovtaro', W / 2, H - 60)
+  }
+
+  return canvas.toDataURL('image/png')
 }
 
 /**

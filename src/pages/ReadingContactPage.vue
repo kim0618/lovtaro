@@ -1,6 +1,12 @@
 <script setup>
 import { ref, computed } from 'vue'
+import { useHead } from '../composables/useHead.js'
 import AppShell from '../components/common/AppShell.vue'
+
+useHead({
+  title: '연락 올까 타로 - 그 사람에게서 연락이 올까 | Lovtaro',
+  description: '그 사람에게서 연락이 올지, 연락의 기류가 흐르고 있는지 타로 카드로 읽어봅니다. 무료 연락 타로 리딩.',
+})
 import PageContainer from '../components/ui/PageContainer.vue'
 import SectionBlock from '../components/ui/SectionBlock.vue'
 import ReadingIntroHeader from '../components/reading/ReadingIntroHeader.vue'
@@ -29,10 +35,13 @@ import { CONTACT_RESULTS } from '../data/readings/contact.js'
 import { applyReversedModifier } from '../data/reversedModifiers.js'
 import { applyRelationshipModifier } from '../data/relationshipModifiers.js'
 import { saveReadingHistory } from '../composables/useReadingHistory.js'
+import { useReadingSession } from '../composables/useReadingSession.js'
 
-const { deck, selectedIds, selectedCards, canConfirm, onSelect, reset } = useCardDraw({ maxSelect: 1 })
+const { deck, selectedIds, selectedCards, selectedCount, canConfirm, onSelect, reset } = useCardDraw({ maxSelect: 1 })
 const phase = ref('intro') // 'intro' | 'status' | 'draw' | 'reveal' | 'result'
 const relationshipStatus = ref(null)
+
+const { clearSession } = useReadingSession('contact', { phase, selectedIds, relationshipStatus, deck })
 
 const drawnCard = computed(() => selectedCards.value[0] ?? null)
 const isReversed = computed(() => drawnCard.value?.reversed ?? false)
@@ -61,11 +70,12 @@ function confirm() {
     spreadType: 'single',
     cards: [{ id: card.id, name: card.name, nameEn: card.nameEn, reversed: card.reversed }],
     summary: result.value?.summary ?? '',
+    details: result.value ? { emotionTags: result.value.emotionTags, advice: result.value.advice, caution: result.value.caution } : null,
   })
   phase.value = 'reveal'
   setTimeout(() => { phase.value = 'result' }, 2200)
 }
-function retry() { reset(); phase.value = 'draw' }
+function retry() { clearSession(); reset(); phase.value = 'draw' }
 </script>
 
 <template>
@@ -131,7 +141,7 @@ function retry() { reset(); phase.value = 'draw' }
           :can-confirm="canConfirm"
           confirm-label="흐름 확인하기"
           reset-label="다시 섞기"
-          :show-reset="selectedIds.length > 0"
+          :show-reset="selectedCount > 0"
           @confirm="confirm"
           @reset="reset"
         />
@@ -141,6 +151,7 @@ function retry() { reset(); phase.value = 'draw' }
     <!-- ── REVEAL ─────────────────────────────────── -->
     <template v-else-if="phase === 'reveal' && drawnCard">
       <CardRevealTransition
+        :card-id="drawnCard.id"
         :card-name="drawnCard.name"
         :card-name-en="drawnCard.nameEn"
         reading-type="연락 올까"
@@ -155,7 +166,7 @@ function retry() { reset(); phase.value = 'draw' }
       </div>
 
       <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-1">
-        <CardImageBlock :card-name="drawnCard.name" :card-name-en="drawnCard.nameEn" :energy="drawnCard.energy" :keywords="drawnCard.keywords" :reversed="isReversed" />
+        <CardImageBlock :image-src="drawnCard.image" :card-name="drawnCard.name" :card-name-en="drawnCard.nameEn" :energy="drawnCard.energy" :keywords="drawnCard.keywords" :reversed="isReversed" />
       </SectionBlock>
 
       <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-2">
@@ -187,6 +198,8 @@ function retry() { reset(); phase.value = 'draw' }
           reading-type="연락 올까"
           :card-name="drawnCard.name"
           :card-name-en="drawnCard.nameEn"
+          :card-image="drawnCard.image"
+          :reversed="drawnCard.reversed"
           :summary="result.summary"
           :emotion-tags="result.emotionTags"
         />

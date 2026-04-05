@@ -42,7 +42,7 @@ function dotState(i) {
 <style scoped>
 .card-draw-header {
   text-align: center;
-  padding: var(--lt-space-xl) var(--lt-space-md) var(--lt-space-lg);
+  padding: var(--lt-space-xl) var(--lt-space-md) var(--lt-space-md);
 }
 
 /* ── dot progress bar ── */

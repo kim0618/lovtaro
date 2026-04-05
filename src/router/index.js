@@ -41,6 +41,26 @@ const routes = [
     name: 'history',
     component: () => import('../pages/HistoryPage.vue'),
   },
+  {
+    path: '/cards',
+    name: 'cards',
+    component: () => import('../pages/CardsPage.vue'),
+  },
+  {
+    path: '/cards/:id',
+    name: 'card-detail',
+    component: () => import('../pages/CardDetailPage.vue'),
+  },
+  {
+    path: '/privacy',
+    name: 'privacy',
+    component: () => import('../pages/PrivacyPage.vue'),
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'not-found',
+    component: () => import('../pages/NotFoundPage.vue'),
+  },
 ]
 
 const router = createRouter({

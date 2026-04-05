@@ -1,6 +1,12 @@
 <script setup>
 import { ref, computed } from 'vue'
+import { useHead } from '../composables/useHead.js'
 import AppShell from '../components/common/AppShell.vue'
+
+useHead({
+  title: '오늘의 연애 타로 - 하루의 감정 기류 | Lovtaro',
+  description: '오늘 하루 어떤 연애 에너지가 흐르고 있는지 타로 카드 한 장으로 읽어봅니다. 매일 새로운 카드, 매일 새로운 메시지.',
+})
 import PageContainer from '../components/ui/PageContainer.vue'
 import SectionBlock from '../components/ui/SectionBlock.vue'
 import CardDrawHeader from '../components/draw/CardDrawHeader.vue'
@@ -21,6 +27,7 @@ import CardRevealTransition from '../components/result/CardRevealTransition.vue'
 import RelationshipStatusSelect from '../components/reading/RelationshipStatusSelect.vue'
 import { useDailyTarot } from '../composables/useDailyTarot.js'
 import { applyRelationshipModifier } from '../data/relationshipModifiers.js'
+import { useStreak } from '../composables/useStreak.js'
 
 const {
   phase,
@@ -36,6 +43,8 @@ const {
   reset,
   resetToday,
 } = useDailyTarot()
+
+const { streak } = useStreak()
 
 // 연애 상태 - 이미 오늘 뽑은 경우 상태 선택 건너뜀
 const relationshipStatus = ref(null)
@@ -96,7 +105,7 @@ function handleResetToday() {
           :can-confirm="canConfirm"
           confirm-label="오늘의 카드 확인하기"
           reset-label="다시 섞기"
-          :show-reset="selectedIds.length > 0"
+          :show-reset="selectedIds.filter(Boolean).length > 0"
           @confirm="confirm"
           @reset="reset"
         />
@@ -106,6 +115,7 @@ function handleResetToday() {
     <!-- ── REVEAL PHASE ────────────────────────────── -->
     <template v-else-if="phase === 'reveal' && drawnCard">
       <CardRevealTransition
+        :card-id="drawnCard.id"
         :card-name="drawnCard.name"
         :card-name-en="drawnCard.nameEn"
         reading-type="오늘의 연애 카드"
@@ -118,6 +128,7 @@ function handleResetToday() {
       <!-- Already drawn today notice -->
       <div v-if="alreadyDrawn" class="today-already-drawn lt-appear">
         <p class="today-already-drawn__text">오늘 뽑은 카드입니다</p>
+        <p v-if="streak > 1" class="today-already-drawn__streak">{{ streak }}일 연속 리딩 중</p>
         <p class="today-already-drawn__sub">내일 새로운 카드가 기다리고 있어요</p>
         <button class="today-already-drawn__redraw" @click="handleResetToday">다시 뽑기</button>
       </div>
@@ -128,7 +139,7 @@ function handleResetToday() {
       </div>
 
       <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-1">
-        <CardImageBlock :card-name="drawnCard.name" :card-name-en="drawnCard.nameEn" :energy="drawnCard.energy" :keywords="[]" :reversed="isReversed" />
+        <CardImageBlock :image-src="drawnCard.image" :card-name="drawnCard.name" :card-name-en="drawnCard.nameEn" :energy="drawnCard.energy" :keywords="[]" :reversed="isReversed" />
       </SectionBlock>
 
       <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-2">
@@ -172,6 +183,8 @@ function handleResetToday() {
           reading-type="오늘의 연애 카드"
           :card-name="drawnCard.name"
           :card-name-en="drawnCard.nameEn"
+          :card-image="drawnCard.image"
+          :reversed="drawnCard.reversed"
           :summary="result.summary"
           :emotion-tags="result.emotionTags"
         />
@@ -206,6 +219,14 @@ function handleResetToday() {
   color: var(--lt-accent-2);
   letter-spacing: 0.1em;
   opacity: 0.85;
+}
+
+.today-already-drawn__streak {
+  font-size: 0.75rem;
+  color: rgba(100, 220, 180, 0.9);
+  letter-spacing: 0.08em;
+  margin-top: 6px;
+  font-weight: 400;
 }
 
 .today-already-drawn__sub {

@@ -7,26 +7,44 @@ import { TAROT_CARDS, shuffleCards } from '../data/tarotCards.js'
  */
 export function useCardDraw({ maxSelect = 1 } = {}) {
   const deck = ref(shuffleCards(TAROT_CARDS))
-  const selectedIds = ref([])
+  const selectedIds = ref(new Array(maxSelect).fill(null))
 
   const selectedCards = computed(() =>
-    selectedIds.value.map(id => deck.value.find(c => c.id === id)).filter(Boolean)
+    selectedIds.value.map(id => id ? deck.value.find(c => c.id === id) ?? null : null)
   )
 
-  const canConfirm = computed(() => selectedIds.value.length === maxSelect)
+  const selectedCount = computed(() => selectedIds.value.filter(Boolean).length)
+
+  const canConfirm = computed(() => selectedIds.value.every(id => id !== null))
 
   function onSelect(cardId) {
-    if (selectedIds.value.includes(cardId)) {
-      selectedIds.value = selectedIds.value.filter(id => id !== cardId)
-    } else if (selectedIds.value.length < maxSelect) {
-      selectedIds.value = [...selectedIds.value, cardId]
+    // 이미 선택된 카드면 해제
+    const existingIdx = selectedIds.value.indexOf(cardId)
+    if (existingIdx !== -1) {
+      const copy = [...selectedIds.value]
+      copy[existingIdx] = null
+      selectedIds.value = copy
+      return
+    }
+    // 빈 슬롯 찾아서 채우기
+    const emptyIdx = selectedIds.value.indexOf(null)
+    if (emptyIdx !== -1) {
+      const copy = [...selectedIds.value]
+      copy[emptyIdx] = cardId
+      selectedIds.value = copy
     }
   }
 
+  function removeAt(index) {
+    const copy = [...selectedIds.value]
+    copy[index] = null
+    selectedIds.value = copy
+  }
+
   function reset() {
-    selectedIds.value = []
+    selectedIds.value = new Array(maxSelect).fill(null)
     deck.value = shuffleCards(TAROT_CARDS)
   }
 
-  return { deck, selectedIds, selectedCards, canConfirm, onSelect, reset }
+  return { deck, selectedIds, selectedCards, selectedCount, canConfirm, onSelect, removeAt, reset }
 }

@@ -1,8 +1,10 @@
 import { ref, computed } from 'vue'
 import { TAROT_CARDS, shuffleCards } from '../data/tarotCards.js'
+import { getCardImage } from '../data/cardImages.js'
 import { TODAY_RESULTS } from '../data/readings/today.js'
 import { applyReversedModifier } from '../data/reversedModifiers.js'
 import { saveReadingHistory } from './useReadingHistory.js'
+import { useStreak } from './useStreak.js'
 
 const STORAGE_KEY = 'lovtaro_daily_tarot'
 
@@ -64,6 +66,7 @@ export function useDailyTarot() {
         reversed: saved.reversed,
         energy: saved.energy,
         keywords: saved.keywords,
+        image: getCardImage(saved.cardId) || '',
       }
     }
     const id = selectedIds.value[0]
@@ -108,8 +111,11 @@ export function useDailyTarot() {
         spreadType: 'single',
         cards: [{ id: card.id, name: card.name, nameEn: card.nameEn, reversed: card.reversed }],
         summary: r?.summary ?? '',
+        details: r ? { emotionTags: r.emotionTags, advice: r.advice, caution: r.caution } : null,
       })
       alreadyDrawn.value = true
+      const { recordToday } = useStreak()
+      recordToday()
     }
     phase.value = 'reveal'
     setTimeout(() => { phase.value = 'result' }, 2200)

@@ -1,3 +1,5 @@
+import { trackEvent } from '../utils/gtag.js'
+
 const STORAGE_KEY = 'lovtaro_reading_history'
 const MAX_ENTRIES = 50
 
@@ -10,6 +12,8 @@ const MAX_ENTRIES = 50
  *   spreadType: 'single' | 'three',
  *   cards: [{ id, name, nameEn, reversed, position? }],
  *   summary: string,
+ *   memo: string (user note, optional),
+ *   details: { emotionTags?, advice?, caution? } (optional, for expandable view),
  * }
  */
 
@@ -38,7 +42,7 @@ function persistHistory(entries) {
  * @param {Array} entry.cards - [{ id, name, nameEn, reversed, position? }]
  * @param {string} entry.summary
  */
-export function saveReadingHistory({ readingType, spreadType, cards, summary }) {
+export function saveReadingHistory({ readingType, spreadType, cards, summary, details }) {
   const entries = loadHistory()
   const newEntry = {
     id: `${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
@@ -47,9 +51,17 @@ export function saveReadingHistory({ readingType, spreadType, cards, summary }) 
     spreadType,
     cards,
     summary,
+    memo: '',
+    details: details || null,
   }
   entries.unshift(newEntry)
   persistHistory(entries)
+
+  trackEvent('reading_complete', {
+    reading_type: readingType,
+    spread_type: spreadType,
+    card_count: cards.length,
+  })
 }
 
 /**
@@ -58,6 +70,20 @@ export function saveReadingHistory({ readingType, spreadType, cards, summary }) 
  */
 export function getReadingHistory() {
   return loadHistory()
+}
+
+/**
+ * Update memo for a specific reading entry.
+ * @param {string} entryId
+ * @param {string} memo
+ */
+export function updateReadingMemo(entryId, memo) {
+  const entries = loadHistory()
+  const entry = entries.find(e => e.id === entryId)
+  if (entry) {
+    entry.memo = memo
+    persistHistory(entries)
+  }
 }
 
 /**

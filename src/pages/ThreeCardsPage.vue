@@ -32,13 +32,13 @@ const REVEAL_DURATION = 2800
 const POSITIONS = ['past', 'present', 'future']
 const POSITION_LABELS = { past: '과거', present: '현재', future: '미래' }
 
-const { deck, selectedIds, selectedCards, canConfirm, onSelect, reset } = useCardDraw({ maxSelect: 3 })
+const { deck, selectedIds, selectedCards, selectedCount, canConfirm, onSelect, removeAt, reset } = useCardDraw({ maxSelect: 3 })
 const phase = ref('intro') // 'intro' | 'status' | 'draw' | 'reveal' | 'result'
 const relationshipStatus = ref(null)
 
 // 카드 3장 + 포지션 배정
 const drawnTriple = computed(() =>
-  selectedCards.value.slice(0, 3).map((card, i) => ({
+  selectedCards.value.filter(Boolean).map((card, i) => ({
     ...card,
     position: POSITION_LABELS[POSITIONS[i]],
     positionKey: POSITIONS[i],
@@ -122,13 +122,13 @@ function retry() { reset(); phase.value = 'draw' }
         <CardDrawHeader
           title="카드를 3장 순서대로 골라보세요"
           instruction="과거 → 현재 → 미래 순으로 손이 머무는 카드를 선택합니다."
-          :selected-count="selectedIds.length"
+          :selected-count="selectedCount"
           :total-steps="3"
         />
       </PageContainer>
 
       <SectionBlock spacing="sm">
-        <ThreeCardDrawState :selected-cards="selectedCards" />
+        <ThreeCardDrawState :selected-cards="selectedCards" @remove="onSelect" />
       </SectionBlock>
 
       <SectionBlock spacing="sm">
@@ -140,7 +140,7 @@ function retry() { reset(); phase.value = 'draw' }
           :can-confirm="canConfirm"
           confirm-label="3장 리딩 결과 보기"
           reset-label="다시 선택"
-          :show-reset="selectedIds.length > 0"
+          :show-reset="selectedCount > 0"
           @confirm="confirm"
           @reset="reset"
         />

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 
 const props = defineProps({
   selectedCards: {
@@ -8,19 +8,34 @@ const props = defineProps({
   },
 })
 
+const emit = defineEmits(['remove'])
+
+function handleSlotClick(index) {
+  const card = props.selectedCards[index]
+  if (card && card.id) {
+    emit('remove', card.id)
+  }
+}
+
 const POSITIONS = ['과거', '현재', '미래']
 
-// 각 슬롯이 방금 채워졌는지 추적
 const justFilled = ref([false, false, false])
 
+const filledCount = computed(() =>
+  props.selectedCards.filter(Boolean).length
+)
+
 watch(
-  () => props.selectedCards.length,
-  (newLen, oldLen) => {
-    if (newLen > oldLen && newLen > 0) {
-      const idx = newLen - 1
-      justFilled.value[idx] = true
-      setTimeout(() => { justFilled.value[idx] = false }, 700)
-    }
+  () => props.selectedCards.map(c => c?.id).join(','),
+  (newVal, oldVal) => {
+    const newIds = newVal.split(',')
+    const oldIds = oldVal.split(',')
+    newIds.forEach((id, idx) => {
+      if (id && id !== oldIds[idx]) {
+        justFilled.value[idx] = true
+        setTimeout(() => { justFilled.value[idx] = false }, 700)
+      }
+    })
   }
 )
 </script>
@@ -36,10 +51,10 @@ watch(
           'three-card-draw-state__slot--filled': !!props.selectedCards[i],
           'three-card-draw-state__slot--just-filled': justFilled[i],
         }"
+        @click="handleSlotClick(i)"
       >
         <div class="three-card-draw-state__card-area">
-          <Transition name="slot-fill">
-            <div v-if="props.selectedCards[i]" class="three-card-draw-state__card-back filled">
+            <div v-if="props.selectedCards[i]" class="three-card-draw-state__card-back">
               <svg class="three-card-draw-state__card-art" viewBox="0 0 120 198" fill="none">
                 <rect x="4" y="4" width="112" height="190" rx="6" stroke="#C8A96E" stroke-opacity="0.35" stroke-width="1"/>
                 <rect x="9" y="9" width="102" height="180" rx="4" stroke="#C8A96E" stroke-opacity="0.18" stroke-width="0.5"/>
@@ -71,7 +86,6 @@ watch(
             <div v-else class="three-card-draw-state__card-empty">
               <span class="three-card-draw-state__num">{{ i + 1 }}</span>
             </div>
-          </Transition>
         </div>
         <div class="three-card-draw-state__slot-info">
           <span class="three-card-draw-state__pos">{{ pos }}</span>
@@ -81,7 +95,7 @@ watch(
       </div>
     </div>
     <p class="three-card-draw-state__count">
-      <span class="three-card-draw-state__count-now">{{ props.selectedCards.length }}</span>
+      <span class="three-card-draw-state__count-now">{{ filledCount }}</span>
       / 3장 선택됨
     </p>
   </div>
@@ -107,6 +121,15 @@ watch(
   flex-direction: column;
   align-items: center;
   gap: var(--lt-space-xs);
+}
+
+.three-card-draw-state__slot--filled {
+  cursor: pointer;
+}
+
+.three-card-draw-state__slot--filled:hover .three-card-draw-state__card-back {
+  border-color: rgba(255, 100, 100, 0.4);
+  box-shadow: 0 0 12px rgba(255, 100, 100, 0.15);
 }
 
 .three-card-draw-state__card-area {
@@ -234,23 +257,14 @@ watch(
   font-size: 0.95rem;
 }
 
-/* slot 채워질 때 카드 등장 트랜지션 */
-.slot-fill-enter-active {
-  animation: slot-card-appear 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-.slot-fill-leave-active {
-  animation: slot-card-disappear 0.25s ease both;
+/* 카드 등장: 점점 나타남 */
+.three-card-draw-state__card-back {
+  animation: slot-fade-in 0.5s ease both;
 }
 
-@keyframes slot-card-appear {
-  0%   { opacity: 0; transform: translateY(-20px) scale(0.7) rotateX(25deg); }
-  60%  { opacity: 1; transform: translateY(3px) scale(1.06) rotateX(-3deg); }
-  100% { opacity: 1; transform: translateY(0) scale(1) rotateX(0deg); }
-}
-
-@keyframes slot-card-disappear {
-  from { opacity: 1; transform: scale(1); }
-  to   { opacity: 0; transform: scale(0.85); }
+@keyframes slot-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 /* just-filled 상태에서 슬롯 라벨 강조 */
@@ -269,11 +283,6 @@ watch(
   .three-card-draw-state__card-back,
   .three-card-draw-state__card-shimmer {
     animation: none;
-  }
-  .slot-fill-enter-active,
-  .slot-fill-leave-active {
-    animation: none;
-    transition: opacity 0.2s;
   }
 }
 </style>

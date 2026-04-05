@@ -8,6 +8,7 @@ const props = defineProps({
   cardName: { type: String,  default: '' },
   selected: { type: Boolean, default: false },
   disabled: { type: Boolean, default: false },
+  selectedOrder: { type: Number, default: 0 },
 })
 
 const emit = defineEmits(['select'])
@@ -194,117 +195,57 @@ function onMouseLeave() {
   transform: translateY(-8px) scale(1.03);
 }
 
-/* ── 선택 상태: 3D 리프트 ── */
+/* ── 선택됨: 빛나는 글로우 ── */
 .tarot-card--selected {
-  transform: translateY(-16px) scale(1.06);
-  z-index: 2;
-  animation: card-select-3d 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+  z-index: 20;
+  cursor: pointer;
 }
 
-@keyframes card-select-3d {
-  0%   { transform: translateY(0)    scale(1)    perspective(900px) rotateY(0deg); }
-  20%  { transform: translateY(-22px) scale(1.1) perspective(900px) rotateY(-22deg); }
-  45%  { transform: translateY(-19px) scale(1.08) perspective(900px) rotateY(10deg); }
-  70%  { transform: translateY(-17px) scale(1.065) perspective(900px) rotateY(-4deg); }
-  100% { transform: translateY(-16px) scale(1.06) perspective(900px) rotateY(0deg); }
-}
-
-.tarot-card--disabled {
-  cursor: default;
-  opacity: 0.28;
-  filter: blur(0.3px);
-}
-
-/* ── 선택된 카드 glow ── */
 .tarot-card--selected .tarot-card__back {
-  border-color: rgba(200, 169, 110, 0.55);
-  animation: selected-glow 2.2s ease-in-out infinite;
+  border-color: rgba(200, 169, 110, 0.7);
+  box-shadow:
+    0 0 8px rgba(200, 169, 110, 0.35),
+    0 0 24px rgba(200, 169, 110, 0.15),
+    0 0 48px rgba(200, 169, 110, 0.08),
+    inset 0 0 12px rgba(200, 169, 110, 0.06);
+  animation: selected-glow 2.4s ease-in-out infinite;
+}
+
+.tarot-card--selected .tarot-card__back::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: var(--lt-radius-sm);
+  background: linear-gradient(
+    170deg,
+    rgba(200, 169, 110, 0.08) 0%,
+    transparent 40%,
+    rgba(200, 169, 110, 0.05) 70%,
+    transparent 100%
+  );
+  pointer-events: none;
 }
 
 @keyframes selected-glow {
   0%, 100% {
     box-shadow:
-      0 0 0 1.5px rgba(200, 169, 110, 0.5),
-      0 0 14px rgba(200, 169, 110, 0.25),
-      0 0 32px rgba(77, 163, 255, 0.15),
-      0 0 56px rgba(45, 108, 223, 0.1);
+      0 0 8px rgba(200, 169, 110, 0.3),
+      0 0 24px rgba(200, 169, 110, 0.12),
+      0 0 48px rgba(200, 169, 110, 0.06),
+      inset 0 0 12px rgba(200, 169, 110, 0.04);
   }
   50% {
     box-shadow:
-      0 0 0 1.5px rgba(212, 184, 122, 0.7),
-      0 0 22px rgba(200, 169, 110, 0.38),
-      0 0 48px rgba(77, 163, 255, 0.22),
-      0 0 80px rgba(45, 108, 223, 0.15);
+      0 0 12px rgba(200, 169, 110, 0.45),
+      0 0 32px rgba(200, 169, 110, 0.2),
+      0 0 56px rgba(200, 169, 110, 0.1),
+      inset 0 0 16px rgba(200, 169, 110, 0.08);
   }
 }
 
-/* shimmer sweep on select */
-.tarot-card--selected .tarot-card__back::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: var(--lt-radius-sm);
-  background: linear-gradient(
-    115deg,
-    transparent 20%,
-    rgba(200, 169, 110, 0.28) 50%,
-    transparent 80%
-  );
-  animation: select-shimmer 0.65s ease both;
-  pointer-events: none;
-}
-
-@keyframes select-shimmer {
-  0%   { transform: translateX(-130%); opacity: 0.9; }
-  100% { transform: translateX(130%);  opacity: 0; }
-}
-
-/* ── 연기: 선택된 카드 하단 ── */
-.tarot-card--selected::before {
-  content: '';
-  position: absolute;
-  bottom: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 150%;
-  height: 44px;
-  background:
-    radial-gradient(ellipse 45px 20px at 35% 100%, rgba(200, 169, 110, 0.15) 0%, transparent 70%),
-    radial-gradient(ellipse 50px 18px at 50% 100%, rgba(77, 163, 255, 0.09) 0%, transparent 65%);
-  filter: blur(9px);
-  animation: card-mist-a 3.8s ease-in-out infinite;
-  pointer-events: none;
-  z-index: 10;
-}
-
-.tarot-card--selected::after {
-  content: '';
-  position: absolute;
-  bottom: -4px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 120%;
-  height: 30px;
-  background:
-    radial-gradient(ellipse 38px 14px at 50% 100%, rgba(200, 169, 110, 0.1) 0%, transparent 68%);
-  filter: blur(8px);
-  animation: card-mist-b 3.8s ease-in-out infinite 1.1s;
-  pointer-events: none;
-  z-index: 9;
-}
-
-@keyframes card-mist-a {
-  0%   { opacity: 0; transform: translateX(-50%) translateY(0)     scaleX(1); }
-  18%  { opacity: 0.5; }
-  60%  { opacity: 0.25; }
-  100% { opacity: 0; transform: translateX(-50%) translateY(-20px) scaleX(1.6); }
-}
-
-@keyframes card-mist-b {
-  0%   { opacity: 0; transform: translateX(-50%) translateY(0)     scaleX(0.9); }
-  22%  { opacity: 0.35; }
-  65%  { opacity: 0.15; }
-  100% { opacity: 0; transform: translateX(-50%) translateY(-14px) scaleX(1.4); }
+.tarot-card--disabled {
+  cursor: default;
+  opacity: 0.32;
 }
 
 /* ── 3D 틸트 레이어 ── */
@@ -427,9 +368,7 @@ function onMouseLeave() {
   .tarot-card__inner {
     transition: transform 0.2s ease;
   }
-  .tarot-card--selected,
-  .tarot-card--selected .tarot-card__back,
-  .tarot-card--selected .tarot-card__back-eye {
+  .tarot-card--selected .tarot-card__back {
     animation: none;
   }
   .tarot-card--selected::before,

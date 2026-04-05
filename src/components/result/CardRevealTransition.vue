@@ -1,10 +1,16 @@
 <script setup>
-defineProps({
+import { computed } from 'vue'
+import { getCardImage } from '../../data/cardImages.js'
+
+const props = defineProps({
+  cardId: { type: String, default: '' },
   cardName: { type: String, default: '' },
   cardNameEn: { type: String, default: '' },
   readingType: { type: String, default: '' },
   reversed: { type: Boolean, default: false },
 })
+
+const frontImage = computed(() => getCardImage(props.cardId))
 </script>
 
 <template>

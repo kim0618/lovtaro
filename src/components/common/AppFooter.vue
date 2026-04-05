@@ -7,7 +7,12 @@ import BrandLogo from './BrandLogo.vue'
     <div class="app-footer__inner">
       <BrandLogo size="sm" />
       <p class="app-footer__tagline">보이지 않는 의미를 천천히 비추는 공간</p>
-      <p class="app-footer__copy">&copy; 2026 Lovtaro. 타로 리딩은 참고용이며, 모든 결정은 본인의 판단을 따르세요.</p>
+      <p class="app-footer__copy">&copy; 2026 Lovtaro. 타로 리딩은 오락 및 자기 성찰 목적이며, 전문 상담을 대체하지 않습니다.</p>
+      <div class="app-footer__links">
+        <router-link to="/cards" class="app-footer__link">카드 의미 사전</router-link>
+        <router-link to="/history" class="app-footer__link">리딩 기록</router-link>
+        <router-link to="/privacy" class="app-footer__link">개인정보처리방침</router-link>
+      </div>
     </div>
   </footer>
 </template>
@@ -41,5 +46,26 @@ import BrandLogo from './BrandLogo.vue'
   line-height: 1.7;
   opacity: 0.4;
   letter-spacing: 0.02em;
+}
+
+.app-footer__links {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.app-footer__link {
+  font-size: 0.62rem;
+  color: var(--lt-text-muted);
+  opacity: 0.4;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  letter-spacing: 0.02em;
+  transition: opacity var(--lt-transition);
+}
+
+.app-footer__link:hover {
+  opacity: 0.7;
 }
 </style>

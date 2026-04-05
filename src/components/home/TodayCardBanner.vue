@@ -1,7 +1,9 @@
 <script setup>
 import { useRouter } from 'vue-router'
+import { useStreak } from '../../composables/useStreak.js'
 
 const router = useRouter()
+const { streak } = useStreak()
 </script>
 
 <template>
@@ -11,6 +13,7 @@ const router = useRouter()
       <div class="today-card-banner__content">
         <div class="today-card-banner__label">오늘의 카드</div>
         <p class="today-card-banner__text">오늘 하루, 어떤 에너지가 흐르는지<br>한 장으로 살펴봅니다.</p>
+        <p v-if="streak > 0" class="today-card-banner__streak">{{ streak }}일 연속 리딩 중</p>
       </div>
       <span class="today-card-banner__link">뽑기 &#8594;</span>
     </div>
@@ -92,5 +95,13 @@ const router = useRouter()
 
 .today-card-banner:hover .today-card-banner__link {
   opacity: 1;
+}
+
+.today-card-banner__streak {
+  font-size: 0.65rem;
+  color: rgba(100, 220, 180, 0.85);
+  letter-spacing: 0.06em;
+  margin-top: 6px;
+  opacity: 0.9;
 }
 </style>

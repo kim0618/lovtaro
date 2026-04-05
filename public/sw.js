@@ -1,8 +1,9 @@
-const CACHE_NAME = 'lovtaro-v1'
+const CACHE_NAME = 'lovtaro-v2'
 const STATIC_ASSETS = [
   '/',
   '/manifest.json',
   '/favicon.svg',
+  '/og-image.svg',
 ]
 
 self.addEventListener('install', (event) => {
@@ -22,26 +23,30 @@ self.addEventListener('activate', (event) => {
 })
 
 self.addEventListener('fetch', (event) => {
-  // Only handle GET requests
   if (event.request.method !== 'GET') return
 
   const url = new URL(event.request.url)
 
+  // Skip external requests (analytics, fonts CDN, etc.)
+  if (url.origin !== self.location.origin) return
+
   // Network-first for navigation (HTML pages)
   if (event.request.mode === 'navigate') {
     event.respondWith(
-      fetch(event.request).catch(() =>
-        caches.match('/').then((cached) => cached ?? fetch(event.request))
-      )
+      fetch(event.request)
+        .then((response) => {
+          const clone = response.clone()
+          caches.open(CACHE_NAME).then((cache) => cache.put('/', clone))
+          return response
+        })
+        .catch(() => caches.match('/'))
     )
     return
   }
 
-  // Cache-first for static assets (JS, CSS, fonts)
-  if (
-    url.origin === self.location.origin &&
-    (url.pathname.startsWith('/assets/') || url.pathname.endsWith('.svg') || url.pathname === '/manifest.json')
-  ) {
+  // Cache-first for hashed static assets (JS, CSS bundles)
+  // Vite produces filenames like index-bfe130c8.js — safe to cache permanently
+  if (url.pathname.startsWith('/assets/')) {
     event.respondWith(
       caches.match(event.request).then((cached) => {
         if (cached) return cached
@@ -54,5 +59,21 @@ self.addEventListener('fetch', (event) => {
         })
       })
     )
+    return
   }
+
+  // Stale-while-revalidate for other same-origin resources (SVGs, manifest, etc.)
+  event.respondWith(
+    caches.match(event.request).then((cached) => {
+      const fetchPromise = fetch(event.request).then((response) => {
+        if (response.ok) {
+          const clone = response.clone()
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone))
+        }
+        return response
+      }).catch(() => cached)
+
+      return cached || fetchPromise
+    })
+  )
 })
