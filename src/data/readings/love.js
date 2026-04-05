@@ -1,5 +1,5 @@
 /**
- * 러브 타로 3장 리딩 - 나의 마음 / 상대의 에너지 / 관계의 방향
+ * 러브타로 3장 리딩 - 나의 마음 / 상대의 에너지 / 관계의 방향
  * positions: myHeart (나의 마음) | theirEnergy (상대의 에너지) | direction (관계의 방향)
  */
 export const LOVE_CARD_INTERPRETATIONS = {
@@ -218,7 +218,7 @@ function getSpreadNarrative(myEnergy, theirEnergy, dirEnergy) {
 }
 
 /**
- * 러브 타로 3장의 에너지를 기반으로 전체 요약 데이터 생성
+ * 러브타로 3장의 에너지를 기반으로 전체 요약 데이터 생성
  * @param {string[]} energies - 나의 마음/상대의 에너지/관계의 방향 카드 energy 값 배열
  */
 export function getLoveOverall(energies) {

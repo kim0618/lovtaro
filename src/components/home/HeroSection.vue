@@ -22,7 +22,7 @@ const router = useRouter()
     <p class="hero-section__subtitle">감정의 결을 읽고, 관계의 흐름을 비춰봅니다</p>
     <div class="hero-section__divider" aria-hidden="true" />
     <button class="hero-section__cta" @click="router.push('/reading/love')">
-      러브 타로 시작하기
+      러브타로 시작하기
     </button>
   </div>
 </template>

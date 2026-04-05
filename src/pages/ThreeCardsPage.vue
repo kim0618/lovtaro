@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue'
+import { useHead } from '../composables/useHead.js'
 import AppShell from '../components/common/AppShell.vue'
 import PageContainer from '../components/ui/PageContainer.vue'
 import SectionBlock from '../components/ui/SectionBlock.vue'
@@ -26,6 +27,12 @@ import { saveReadingHistory } from '../composables/useReadingHistory.js'
 import { useCardDraw } from '../composables/useCardDraw.js'
 import { THREE_CARD_INTERPRETATIONS, getThreeCardOverall } from '../data/readings/threecards.js'
 import { applyRelationshipModifierToOverall } from '../data/relationshipModifiers.js'
+import { encodeSpreadParams, buildShareUrl } from '../utils/shareLink.js'
+
+useHead({
+  title: '3장 리딩 - 과거, 현재, 미래 흐름 읽기 | Lovtaro',
+  description: '과거, 현재, 미래 세 장의 카드로 관계의 흐름을 깊이 살펴봅니다. 무료 타로 3장 스프레드 리딩.',
+})
 
 const REVEAL_DURATION = 2800
 
@@ -49,6 +56,14 @@ const overall = computed(() => {
   if (drawnTriple.value.length < 3) return null
   const base = getThreeCardOverall(drawnTriple.value.map(c => c.energy))
   return applyRelationshipModifierToOverall(base, relationshipStatus.value)
+})
+
+const shareUrl = computed(() => {
+  if (drawnTriple.value.length < 3) return ''
+  return buildShareUrl('/reading/3cards', encodeSpreadParams(
+    drawnTriple.value.map(c => ({ id: c.id, reversed: c.reversed })),
+    relationshipStatus.value,
+  ))
 })
 
 const flowPoints = [
@@ -326,6 +341,7 @@ function retry() { reset(); phase.value = 'draw' }
           mode="three"
           :cards="drawnTriple"
           :summary="overall.summary"
+          :share-url="shareUrl"
         />
       </SectionBlock>
 

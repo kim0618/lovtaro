@@ -36,6 +36,7 @@ import { applyReversedModifier } from '../data/reversedModifiers.js'
 import { applyRelationshipModifier } from '../data/relationshipModifiers.js'
 import { saveReadingHistory } from '../composables/useReadingHistory.js'
 import { useReadingSession } from '../composables/useReadingSession.js'
+import { encodeReadingParams, buildShareUrl } from '../utils/shareLink.js'
 
 const { deck, selectedIds, selectedCards, selectedCount, canConfirm, onSelect, reset } = useCardDraw({ maxSelect: 1 })
 const phase = ref('intro') // 'intro' | 'status' | 'draw' | 'reveal' | 'result'
@@ -51,6 +52,13 @@ const result = computed(() => {
   if (!upright) return null
   const withReversed = applyReversedModifier(drawnCard.value.id, upright, isReversed.value)
   return applyRelationshipModifier(drawnCard.value.id, withReversed, relationshipStatus.value)
+})
+
+const shareUrl = computed(() => {
+  if (!drawnCard.value) return ''
+  return buildShareUrl('/reading/mind', encodeReadingParams({
+    cardId: drawnCard.value.id, reversed: drawnCard.value.reversed, status: relationshipStatus.value,
+  }))
 })
 
 const flowPoints = [
@@ -202,6 +210,7 @@ function retry() { clearSession(); reset(); phase.value = 'draw' }
           :reversed="drawnCard.reversed"
           :summary="result.summary"
           :emotion-tags="result.emotionTags"
+          :share-url="shareUrl"
         />
       </SectionBlock>
 

@@ -28,6 +28,7 @@ import RelationshipStatusSelect from '../components/reading/RelationshipStatusSe
 import { useDailyTarot } from '../composables/useDailyTarot.js'
 import { applyRelationshipModifier } from '../data/relationshipModifiers.js'
 import { useStreak } from '../composables/useStreak.js'
+import { encodeReadingParams, buildShareUrl } from '../utils/shareLink.js'
 
 const {
   phase,
@@ -58,6 +59,13 @@ const result = computed(() => {
 function selectStatus(s) {
   relationshipStatus.value = s
 }
+
+const shareUrl = computed(() => {
+  if (!drawnCard.value) return ''
+  return buildShareUrl('/today', encodeReadingParams({
+    cardId: drawnCard.value.id, reversed: drawnCard.value.reversed, status: relationshipStatus.value,
+  }))
+})
 
 function handleResetToday() {
   relationshipStatus.value = null
@@ -187,6 +195,7 @@ function handleResetToday() {
           :reversed="drawnCard.reversed"
           :summary="result.summary"
           :emotion-tags="result.emotionTags"
+          :share-url="shareUrl"
         />
       </SectionBlock>
 

@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue'
+import { useHead } from '../composables/useHead.js'
 import AppShell from '../components/common/AppShell.vue'
 import PageContainer from '../components/ui/PageContainer.vue'
 import SectionBlock from '../components/ui/SectionBlock.vue'
@@ -26,6 +27,12 @@ import { saveReadingHistory } from '../composables/useReadingHistory.js'
 import { useCardDraw } from '../composables/useCardDraw.js'
 import { LOVE_CARD_INTERPRETATIONS, getLoveOverall } from '../data/readings/love.js'
 import { applyRelationshipModifierToOverall } from '../data/relationshipModifiers.js'
+import { encodeSpreadParams, buildShareUrl } from '../utils/shareLink.js'
+
+useHead({
+  title: '러브타로 - 두 사람의 마음과 관계의 방향 | Lovtaro',
+  description: '나의 마음, 상대의 에너지, 관계의 방향. 세 장의 카드로 사랑의 흐름을 깊이 읽어봅니다. 무료 러브타로 스프레드 리딩.',
+})
 
 const POSITIONS = ['myHeart', 'theirEnergy', 'direction']
 const POSITION_LABELS = { myHeart: '나의 마음', theirEnergy: '상대의 에너지', direction: '관계의 방향' }
@@ -49,6 +56,14 @@ const overall = computed(() => {
   return applyRelationshipModifierToOverall(base, relationshipStatus.value)
 })
 
+const shareUrl = computed(() => {
+  if (drawnTriple.value.length < 3) return ''
+  return buildShareUrl('/reading/love', encodeSpreadParams(
+    drawnTriple.value.map(c => ({ id: c.id, reversed: c.reversed })),
+    relationshipStatus.value,
+  ))
+})
+
 const flowPoints = [
   { label: '나의 마음', text: '지금 당신의 감정이 어디를 향하고 있는지 읽어봅니다.' },
   { label: '상대의 에너지', text: '상대가 지금 어떤 에너지 안에 있는지 살펴봅니다.' },
@@ -61,9 +76,9 @@ function selectStatus(s) { relationshipStatus.value = s; phase.value = 'draw' }
 function confirm() {
   if (!canConfirm.value) return
   const names = drawnTriple.value.map(c => c.name).join(' · ')
-  saveLastReading({ readingType: '러브 타로', cardId: 'love', cardName: names, cardNameEn: '' })
+  saveLastReading({ readingType: '러브타로', cardId: 'love', cardName: names, cardNameEn: '' })
   saveReadingHistory({
-    readingType: '러브 타로',
+    readingType: '러브타로',
     spreadType: 'three',
     cards: drawnTriple.value.map(c => ({ id: c.id, name: c.name, nameEn: c.nameEn, reversed: c.reversed, position: c.position })),
     summary: overall.value?.summary ?? '',
@@ -92,7 +107,7 @@ const drawInstruction = computed(() => DRAW_INSTRUCTIONS[Math.min(selectedCount.
     <template v-if="phase === 'intro'">
       <PageContainer>
         <ReadingIntroHeader
-          title="러브 타로"
+          title="러브타로"
           subtitle="두 사람의 마음과 관계의 방향을 세 장의 카드로 읽어봅니다."
         />
       </PageContainer>
@@ -122,7 +137,7 @@ const drawInstruction = computed(() => DRAW_INSTRUCTIONS[Math.min(selectedCount.
 
     <!-- ── STATUS ────────────────────────────────────── -->
     <template v-else-if="phase === 'status'">
-      <RelationshipStatusSelect reading-type="러브 타로" @select="selectStatus" />
+      <RelationshipStatusSelect reading-type="러브타로" @select="selectStatus" />
     </template>
 
     <!-- ── DRAW ───────────────────────────────────── -->
@@ -151,7 +166,7 @@ const drawInstruction = computed(() => DRAW_INSTRUCTIONS[Math.min(selectedCount.
       <SectionBlock spacing="sm">
         <DrawActionBar
           :can-confirm="canConfirm"
-          confirm-label="러브 타로 결과 보기"
+          confirm-label="러브타로 결과 보기"
           reset-label="다시 선택"
           :show-reset="selectedCount > 0"
           :selected-count="selectedCount"
@@ -233,7 +248,7 @@ const drawInstruction = computed(() => DRAW_INSTRUCTIONS[Math.min(selectedCount.
     <!-- ── RESULT ─────────────────────────────────── -->
     <template v-else-if="phase === 'result' && drawnTriple.length === 3 && overall">
       <div class="love-result__hero lt-appear">
-        <p class="love-result__hero-label">러브 타로 결과</p>
+        <p class="love-result__hero-label">러브타로 결과</p>
         <SectionBlock spacing="sm">
           <ThreeCardLayout :cards="drawnTriple" />
         </SectionBlock>
@@ -280,10 +295,11 @@ const drawInstruction = computed(() => DRAW_INSTRUCTIONS[Math.min(selectedCount.
 
       <SectionBlock spacing="md">
         <ShareSaveSection
-          reading-type="러브 타로"
+          reading-type="러브타로"
           mode="three"
           :cards="drawnTriple"
           :summary="overall.summary"
+          :share-url="shareUrl"
         />
       </SectionBlock>
 

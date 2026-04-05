@@ -433,7 +433,7 @@ export const RELATIONSHIP_MODIFIERS = {
 
 /**
  * 연애 상태별 전체 결과(multi-card overall)에 추가되는 관계 렌즈 문장
- * 러브 타로 / 3장 리딩의 overall.guidance 배열 끝에 추가됩니다.
+ * 러브타로 / 3장 리딩의 overall.guidance 배열 끝에 추가됩니다.
  */
 export const OVERALL_RELATIONSHIP_LENS = {
   single: '아직 만나지 못한 인연에 대한 열린 마음을 유지하되, 지금 내 삶의 충만함을 먼저 챙겨 보세요. 좋은 만남은 내가 나 자신에게 충분히 집중하고 있을 때, 예상치 못한 순간에 찾아오는 편이에요.',

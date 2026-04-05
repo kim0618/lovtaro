@@ -284,7 +284,7 @@ function _drawCardFrame(ctx, img, x, y, w, h, reversed) {
 /**
  * Generate share card for three-card reading
  * @param {Object} options
- * @param {string} options.readingType - e.g. "3장 리딩" or "러브 타로"
+ * @param {string} options.readingType - e.g. "3장 리딩" or "러브타로"
  * @param {Array} options.cards - [{name, position}]
  * @param {string} options.summary - Overall summary
  * @returns {Promise<string>} Data URL of the generated image
