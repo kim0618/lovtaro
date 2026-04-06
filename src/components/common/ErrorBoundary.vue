@@ -5,7 +5,8 @@ import { useRouter } from 'vue-router'
 const error = ref(null)
 const router = useRouter()
 
-onErrorCaptured((err) => {
+onErrorCaptured((err, instance, info) => {
+  console.error('[ErrorBoundary]', err, '\nComponent:', instance, '\nInfo:', info)
   error.value = err
   return false
 })

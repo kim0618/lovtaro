@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useHead } from '../composables/useHead.js'
 import AppShell from '../components/common/AppShell.vue'
 
@@ -69,6 +69,8 @@ const flowPoints = [
   { label: '지금의 방향',      text: '이 흐름에서 어떤 태도가 맞는지 살펴봅니다.' },
 ]
 
+let revealTimer = null
+
 function startReading() { phase.value = 'status' }
 function selectStatus(s) { relationshipStatus.value = s; phase.value = 'draw' }
 function confirm() {
@@ -83,9 +85,12 @@ function confirm() {
     details: result.value ? { emotionTags: result.value.emotionTags, advice: result.value.advice, caution: result.value.caution } : null,
   })
   phase.value = 'reveal'
-  setTimeout(() => { phase.value = 'result' }, 2200)
+  revealTimer = setTimeout(() => { phase.value = 'result' }, 2200)
 }
 function retry() { clearSession(); reset(); phase.value = 'draw' }
+function scrollTop() { window.scrollTo({ top: 0 }) }
+
+onUnmounted(() => { if (revealTimer) clearTimeout(revealTimer) })
 
 onMounted(() => {
   const shared = decodeReadingParams()
@@ -101,7 +106,7 @@ onMounted(() => {
 
 <template>
   <AppShell>
-    <Transition name="phase-fade" mode="out-in" @enter="() => window.scrollTo({ top: 0 })">
+    <Transition name="phase-fade" mode="out-in" @after-enter="scrollTop">
     <div :key="phase">
     <!-- ── INTRO ───────────────────────────────────── -->
     <template v-if="phase === 'intro'">

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useHead } from '../composables/useHead.js'
 import AppShell from '../components/common/AppShell.vue'
 import PageContainer from '../components/ui/PageContainer.vue'
@@ -72,6 +72,8 @@ const flowPoints = [
   { label: '관계의 방향', text: '두 사람 사이의 흐름이 어디로 향하는지 비춰봅니다.' },
 ]
 
+let revealTimer = null
+
 function startReading() { phase.value = 'status' }
 function selectStatus(s) { relationshipStatus.value = s; phase.value = 'draw' }
 
@@ -86,11 +88,14 @@ function confirm() {
     summary: overall.value?.summary ?? '',
   })
   phase.value = 'reveal'
-  setTimeout(() => { phase.value = 'result' }, 2800)
+  revealTimer = setTimeout(() => { phase.value = 'result' }, 2800)
 }
 
 function doReset() { reset(); deckKey.value++ }
 function retry() { doReset(); phase.value = 'draw' }
+function scrollTop() { window.scrollTo({ top: 0 }) }
+
+onUnmounted(() => { if (revealTimer) clearTimeout(revealTimer) })
 
 const DRAW_INSTRUCTIONS = [
   '나의 마음 자리의 카드를 먼저 고르세요',
@@ -126,7 +131,7 @@ onMounted(() => {
 
 <template>
   <AppShell>
-    <Transition name="phase-fade" mode="out-in" @enter="() => window.scrollTo({ top: 0 })">
+    <Transition name="phase-fade" mode="out-in" @after-enter="scrollTop">
     <div :key="phase">
     <!-- ── INTRO ───────────────────────────────────── -->
     <template v-if="phase === 'intro'">

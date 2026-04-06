@@ -22,8 +22,8 @@ export function useReadingSession(key, { phase, selectedIds, relationshipStatus,
     if (raw) {
       const data = JSON.parse(raw)
       // Only restore if there was meaningful progress (past intro/status)
-      if (data.phase === 'draw' && data.selectedIds?.some(Boolean)) {
-        phase.value = data.phase
+      if ((data.phase === 'draw' || data.phase === 'result') && data.selectedIds?.some(Boolean)) {
+        // Restore data BEFORE phase to avoid watchers seeing stale state
         selectedIds.value = data.selectedIds
         if (data.relationshipStatus && relationshipStatus) {
           relationshipStatus.value = data.relationshipStatus
@@ -31,16 +31,7 @@ export function useReadingSession(key, { phase, selectedIds, relationshipStatus,
         if (data.deck && deck) {
           deck.value = data.deck
         }
-      } else if (data.phase === 'result' && data.selectedIds?.some(Boolean)) {
-        // Restore to result phase
         phase.value = data.phase
-        selectedIds.value = data.selectedIds
-        if (data.relationshipStatus && relationshipStatus) {
-          relationshipStatus.value = data.relationshipStatus
-        }
-        if (data.deck && deck) {
-          deck.value = data.deck
-        }
       }
     }
   } catch {

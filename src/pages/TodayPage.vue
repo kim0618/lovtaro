@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useHead } from '../composables/useHead.js'
 import AppShell from '../components/common/AppShell.vue'
 
@@ -45,6 +45,7 @@ const {
   confirm,
   reset,
   resetToday,
+  clearRevealTimer,
 } = useDailyTarot()
 
 const { streak } = useStreak()
@@ -74,6 +75,10 @@ function handleResetToday() {
   resetToday()
 }
 
+function scrollTop() { window.scrollTo({ top: 0 }) }
+
+onUnmounted(() => { clearRevealTimer() })
+
 onMounted(() => {
   const shared = decodeReadingParams()
   if (!shared) return
@@ -88,7 +93,7 @@ onMounted(() => {
 
 <template>
   <AppShell>
-    <Transition name="phase-fade" mode="out-in" @enter="() => window.scrollTo({ top: 0 })">
+    <Transition name="phase-fade" mode="out-in" @after-enter="scrollTop">
     <div :key="showStatusSelect ? 'status' : phase">
 
     <!-- ── STATUS SELECT ─────────────────────────── -->
@@ -146,17 +151,10 @@ onMounted(() => {
 
     <!-- ── RESULT PHASE ────────────────────────────── -->
     <template v-else-if="phase === 'result' && drawnCard && result">
-      <!-- Already drawn today notice -->
-      <div v-if="alreadyDrawn" class="today-already-drawn lt-appear">
-        <p class="today-already-drawn__text">오늘 뽑은 카드입니다</p>
-        <p v-if="streak > 1" class="today-already-drawn__streak">{{ streak }}일 연속 리딩 중</p>
-        <p class="today-already-drawn__sub">내일 새로운 카드가 기다리고 있어요</p>
-        <button class="today-already-drawn__redraw" @click="handleResetToday">다시 뽑기</button>
-      </div>
-
       <!-- 카드 타입 라벨 -->
       <div class="today-result-type lt-appear">
         <p class="today-result-type__label">오늘의 연애 카드</p>
+        <p v-if="alreadyDrawn && streak > 1" class="today-result-type__streak">{{ streak }}일 연속 리딩 중</p>
       </div>
 
       <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-1">
@@ -212,6 +210,12 @@ onMounted(() => {
         />
       </SectionBlock>
 
+      <SectionBlock spacing="sm">
+        <div class="reading-result__retry-wrap">
+          <button class="reading-result__retry" @click="handleResetToday">다시 뽑기</button>
+        </div>
+      </SectionBlock>
+
       <SectionBlock spacing="md">
         <OtherReadingsNav current="today" />
       </SectionBlock>
@@ -226,40 +230,14 @@ onMounted(() => {
 </template>
 
 <style scoped>
-/* ── Already drawn notice ── */
-.today-already-drawn {
-  text-align: center;
-  padding: var(--lt-space-lg) var(--lt-space-md);
-  margin: 0 var(--lt-space-md) var(--lt-space-md);
-  background: rgba(77, 163, 255, 0.04);
-  border: 1px solid rgba(77, 163, 255, 0.1);
-  border-radius: var(--lt-radius-lg);
+/* ── Retry button (bottom) ── */
+.reading-result__retry-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 0 var(--lt-space-md);
 }
 
-.today-already-drawn__text {
-  font-size: 0.8rem;
-  color: var(--lt-accent-2);
-  letter-spacing: 0.1em;
-  opacity: 0.85;
-}
-
-.today-already-drawn__streak {
-  font-size: 0.75rem;
-  color: rgba(100, 220, 180, 0.9);
-  letter-spacing: 0.08em;
-  margin-top: 6px;
-  font-weight: 400;
-}
-
-.today-already-drawn__sub {
-  font-size: 0.72rem;
-  color: var(--lt-text-muted);
-  margin-top: 4px;
-  letter-spacing: 0.06em;
-}
-
-.today-already-drawn__redraw {
-  margin-top: 12px;
+.reading-result__retry {
   font-size: 0.72rem;
   color: var(--lt-accent-2);
   letter-spacing: 0.06em;
@@ -271,7 +249,7 @@ onMounted(() => {
   transition: opacity var(--lt-transition), border-color var(--lt-transition);
 }
 
-.today-already-drawn__redraw:hover {
+.reading-result__retry:hover {
   opacity: 1;
   border-color: rgba(77, 163, 255, 0.4);
 }
@@ -288,5 +266,12 @@ onMounted(() => {
   letter-spacing: 0.14em;
   text-transform: uppercase;
   opacity: 0.7;
+}
+
+.today-result-type__streak {
+  font-size: 0.68rem;
+  color: rgba(100, 220, 180, 0.8);
+  letter-spacing: 0.06em;
+  margin-top: 6px;
 }
 </style>

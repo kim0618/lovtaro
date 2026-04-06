@@ -51,6 +51,7 @@ export function useDailyTarot() {
   const saved = loadTodayResult()
   const alreadyDrawn = ref(!!saved)
   const phase = ref(saved ? 'result' : 'draw')
+  let revealTimer = null
 
   // Card draw state
   const deck = ref(shuffleCards(TAROT_CARDS))
@@ -118,7 +119,11 @@ export function useDailyTarot() {
       recordToday()
     }
     phase.value = 'reveal'
-    setTimeout(() => { phase.value = 'result' }, 2200)
+    revealTimer = setTimeout(() => { phase.value = 'result' }, 2200)
+  }
+
+  function clearRevealTimer() {
+    if (revealTimer) { clearTimeout(revealTimer); revealTimer = null }
   }
 
   function reset() {
@@ -147,5 +152,6 @@ export function useDailyTarot() {
     confirm,
     reset,
     resetToday,
+    clearRevealTimer,
   }
 }

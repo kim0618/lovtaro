@@ -27,5 +27,6 @@ defineProps({
 
 .app-shell__main {
   flex: 1;
+  position: relative;
 }
 </style>

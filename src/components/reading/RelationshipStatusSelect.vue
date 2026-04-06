@@ -3,32 +3,44 @@ import { ref, computed } from 'vue'
 
 const emit = defineEmits(['select'])
 
-defineProps({
+const props = defineProps({
   readingType: { type: String, default: '' },
 })
 
-const statuses = [
-  {
-    value: 'single',
-    label: '솔로',
-    desc: '현재 연애 중이 아닌 상태',
-  },
-  {
-    value: 'situationship',
-    label: '썸',
-    desc: '감정은 있지만 아직 정의되지 않은 관계',
-  },
-  {
-    value: 'dating',
-    label: '연애 중',
-    desc: '현재 사귀고 있는 상대가 있는 상태',
-  },
-  {
-    value: 'breakup',
-    label: '이별 후',
-    desc: '이별하거나 재회를 생각 중인 상태',
-  },
+const ALL_STATUSES = [
+  { value: 'single',        label: '솔로',    desc: '현재 연애 중이 아닌 상태' },
+  { value: 'situationship',  label: '썸',     desc: '감정은 있지만 아직 정의되지 않은 관계' },
+  { value: 'dating',         label: '연애 중', desc: '현재 사귀고 있는 상대가 있는 상태' },
+  { value: 'breakup',        label: '이별 후', desc: '이별하거나 재회를 생각 중인 상태' },
 ]
+
+const READING_CONFIG = {
+  '재회 가능성': {
+    title: '지금 어떤 상황인가요?',
+    desc: '이별 이후의 흐름을 더 정확하게 읽기 위해\n상황을 알려주세요.',
+    statuses: ['situationship', 'breakup'],
+  },
+  '연락 올까': {
+    title: '그 사람과 어떤 사이인가요?',
+    desc: '관계에 따라 연락의 기류가 다르게 읽힙니다.',
+    statuses: ['single', 'situationship', 'breakup'],
+  },
+  '상대방 속마음': {
+    title: '지금 어떤 관계인가요?',
+    desc: '관계의 결에 따라 속마음의 해석이 달라집니다.',
+    statuses: ['situationship', 'dating', 'breakup'],
+  },
+}
+
+const config = computed(() => READING_CONFIG[props.readingType] ?? null)
+
+const title = computed(() => config.value?.title ?? '지금 어떤 상태인가요?')
+const desc = computed(() => config.value?.desc ?? '가장 가까운 상태를 골라주세요.\n해석의 결이 조금 더 또렷해집니다.')
+
+const statuses = computed(() => {
+  if (!config.value) return ALL_STATUSES
+  return ALL_STATUSES.filter(s => config.value.statuses.includes(s.value))
+})
 
 const selected = ref(null)
 const transitioning = ref(false)
@@ -65,14 +77,11 @@ function onConfirm() {
 
     <div class="rs-select__header">
       <p class="rs-select__eyebrow">Step 1</p>
-      <h2 class="rs-select__title">지금 어떤 상태인가요?</h2>
-      <p class="rs-select__desc">
-        가장 가까운 상태를 골라주세요.<br>
-        해석의 결이 조금 더 또렷해집니다.
-      </p>
+      <h2 class="rs-select__title">{{ title }}</h2>
+      <p class="rs-select__desc" v-html="desc.replace('\n', '<br>')"></p>
     </div>
 
-    <div class="rs-select__grid" role="radiogroup" aria-label="연애 상태 선택">
+    <div class="rs-select__grid" :class="{ 'rs-select__grid--narrow': statuses.length <= 3 }" role="radiogroup" aria-label="연애 상태 선택">
       <button
         v-for="s in statuses"
         :key="s.value"
@@ -89,7 +98,7 @@ function onConfirm() {
       >
         <span class="rs-select__option-label">{{ s.label }}</span>
         <span class="rs-select__option-desc">{{ s.desc }}</span>
-        <span v-if="selected === s.value" class="rs-select__option-check" aria-label="선택됨">✓</span>
+        <span v-show="selected === s.value" class="rs-select__option-check" aria-label="선택됨">✓</span>
       </button>
     </div>
 
@@ -242,6 +251,10 @@ function onConfirm() {
   max-width: 340px;
 }
 
+.rs-select__grid--narrow {
+  grid-template-columns: 1fr;
+}
+
 /* ── Option card ── */
 .rs-select__option {
   display: flex;
@@ -327,7 +340,6 @@ function onConfirm() {
     0 0 20px rgba(77, 163, 255, 0.18),
     0 0 40px rgba(45, 108, 223, 0.08),
     0 4px 20px rgba(0, 0, 0, 0.45);
-  animation: rs-selected-pulse 3.2s ease-in-out infinite;
 }
 
 .rs-select__option--selected::before {
@@ -345,23 +357,6 @@ function onConfirm() {
   color: rgba(200, 215, 240, 0.95);
 }
 
-@keyframes rs-selected-pulse {
-  0%, 100% {
-    box-shadow:
-      0 0 0 1px rgba(100, 180, 255, 0.3),
-      0 0 20px rgba(77, 163, 255, 0.18),
-      0 0 40px rgba(45, 108, 223, 0.08),
-      0 4px 20px rgba(0, 0, 0, 0.45);
-  }
-  50% {
-    box-shadow:
-      0 0 0 1px rgba(100, 180, 255, 0.4),
-      0 0 26px rgba(77, 163, 255, 0.24),
-      0 0 48px rgba(45, 108, 223, 0.1),
-      0 4px 20px rgba(0, 0, 0, 0.45);
-  }
-}
-
 /* ── Selected check ── */
 .rs-select__option-check {
   position: absolute;
@@ -377,13 +372,7 @@ function onConfirm() {
   background: rgba(77, 163, 255, 0.1);
   border: 1px solid rgba(143, 211, 255, 0.25);
   border-radius: 50%;
-  opacity: 0;
-  animation: rs-check-in 300ms cubic-bezier(0.16, 1, 0.3, 1) 50ms forwards;
-}
-
-@keyframes rs-check-in {
-  from { opacity: 0; transform: scale(0.5); }
-  to   { opacity: 1; transform: scale(1); }
+  transition: opacity 200ms ease, transform 200ms ease;
 }
 
 /* ── Label & desc ── */
@@ -579,9 +568,6 @@ function onConfirm() {
   .rs-select__orb {
     animation: none;
     opacity: 1;
-  }
-  .rs-select__option--selected {
-    animation: none;
   }
 }
 </style>

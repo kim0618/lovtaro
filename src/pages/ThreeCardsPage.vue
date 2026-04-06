@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useHead } from '../composables/useHead.js'
 import AppShell from '../components/common/AppShell.vue'
 import PageContainer from '../components/ui/PageContainer.vue'
@@ -43,6 +43,7 @@ const POSITION_LABELS = { past: '과거', present: '현재', future: '미래' }
 
 const { deck, selectedIds, selectedCards, selectedCount, canConfirm, onSelect, removeAt, reset } = useCardDraw({ maxSelect: 3 })
 const phase = ref('intro') // 'intro' | 'status' | 'draw' | 'reveal' | 'result'
+const deckKey = ref(0)
 const relationshipStatus = ref(null)
 
 // 카드 3장 + 포지션 배정
@@ -74,6 +75,8 @@ const flowPoints = [
   { label: '미래 - 앞으로의 방향',      text: '현재 기류가 이어지면 어떤 흐름으로 향하는지 읽어냅니다.' },
 ]
 
+let revealTimer = null
+
 function startReading() { phase.value = 'status' }
 function selectStatus(s) { relationshipStatus.value = s; phase.value = 'draw' }
 function confirm() {
@@ -87,9 +90,12 @@ function confirm() {
     summary: overall.value?.summary ?? '',
   })
   phase.value = 'reveal'
-  setTimeout(() => { phase.value = 'result' }, REVEAL_DURATION)
+  revealTimer = setTimeout(() => { phase.value = 'result' }, REVEAL_DURATION)
 }
-function retry() { reset(); phase.value = 'draw' }
+function retry() { reset(); deckKey.value++; phase.value = 'draw' }
+function scrollTop() { window.scrollTo({ top: 0 }) }
+
+onUnmounted(() => { if (revealTimer) clearTimeout(revealTimer) })
 
 onMounted(() => {
   const shared = decodeSpreadParams()
@@ -117,7 +123,7 @@ onMounted(() => {
 
 <template>
   <AppShell>
-    <Transition name="phase-fade" mode="out-in" @enter="() => window.scrollTo({ top: 0 })">
+    <Transition name="phase-fade" mode="out-in" @after-enter="scrollTop">
     <div :key="phase">
     <!-- ── INTRO ───────────────────────────────────── -->
     <template v-if="phase === 'intro'">
@@ -172,7 +178,7 @@ onMounted(() => {
       </SectionBlock>
 
       <SectionBlock spacing="sm">
-        <CardDeck :cards="deck" :selected-ids="selectedIds" :max-select="3" @select="onSelect" />
+        <CardDeck :key="deckKey" :cards="deck" :selected-ids="selectedIds" :max-select="3" @select="onSelect" />
       </SectionBlock>
 
       <SectionBlock spacing="sm">
