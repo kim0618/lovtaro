@@ -58,11 +58,33 @@ async function handleSave() {
 }
 
 function handleKakaoShare() {
-  const url = resolvedUrl.value
-  const text = `${props.readingType} 결과 - ${props.cardName || 'Lovtaro'}`
-  const kakaoUrl = `https://sharer.kakao.com/talk/friends/picker/link?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`
+  if (!window.Kakao?.Share) {
+    alert('카카오톡 공유 기능을 불러오지 못했습니다. 잠시 후 다시 시도해주세요.')
+    return
+  }
 
-  window.open(kakaoUrl, '_blank', 'noopener,noreferrer')
+  const url = resolvedUrl.value
+  const cardLabel = props.cardName
+    ? `${props.cardName}${props.reversed ? ' (역방향)' : ''}`
+    : 'Lovtaro'
+
+  window.Kakao.Share.sendDefault({
+    objectType: 'feed',
+    content: {
+      title: `${props.readingType} 리딩 결과`,
+      description: props.summary || `${cardLabel} 카드가 나왔어요`,
+      imageUrl: props.cardImage
+        ? `https://lovtaro.pages.dev${props.cardImage}`
+        : 'https://lovtaro.pages.dev/og-image.png',
+      link: { mobileWebUrl: url, webUrl: url },
+    },
+    buttons: [
+      {
+        title: '결과 보기',
+        link: { mobileWebUrl: url, webUrl: url },
+      },
+    ],
+  })
   trackEvent('share', { reading_type: props.readingType, method: 'kakao' })
 }
 
