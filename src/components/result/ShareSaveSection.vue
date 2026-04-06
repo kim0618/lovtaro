@@ -58,13 +58,13 @@ async function handleSave() {
 }
 
 function toPngUrl(imagePath) {
-  return `https://lovtaro.pages.dev${imagePath.replace('/cards/', '/cards-png/').replace('.webp', '.png')}`
+  return `https://lovtaro.kr${imagePath.replace('/cards/', '/cards-png/').replace('.webp', '.png')}`
 }
 
 function getShareImageUrl() {
   if (props.cardImage) return toPngUrl(props.cardImage)
   if (props.cards.length > 0 && props.cards[0].image) return toPngUrl(props.cards[0].image)
-  return 'https://lovtaro.pages.dev/og-image.png'
+  return 'https://lovtaro.kr/og-image.png'
 }
 
 function handleKakaoShare() {

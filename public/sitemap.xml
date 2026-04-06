@@ -1,162 +1,162 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://lovtaro.pages.dev/</loc>
+    <loc>https://lovtaro.kr/</loc>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://lovtaro.pages.dev/today</loc>
+    <loc>https://lovtaro.kr/today</loc>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://lovtaro.pages.dev/reading/love</loc>
+    <loc>https://lovtaro.kr/reading/love</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://lovtaro.pages.dev/reading/mind</loc>
+    <loc>https://lovtaro.kr/reading/mind</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://lovtaro.pages.dev/reading/reunion</loc>
+    <loc>https://lovtaro.kr/reading/reunion</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://lovtaro.pages.dev/reading/contact</loc>
+    <loc>https://lovtaro.kr/reading/contact</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://lovtaro.pages.dev/reading/3cards</loc>
+    <loc>https://lovtaro.kr/reading/3cards</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://lovtaro.pages.dev/history</loc>
+    <loc>https://lovtaro.kr/history</loc>
     <changefreq>weekly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://lovtaro.pages.dev/cards</loc>
+    <loc>https://lovtaro.kr/cards</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://lovtaro.pages.dev/cards/fool</loc>
+    <loc>https://lovtaro.kr/cards/fool</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://lovtaro.pages.dev/cards/magician</loc>
+    <loc>https://lovtaro.kr/cards/magician</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://lovtaro.pages.dev/cards/priestess</loc>
+    <loc>https://lovtaro.kr/cards/priestess</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://lovtaro.pages.dev/cards/empress</loc>
+    <loc>https://lovtaro.kr/cards/empress</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://lovtaro.pages.dev/cards/emperor</loc>
+    <loc>https://lovtaro.kr/cards/emperor</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://lovtaro.pages.dev/cards/hierophant</loc>
+    <loc>https://lovtaro.kr/cards/hierophant</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://lovtaro.pages.dev/cards/lovers</loc>
+    <loc>https://lovtaro.kr/cards/lovers</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://lovtaro.pages.dev/cards/star</loc>
+    <loc>https://lovtaro.kr/cards/star</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://lovtaro.pages.dev/cards/world</loc>
+    <loc>https://lovtaro.kr/cards/world</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://lovtaro.pages.dev/cards/chariot</loc>
+    <loc>https://lovtaro.kr/cards/chariot</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://lovtaro.pages.dev/cards/strength</loc>
+    <loc>https://lovtaro.kr/cards/strength</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://lovtaro.pages.dev/cards/death</loc>
+    <loc>https://lovtaro.kr/cards/death</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://lovtaro.pages.dev/cards/temperance</loc>
+    <loc>https://lovtaro.kr/cards/temperance</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://lovtaro.pages.dev/cards/devil</loc>
+    <loc>https://lovtaro.kr/cards/devil</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://lovtaro.pages.dev/cards/moon</loc>
+    <loc>https://lovtaro.kr/cards/moon</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://lovtaro.pages.dev/cards/hermit</loc>
+    <loc>https://lovtaro.kr/cards/hermit</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://lovtaro.pages.dev/cards/wheel</loc>
+    <loc>https://lovtaro.kr/cards/wheel</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://lovtaro.pages.dev/cards/hanged</loc>
+    <loc>https://lovtaro.kr/cards/hanged</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://lovtaro.pages.dev/cards/justice</loc>
+    <loc>https://lovtaro.kr/cards/justice</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://lovtaro.pages.dev/cards/tower</loc>
+    <loc>https://lovtaro.kr/cards/tower</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://lovtaro.pages.dev/cards/sun</loc>
+    <loc>https://lovtaro.kr/cards/sun</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://lovtaro.pages.dev/cards/judgement</loc>
+    <loc>https://lovtaro.kr/cards/judgement</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://lovtaro.pages.dev/privacy</loc>
+    <loc>https://lovtaro.kr/privacy</loc>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>

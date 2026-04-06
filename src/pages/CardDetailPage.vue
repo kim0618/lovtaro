@@ -22,7 +22,7 @@ useHead({
     '@type': 'Article',
     headline: `${card.value.name}(${card.value.nameEn}) 타로 카드 의미`,
     description: `${card.value.name} 타로 카드의 정방향, 역방향 의미와 연애 해석`,
-    image: cardImage.value ? `https://lovtaro.pages.dev${cardImage.value}` : undefined,
+    image: cardImage.value ? `https://lovtaro.kr${cardImage.value}` : undefined,
     author: { '@type': 'Organization', name: 'Lovtaro' },
     publisher: { '@type': 'Organization', name: 'Lovtaro' },
     inLanguage: 'ko',

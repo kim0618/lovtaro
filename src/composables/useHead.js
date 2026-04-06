@@ -7,7 +7,7 @@ const defaults = {
 }
 
 // 도메인 변경 시 여기만 수정
-export const SITE_URL = 'https://lovtaro.pages.dev'
+export const SITE_URL = 'https://lovtaro.kr'
 
 const JSON_LD_ID = 'lovtaro-jsonld'
 

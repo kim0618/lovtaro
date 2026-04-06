@@ -163,7 +163,7 @@ export async function generateSingleCardShareImage({ readingType, cardName, card
 
     ctx.font = '300 22px "Noto Sans KR", sans-serif'
     ctx.fillStyle = 'rgba(167, 183, 214, 0.5)'
-    ctx.fillText('lovtaro.pages.dev', textX, cardY + cardH - 36)
+    ctx.fillText('lovtaro.kr', textX, cardY + cardH - 36)
   } else {
     // ── Story 레이아웃 (9:16) ──
     ctx.strokeStyle = lineGrad
@@ -234,7 +234,7 @@ export async function generateSingleCardShareImage({ readingType, cardName, card
 
     ctx.font = '300 26px "Noto Sans KR", sans-serif'
     ctx.fillStyle = 'rgba(167, 183, 214, 0.6)'
-    ctx.fillText('lovtaro.pages.dev', W / 2, bottomLineY + 92)
+    ctx.fillText('lovtaro.kr', W / 2, bottomLineY + 92)
 
     ctx.font = 'italic 300 24px "Cormorant Garamond", Georgia, serif'
     ctx.fillStyle = 'rgba(126, 138, 168, 0.35)'
@@ -436,7 +436,7 @@ export async function generateThreeCardShareImage({ readingType, cards, summary,
 
   ctx.font = isFeed ? '300 22px "Noto Sans KR", sans-serif' : '300 26px "Noto Sans KR", sans-serif'
   ctx.fillStyle = 'rgba(167, 183, 214, 0.6)'
-  ctx.fillText('lovtaro.pages.dev', W / 2, bottomLineY + (isFeed ? 72 : 92))
+  ctx.fillText('lovtaro.kr', W / 2, bottomLineY + (isFeed ? 72 : 92))
 
   if (!isFeed) {
     ctx.font = 'italic 300 24px "Cormorant Garamond", Georgia, serif'
