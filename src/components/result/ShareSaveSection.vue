@@ -57,6 +57,16 @@ async function handleSave() {
   }
 }
 
+function toPngUrl(imagePath) {
+  return `https://lovtaro.pages.dev${imagePath.replace('/cards/', '/cards-png/').replace('.webp', '.png')}`
+}
+
+function getShareImageUrl() {
+  if (props.cardImage) return toPngUrl(props.cardImage)
+  if (props.cards.length > 0 && props.cards[0].image) return toPngUrl(props.cards[0].image)
+  return 'https://lovtaro.pages.dev/og-image.png'
+}
+
 function handleKakaoShare() {
   if (!window.Kakao?.Share) {
     alert('카카오톡 공유 기능을 불러오지 못했습니다. 잠시 후 다시 시도해주세요.')
@@ -73,9 +83,7 @@ function handleKakaoShare() {
     content: {
       title: `${props.readingType} 리딩 결과`,
       description: props.summary || `${cardLabel} 카드가 나왔어요`,
-      imageUrl: props.cardImage
-        ? `https://lovtaro.pages.dev${props.cardImage}`
-        : 'https://lovtaro.pages.dev/og-image.png',
+      imageUrl: getShareImageUrl(),
       link: { mobileWebUrl: url, webUrl: url },
     },
     buttons: [

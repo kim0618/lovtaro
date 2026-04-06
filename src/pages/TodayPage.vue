@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useHead } from '../composables/useHead.js'
 import AppShell from '../components/common/AppShell.vue'
 
@@ -28,7 +28,9 @@ import RelationshipStatusSelect from '../components/reading/RelationshipStatusSe
 import { useDailyTarot } from '../composables/useDailyTarot.js'
 import { applyRelationshipModifier } from '../data/relationshipModifiers.js'
 import { useStreak } from '../composables/useStreak.js'
-import { encodeReadingParams, buildShareUrl } from '../utils/shareLink.js'
+import { encodeReadingParams, buildShareUrl, decodeReadingParams } from '../utils/shareLink.js'
+import { getCardById } from '../data/tarotCards.js'
+import { getCardImage } from '../data/cardImages.js'
 
 const {
   phase,
@@ -71,6 +73,17 @@ function handleResetToday() {
   relationshipStatus.value = null
   resetToday()
 }
+
+onMounted(() => {
+  const shared = decodeReadingParams()
+  if (!shared) return
+  const base = getCardById(shared.cardId)
+  if (!base) return
+  onSelect(shared.cardId)
+  deck.value = deck.value.map(c => c.id === shared.cardId ? { ...c, reversed: shared.reversed } : c)
+  relationshipStatus.value = shared.status || null
+  phase.value = 'result'
+})
 </script>
 
 <template>

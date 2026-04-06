@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useHead } from '../composables/useHead.js'
 import AppShell from '../components/common/AppShell.vue'
 import PageContainer from '../components/ui/PageContainer.vue'
@@ -25,9 +25,11 @@ import RelationshipStatusSelect from '../components/reading/RelationshipStatusSe
 import { saveLastReading } from '../composables/useLastReading.js'
 import { saveReadingHistory } from '../composables/useReadingHistory.js'
 import { useCardDraw } from '../composables/useCardDraw.js'
+import { getCardById } from '../data/tarotCards.js'
+import { getCardImage } from '../data/cardImages.js'
 import { LOVE_CARD_INTERPRETATIONS, getLoveOverall } from '../data/readings/love.js'
 import { applyRelationshipModifierToOverall } from '../data/relationshipModifiers.js'
-import { encodeSpreadParams, buildShareUrl } from '../utils/shareLink.js'
+import { encodeSpreadParams, buildShareUrl, decodeSpreadParams } from '../utils/shareLink.js'
 
 useHead({
   title: '러브타로 - 두 사람의 마음과 관계의 방향 | Lovtaro',
@@ -97,6 +99,29 @@ const DRAW_INSTRUCTIONS = [
   '3장이 모두 선택되었습니다',
 ]
 const drawInstruction = computed(() => DRAW_INSTRUCTIONS[Math.min(selectedCount.value, 3)])
+
+onMounted(() => {
+  const shared = decodeSpreadParams()
+  if (!shared || shared.cards.length < 3) return
+
+  const resolved = shared.cards.map(c => {
+    const base = getCardById(c.id)
+    if (!base) return null
+    return { ...base, reversed: c.reversed, image: getCardImage(c.id) || '' }
+  })
+  if (resolved.some(c => !c)) return
+
+  relationshipStatus.value = shared.status || null
+  resolved.forEach(c => onSelect(c.id))
+
+  // deck에 reversed 상태 반영
+  deck.value = deck.value.map(c => {
+    const match = resolved.find(r => r.id === c.id)
+    return match ? { ...c, reversed: match.reversed } : c
+  })
+
+  phase.value = 'result'
+})
 </script>
 
 <template>

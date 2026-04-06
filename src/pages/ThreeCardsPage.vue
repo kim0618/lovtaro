@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useHead } from '../composables/useHead.js'
 import AppShell from '../components/common/AppShell.vue'
 import PageContainer from '../components/ui/PageContainer.vue'
@@ -27,7 +27,9 @@ import { saveReadingHistory } from '../composables/useReadingHistory.js'
 import { useCardDraw } from '../composables/useCardDraw.js'
 import { THREE_CARD_INTERPRETATIONS, getThreeCardOverall } from '../data/readings/threecards.js'
 import { applyRelationshipModifierToOverall } from '../data/relationshipModifiers.js'
-import { encodeSpreadParams, buildShareUrl } from '../utils/shareLink.js'
+import { encodeSpreadParams, buildShareUrl, decodeSpreadParams } from '../utils/shareLink.js'
+import { getCardById } from '../data/tarotCards.js'
+import { getCardImage } from '../data/cardImages.js'
 
 useHead({
   title: '3장 리딩 - 과거, 현재, 미래 흐름 읽기 | Lovtaro',
@@ -88,6 +90,29 @@ function confirm() {
   setTimeout(() => { phase.value = 'result' }, REVEAL_DURATION)
 }
 function retry() { reset(); phase.value = 'draw' }
+
+onMounted(() => {
+  const shared = decodeSpreadParams()
+  if (!shared || shared.cards.length < 3) return
+
+  const resolved = shared.cards.map(c => {
+    const base = getCardById(c.id)
+    if (!base) return null
+    return { ...base, reversed: c.reversed, image: getCardImage(c.id) || '' }
+  })
+  if (resolved.some(c => !c)) return
+
+  relationshipStatus.value = shared.status || null
+  resolved.forEach(c => onSelect(c.id))
+
+  // deck에 reversed 상태 반영
+  deck.value = deck.value.map(c => {
+    const match = resolved.find(r => r.id === c.id)
+    return match ? { ...c, reversed: match.reversed } : c
+  })
+
+  phase.value = 'result'
+})
 </script>
 
 <template>

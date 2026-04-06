@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useHead } from '../composables/useHead.js'
 import AppShell from '../components/common/AppShell.vue'
 
@@ -36,7 +36,9 @@ import { applyReversedModifier } from '../data/reversedModifiers.js'
 import { applyRelationshipModifier } from '../data/relationshipModifiers.js'
 import { saveReadingHistory } from '../composables/useReadingHistory.js'
 import { useReadingSession } from '../composables/useReadingSession.js'
-import { encodeReadingParams, buildShareUrl } from '../utils/shareLink.js'
+import { encodeReadingParams, buildShareUrl, decodeReadingParams } from '../utils/shareLink.js'
+import { getCardById } from '../data/tarotCards.js'
+import { getCardImage } from '../data/cardImages.js'
 
 const { deck, selectedIds, selectedCards, selectedCount, canConfirm, onSelect, reset } = useCardDraw({ maxSelect: 1 })
 const phase = ref('intro') // 'intro' | 'status' | 'draw' | 'reveal' | 'result'
@@ -84,6 +86,17 @@ function confirm() {
   setTimeout(() => { phase.value = 'result' }, 2200)
 }
 function retry() { clearSession(); reset(); phase.value = 'draw' }
+
+onMounted(() => {
+  const shared = decodeReadingParams()
+  if (!shared) return
+  const base = getCardById(shared.cardId)
+  if (!base) return
+  onSelect(shared.cardId)
+  deck.value = deck.value.map(c => c.id === shared.cardId ? { ...c, reversed: shared.reversed } : c)
+  relationshipStatus.value = shared.status || null
+  phase.value = 'result'
+})
 </script>
 
 <template>
