@@ -126,7 +126,7 @@ onMounted(() => {
 
 <template>
   <AppShell>
-    <Transition name="phase-fade" mode="out-in">
+    <Transition name="phase-fade" mode="out-in" @enter="() => window.scrollTo({ top: 0 })">
     <div :key="phase">
     <!-- ── INTRO ───────────────────────────────────── -->
     <template v-if="phase === 'intro'">

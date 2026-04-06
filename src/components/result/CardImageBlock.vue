@@ -124,6 +124,11 @@ defineProps({
       <span class="card-image-block__spark card-image-block__spark--8" />
     </div>
 
+    <div class="card-image-block__name-area">
+      <span class="card-image-block__card-name">{{ cardName }}</span>
+      <span v-if="cardNameEn" class="card-image-block__card-name-en">{{ cardNameEn }}</span>
+    </div>
+
     <div v-if="reversed" class="card-image-block__reversed-badge">
       <span class="card-image-block__reversed-icon">↺</span>
       <span>역방향</span>
@@ -443,6 +448,31 @@ defineProps({
   0%   { opacity: 0;   transform: translate(0, 0) scale(1); }
   15%  { opacity: 0.8; }
   100% { opacity: 0;   transform: translate(32px, 42px) scale(0.3); }
+}
+
+/* ── card name ── */
+.card-image-block__name-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.card-image-block__card-name {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 200;
+  color: var(--lt-text-strong);
+  letter-spacing: 0.06em;
+}
+
+.card-image-block__card-name-en {
+  display: block;
+  font-family: var(--lt-font-display);
+  font-size: 0.75rem;
+  color: var(--lt-text-muted);
+  font-style: italic;
+  letter-spacing: 0.06em;
 }
 
 /* ── reversed badge ── */

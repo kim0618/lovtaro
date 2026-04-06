@@ -117,7 +117,7 @@ onMounted(() => {
 
 <template>
   <AppShell>
-    <Transition name="phase-fade" mode="out-in">
+    <Transition name="phase-fade" mode="out-in" @enter="() => window.scrollTo({ top: 0 })">
     <div :key="phase">
     <!-- ── INTRO ───────────────────────────────────── -->
     <template v-if="phase === 'intro'">
@@ -234,68 +234,16 @@ onMounted(() => {
                     <circle cx="82.5" cy="167.5" r="4" fill="#0A1020"/>
                   </svg>
                 </div>
-                <!-- 앞면: 별자리 + 카드이름 -->
+                <!-- 앞면: 카드 일러스트 -->
                 <div class="three-reveal__card-front">
-                  <svg viewBox="0 0 120 198" fill="none" class="three-reveal__card-svg" aria-hidden="true">
-                    <!-- 내부 테두리 -->
-                    <rect x="8" y="8" width="104" height="182" rx="4" stroke="#C8A96E" stroke-opacity="0.12" stroke-width="0.4"/>
-                    <!-- 코너 장식 -->
-                    <path d="M13 21 Q13 13 21 13" stroke="#C8A96E" stroke-opacity="0.3" stroke-width="0.5" fill="none"/>
-                    <path d="M107 21 Q107 13 99 13" stroke="#C8A96E" stroke-opacity="0.3" stroke-width="0.5" fill="none"/>
-                    <path d="M13 177 Q13 185 21 185" stroke="#C8A96E" stroke-opacity="0.3" stroke-width="0.5" fill="none"/>
-                    <path d="M107 177 Q107 185 99 185" stroke="#C8A96E" stroke-opacity="0.3" stroke-width="0.5" fill="none"/>
-                    <!-- 상단 달 위상 -->
-                    <circle cx="40" cy="30" r="4" stroke="#C8A96E" stroke-opacity="0.25" stroke-width="0.5" fill="none"/>
-                    <circle cx="42" cy="28.5" r="3" fill="#0A1020"/>
-                    <circle cx="60" cy="30" r="4" stroke="#C8A96E" stroke-opacity="0.3" stroke-width="0.5" fill="#C8A96E" fill-opacity="0.06"/>
-                    <circle cx="80" cy="30" r="4" stroke="#C8A96E" stroke-opacity="0.25" stroke-width="0.5" fill="none"/>
-                    <circle cx="78" cy="28.5" r="3" fill="#0A1020"/>
-                    <!-- 상단 성좌 -->
-                    <circle cx="38" cy="62" r="3" fill="#C8A96E" fill-opacity="0.7"/>
-                    <circle cx="38" cy="62" r="6" stroke="#C8A96E" stroke-opacity="0.2" stroke-width="0.5" fill="none"/>
-                    <circle cx="84" cy="55" r="2.5" fill="#C8A96E" fill-opacity="0.6"/>
-                    <circle cx="84" cy="55" r="5" stroke="#C8A96E" stroke-opacity="0.18" stroke-width="0.5" fill="none"/>
-                    <line x1="38" y1="62" x2="84" y2="55" stroke="#C8A96E" stroke-opacity="0.3" stroke-width="0.6"/>
-                    <!-- 보조 별 -->
-                    <circle cx="26" cy="50" r="1.5" fill="#C8A96E" fill-opacity="0.45"/>
-                    <circle cx="60" cy="52" r="1.8" fill="#C8A96E" fill-opacity="0.4"/>
-                    <circle cx="96" cy="66" r="1.3" fill="#C8A96E" fill-opacity="0.35"/>
-                    <circle cx="48" cy="74" r="1.2" fill="#C8A96E" fill-opacity="0.3"/>
-                    <circle cx="72" cy="70" r="1" fill="#C8A96E" fill-opacity="0.25"/>
-                    <!-- 연결선 -->
-                    <line x1="26" y1="50" x2="38" y2="62" stroke="#C8A96E" stroke-opacity="0.15" stroke-width="0.4"/>
-                    <line x1="38" y1="62" x2="60" y2="52" stroke="#C8A96E" stroke-opacity="0.12" stroke-width="0.4"/>
-                    <line x1="60" y1="52" x2="84" y2="55" stroke="#C8A96E" stroke-opacity="0.12" stroke-width="0.4"/>
-                    <line x1="84" y1="55" x2="96" y2="66" stroke="#C8A96E" stroke-opacity="0.1" stroke-width="0.3"/>
-                    <line x1="38" y1="62" x2="48" y2="74" stroke="#C8A96E" stroke-opacity="0.1" stroke-width="0.3"/>
-                    <!-- 중앙 원형 장식 -->
-                    <circle cx="60" cy="99" r="16" stroke="#C8A96E" stroke-opacity="0.08" stroke-width="0.4" fill="none"/>
-                    <circle cx="60" cy="99" r="8" stroke="#C8A96E" stroke-opacity="0.12" stroke-width="0.4" fill="none"/>
-                    <circle cx="60" cy="99" r="2" fill="#C8A96E" fill-opacity="0.15"/>
-                    <!-- 하단 성좌 -->
-                    <circle cx="34" cy="138" r="2" fill="#C8A96E" fill-opacity="0.5"/>
-                    <circle cx="34" cy="138" r="4.5" stroke="#C8A96E" stroke-opacity="0.15" stroke-width="0.4" fill="none"/>
-                    <circle cx="78" cy="132" r="1.8" fill="#C8A96E" fill-opacity="0.4"/>
-                    <circle cx="92" cy="145" r="1.2" fill="#C8A96E" fill-opacity="0.3"/>
-                    <circle cx="50" cy="148" r="1" fill="#C8A96E" fill-opacity="0.25"/>
-                    <line x1="34" y1="138" x2="78" y2="132" stroke="#C8A96E" stroke-opacity="0.12" stroke-width="0.4"/>
-                    <line x1="78" y1="132" x2="92" y2="145" stroke="#C8A96E" stroke-opacity="0.08" stroke-width="0.3"/>
-                    <line x1="34" y1="138" x2="50" y2="148" stroke="#C8A96E" stroke-opacity="0.08" stroke-width="0.3"/>
-                    <!-- 별먼지 -->
-                    <circle cx="22" cy="58" r="0.6" fill="#C8A96E" fill-opacity="0.22"/>
-                    <circle cx="68" cy="46" r="0.7" fill="#C8A96E" fill-opacity="0.16"/>
-                    <circle cx="100" cy="58" r="0.4" fill="#C8A96E" fill-opacity="0.1"/>
-                    <circle cx="24" cy="128" r="0.5" fill="#C8A96E" fill-opacity="0.14"/>
-                    <circle cx="88" cy="126" r="0.5" fill="#C8A96E" fill-opacity="0.12"/>
-                    <circle cx="60" cy="150" r="0.4" fill="#C8A96E" fill-opacity="0.1"/>
-                    <!-- 하단 달 위상 -->
-                    <circle cx="40" cy="168" r="4" stroke="#C8A96E" stroke-opacity="0.25" stroke-width="0.5" fill="none"/>
-                    <circle cx="38" cy="169.5" r="3" fill="#0A1020"/>
-                    <circle cx="60" cy="168" r="4" stroke="#C8A96E" stroke-opacity="0.3" stroke-width="0.5" fill="#C8A96E" fill-opacity="0.06"/>
-                    <circle cx="80" cy="168" r="4" stroke="#C8A96E" stroke-opacity="0.25" stroke-width="0.5" fill="none"/>
-                    <circle cx="82" cy="169.5" r="3" fill="#0A1020"/>
-                  </svg>
-                  <div class="three-reveal__card-front-content">
+                  <img
+                    v-if="card.image"
+                    :src="card.image"
+                    :alt="card.name"
+                    class="three-reveal__card-img"
+                    :class="{ 'three-reveal__card-img--reversed': card.reversed }"
+                  />
+                  <div v-else class="three-reveal__card-front-content">
                     <span class="three-reveal__card-name">{{ card.name }}</span>
                   </div>
                 </div>
@@ -560,10 +508,15 @@ onMounted(() => {
   height: 100%;
 }
 
-.three-reveal__card-front .three-reveal__card-svg {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
+.three-reveal__card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.three-reveal__card-img--reversed {
+  transform: rotate(180deg);
 }
 
 .three-reveal__card-front-content {

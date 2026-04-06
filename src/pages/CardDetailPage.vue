@@ -12,6 +12,7 @@ import { getCardImage } from '../data/cardImages.js'
 
 const route = useRoute()
 const card = computed(() => getCardDetail(route.params.id))
+const cardImage = computed(() => card.value ? getCardImage(card.value.id) : null)
 
 useHead({
   title: () => card.value ? `${card.value.name}(${card.value.nameEn}) 타로 카드 의미 | Lovtaro` : '카드 상세 | Lovtaro',
@@ -28,7 +29,6 @@ useHead({
   } : null,
 })
 
-const cardImage = computed(() => card.value ? getCardImage(card.value.id) : null)
 const energyLabel = { positive: '긍정적 에너지', neutral: '중립적 에너지', challenging: '도전적 에너지' }
 </script>
 
