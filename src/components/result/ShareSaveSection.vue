@@ -22,13 +22,15 @@ const copyState = ref('idle')
 
 const resolvedUrl = computed(() => props.shareUrl || window.location.href)
 
-async function generateImage() {
+const instaState = ref('idle')
+
+async function generateImage(format = 'story') {
   if (props.mode === 'three' && props.cards.length >= 3) {
     return generateThreeCardShareImage({
       readingType: props.readingType,
       cards: props.cards,
       summary: props.summary,
-      format: 'story',
+      format,
     })
   }
   return generateSingleCardShareImage({
@@ -39,7 +41,7 @@ async function generateImage() {
     reversed: props.reversed,
     summary: props.summary,
     emotionTags: props.emotionTags,
-    format: 'story',
+    format,
   })
 }
 
@@ -47,11 +49,25 @@ async function handleSave() {
   if (generating.value) return
   generating.value = true
   try {
-    const dataUrl = await generateImage()
+    const dataUrl = await generateImage('story')
     downloadImage(dataUrl, `lovtaro-${props.readingType || 'reading'}.png`)
     trackEvent('image_save', { reading_type: props.readingType })
     saveState.value = 'done'
     setTimeout(() => { saveState.value = 'idle' }, 2200)
+  } finally {
+    generating.value = false
+  }
+}
+
+async function handleInstaSave() {
+  if (generating.value) return
+  generating.value = true
+  try {
+    const dataUrl = await generateImage('square')
+    downloadImage(dataUrl, `lovtaro-insta-${props.readingType || 'reading'}.png`)
+    trackEvent('image_save', { reading_type: props.readingType, format: 'instagram_square' })
+    instaState.value = 'done'
+    setTimeout(() => { instaState.value = 'idle' }, 2200)
   } finally {
     generating.value = false
   }
@@ -122,6 +138,17 @@ async function handleCopyLink() {
     <p class="share-save-section__heading">이 리딩을 간직하거나 공유하세요</p>
     <div class="share-save-section__grid">
       <button
+        class="share-save-section__btn share-save-section__btn--insta"
+        :disabled="generating"
+        @click="handleInstaSave"
+      >
+        <span v-if="instaState === 'done'" class="share-save-section__done-text">저장 완료</span>
+        <template v-else>
+          <span v-if="generating" class="share-save-section__spinner" />
+          <span v-else>인스타 피드용</span>
+        </template>
+      </button>
+      <button
         class="share-save-section__btn"
         :disabled="generating"
         @click="handleSave"
@@ -129,7 +156,7 @@ async function handleCopyLink() {
         <span v-if="saveState === 'done'" class="share-save-section__done-text">저장 완료</span>
         <template v-else>
           <span v-if="generating" class="share-save-section__spinner" />
-          <span v-else>이미지 저장</span>
+          <span v-else>스토리용 저장</span>
         </template>
       </button>
       <button
@@ -165,10 +192,10 @@ async function handleCopyLink() {
 }
 
 .share-save-section__grid {
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 8px;
-  max-width: 360px;
+  max-width: 320px;
   margin: 0 auto;
 }
 
@@ -198,6 +225,18 @@ async function handleCopyLink() {
   border-color: var(--lt-btn-primary-hover-border);
   background: var(--lt-btn-primary-hover);
   box-shadow: 0 0 16px rgba(77, 163, 255, 0.12);
+}
+
+.share-save-section__btn--insta {
+  background: rgba(225, 48, 108, 0.12);
+  border-color: rgba(225, 48, 108, 0.3);
+  color: rgba(225, 120, 160, 0.9);
+}
+
+.share-save-section__btn--insta:hover:not(:disabled) {
+  background: rgba(225, 48, 108, 0.18);
+  border-color: rgba(225, 48, 108, 0.5);
+  box-shadow: 0 0 16px rgba(225, 48, 108, 0.1);
 }
 
 .share-save-section__btn--kakao {

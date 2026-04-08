@@ -7,6 +7,8 @@ const STORY_WIDTH = 1080
 const STORY_HEIGHT = 1920
 const FEED_WIDTH = 1080
 const FEED_HEIGHT = 1350
+const SQUARE_WIDTH = 1080
+const SQUARE_HEIGHT = 1080
 const DPR = 1
 
 /**
@@ -59,8 +61,8 @@ function wrapText(ctx, text, maxWidth) {
  * @returns {Promise<string>} Data URL of the generated image
  */
 export async function generateSingleCardShareImage({ readingType, cardName, cardNameEn, summary, emotionTags = [], cardImage = '', reversed = false, format = 'story' }) {
-  const W = format === 'feed' ? FEED_WIDTH : STORY_WIDTH
-  const H = format === 'feed' ? FEED_HEIGHT : STORY_HEIGHT
+  const W = format === 'square' ? SQUARE_WIDTH : format === 'feed' ? FEED_WIDTH : STORY_WIDTH
+  const H = format === 'square' ? SQUARE_HEIGHT : format === 'feed' ? FEED_HEIGHT : STORY_HEIGHT
   // 카드 이미지 로드
   const img = cardImage
     ? await new Promise((resolve) => {
@@ -105,14 +107,15 @@ export async function generateSingleCardShareImage({ readingType, cardName, card
   lineGrad.addColorStop(0.5, 'rgba(77, 163, 255, 0.3)')
   lineGrad.addColorStop(1, 'transparent')
 
-  // Feed: 좌측 카드 + 우측 텍스트 / Story: 위 텍스트 + 아래 카드
-  const isFeed = format === 'feed'
+  // Feed/Square: 좌측 카드 + 우측 텍스트 / Story: 위 텍스트 + 아래 카드
+  const isFeed = format === 'feed' || format === 'square'
+  const isSquare = format === 'square'
 
   if (isFeed) {
-    // ── Feed 레이아웃 (4:5) ──
-    const cardW = 380
-    const cardH = 630
-    const cardX = 100
+    // ── Feed/Square 레이아웃 ──
+    const cardW = isSquare ? 300 : 380
+    const cardH = isSquare ? 500 : 630
+    const cardX = isSquare ? 80 : 100
     const cardY = (H - cardH) / 2
 
     // 카드 그리기
@@ -159,11 +162,15 @@ export async function generateSingleCardShareImage({ readingType, cardName, card
     ctx.textAlign = 'left'
     ctx.font = '400 26px "Noto Sans KR", sans-serif'
     ctx.fillStyle = 'rgba(143, 211, 255, 0.7)'
-    ctx.fillText('나도 뽑아보기', textX, cardY + cardH - 70)
+    ctx.fillText('나도 뽑아보기', textX, cardY + cardH - 90)
 
     ctx.font = '300 22px "Noto Sans KR", sans-serif'
     ctx.fillStyle = 'rgba(167, 183, 214, 0.5)'
-    ctx.fillText('lovtaro.kr', textX, cardY + cardH - 36)
+    ctx.fillText('lovtaro.kr', textX, cardY + cardH - 56)
+
+    ctx.font = '300 20px "Noto Sans KR", sans-serif'
+    ctx.fillStyle = 'rgba(143, 211, 255, 0.45)'
+    ctx.fillText('@lovtarot_', textX, cardY + cardH - 28)
   } else {
     // ── Story 레이아웃 (9:16) ──
     ctx.strokeStyle = lineGrad
@@ -220,7 +227,7 @@ export async function generateSingleCardShareImage({ readingType, cardName, card
     }
 
     // Bottom CTA
-    const bottomLineY = H - 200
+    const bottomLineY = H - 260
     ctx.strokeStyle = lineGrad
     ctx.beginPath()
     ctx.moveTo(200, bottomLineY)
@@ -230,15 +237,19 @@ export async function generateSingleCardShareImage({ readingType, cardName, card
     ctx.font = '400 30px "Noto Sans KR", sans-serif'
     ctx.fillStyle = 'rgba(143, 211, 255, 0.8)'
     ctx.textAlign = 'center'
-    ctx.fillText('나도 뽑아보기', W / 2, bottomLineY + 52)
+    ctx.fillText('나도 뽑아보기', W / 2, bottomLineY + 48)
 
     ctx.font = '300 26px "Noto Sans KR", sans-serif'
     ctx.fillStyle = 'rgba(167, 183, 214, 0.6)'
-    ctx.fillText('lovtaro.kr', W / 2, bottomLineY + 92)
+    ctx.fillText('lovtaro.kr', W / 2, bottomLineY + 82)
+
+    ctx.font = '300 24px "Noto Sans KR", sans-serif'
+    ctx.fillStyle = 'rgba(143, 211, 255, 0.45)'
+    ctx.fillText('@lovtarot_', W / 2, bottomLineY + 114)
 
     ctx.font = 'italic 300 24px "Cormorant Garamond", Georgia, serif'
     ctx.fillStyle = 'rgba(126, 138, 168, 0.35)'
-    ctx.fillText('Lovtaro', W / 2, H - 60)
+    ctx.fillText('Lovtaro', W / 2, H - 80)
   }
 
   return canvas.toDataURL('image/png')
@@ -290,8 +301,8 @@ function _drawCardFrame(ctx, img, x, y, w, h, reversed) {
  * @returns {Promise<string>} Data URL of the generated image
  */
 export async function generateThreeCardShareImage({ readingType, cards, summary, format = 'story' }) {
-  const W = format === 'feed' ? FEED_WIDTH : STORY_WIDTH
-  const H = format === 'feed' ? FEED_HEIGHT : STORY_HEIGHT
+  const W = format === 'square' ? SQUARE_WIDTH : format === 'feed' ? FEED_WIDTH : STORY_WIDTH
+  const H = format === 'square' ? SQUARE_HEIGHT : format === 'feed' ? FEED_HEIGHT : STORY_HEIGHT
 
   // 카드 이미지 로드
   const cardImages = await Promise.all(
@@ -340,15 +351,16 @@ export async function generateThreeCardShareImage({ readingType, cards, summary,
   lineGrad.addColorStop(0.5, 'rgba(77, 163, 255, 0.3)')
   lineGrad.addColorStop(1, 'transparent')
 
-  const isFeed = format === 'feed'
-  const headerLineY = isFeed ? 200 : 260
-  const titleY = isFeed ? 310 : 380
-  const cardW = isFeed ? 280 : 240
-  const cardH = isFeed ? 460 : 400
-  const gap = isFeed ? 24 : 36
+  const isFeed = format === 'feed' || format === 'square'
+  const isSquare = format === 'square'
+  const headerLineY = isSquare ? 100 : isFeed ? 200 : 260
+  const titleY = isSquare ? 200 : isFeed ? 310 : 380
+  const cardW = isSquare ? 200 : isFeed ? 280 : 240
+  const cardH = isSquare ? 320 : isFeed ? 460 : 400
+  const gap = isSquare ? 16 : isFeed ? 24 : 36
   const totalW = cardW * 3 + gap * 2
   const startX = (W - totalW) / 2
-  const cardY = isFeed ? 360 : 440
+  const cardY = isSquare ? 200 : isFeed ? 360 : 440
 
   // Decorative line top
   ctx.strokeStyle = lineGrad
@@ -421,7 +433,7 @@ export async function generateThreeCardShareImage({ readingType, cards, summary,
   }
 
   // ── Bottom CTA + Branding ──
-  const bottomLineY = H - (isFeed ? 140 : 200)
+  const bottomLineY = H - (isSquare ? 180 : isFeed ? 140 : 260)
   ctx.strokeStyle = lineGrad
   ctx.lineWidth = 1
   ctx.beginPath()
@@ -432,16 +444,20 @@ export async function generateThreeCardShareImage({ readingType, cards, summary,
   ctx.font = isFeed ? '400 26px "Noto Sans KR", sans-serif' : '400 30px "Noto Sans KR", sans-serif'
   ctx.fillStyle = 'rgba(143, 211, 255, 0.8)'
   ctx.textAlign = 'center'
-  ctx.fillText('나도 뽑아보기', W / 2, bottomLineY + (isFeed ? 40 : 52))
+  ctx.fillText('나도 뽑아보기', W / 2, bottomLineY + (isFeed ? 36 : 44))
 
   ctx.font = isFeed ? '300 22px "Noto Sans KR", sans-serif' : '300 26px "Noto Sans KR", sans-serif'
   ctx.fillStyle = 'rgba(167, 183, 214, 0.6)'
-  ctx.fillText('lovtaro.kr', W / 2, bottomLineY + (isFeed ? 72 : 92))
+  ctx.fillText('lovtaro.kr', W / 2, bottomLineY + (isFeed ? 64 : 78))
+
+  ctx.font = isFeed ? '300 20px "Noto Sans KR", sans-serif' : '300 24px "Noto Sans KR", sans-serif'
+  ctx.fillStyle = 'rgba(143, 211, 255, 0.45)'
+  ctx.fillText('@lovtarot_', W / 2, bottomLineY + (isFeed ? 90 : 110))
 
   if (!isFeed) {
     ctx.font = 'italic 300 24px "Cormorant Garamond", Georgia, serif'
     ctx.fillStyle = 'rgba(126, 138, 168, 0.35)'
-    ctx.fillText('Lovtaro', W / 2, H - 60)
+    ctx.fillText('Lovtaro', W / 2, H - 80)
   }
 
   return canvas.toDataURL('image/png')

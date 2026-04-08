@@ -1,6 +1,4 @@
-// ⚠️ 오픈 전 필수: GA4 속성 생성 후 아래 ID를 실제 측정 ID로 교체하세요
-// Google Analytics → 관리 → 데이터 스트림 → 측정 ID (G-XXXXXXXXXX 형식)
-const GA_ID = 'G-XXXXXXXXXX'
+const GA_ID = 'G-9B8C0RHKXX'
 
 export function initGA() {
   if (typeof window === 'undefined') return
