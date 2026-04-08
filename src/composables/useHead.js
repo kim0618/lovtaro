@@ -11,12 +11,13 @@ export const SITE_URL = 'https://lovtaro.kr'
 
 const JSON_LD_ID = 'lovtaro-jsonld'
 
-export function useHead({ title, description, jsonLd }) {
+export function useHead({ title, description, jsonLd, ogImage }) {
   const route = useRoute()
 
   watchEffect(() => {
     const t = typeof title === 'function' ? title() : title
     const d = typeof description === 'function' ? description() : description
+    const img = typeof ogImage === 'function' ? ogImage() : ogImage
     const url = `${SITE_URL}${route.path}`
 
     document.title = t || defaults.title
@@ -25,6 +26,9 @@ export function useHead({ title, description, jsonLd }) {
     setMeta('og:title', t || defaults.title, 'property')
     setMeta('og:description', d || defaults.description, 'property')
     setMeta('og:url', url, 'property')
+    if (img) {
+      setMeta('og:image', img, 'property')
+    }
 
     setLink('canonical', url)
 
@@ -40,6 +44,7 @@ export function useHead({ title, description, jsonLd }) {
     setMeta('og:title', defaults.title, 'property')
     setMeta('og:description', defaults.description, 'property')
     setMeta('og:url', SITE_URL, 'property')
+    setMeta('og:image', `${SITE_URL}/og-image.png`, 'property')
     setLink('canonical', SITE_URL)
     removeJsonLd()
   })

@@ -15,8 +15,9 @@ const card = computed(() => getCardDetail(route.params.id))
 const cardImage = computed(() => card.value ? getCardImage(card.value.id) : null)
 
 useHead({
-  title: () => card.value ? `${card.value.name}(${card.value.nameEn}) 타로 카드 의미 | Lovtaro` : '카드 상세 | Lovtaro',
-  description: () => card.value ? `${card.value.name} 타로 카드의 정방향, 역방향 의미와 연애 해석. ${card.value.keywords.join(', ')}. Lovtaro 카드 의미 사전.` : '',
+  title: () => card.value ? `${card.value.name}(${card.value.nameEn}) 타로 카드 의미 - 정방향 역방향 연애 해석 | Lovtaro` : '카드 상세 | Lovtaro',
+  description: () => card.value ? `${card.value.name}(${card.value.nameEn}) 타로 카드 정방향·역방향 의미와 연애 해석. 키워드: ${card.value.keywords.join(', ')}. 무료 타로 카드 의미 사전.` : '',
+  ogImage: () => cardImage.value ? `https://lovtaro.kr${cardImage.value.replace('.webp', '.png').replace('/cards/', '/cards-png/')}` : null,
   jsonLd: () => card.value ? {
     '@context': 'https://schema.org',
     '@type': 'Article',

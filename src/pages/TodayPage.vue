@@ -25,6 +25,7 @@ import DisclaimerBlock from '../components/result/DisclaimerBlock.vue'
 import OtherReadingsNav from '../components/common/OtherReadingsNav.vue'
 import CardRevealTransition from '../components/result/CardRevealTransition.vue'
 import RelationshipStatusSelect from '../components/reading/RelationshipStatusSelect.vue'
+import StreakBadge from '../components/result/StreakBadge.vue'
 import { useDailyTarot } from '../composables/useDailyTarot.js'
 import { applyRelationshipModifier } from '../data/relationshipModifiers.js'
 import { useStreak } from '../composables/useStreak.js'
@@ -208,6 +209,10 @@ onMounted(() => {
           :emotion-tags="result.emotionTags"
           :share-url="shareUrl"
         />
+      </SectionBlock>
+
+      <SectionBlock v-if="streak >= 2" spacing="md">
+        <StreakBadge :streak="streak" :card-name="drawnCard.name" />
       </SectionBlock>
 
       <SectionBlock spacing="sm">

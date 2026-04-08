@@ -11,8 +11,8 @@ import { getCardImage } from '../data/cardImages.js'
 const allCards = getAllCards()
 
 useHead({
-  title: '타로 카드 의미 사전 - 22장 메이저 아르카나 해석 | Lovtaro',
-  description: '타로 메이저 아르카나 22장의 정방향, 역방향 의미와 연애 해석을 확인하세요. 바보, 마법사, 여사제, 여황제, 황제, 교황, 연인, 전차, 힘, 은둔자, 운명의 수레바퀴, 정의, 매달린 사람, 죽음, 절제, 악마, 탑, 별, 달, 태양, 심판, 세계.',
+  title: '타로 카드 의미 사전 - 메이저 아르카나 22장 정방향 역방향 해석 | Lovtaro',
+  description: '타로 카드 의미 총정리. 메이저 아르카나 22장의 정방향·역방향 뜻과 연애 해석. 바보, 마법사, 여사제, 여황제, 황제, 교황, 연인, 전차, 힘, 은둔자, 운명의 수레바퀴, 정의, 매달린 사람, 죽음, 절제, 악마, 탑, 별, 달, 태양, 심판, 세계 카드 해설.',
   jsonLd: {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
