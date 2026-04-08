@@ -22,6 +22,17 @@ const copyState = ref('idle')
 
 const resolvedUrl = computed(() => props.shareUrl || window.location.href)
 
+function withUtm(url, source, medium) {
+  const u = new URL(url, window.location.origin)
+  u.searchParams.set('utm_source', source)
+  u.searchParams.set('utm_medium', medium)
+  u.searchParams.set('utm_campaign', props.readingType || 'reading')
+  return u.toString()
+}
+
+const kakaoUrl = computed(() => withUtm(resolvedUrl.value, 'kakao', 'share'))
+const copyUrl = computed(() => withUtm(resolvedUrl.value, 'link', 'copy'))
+
 const instaState = ref('idle')
 
 async function generateImage(format = 'story') {
@@ -89,7 +100,7 @@ function handleKakaoShare() {
     return
   }
 
-  const url = resolvedUrl.value
+  const url = kakaoUrl.value
   const cardLabel = props.cardName
     ? `${props.cardName}${props.reversed ? ' (역방향)' : ''}`
     : 'Lovtaro'
@@ -114,13 +125,13 @@ function handleKakaoShare() {
 
 async function handleCopyLink() {
   try {
-    await navigator.clipboard.writeText(resolvedUrl.value)
+    await navigator.clipboard.writeText(copyUrl.value)
     trackEvent('copy_link', { reading_type: props.readingType })
     copyState.value = 'done'
     setTimeout(() => { copyState.value = 'idle' }, 2200)
   } catch {
     const textarea = document.createElement('textarea')
-    textarea.value = resolvedUrl.value
+    textarea.value = copyUrl.value
     textarea.style.position = 'fixed'
     textarea.style.opacity = '0'
     document.body.appendChild(textarea)
@@ -174,6 +185,7 @@ async function handleCopyLink() {
       </button>
     </div>
     <p v-if="generating" class="share-save-section__progress">이미지를 만들고 있어요</p>
+    <p class="share-save-section__nudge">스토리에 올리면 친구들도 뽑아볼 수 있어요</p>
   </div>
 </template>
 
@@ -299,5 +311,14 @@ async function handleCopyLink() {
 @keyframes share-progress-pulse {
   0%, 100% { opacity: 0.5; }
   50% { opacity: 0.9; }
+}
+
+.share-save-section__nudge {
+  font-size: 0.68rem;
+  color: var(--lt-text-muted);
+  text-align: center;
+  letter-spacing: 0.04em;
+  margin-top: var(--lt-space-md);
+  opacity: 0.6;
 }
 </style>

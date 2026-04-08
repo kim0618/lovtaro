@@ -52,6 +52,11 @@ const routes = [
     component: () => import('../pages/CardDetailPage.vue'),
   },
   {
+    path: '/link',
+    name: 'link',
+    component: () => import('../pages/LinkPage.vue'),
+  },
+  {
     path: '/privacy',
     name: 'privacy',
     component: () => import('../pages/PrivacyPage.vue'),

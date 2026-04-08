@@ -3,18 +3,16 @@ const GA_ID = 'G-9B8C0RHKXX'
 export function initGA() {
   if (typeof window === 'undefined') return
 
-  const script = document.createElement('script')
-  script.async = true
-  script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`
-  document.head.appendChild(script)
-
+  // GA 스크립트는 index.html에서 이미 로드됨
+  // 여기서는 라우터 수동 페이지뷰를 위해 send_page_view만 비활성화
   window.dataLayer = window.dataLayer || []
-  window.gtag = function () {
-    window.dataLayer.push(arguments)
+  if (!window.gtag) {
+    window.gtag = function () {
+      window.dataLayer.push(arguments)
+    }
   }
-  window.gtag('js', new Date())
   window.gtag('config', GA_ID, {
-    send_page_view: false, // 라우터에서 수동 전송
+    send_page_view: false,
   })
 }
 

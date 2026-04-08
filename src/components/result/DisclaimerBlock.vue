@@ -1,7 +1,7 @@
 <template>
   <div class="disclaimer-block" role="contentinfo">
     <p class="disclaimer-block__text">
-      이 리딩은 지금의 감정을 비추는 거울입니다.
+      이 리딩은 지금의 감정을 비추는 거울입니다.<br>
       카드는 흐름을 살필 뿐, 관계를 단정하지는 않습니다.
     </p>
     <p class="disclaimer-block__legal">
