@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue'
-import { generateSingleCardShareImage, generateThreeCardShareImage, downloadImage } from '../../composables/useShareCard.js'
+import { generateSingleCardShareImage, generateThreeCardShareImage, generateCompatibilityShareImage, downloadImage } from '../../composables/useShareCard.js'
 import { trackEvent } from '../../utils/gtag.js'
 
 const props = defineProps({
@@ -17,6 +17,12 @@ const props = defineProps({
   shareTitle: { type: String, default: '' },
   answerLabel: { type: String, default: '' },
   answerDesc: { type: String, default: '' },
+  card2Name: { type: String, default: '' },
+  card2NameEn: { type: String, default: '' },
+  card2Image: { type: String, default: '' },
+  card2Reversed: { type: Boolean, default: false },
+  score: { type: Number, default: 0 },
+  scoreLabel: { type: String, default: '' },
 })
 
 const generating = ref(false)
@@ -39,6 +45,22 @@ const copyUrl = computed(() => withUtm(resolvedUrl.value, 'link', 'copy'))
 const instaState = ref('idle')
 
 async function generateImage(format = 'story') {
+  if (props.mode === 'compatibility') {
+    return generateCompatibilityShareImage({
+      card1Name: props.cardName.split(' + ')[0] || props.cardName,
+      card1NameEn: props.cardNameEn.split(' & ')[0] || props.cardNameEn,
+      card1Image: props.cardImage,
+      card1Reversed: props.reversed,
+      card2Name: props.card2Name,
+      card2NameEn: props.card2NameEn,
+      card2Image: props.card2Image,
+      card2Reversed: props.card2Reversed,
+      score: props.score,
+      scoreLabel: props.scoreLabel,
+      summary: props.summary,
+      format,
+    })
+  }
   if (props.mode === 'three' && props.cards.length >= 3) {
     return generateThreeCardShareImage({
       readingType: props.readingType,
@@ -79,9 +101,9 @@ async function handleInstaSave() {
   if (generating.value) return
   generating.value = true
   try {
-    const dataUrl = await generateImage('square')
+    const dataUrl = await generateImage('feed')
     downloadImage(dataUrl, `lovtaro-insta-${props.readingType || 'reading'}.png`)
-    trackEvent('image_save', { reading_type: props.readingType, format: 'instagram_square' })
+    trackEvent('image_save', { reading_type: props.readingType, format: 'instagram_feed' })
     instaState.value = 'done'
     setTimeout(() => { instaState.value = 'idle' }, 2200)
   } finally {
@@ -94,6 +116,7 @@ function toPngUrl(imagePath) {
 }
 
 function getShareImageUrl() {
+  if (props.mode === 'compatibility') return 'https://lovtaro.kr/og-image.png'
   if (props.cardImage) return toPngUrl(props.cardImage)
   if (props.cards.length > 0 && props.cards[0].image) return toPngUrl(props.cards[0].image)
   return 'https://lovtaro.kr/og-image.png'
@@ -105,15 +128,26 @@ function handleKakaoShare() {
     return
   }
 
-  const url = kakaoUrl.value
   const cardLabel = props.cardName
     ? `${props.cardName}${props.reversed ? ' (역방향)' : ''}`
     : 'Lovtaro'
 
-  const kakaoTitle = props.shareTitle || `${props.readingType} 리딩 결과`
-  const kakaoDesc = props.answerLabel
-    ? `${props.answerLabel}! ${props.summary || `${cardLabel} 카드가 나왔어요`}`
-    : (props.summary || `${cardLabel} 카드가 나왔어요`)
+  let url, kakaoTitle, kakaoDesc, buttonTitle
+
+  if (props.mode === 'compatibility') {
+    const introPath = '/reading/compatibility'
+    url = withUtm(new URL(introPath, window.location.origin).toString(), 'kakao', 'share')
+    kakaoTitle = '우리의 타로 궁합은 몇 점일까?'
+    kakaoDesc = '카드 두 장으로 알아보는 연애 궁합 타로, 지금 바로 확인해봐!'
+    buttonTitle = '나도 궁합 보기'
+  } else {
+    url = kakaoUrl.value
+    kakaoTitle = props.shareTitle || `${props.readingType} 리딩 결과`
+    kakaoDesc = props.answerLabel
+      ? `${props.answerLabel}! ${props.summary || `${cardLabel} 카드가 나왔어요`}`
+      : (props.summary || `${cardLabel} 카드가 나왔어요`)
+    buttonTitle = '결과 보기'
+  }
 
   window.Kakao.Share.sendDefault({
     objectType: 'feed',
@@ -125,7 +159,7 @@ function handleKakaoShare() {
     },
     buttons: [
       {
-        title: '결과 보기',
+        title: buttonTitle,
         link: { mobileWebUrl: url, webUrl: url },
       },
     ],

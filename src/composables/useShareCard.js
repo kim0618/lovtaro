@@ -298,6 +298,354 @@ export async function generateSingleCardShareImage({ readingType, cardName, card
   return canvas.toDataURL('image/png')
 }
 
+/**
+ * Generate share card for compatibility reading (2 cards + score)
+ */
+export async function generateCompatibilityShareImage({ card1Name, card1NameEn, card1Image, card1Reversed, card2Name, card2NameEn, card2Image, card2Reversed, score, scoreLabel, summary, format = 'story' }) {
+  const W = format === 'square' ? SQUARE_WIDTH : format === 'feed' ? FEED_WIDTH : STORY_WIDTH
+  const H = format === 'square' ? SQUARE_HEIGHT : format === 'feed' ? FEED_HEIGHT : STORY_HEIGHT
+
+  const [img1, img2] = await Promise.all([card1Image, card2Image].map(src =>
+    src
+      ? new Promise(resolve => {
+          const i = new Image()
+          i.crossOrigin = 'anonymous'
+          i.onload = () => resolve(i)
+          i.onerror = () => resolve(null)
+          i.src = src
+        })
+      : Promise.resolve(null)
+  ))
+
+  const canvas = document.createElement('canvas')
+  canvas.width = W * DPR
+  canvas.height = H * DPR
+  const ctx = canvas.getContext('2d')
+  ctx.scale(DPR, DPR)
+
+  // Background
+  const bgGrad = ctx.createLinearGradient(0, 0, 0, H)
+  bgGrad.addColorStop(0, '#05070D')
+  bgGrad.addColorStop(0.4, '#0A1020')
+  bgGrad.addColorStop(1, '#05070D')
+  ctx.fillStyle = bgGrad
+  ctx.fillRect(0, 0, W, H)
+
+  // Ambient glow (gold for compatibility)
+  const glowGrad = ctx.createRadialGradient(W / 2, H * 0.3, 0, W / 2, H * 0.3, 420)
+  glowGrad.addColorStop(0, 'rgba(212, 184, 122, 0.1)')
+  glowGrad.addColorStop(0.5, 'rgba(200, 169, 110, 0.04)')
+  glowGrad.addColorStop(1, 'transparent')
+  ctx.fillStyle = glowGrad
+  ctx.fillRect(0, 0, W, H)
+
+  // Inner border frame
+  ctx.strokeStyle = 'rgba(199, 215, 248, 0.08)'
+  ctx.lineWidth = 1
+  roundRect(ctx, 60, 60, W - 120, H - 120, 20)
+  ctx.stroke()
+
+  const lineGrad = ctx.createLinearGradient(200, 0, W - 200, 0)
+  lineGrad.addColorStop(0, 'transparent')
+  lineGrad.addColorStop(0.5, 'rgba(200, 169, 110, 0.3)')
+  lineGrad.addColorStop(1, 'transparent')
+
+  const isFeed = format === 'feed' || format === 'square'
+  const isSquare = format === 'square'
+
+  if (isFeed) {
+    // ── Feed/Square ──
+    ctx.textAlign = 'center'
+
+    if (isSquare) {
+      // ═══ SQUARE 1080x1080 전용 레이아웃 ═══
+      // 궁합 타로 라벨
+      ctx.font = '300 22px "Noto Sans KR", sans-serif'
+      ctx.fillStyle = 'rgba(77, 163, 255, 0.7)'
+      ctx.fillText('궁합 타로', W / 2, 96)
+
+      // 점수 (골드)
+      const sGlow = ctx.createRadialGradient(W / 2, 170, 0, W / 2, 170, 180)
+      sGlow.addColorStop(0, 'rgba(212, 184, 122, 0.12)')
+      sGlow.addColorStop(1, 'transparent')
+      ctx.fillStyle = sGlow
+      ctx.fillRect(0, 60, W, 220)
+
+      ctx.font = '400 100px "Cinzel", Georgia, serif'
+      const sGrad = ctx.createLinearGradient(W / 2 - 120, 0, W / 2 + 120, 0)
+      sGrad.addColorStop(0, '#D4B87A')
+      sGrad.addColorStop(0.4, '#E8D09A')
+      sGrad.addColorStop(0.7, '#C8A96E')
+      sGrad.addColorStop(1, '#D4B87A')
+      ctx.fillStyle = sGrad
+      ctx.fillText(`${score}%`, W / 2, 176)
+
+      // 등급
+      ctx.font = '300 24px "Noto Sans KR", sans-serif'
+      ctx.fillStyle = 'rgba(220, 232, 255, 0.75)'
+      ctx.fillText(scoreLabel, W / 2, 212)
+
+      // 카드 2장 (넉넉한 크기)
+      const cW = 250, cH = 416, cGap = 28
+      const cTotalW = cW * 2 + cGap
+      const cStartX = (W - cTotalW) / 2
+      const cY = 240
+
+      _drawCardFrame(ctx, img1, cStartX, cY, cW, cH, card1Reversed)
+      _drawCardFrame(ctx, img2, cStartX + cW + cGap, cY, cW, cH, card2Reversed)
+
+      // 카드 이름
+      ctx.font = '300 26px "Noto Sans KR", sans-serif'
+      ctx.fillStyle = '#F4F8FF'
+      ctx.fillText(card1Name, cStartX + cW / 2, cY + cH + 34)
+      ctx.fillText(card2Name, cStartX + cW + cGap + cW / 2, cY + cH + 34)
+
+      // 영문
+      ctx.font = 'italic 300 18px "Cormorant Garamond", Georgia, serif'
+      ctx.fillStyle = 'rgba(126, 138, 168, 0.7)'
+      ctx.fillText(card1NameEn, cStartX + cW / 2, cY + cH + 58)
+      ctx.fillText(card2NameEn, cStartX + cW + cGap + cW / 2, cY + cH + 58)
+
+      // 구분선
+      const lineY2 = cY + cH + 80
+      ctx.strokeStyle = lineGrad
+      ctx.lineWidth = 1
+      ctx.beginPath()
+      ctx.moveTo(200, lineY2)
+      ctx.lineTo(W - 200, lineY2)
+      ctx.stroke()
+
+      // 요약
+      if (summary) {
+        ctx.font = '400 24px "Noto Sans KR", sans-serif'
+        ctx.fillStyle = 'rgba(220, 232, 255, 0.85)'
+        const lines = wrapText(ctx, summary, W - 240)
+        lines.slice(0, 2).forEach((line, i) => {
+          ctx.fillText(line, W / 2, lineY2 + 38 + i * 38)
+        })
+      }
+
+      // CTA
+      ctx.font = '400 22px "Noto Sans KR", sans-serif'
+      ctx.fillStyle = 'rgba(143, 211, 255, 0.7)'
+      ctx.fillText('나도 궁합 보기  ·  lovtaro.kr', W / 2, H - 80)
+      ctx.font = '300 18px "Noto Sans KR", sans-serif'
+      ctx.fillStyle = 'rgba(143, 211, 255, 0.45)'
+      ctx.fillText('@lovtarot_', W / 2, H - 56)
+
+    } else {
+      // ═══ FEED 1080x1350 — 세로 여유있게 배치 ═══
+      // 라벨 y=130
+      ctx.font = '300 24px "Noto Sans KR", sans-serif'
+      ctx.fillStyle = 'rgba(77, 163, 255, 0.7)'
+      ctx.fillText('궁합 타로', W / 2, 130)
+
+      // 점수 글로우 (강하게)
+      const scoreY = 270
+      const scoreGlow = ctx.createRadialGradient(W / 2, scoreY - 10, 0, W / 2, scoreY - 10, 250)
+      scoreGlow.addColorStop(0, 'rgba(212, 184, 122, 0.2)')
+      scoreGlow.addColorStop(0.4, 'rgba(200, 169, 110, 0.08)')
+      scoreGlow.addColorStop(1, 'transparent')
+      ctx.fillStyle = scoreGlow
+      ctx.fillRect(0, scoreY - 150, W, 300)
+
+      // 점수 130px
+      ctx.font = '400 130px "Cinzel", Georgia, serif'
+      const scoreTextGrad = ctx.createLinearGradient(W / 2 - 150, 0, W / 2 + 150, 0)
+      scoreTextGrad.addColorStop(0, '#D4B87A')
+      scoreTextGrad.addColorStop(0.4, '#E8D09A')
+      scoreTextGrad.addColorStop(0.7, '#C8A96E')
+      scoreTextGrad.addColorStop(1, '#D4B87A')
+      ctx.fillStyle = scoreTextGrad
+      ctx.fillText(`${score}%`, W / 2, scoreY)
+
+      // 등급 y=320
+      ctx.font = '300 30px "Noto Sans KR", sans-serif'
+      ctx.fillStyle = 'rgba(220, 232, 255, 0.8)'
+      ctx.fillText(scoreLabel, W / 2, scoreY + 50)
+
+      // 구분선 y=360
+      const line1Y = scoreY + 86
+      ctx.strokeStyle = lineGrad
+      ctx.lineWidth = 1
+      ctx.beginPath()
+      ctx.moveTo(200, line1Y)
+      ctx.lineTo(W - 200, line1Y)
+      ctx.stroke()
+
+      // 카드 2장 y=390~850
+      const cardW = 280, cardH = 466, gap = 30
+      const totalCardW = cardW * 2 + gap
+      const startX = (W - totalCardW) / 2
+      const cardY = line1Y + 30
+
+      _drawCardFrame(ctx, img1, startX, cardY, cardW, cardH, card1Reversed)
+      _drawCardFrame(ctx, img2, startX + cardW + gap, cardY, cardW, cardH, card2Reversed)
+
+      // 카드 이름 y=896
+      ctx.font = '300 28px "Noto Sans KR", sans-serif'
+      ctx.fillStyle = '#F4F8FF'
+      ctx.fillText(card1Name, startX + cardW / 2, cardY + cardH + 36)
+      ctx.fillText(card2Name, startX + cardW + gap + cardW / 2, cardY + cardH + 36)
+
+      // 영문 y=922
+      ctx.font = 'italic 300 20px "Cormorant Garamond", Georgia, serif'
+      ctx.fillStyle = 'rgba(126, 138, 168, 0.7)'
+      ctx.fillText(card1NameEn, startX + cardW / 2, cardY + cardH + 62)
+      ctx.fillText(card2NameEn, startX + cardW + gap + cardW / 2, cardY + cardH + 62)
+
+      // 구분선 y=952
+      const line2Y = cardY + cardH + 86
+      ctx.strokeStyle = lineGrad
+      ctx.beginPath()
+      ctx.moveTo(200, line2Y)
+      ctx.lineTo(W - 200, line2Y)
+      ctx.stroke()
+
+      // 요약 y=998~
+      let nextY = line2Y + 46
+      if (summary) {
+        ctx.font = '400 28px "Noto Sans KR", sans-serif'
+        ctx.fillStyle = 'rgba(220, 232, 255, 0.85)'
+        const lines = wrapText(ctx, summary, W - 220)
+        const maxL = Math.min(lines.length, 3)
+        lines.slice(0, maxL).forEach((line, i) => {
+          ctx.fillText(line, W / 2, nextY + i * 44)
+        })
+        nextY = nextY + maxL * 44 + 30
+      }
+
+      // 구분선 + CTA (요약 바로 아래)
+      ctx.strokeStyle = lineGrad
+      ctx.beginPath()
+      ctx.moveTo(200, nextY)
+      ctx.lineTo(W - 200, nextY)
+      ctx.stroke()
+
+      ctx.font = '400 28px "Noto Sans KR", sans-serif'
+      ctx.fillStyle = 'rgba(143, 211, 255, 0.8)'
+      ctx.fillText('나도 궁합 보기', W / 2, nextY + 44)
+
+      ctx.font = '300 22px "Noto Sans KR", sans-serif'
+      ctx.fillStyle = 'rgba(167, 183, 214, 0.6)'
+      ctx.fillText('lovtaro.kr', W / 2, nextY + 76)
+
+      ctx.font = '300 20px "Noto Sans KR", sans-serif'
+      ctx.fillStyle = 'rgba(143, 211, 255, 0.45)'
+      ctx.fillText('@lovtarot_', W / 2, nextY + 102)
+    }
+
+  } else {
+    // ── Story (9:16) ──
+    ctx.textAlign = 'center'
+
+    // Reading type
+    ctx.font = '300 28px "Noto Sans KR", sans-serif'
+    ctx.fillStyle = 'rgba(77, 163, 255, 0.7)'
+    ctx.fillText('궁합 타로', W / 2, 240)
+
+    ctx.strokeStyle = lineGrad
+    ctx.lineWidth = 1
+    ctx.beginPath()
+    ctx.moveTo(200, 270)
+    ctx.lineTo(W - 200, 270)
+    ctx.stroke()
+
+    // Score - large gold
+    const scoreY = 440
+    const scoreGlow = ctx.createRadialGradient(W / 2, scoreY - 30, 0, W / 2, scoreY - 30, 280)
+    scoreGlow.addColorStop(0, 'rgba(212, 184, 122, 0.15)')
+    scoreGlow.addColorStop(1, 'transparent')
+    ctx.fillStyle = scoreGlow
+    ctx.fillRect(0, scoreY - 160, W, 320)
+
+    ctx.font = '400 130px "Cinzel", Georgia, serif'
+    const scoreTextGrad = ctx.createLinearGradient(W / 2 - 150, 0, W / 2 + 150, 0)
+    scoreTextGrad.addColorStop(0, '#D4B87A')
+    scoreTextGrad.addColorStop(0.4, '#E8D09A')
+    scoreTextGrad.addColorStop(0.7, '#C8A96E')
+    scoreTextGrad.addColorStop(1, '#D4B87A')
+    ctx.fillStyle = scoreTextGrad
+    ctx.fillText(`${score}%`, W / 2, scoreY)
+
+    // Score label
+    ctx.font = '300 36px "Noto Sans KR", sans-serif'
+    ctx.fillStyle = 'rgba(220, 232, 255, 0.8)'
+    ctx.fillText(scoreLabel, W / 2, scoreY + 56)
+
+    // Two cards
+    const cardW = 300
+    const cardH = 500
+    const gap = 36
+    const totalCardW = cardW * 2 + gap
+    const startX = (W - totalCardW) / 2
+    const cardY = 560
+
+    _drawCardFrame(ctx, img1, startX, cardY, cardW, cardH, card1Reversed)
+    _drawCardFrame(ctx, img2, startX + cardW + gap, cardY, cardW, cardH, card2Reversed)
+
+    // Card names
+    ctx.font = '300 34px "Noto Sans KR", sans-serif'
+    ctx.fillStyle = '#F4F8FF'
+    ctx.fillText(card1Name, startX + cardW / 2, cardY + cardH + 44)
+    ctx.fillText(card2Name, startX + cardW + gap + cardW / 2, cardY + cardH + 44)
+
+    // English names
+    ctx.font = 'italic 300 24px "Cormorant Garamond", Georgia, serif'
+    ctx.fillStyle = 'rgba(126, 138, 168, 0.7)'
+    ctx.fillText(card1NameEn, startX + cardW / 2, cardY + cardH + 76)
+    ctx.fillText(card2NameEn, startX + cardW + gap + cardW / 2, cardY + cardH + 76)
+
+    // Decorative line after cards
+    const afterY = cardY + cardH + 110
+    ctx.strokeStyle = lineGrad
+    ctx.lineWidth = 1
+    ctx.beginPath()
+    ctx.moveTo(200, afterY)
+    ctx.lineTo(W - 200, afterY)
+    ctx.stroke()
+
+    // Summary + CTA (요약 바로 아래 이어서)
+    let storyNextY = afterY + 56
+    if (summary) {
+      ctx.font = '400 32px "Noto Sans KR", sans-serif'
+      ctx.fillStyle = 'rgba(220, 232, 255, 0.9)'
+      const lines = wrapText(ctx, summary, W - 200)
+      const maxL = Math.min(lines.length, 3)
+      lines.slice(0, maxL).forEach((line, i) => {
+        ctx.fillText(line, W / 2, storyNextY + i * 50)
+      })
+      storyNextY = storyNextY + maxL * 50 + 40
+    }
+
+    // CTA 구분선
+    ctx.strokeStyle = lineGrad
+    ctx.lineWidth = 1
+    ctx.beginPath()
+    ctx.moveTo(200, storyNextY)
+    ctx.lineTo(W - 200, storyNextY)
+    ctx.stroke()
+
+    ctx.font = '400 30px "Noto Sans KR", sans-serif'
+    ctx.fillStyle = 'rgba(143, 211, 255, 0.8)'
+    ctx.fillText('나도 궁합 보기', W / 2, storyNextY + 48)
+
+    ctx.font = '300 26px "Noto Sans KR", sans-serif'
+    ctx.fillStyle = 'rgba(167, 183, 214, 0.6)'
+    ctx.fillText('lovtaro.kr', W / 2, storyNextY + 82)
+
+    ctx.font = '300 24px "Noto Sans KR", sans-serif'
+    ctx.fillStyle = 'rgba(143, 211, 255, 0.45)'
+    ctx.fillText('@lovtarot_', W / 2, storyNextY + 114)
+
+    ctx.font = 'italic 300 24px "Cormorant Garamond", Georgia, serif'
+    ctx.fillStyle = 'rgba(126, 138, 168, 0.35)'
+    ctx.fillText('Lovtaro', W / 2, storyNextY + 160)
+  }
+
+  return canvas.toDataURL('image/png')
+}
+
 /** 카드 프레임 + 이미지 공통 헬퍼 */
 function _drawCardFrame(ctx, img, x, y, w, h, reversed) {
   ctx.shadowColor = 'rgba(0, 0, 0, 0.5)'

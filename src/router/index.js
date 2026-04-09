@@ -32,6 +32,11 @@ const routes = [
     component: () => import('../pages/ReadingYesNoPage.vue'),
   },
   {
+    path: '/reading/compatibility',
+    name: 'reading-compatibility',
+    component: () => import('../pages/ReadingCompatibilityPage.vue'),
+  },
+  {
     path: '/reading/3cards',
     name: 'reading-3cards',
     component: () => import('../pages/ThreeCardsPage.vue'),

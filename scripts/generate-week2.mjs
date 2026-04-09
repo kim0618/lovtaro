@@ -74,11 +74,9 @@ const WEEK2 = [
     theme: '바보 카드가 연애에서 나왔을 때 진짜 의미',
     eduCard: { slug: 'fool', name: '바보', nameEn: 'The Fool' },
     slides: [
-      { title: '바보 카드 = 새로운 시작', body: '겁 없이 다가갈 수 있는 에너지\n키워드: 설렘 / 가능성 / 용기' },
-      { title: '연애에서 이 카드가 나오면', body: '아직 아무것도 정해지지 않았다는 뜻\n어떤 형태로든 발전할 가능성이 있어요' },
-      { title: '짝사랑일 때 바보 카드', body: '상대도 부담 없이 탐색 중\n연락이 일정하지 않아도\n거리두기가 아니에요' },
-      { title: '커플일 때 바보 카드', body: '관계에 새로운 바람이 필요한 시기\n처음처럼 가볍게 데이트해보세요' },
-      { title: '주의할 점', body: '기대를 너무 구체적으로 잡으면\n흐름이 막혀요\n열어두는 만큼 다음이 생겨요' },
+      { title: '바보 카드 = 새로운 시작', body: '겁 없이 다가갈 수 있는 에너지\n타로에서 가장 순수한 카드\n키워드: 설렘 / 가능성 / 용기' },
+      { title: '연애에서 나왔다면?', body: '짝사랑: 상대도 탐색 중이에요\n연락이 불규칙해도 거리두기가 아님\n\n커플: 새로운 바람이 필요한 시기\n처음처럼 가볍게 다가가보세요' },
+      { title: '이것만 주의하세요', body: '기대를 너무 구체적으로 잡으면\n오히려 흐름이 막혀요\n열어두는 만큼 다음이 생깁니다' },
     ],
     storyCard: { slug: 'fool', name: '바보', nameEn: 'The Fool', keywords: ['새로운 시작', '가능성', '용기'] },
     storyHook: '바보 카드가 나왔다면?\n나쁜 게 아니에요\n새로운 시작의 신호입니다',
@@ -192,18 +190,59 @@ function carouselBg(content) {
 </svg>`
 }
 
-// 표지 슬라이드
-async function carouselCover(title, subtitle) {
+// 표지 슬라이드 (카드 7장 팬 배치)
+async function carouselCover(title, subtitle, cardSlugs) {
+  const slugs = cardSlugs || []
+  const cW = 160, cH = 240
+
+  const cards = []
+  for (const slug of slugs) {
+    const img = await loadCard(slug, cW, cH)
+    if (img) {
+      const masked = await roundImg(img, cW, cH, 8)
+      cards.push(masked)
+    }
+  }
+
+  // 7장 팬: 중앙 기준, 부채꼴로 펼침
+  const count = cards.length
+  const positions = []
+  for (let i = 0; i < count; i++) {
+    const center = (count - 1) / 2
+    const offset = i - center
+    positions.push({
+      left: 540 + offset * 90 - cW / 2,
+      top: 470 + Math.abs(offset) * 25,
+      rotate: offset * 6,
+    })
+  }
+
   const svg = carouselBg(`
   <text x="540" y="100" font-family="sans-serif" font-size="18" fill="rgba(77,163,255,0.5)" text-anchor="middle" letter-spacing="6">LOVTARO</text>
-  <line x1="390" y1="380" x2="690" y2="380" stroke="rgba(77,163,255,0.15)" stroke-width="1"/>
-  <text x="540" y="460" font-family="sans-serif" font-size="52" font-weight="200" fill="#F4F8FF" text-anchor="middle">${esc(title)}</text>
-  <text x="540" y="520" font-family="sans-serif" font-size="24" fill="rgba(167,183,214,0.5)" text-anchor="middle">${esc(subtitle)}</text>
-  <line x1="390" y1="560" x2="690" y2="560" stroke="rgba(77,163,255,0.15)" stroke-width="1"/>
-  <text x="540" y="950" font-family="sans-serif" font-size="18" fill="rgba(143,211,255,0.35)" text-anchor="middle">스와이프해서 확인하세요 →</text>
-  <text x="540" y="1020" font-family="sans-serif" font-size="16" fill="rgba(143,211,255,0.25)" text-anchor="middle">@lovtarot_</text>
+  <text x="540" y="220" font-family="sans-serif" font-size="56" font-weight="200" fill="#F4F8FF" text-anchor="middle">${esc(title)}</text>
+  <line x1="400" y1="260" x2="680" y2="260" stroke="rgba(77,163,255,0.15)" stroke-width="1"/>
+  <text x="540" y="300" font-family="sans-serif" font-size="26" fill="rgba(167,183,214,0.5)" text-anchor="middle">${esc(subtitle)}</text>
+  <text x="540" y="970" font-family="sans-serif" font-size="20" fill="rgba(143,211,255,0.4)" text-anchor="middle">스와이프해서 확인하세요 →</text>
+  <text x="540" y="1030" font-family="sans-serif" font-size="16" fill="rgba(143,211,255,0.25)" text-anchor="middle">@lovtarot_</text>
   `)
-  return sharp(Buffer.from(svg)).png().toBuffer()
+  let base = await sharp(Buffer.from(svg)).png().toBuffer()
+
+  const composites = []
+  for (let i = 0; i < cards.length; i++) {
+    const pos = positions[i]
+    const rotated = await sharp(cards[i])
+      .rotate(pos.rotate, { background: { r: 0, g: 0, b: 0, alpha: 0 } })
+      .toBuffer()
+    const meta = await sharp(rotated).metadata()
+    const adjLeft = Math.round(pos.left - (meta.width - cW) / 2)
+    const adjTop = Math.round(pos.top - (meta.height - cH) / 2)
+    composites.push({ input: rotated, left: adjLeft, top: adjTop })
+  }
+
+  if (composites.length > 0) {
+    base = await sharp(base).composite(composites).png().toBuffer()
+  }
+  return base
 }
 
 // 카드 + 요일 슬라이드 (주간 운세용)
@@ -214,7 +253,7 @@ async function carouselDayCard(card) {
 
   const lines = card.line.split('. ')
   const lineSvg = lines.map((l, i) =>
-    `<text x="540" y="${880 + i * 36}" font-family="sans-serif" font-size="26" font-weight="300" fill="rgba(244,248,255,0.85)" text-anchor="middle">${esc(l)}</text>`
+    `<text x="540" y="${880 + i * 36}" font-family="sans-serif" font-size="26" font-weight="300" fill="${i === 0 ? 'rgba(143,211,255,0.9)' : 'rgba(244,248,255,0.75)'}" text-anchor="middle">${esc(l)}</text>`
   ).join('\n  ')
 
   const svg = carouselBg(`
@@ -231,50 +270,105 @@ async function carouselDayCard(card) {
   return base
 }
 
-// CTA 슬라이드
-async function carouselCTA(mainText, subText) {
+// CTA 슬라이드 (아이콘 + 배경 카드)
+async function carouselCTA(mainText, subText, icon, bgCardSlug) {
+  // icon: 'save' = 북마크, 'share' = 공유 화살표
+  let iconSvg = ''
+  if (icon === 'save') {
+    iconSvg = `<g transform="translate(492, 260)">
+      <path d="M14 0 L82 0 Q96 0 96 14 L96 110 L48 82 L0 110 L0 14 Q0 0 14 0 Z" fill="none" stroke="rgba(143,211,255,0.6)" stroke-width="3"/>
+    </g>`
+  } else if (icon === 'share') {
+    iconSvg = `<g transform="translate(490, 260)">
+      <path d="M65 0 L96 32 L65 64" fill="none" stroke="rgba(143,211,255,0.6)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M96 32 L15 32 L15 96" fill="none" stroke="rgba(143,211,255,0.6)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>`
+  }
+
   const svg = carouselBg(`
-  <text x="540" y="420" font-family="sans-serif" font-size="38" font-weight="300" fill="#F4F8FF" text-anchor="middle">${esc(mainText)}</text>
-  <text x="540" y="480" font-family="sans-serif" font-size="24" fill="rgba(167,183,214,0.5)" text-anchor="middle">${esc(subText)}</text>
-  <line x1="380" y1="560" x2="700" y2="560" stroke="rgba(77,163,255,0.1)" stroke-width="1"/>
-  <text x="540" y="620" font-family="sans-serif" font-size="22" fill="rgba(143,211,255,0.5)" text-anchor="middle">무료로 직접 뽑아보기 · lovtaro.kr</text>
+  ${iconSvg}
+  <text x="540" y="420" font-family="sans-serif" font-size="40" font-weight="300" fill="#F4F8FF" text-anchor="middle">${esc(mainText)}</text>
+  <text x="540" y="470" font-family="sans-serif" font-size="24" fill="rgba(167,183,214,0.5)" text-anchor="middle">${esc(subText)}</text>
+  <line x1="380" y1="530" x2="700" y2="530" stroke="rgba(77,163,255,0.12)" stroke-width="1"/>
+  <text x="540" y="580" font-family="sans-serif" font-size="22" fill="rgba(143,211,255,0.5)" text-anchor="middle">무료로 직접 뽑아보기 · lovtaro.kr</text>
   <text x="540" y="1020" font-family="sans-serif" font-size="16" fill="rgba(143,211,255,0.25)" text-anchor="middle">@lovtarot_</text>
   `)
-  return sharp(Buffer.from(svg)).png().toBuffer()
+  let base = await sharp(Buffer.from(svg)).png().toBuffer()
+
+  // 배경 카드 반투명 합성
+  if (bgCardSlug) {
+    const bgW = 420, bgH = 630
+    const bgImg = await loadCard(bgCardSlug, bgW, bgH)
+    if (bgImg) {
+      const bgMasked = await roundImg(bgImg, bgW, bgH, 14)
+      const faded = await sharp(bgMasked)
+        .ensureAlpha()
+        .composite([{
+          input: Buffer.from(`<svg width="${bgW}" height="${bgH}"><rect width="${bgW}" height="${bgH}" fill="white" opacity="0.25"/></svg>`),
+          blend: 'dest-in'
+        }])
+        .png().toBuffer()
+      base = await sharp(base)
+        .composite([{ input: faded, left: (1080 - bgW) / 2, top: 220 }])
+        .png().toBuffer()
+    }
+  }
+  return base
 }
 
-// 교육형 슬라이드 (카드 해설)
+// 교육형 슬라이드 (텍스트 중심, 수직 중앙)
 async function carouselEduSlide(title, body, index) {
   const lines = body.split('\n')
-  const bodySvg = lines.map((l, i) =>
-    `<text x="540" y="${520 + i * 42}" font-family="sans-serif" font-size="28" font-weight="300" fill="rgba(244,248,255,0.85)" text-anchor="middle">${esc(l)}</text>`
-  ).join('\n  ')
+
+  const titleSize = 42
+  const bodySize = 26
+  const lineGap = 42
+  const blankGap = 24 // 빈 줄 추가 간격
+  const titleBodyGap = 35
+
+  // 실제 높이 계산 (빈 줄은 추가 간격만)
+  let bodyTotalH = 0
+  for (const l of lines) {
+    bodyTotalH += l === '' ? blankGap : lineGap
+  }
+  const totalH = titleSize + titleBodyGap + bodyTotalH
+  const startY = Math.round((1080 - totalH) / 2)
+
+  const titleY = startY + titleSize
+  let curY = titleY + titleBodyGap + bodySize
+  const bodySvg = lines.map(l => {
+    if (l === '') { curY += blankGap; return '' }
+    const s = `<text x="540" y="${curY}" font-family="sans-serif" font-size="${bodySize}" font-weight="300" fill="rgba(244,248,255,0.75)" text-anchor="middle">${esc(l)}</text>`
+    curY += lineGap
+    return s
+  }).filter(s => s).join('\n  ')
 
   const svg = carouselBg(`
-  <text x="540" y="100" font-family="sans-serif" font-size="16" fill="rgba(77,163,255,0.4)" text-anchor="middle" letter-spacing="3">${index}</text>
-  <line x1="350" y1="360" x2="730" y2="360" stroke="rgba(77,163,255,0.15)" stroke-width="1"/>
-  <text x="540" y="430" font-family="sans-serif" font-size="36" font-weight="200" fill="#F4F8FF" text-anchor="middle">${esc(title)}</text>
+  <text x="540" y="60" font-family="sans-serif" font-size="16" fill="rgba(77,163,255,0.4)" text-anchor="middle" letter-spacing="3">${index}</text>
+  <line x1="390" y1="${titleY - titleSize - 15}" x2="690" y2="${titleY - titleSize - 15}" stroke="rgba(77,163,255,0.15)" stroke-width="1"/>
+  <text x="540" y="${titleY}" font-family="sans-serif" font-size="${titleSize}" font-weight="200" fill="#F4F8FF" text-anchor="middle">${esc(title)}</text>
+  <line x1="390" y1="${titleY + 15}" x2="690" y2="${titleY + 15}" stroke="rgba(77,163,255,0.15)" stroke-width="1"/>
   ${bodySvg}
-  <text x="540" y="1020" font-family="sans-serif" font-size="16" fill="rgba(143,211,255,0.25)" text-anchor="middle">@lovtarot_</text>
+  <text x="540" y="1040" font-family="sans-serif" font-size="16" fill="rgba(143,211,255,0.25)" text-anchor="middle">@lovtarot_</text>
   `)
   return sharp(Buffer.from(svg)).png().toBuffer()
 }
 
 // 교육형 표지 (카드 이미지 + 제목)
 async function carouselEduCover(card, title, subtitle) {
-  const cW = 500, cH = 750
+  const cW = 460, cH = 690
   const img = await loadCard(card.slug, cW, cH)
   const masked = img ? await roundImg(img, cW, cH, 14) : null
 
   const svg = carouselBg(`
   <text x="540" y="70" font-family="sans-serif" font-size="18" fill="rgba(77,163,255,0.5)" text-anchor="middle" letter-spacing="6">카드 해설</text>
-  <text x="540" y="860" font-family="sans-serif" font-size="44" font-weight="200" fill="#F4F8FF" text-anchor="middle">${esc(title)}</text>
-  <text x="540" y="910" font-family="sans-serif" font-size="24" fill="rgba(167,183,214,0.5)" text-anchor="middle">${esc(subtitle)}</text>
+  <text x="540" y="890" font-family="sans-serif" font-size="44" font-weight="200" fill="#F4F8FF" text-anchor="middle">${esc(title)}</text>
+  <text x="540" y="940" font-family="sans-serif" font-size="24" fill="rgba(167,183,214,0.5)" text-anchor="middle">${esc(subtitle)}</text>
   <text x="540" y="1020" font-family="sans-serif" font-size="16" fill="rgba(143,211,255,0.25)" text-anchor="middle">@lovtarot_</text>
   `)
   const base = await sharp(Buffer.from(svg)).png().toBuffer()
   if (masked) {
-    return sharp(base).composite([{ input: masked, left: (1080 - cW) / 2, top: 90 }]).png().toBuffer()
+    return sharp(base).composite([{ input: masked, left: (1080 - cW) / 2, top: 100 }]).png().toBuffer()
   }
   return base
 }
@@ -801,7 +895,7 @@ async function main() {
       console.log(`  캐러셀: ${day.theme} (${day.cards.length + 3}장)`)
 
       // 표지
-      const cover = await carouselCover('이번 주 연애운', '4/13 - 4/19')
+      const cover = await carouselCover('이번 주 연애운', '4/13 - 4/19', day.cards.map(c => c.slug))
       writeFileSync(resolve(cDir, 'slide01.png'), cover)
 
       // 요일별 카드
@@ -810,12 +904,12 @@ async function main() {
         writeFileSync(resolve(cDir, `slide${String(i + 2).padStart(2, '0')}.png`), slide)
       }
 
-      // 저장 CTA
-      const saveCta = await carouselCTA('저장해두고 매일 아침 확인하세요', '해당 요일에 직접 뽑아보면 더 정확해요')
+      // 저장 CTA (별 카드 배경)
+      const saveCta = await carouselCTA('저장해두고 매일 아침 확인하세요', '해당 요일에 직접 뽑아보면 더 정확해요', 'save', 'star')
       writeFileSync(resolve(cDir, `slide${String(day.cards.length + 2).padStart(2, '0')}.png`), saveCta)
 
-      // 공유 CTA
-      const shareCta = await carouselCTA('친구에게 공유해주세요', '이번 주 연애운이 궁금한 사람에게')
+      // 공유 CTA (여황제 카드 배경)
+      const shareCta = await carouselCTA('친구에게 공유해주세요', '이번 주 연애운이 궁금한 사람에게', 'share', 'empress')
       writeFileSync(resolve(cDir, `slide${String(day.cards.length + 3).padStart(2, '0')}.png`), shareCta)
 
       writeFileSync(resolve(cDir, 'caption.txt'), cap.carousel)
@@ -838,11 +932,11 @@ async function main() {
       }
 
       // 저장 CTA
-      const saveCta = await carouselCTA('나중에 이 카드 나오면 다시 보세요', '저장 필수!')
+      const saveCta = await carouselCTA('나중에 이 카드 나오면 다시 보세요', '저장 필수!', 'save', 'fool')
       writeFileSync(resolve(cDir, `slide${String(day.slides.length + 2).padStart(2, '0')}.png`), saveCta)
 
       // 공유 CTA
-      const shareCta = await carouselCTA('바보 카드 나온 친구에게 보내주세요', 'lovtaro.kr에서 직접 뽑아보기')
+      const shareCta = await carouselCTA('바보 카드 나온 친구에게 보내주세요', 'lovtaro.kr에서 직접 뽑아보기', 'share', 'fool')
       writeFileSync(resolve(cDir, `slide${String(day.slides.length + 3).padStart(2, '0')}.png`), shareCta)
 
       writeFileSync(resolve(cDir, 'caption.txt'), cap.carousel)
@@ -855,7 +949,7 @@ async function main() {
       console.log(`  캐러셀(테스트): ${day.theme} (${day.testItems.length + 4}장)`)
 
       // 표지
-      const cover = await carouselCover('읽씹당하면 당신은?', '유형별 타로 카드 매칭')
+      const cover = await carouselCover('읽씹당하면 당신은?', '유형별 타로 카드 매칭', day.testItems.map(t => t.slug))
       writeFileSync(resolve(cDir, 'slide01.png'), cover)
 
       // 상황 설명
@@ -869,11 +963,11 @@ async function main() {
       }
 
       // 댓글 CTA
-      const commentCta = await carouselCTA('당신은 몇 유형?', '댓글에 A/B/C/D로 알려주세요')
+      const commentCta = await carouselCTA('당신은 몇 유형?', '댓글에 A/B/C/D로 알려주세요', 'save', 'tower')
       writeFileSync(resolve(cDir, `slide${String(day.testItems.length + 3).padStart(2, '0')}.png`), commentCta)
 
       // 공유 CTA
-      const shareCta = await carouselCTA('"이거 너잖아" 싶은 친구에게 공유', 'lovtaro.kr에서 직접 뽑아보기')
+      const shareCta = await carouselCTA('"이거 너잖아" 싶은 친구에게 공유', 'lovtaro.kr에서 직접 뽑아보기', 'share', 'wheel-of-fortune')
       writeFileSync(resolve(cDir, `slide${String(day.testItems.length + 4).padStart(2, '0')}.png`), shareCta)
 
       writeFileSync(resolve(cDir, 'caption.txt'), cap.carousel)

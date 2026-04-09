@@ -12,11 +12,12 @@ const router = useRouter()
 
 const links = [
   { label: '상대방 속마음 타로', desc: '그 사람의 진짜 마음 읽기', to: '/reading/mind', hot: true },
+  { label: 'Yes/No 타로', desc: '지금 궁금한 것, 카드가 답합니다', to: '/reading/yesno', tag: 'NEW' },
+  { label: '궁합 타로', desc: '두 사람의 케미와 궁합 점수 확인', to: '/reading/compatibility', tag: 'NEW' },
   { label: '러브타로 스프레드', desc: '나의 마음 · 상대의 에너지 · 관계의 방향', to: '/reading/love' },
   { label: '오늘의 연애 카드', desc: '매일 한 장, 오늘의 연애 에너지', to: '/today' },
   { label: '재회 가능성 타로', desc: '다시 만날 수 있을까?', to: '/reading/reunion' },
   { label: '연락 올까 타로', desc: '연락의 기류가 있는지 확인', to: '/reading/contact' },
-  { label: 'Yes/No 타로', desc: '지금 궁금한 것, 카드가 답합니다', to: '/reading/yesno' },
   { label: '3카드 리딩', desc: '과거 · 현재 · 미래 흐름 읽기', to: '/reading/3cards' },
 ]
 
@@ -49,6 +50,7 @@ function go(link) {
           <span class="link-page__desc">{{ link.desc }}</span>
         </div>
         <span v-if="link.hot" class="link-page__hot">HOT</span>
+        <span v-else-if="link.tag" class="link-page__tag">{{ link.tag }}</span>
         <span class="link-page__arrow">&#8594;</span>
       </button>
     </div>
@@ -160,6 +162,15 @@ function go(link) {
   font-size: 0.56rem;
   font-weight: 500;
   color: var(--lt-accent-2);
+  letter-spacing: 0.08em;
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+
+.link-page__tag {
+  font-size: 0.52rem;
+  font-weight: 500;
+  color: var(--lt-accent-3);
   letter-spacing: 0.08em;
   opacity: 0.7;
   flex-shrink: 0;

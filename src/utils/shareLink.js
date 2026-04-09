@@ -11,11 +11,13 @@
  * @param {string} options.status - 관계 상태
  * @returns {string} 쿼리스트링 (? 포함)
  */
-export function encodeReadingParams({ cardId, reversed, status }) {
+export function encodeReadingParams({ cardId, reversed, status, cardId2, reversed2 }) {
   const params = new URLSearchParams()
   params.set('c', cardId)
   if (reversed) params.set('r', '1')
   if (status) params.set('s', status)
+  if (cardId2) params.set('c2', cardId2)
+  if (reversed2) params.set('r2', '1')
   return `?${params.toString()}`
 }
 
@@ -45,6 +47,8 @@ export function decodeReadingParams() {
     cardId,
     reversed: params.get('r') === '1',
     status: params.get('s') || '',
+    cardId2: params.get('c2') || '',
+    reversed2: params.get('r2') === '1',
   }
 }
 

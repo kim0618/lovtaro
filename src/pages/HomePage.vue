@@ -44,6 +44,13 @@ const scenarioItems = [
     featured: true,
   },
   {
+    title: '궁합 타로',
+    description: '두 사람의 에너지가 만들어내는 케미를 읽어봅니다.',
+    to: '/reading/compatibility',
+    tag: 'NEW',
+    featured: true,
+  },
+  {
     title: '재회 가능성 타로',
     description: '다시 만날 수 있는 흐름인지 조용히 살펴봅니다.',
     to: '/reading/reunion',
