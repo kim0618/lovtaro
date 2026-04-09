@@ -16,6 +16,7 @@ const links = [
   { label: '오늘의 연애 카드', desc: '매일 한 장, 오늘의 연애 에너지', to: '/today' },
   { label: '재회 가능성 타로', desc: '다시 만날 수 있을까?', to: '/reading/reunion' },
   { label: '연락 올까 타로', desc: '연락의 기류가 있는지 확인', to: '/reading/contact' },
+  { label: 'Yes/No 타로', desc: '지금 궁금한 것, 카드가 답합니다', to: '/reading/yesno' },
   { label: '3카드 리딩', desc: '과거 · 현재 · 미래 흐름 읽기', to: '/reading/3cards' },
 ]
 

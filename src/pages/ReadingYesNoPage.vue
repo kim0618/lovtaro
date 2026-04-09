@@ -4,8 +4,8 @@ import { useHead } from '../composables/useHead.js'
 import AppShell from '../components/common/AppShell.vue'
 
 useHead({
-  title: '재회 가능성 타로 - 다시 만날 수 있을까 | Lovtaro',
-  description: '다시 만날 수 있는 흐름인지, 재회의 가능성을 타로 카드로 조용히 살펴봅니다. 무료 재회 타로 리딩.',
+  title: 'Yes/No 타로 - 예스노 타로로 답을 확인하세요 | Lovtaro',
+  description: '지금 궁금한 것에 대해 타로 카드가 Yes, No, Maybe로 답해드립니다. 무료 예스노 타로 리딩.',
 })
 import PageContainer from '../components/ui/PageContainer.vue'
 import SectionBlock from '../components/ui/SectionBlock.vue'
@@ -17,6 +17,7 @@ import CardDrawHeader from '../components/draw/CardDrawHeader.vue'
 import CardDeck from '../components/draw/CardDeck.vue'
 import SelectedCardState from '../components/draw/SelectedCardState.vue'
 import DrawActionBar from '../components/draw/DrawActionBar.vue'
+import YesNoAnswerBadge from '../components/result/YesNoAnswerBadge.vue'
 import CardImageBlock from '../components/result/CardImageBlock.vue'
 import EmotionTagList from '../components/result/EmotionTagList.vue'
 import CoreInsightBlock from '../components/result/CoreInsightBlock.vue'
@@ -28,61 +29,55 @@ import ReadingClosingBlock from '../components/result/ReadingClosingBlock.vue'
 import DisclaimerBlock from '../components/result/DisclaimerBlock.vue'
 import OtherReadingsNav from '../components/common/OtherReadingsNav.vue'
 import CardRevealTransition from '../components/result/CardRevealTransition.vue'
-import RelationshipStatusSelect from '../components/reading/RelationshipStatusSelect.vue'
 import { saveLastReading } from '../composables/useLastReading.js'
 import { useCardDraw } from '../composables/useCardDraw.js'
-import { REUNION_RESULTS } from '../data/readings/reunion.js'
-import { applyReversedModifier } from '../data/reversedModifiers.js'
-import { applyRelationshipModifier } from '../data/relationshipModifiers.js'
+import { YESNO_RESULTS } from '../data/readings/yesno.js'
+import { applyYesNoReversedModifier } from '../data/yesnoReversedModifiers.js'
 import { saveReadingHistory } from '../composables/useReadingHistory.js'
 import { useReadingSession } from '../composables/useReadingSession.js'
 import { encodeReadingParams, buildShareUrl, decodeReadingParams } from '../utils/shareLink.js'
 import { getCardById } from '../data/tarotCards.js'
-import { getCardImage } from '../data/cardImages.js'
 
 const { deck, selectedIds, selectedCards, selectedCount, canConfirm, onSelect, reset } = useCardDraw({ maxSelect: 1 })
-const phase = ref('intro') // 'intro' | 'status' | 'draw' | 'reveal' | 'result'
-const relationshipStatus = ref(null)
+const phase = ref('intro') // 'intro' | 'draw' | 'reveal' | 'result'
 
-const { clearSession } = useReadingSession('reunion', { phase, selectedIds, relationshipStatus, deck })
+const { clearSession } = useReadingSession('yesno', { phase, selectedIds, deck })
 
 const drawnCard = computed(() => selectedCards.value[0] ?? null)
 const isReversed = computed(() => drawnCard.value?.reversed ?? false)
 const result = computed(() => {
   if (!drawnCard.value) return null
-  const upright = REUNION_RESULTS[drawnCard.value.id]
+  const upright = YESNO_RESULTS[drawnCard.value.id]
   if (!upright) return null
-  const withReversed = applyReversedModifier(drawnCard.value.id, upright, isReversed.value)
-  return applyRelationshipModifier(drawnCard.value.id, withReversed, relationshipStatus.value)
+  return applyYesNoReversedModifier(drawnCard.value.id, upright, isReversed.value)
 })
 
 const shareUrl = computed(() => {
   if (!drawnCard.value) return ''
-  return buildShareUrl('/reading/reunion', encodeReadingParams({
-    cardId: drawnCard.value.id, reversed: drawnCard.value.reversed, status: relationshipStatus.value,
+  return buildShareUrl('/reading/yesno', encodeReadingParams({
+    cardId: drawnCard.value.id, reversed: drawnCard.value.reversed,
   }))
 })
 
 const flowPoints = [
-  { label: '지금 기류',   text: '현재 두 사람 사이에 어떤 에너지가 흐르고 있는지 읽어봅니다.' },
-  { label: '재회의 결',   text: '다시 연결될 수 있는 흐름인지 카드로 비춰봅니다.' },
-  { label: '지금의 방향', text: '이 흐름에서 어떤 태도가 맞는지 살펴봅니다.' },
+  { label: '질문을 떠올리세요', text: '지금 가장 궁금한 것 하나를 마음속에 품어보세요.' },
+  { label: 'Yes / No / Maybe',  text: '카드가 당신의 질문에 직관적인 답을 건넵니다.' },
+  { label: '흐름 읽기',         text: '답의 이유와 지금 할 수 있는 것을 살펴봅니다.' },
 ]
 
 let revealTimer = null
 
-function startReading() { phase.value = 'status' }
-function selectStatus(s) { relationshipStatus.value = s; phase.value = 'draw' }
+function startReading() { phase.value = 'draw' }
 function confirm() {
   if (!canConfirm.value) return
   const card = drawnCard.value
-  saveLastReading({ readingType: '재회 가능성', cardId: card.id, cardName: card.name, cardNameEn: card.nameEn })
+  saveLastReading({ readingType: 'Yes/No 타로', cardId: card.id, cardName: card.name, cardNameEn: card.nameEn })
   saveReadingHistory({
-    readingType: '재회 가능성',
+    readingType: 'Yes/No 타로',
     spreadType: 'single',
     cards: [{ id: card.id, name: card.name, nameEn: card.nameEn, reversed: card.reversed }],
     summary: result.value?.summary ?? '',
-    details: result.value ? { emotionTags: result.value.emotionTags, advice: result.value.advice, caution: result.value.caution } : null,
+    details: result.value ? { answer: result.value.answer, answerLabel: result.value.answerLabel, emotionTags: result.value.emotionTags, advice: result.value.advice, caution: result.value.caution } : null,
   })
   phase.value = 'reveal'
   revealTimer = setTimeout(() => { phase.value = 'result' }, 2200)
@@ -99,7 +94,6 @@ onMounted(() => {
   if (!base) return
   onSelect(shared.cardId)
   deck.value = deck.value.map(c => c.id === shared.cardId ? { ...c, reversed: shared.reversed } : c)
-  relationshipStatus.value = shared.status || null
   phase.value = 'result'
 })
 </script>
@@ -112,14 +106,14 @@ onMounted(() => {
     <template v-if="phase === 'intro'">
       <PageContainer>
         <ReadingIntroHeader
-          title="재회 가능성 타로"
-          subtitle="다시 연결될 수 있는 흐름인지, 지금 에너지가 어디를 향하는지 읽어봅니다."
+          title="Yes/No 타로"
+          subtitle="지금 궁금한 것에 대해, 카드가 직관적인 답을 건넵니다."
         />
       </PageContainer>
 
       <SectionBlock spacing="sm">
         <ReadingDescriptionBox
-          description="이별 후 흐름이 어디로 향하는지 방향이 보이지 않을 때. 재회 타로는 결과를 단정하지 않습니다. 지금 두 사람 사이에 어떤 기류가 흐르는지 읽어내는 리딩입니다."
+          description="머릿속에 하나의 질문을 떠올려보세요. '그 사람이 날 좋아할까?', '이 선택이 맞을까?' 카드가 Yes, No, 또는 Maybe로 답합니다."
         />
       </SectionBlock>
 
@@ -130,27 +124,22 @@ onMounted(() => {
       <SectionBlock spacing="sm">
         <StartReadingCTA
           label="카드 한 장 뽑기"
-          note="그 사람과의 기억을 조용히 떠올린 채, 손이 머무는 카드를 골라보세요."
+          note="질문을 마음에 품은 채, 끌리는 카드를 골라보세요."
           @start="startReading"
         />
       </SectionBlock>
 
       <SectionBlock spacing="md">
-        <OtherReadingsNav current="reunion" />
+        <OtherReadingsNav current="yesno" />
       </SectionBlock>
-    </template>
-
-    <!-- ── STATUS ────────────────────────────────────── -->
-    <template v-else-if="phase === 'status'">
-      <RelationshipStatusSelect reading-type="재회 가능성" @select="selectStatus" />
     </template>
 
     <!-- ── DRAW ───────────────────────────────────── -->
     <template v-else-if="phase === 'draw'">
       <PageContainer>
         <CardDrawHeader
-          title="재회의 기류가 담긴 카드를 골라보세요"
-          instruction="억지로 고르지 않아도 됩니다. 손이 멈추는 쪽으로."
+          title="질문에 대한 답이 담긴 카드를 골라보세요"
+          instruction="마음을 가라앉힌 채, 끌리는 카드 한 장으로."
         />
       </PageContainer>
 
@@ -165,7 +154,7 @@ onMounted(() => {
       <SectionBlock spacing="sm">
         <DrawActionBar
           :can-confirm="canConfirm"
-          confirm-label="흐름 확인하기"
+          confirm-label="답 확인하기"
           reset-label="다시 섞기"
           :show-reset="selectedCount > 0"
           @confirm="confirm"
@@ -180,7 +169,7 @@ onMounted(() => {
         :card-id="drawnCard.id"
         :card-name="drawnCard.name"
         :card-name-en="drawnCard.nameEn"
-        reading-type="재회 가능성"
+        reading-type="Yes/No 타로"
         :reversed="isReversed"
       />
     </template>
@@ -188,8 +177,12 @@ onMounted(() => {
     <!-- ── RESULT ─────────────────────────────────── -->
     <template v-else-if="phase === 'result' && drawnCard && result">
       <div class="reading-result__hero lt-appear">
-        <p class="reading-result__hero-label">재회 가능성</p>
+        <p class="reading-result__hero-label">Yes/No 타로</p>
       </div>
+
+      <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-1">
+        <YesNoAnswerBadge :answer="result.answer" :answer-label="result.answerLabel" :answer-desc="result.answerDesc" />
+      </SectionBlock>
 
       <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-1">
         <CardImageBlock :image-src="drawnCard.image" :card-name="drawnCard.name" :card-name-en="drawnCard.nameEn" :energy="drawnCard.energy" :keywords="drawnCard.keywords" :reversed="isReversed" />
@@ -221,7 +214,7 @@ onMounted(() => {
 
       <SectionBlock spacing="md">
         <ShareSaveSection
-          reading-type="재회 가능성"
+          reading-type="Yes/No 타로"
           :card-name="drawnCard.name"
           :card-name-en="drawnCard.nameEn"
           :card-image="drawnCard.image"
@@ -229,6 +222,9 @@ onMounted(() => {
           :summary="result.summary"
           :emotion-tags="result.emotionTags"
           :share-url="shareUrl"
+          :share-title="`${result.answerLabel}! ${drawnCard.name} 카드가 나왔어요`"
+          :answer-label="result.answerLabel"
+          :answer-desc="result.answerDesc"
         />
       </SectionBlock>
 
@@ -239,7 +235,7 @@ onMounted(() => {
       </SectionBlock>
 
       <SectionBlock spacing="md">
-        <OtherReadingsNav current="reunion" />
+        <OtherReadingsNav current="yesno" />
       </SectionBlock>
 
       <SectionBlock spacing="sm">

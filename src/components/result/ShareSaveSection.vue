@@ -14,6 +14,9 @@ const props = defineProps({
   cards: { type: Array, default: () => [] },
   mode: { type: String, default: 'single' },
   shareUrl: { type: String, default: '' },
+  shareTitle: { type: String, default: '' },
+  answerLabel: { type: String, default: '' },
+  answerDesc: { type: String, default: '' },
 })
 
 const generating = ref(false)
@@ -52,6 +55,8 @@ async function generateImage(format = 'story') {
     reversed: props.reversed,
     summary: props.summary,
     emotionTags: props.emotionTags,
+    answerLabel: props.answerLabel,
+    answerDesc: props.answerDesc,
     format,
   })
 }
@@ -105,11 +110,16 @@ function handleKakaoShare() {
     ? `${props.cardName}${props.reversed ? ' (역방향)' : ''}`
     : 'Lovtaro'
 
+  const kakaoTitle = props.shareTitle || `${props.readingType} 리딩 결과`
+  const kakaoDesc = props.answerLabel
+    ? `${props.answerLabel}! ${props.summary || `${cardLabel} 카드가 나왔어요`}`
+    : (props.summary || `${cardLabel} 카드가 나왔어요`)
+
   window.Kakao.Share.sendDefault({
     objectType: 'feed',
     content: {
-      title: `${props.readingType} 리딩 결과`,
-      description: props.summary || `${cardLabel} 카드가 나왔어요`,
+      title: kakaoTitle,
+      description: kakaoDesc,
       imageUrl: getShareImageUrl(),
       link: { mobileWebUrl: url, webUrl: url },
     },

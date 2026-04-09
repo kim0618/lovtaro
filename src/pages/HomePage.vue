@@ -37,6 +37,13 @@ const scenarioItems = [
     featured: true,
   },
   {
+    title: 'Yes/No 타로',
+    description: '지금 궁금한 것에 대해 카드가 답을 건넵니다.',
+    to: '/reading/yesno',
+    tag: 'NEW',
+    featured: true,
+  },
+  {
     title: '재회 가능성 타로',
     description: '다시 만날 수 있는 흐름인지 조용히 살펴봅니다.',
     to: '/reading/reunion',

@@ -119,7 +119,7 @@ onMounted(() => {
 
       <SectionBlock spacing="sm">
         <ReadingDescriptionBox
-          description="상대의 마음이 어디를 향하고 있는지, 직접 묻기 어려울 때 - 지금 어떤 에너지가 흐르는지 카드로 읽어봅니다. 답을 단정 짓는 것이 아니라, 기류를 살피는 리딩입니다."
+          description="상대의 마음이 어디를 향하고 있는지, 직접 묻기 어려울 때. 지금 어떤 에너지가 흐르는지 카드로 읽어봅니다. 답을 단정 짓는 것이 아니라, 기류를 살피는 리딩입니다."
         />
       </SectionBlock>
 

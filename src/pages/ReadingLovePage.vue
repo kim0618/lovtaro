@@ -144,7 +144,7 @@ onMounted(() => {
 
       <SectionBlock spacing="sm">
         <ReadingDescriptionBox
-          description="사랑의 흐름이 어디를 향하는지 알고 싶을 때 - 나의 마음, 상대의 에너지, 그리고 관계의 방향을 카드 세 장으로 조용히 펼쳐봅니다."
+          description="사랑의 흐름이 어디를 향하는지 알고 싶을 때. 나의 마음, 상대의 에너지, 그리고 관계의 방향을 카드 세 장으로 조용히 펼쳐봅니다."
         />
       </SectionBlock>
 

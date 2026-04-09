@@ -27,6 +27,11 @@ const routes = [
     component: () => import('../pages/ReadingContactPage.vue'),
   },
   {
+    path: '/reading/yesno',
+    name: 'reading-yesno',
+    component: () => import('../pages/ReadingYesNoPage.vue'),
+  },
+  {
     path: '/reading/3cards',
     name: 'reading-3cards',
     component: () => import('../pages/ThreeCardsPage.vue'),

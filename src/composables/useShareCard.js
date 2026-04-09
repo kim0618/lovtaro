@@ -60,7 +60,7 @@ function wrapText(ctx, text, maxWidth) {
  * @param {string[]} options.emotionTags - Keyword tags
  * @returns {Promise<string>} Data URL of the generated image
  */
-export async function generateSingleCardShareImage({ readingType, cardName, cardNameEn, summary, emotionTags = [], cardImage = '', reversed = false, format = 'story' }) {
+export async function generateSingleCardShareImage({ readingType, cardName, cardNameEn, summary, emotionTags = [], cardImage = '', reversed = false, format = 'story', answerLabel = '', answerDesc = '' }) {
   const W = format === 'square' ? SQUARE_WIDTH : format === 'feed' ? FEED_WIDTH : STORY_WIDTH
   const H = format === 'square' ? SQUARE_HEIGHT : format === 'feed' ? FEED_HEIGHT : STORY_HEIGHT
   // 카드 이미지 로드
@@ -130,31 +130,44 @@ export async function generateSingleCardShareImage({ readingType, cardName, card
     ctx.fillStyle = 'rgba(77, 163, 255, 0.7)'
     ctx.fillText(readingType, textX, cardY + 40)
 
+    // Yes/No 답변 (Feed/Square)
+    let feedTextOffset = 0
+    if (answerLabel) {
+      const answerColors = { Yes: '#D4B87A', No: 'rgba(167, 183, 214, 0.8)', Maybe: '#B8A0D4' }
+      ctx.font = '400 52px "Cinzel", Georgia, serif'
+      ctx.fillStyle = answerColors[answerLabel] || answerColors.Yes
+      ctx.fillText(answerLabel, textX, cardY + 100)
+      feedTextOffset = 70
+    }
+
     ctx.font = '300 64px "Noto Sans KR", sans-serif'
     ctx.fillStyle = '#F4F8FF'
-    ctx.fillText(cardName, textX, cardY + 120)
+    ctx.fillText(cardName, textX, cardY + 120 + feedTextOffset)
 
     if (cardNameEn) {
       ctx.font = 'italic 300 28px "Cormorant Garamond", Georgia, serif'
       ctx.fillStyle = 'rgba(126, 138, 168, 0.7)'
-      ctx.fillText(cardNameEn, textX, cardY + 160)
+      ctx.fillText(cardNameEn, textX, cardY + 160 + feedTextOffset)
     }
 
     // 구분선
     ctx.strokeStyle = 'rgba(77, 163, 255, 0.2)'
     ctx.lineWidth = 1
     ctx.beginPath()
-    ctx.moveTo(textX, cardY + 190)
-    ctx.lineTo(textX + textW, cardY + 190)
+    ctx.moveTo(textX, cardY + 190 + feedTextOffset)
+    ctx.lineTo(textX + textW, cardY + 190 + feedTextOffset)
     ctx.stroke()
 
     // 요약
     if (summary) {
-      ctx.font = '400 28px "Noto Sans KR", sans-serif'
+      const sumFontSize = answerLabel ? 24 : 28
+      const sumLineH = answerLabel ? 38 : 44
+      const sumMaxLines = answerLabel ? 3 : 5
+      ctx.font = `400 ${sumFontSize}px "Noto Sans KR", sans-serif`
       ctx.fillStyle = 'rgba(220, 232, 255, 0.85)'
       const lines = wrapText(ctx, summary, textW)
-      lines.slice(0, 5).forEach((line, i) => {
-        ctx.fillText(line, textX, cardY + 230 + i * 44)
+      lines.slice(0, sumMaxLines).forEach((line, i) => {
+        ctx.fillText(line, textX, cardY + 230 + feedTextOffset + i * sumLineH)
       })
     }
 
@@ -185,20 +198,50 @@ export async function generateSingleCardShareImage({ readingType, cardName, card
     ctx.textAlign = 'center'
     ctx.fillText(readingType, W / 2, 240)
 
+    // Yes/No 답변 뱃지 (있을 때만)
+    let contentOffsetY = 0
+    if (answerLabel) {
+      const answerColors = {
+        Yes: { text: '#D4B87A', glow: 'rgba(212, 184, 122, 0.15)' },
+        No: { text: 'rgba(167, 183, 214, 0.8)', glow: 'rgba(120, 140, 180, 0.1)' },
+        Maybe: { text: '#B8A0D4', glow: 'rgba(160, 130, 200, 0.12)' },
+      }
+      const color = answerColors[answerLabel] || answerColors.Yes
+
+      // 답변 글로우
+      const answerGlow = ctx.createRadialGradient(W / 2, 360, 0, W / 2, 360, 200)
+      answerGlow.addColorStop(0, color.glow)
+      answerGlow.addColorStop(1, 'transparent')
+      ctx.fillStyle = answerGlow
+      ctx.fillRect(0, 260, W, 200)
+
+      ctx.font = '400 120px "Cinzel", Georgia, serif'
+      ctx.fillStyle = color.text
+      ctx.fillText(answerLabel, W / 2, 400)
+
+      if (answerDesc) {
+        ctx.font = '400 28px "Noto Sans KR", sans-serif'
+        ctx.fillStyle = 'rgba(167, 183, 214, 0.75)'
+        ctx.fillText(answerDesc, W / 2, 450)
+      }
+
+      contentOffsetY = 160
+    }
+
     ctx.font = '300 96px "Noto Sans KR", sans-serif'
     ctx.fillStyle = '#F4F8FF'
-    ctx.fillText(cardName, W / 2, 440)
+    ctx.fillText(cardName, W / 2, 440 + contentOffsetY)
 
     if (cardNameEn) {
       ctx.font = 'italic 300 36px "Cormorant Garamond", Georgia, serif'
       ctx.fillStyle = 'rgba(126, 138, 168, 0.8)'
-      ctx.fillText(cardNameEn, W / 2, 500)
+      ctx.fillText(cardNameEn, W / 2, 500 + contentOffsetY)
     }
 
-    const cardW = 320
-    const cardH = 530
+    const cardW = answerLabel ? 280 : 320
+    const cardH = answerLabel ? 460 : 530
     const cardX = (W - cardW) / 2
-    const cardY = 540
+    const cardY = (answerLabel ? 540 : 540) + contentOffsetY
 
     _drawCardFrame(ctx, img, cardX, cardY, cardW, cardH, reversed)
 

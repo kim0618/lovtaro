@@ -119,7 +119,7 @@ onMounted(() => {
 
       <SectionBlock spacing="sm">
         <ReadingDescriptionBox
-          description="기다리는 시간 속에서 방향이 보이지 않을 때 - 그 사람이 지금 어떤 상태에 있는지, 연락이 올 수 있는 기류인지 카드로 읽어냅니다."
+          description="기다리는 시간 속에서 방향이 보이지 않을 때. 그 사람이 지금 어떤 상태에 있는지, 연락이 올 수 있는 기류인지 카드로 읽어냅니다."
         />
       </SectionBlock>
 
