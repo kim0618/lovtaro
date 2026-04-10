@@ -1,4 +1,4 @@
-const CACHE_NAME = 'lovtaro-v3'
+const CACHE_NAME = 'lovtaro-__BUILD_HASH__'
 const STATIC_ASSETS = [
   '/',
   '/manifest.json',
