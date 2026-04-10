@@ -25,6 +25,7 @@ import RelationshipStatusSelect from '../components/reading/RelationshipStatusSe
 import { saveLastReading } from '../composables/useLastReading.js'
 import { saveReadingHistory } from '../composables/useReadingHistory.js'
 import { useCardDraw } from '../composables/useCardDraw.js'
+import { useReadingSession } from '../composables/useReadingSession.js'
 import { getCardById } from '../data/tarotCards.js'
 import { getCardImage } from '../data/cardImages.js'
 import { LOVE_CARD_INTERPRETATIONS, getLoveOverall } from '../data/readings/love.js'
@@ -43,6 +44,7 @@ const { deck, selectedIds, selectedCards, selectedCount, canConfirm, onSelect, r
 const phase = ref('intro') // 'intro' | 'status' | 'draw' | 'reveal' | 'result'
 const deckKey = ref(0)
 const relationshipStatus = ref(null)
+const { clearSession } = useReadingSession('love', { phase, selectedIds, relationshipStatus, deck })
 
 const drawnTriple = computed(() =>
   selectedCards.value.filter(Boolean).map((card, i) => ({
@@ -92,7 +94,7 @@ function confirm() {
 }
 
 function doReset() { reset(); deckKey.value++ }
-function retry() { doReset(); phase.value = 'draw' }
+function retry() { clearSession(); doReset(); phase.value = 'draw' }
 function scrollTop() { window.scrollTo({ top: 0 }) }
 
 onUnmounted(() => { if (revealTimer) clearTimeout(revealTimer) })

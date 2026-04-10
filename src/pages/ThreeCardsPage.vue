@@ -25,6 +25,7 @@ import RelationshipStatusSelect from '../components/reading/RelationshipStatusSe
 import { saveLastReading } from '../composables/useLastReading.js'
 import { saveReadingHistory } from '../composables/useReadingHistory.js'
 import { useCardDraw } from '../composables/useCardDraw.js'
+import { useReadingSession } from '../composables/useReadingSession.js'
 import { THREE_CARD_INTERPRETATIONS, getThreeCardOverall } from '../data/readings/threecards.js'
 import { applyRelationshipModifierToOverall } from '../data/relationshipModifiers.js'
 import { encodeSpreadParams, buildShareUrl, decodeSpreadParams } from '../utils/shareLink.js'
@@ -45,6 +46,7 @@ const { deck, selectedIds, selectedCards, selectedCount, canConfirm, onSelect, r
 const phase = ref('intro') // 'intro' | 'status' | 'draw' | 'reveal' | 'result'
 const deckKey = ref(0)
 const relationshipStatus = ref(null)
+const { clearSession } = useReadingSession('3cards', { phase, selectedIds, relationshipStatus, deck })
 
 // 카드 3장 + 포지션 배정
 const drawnTriple = computed(() =>
@@ -92,7 +94,7 @@ function confirm() {
   phase.value = 'reveal'
   revealTimer = setTimeout(() => { phase.value = 'result' }, REVEAL_DURATION)
 }
-function retry() { reset(); deckKey.value++; phase.value = 'draw' }
+function retry() { clearSession(); reset(); deckKey.value++; phase.value = 'draw' }
 function scrollTop() { window.scrollTo({ top: 0 }) }
 
 onUnmounted(() => { if (revealTimer) clearTimeout(revealTimer) })

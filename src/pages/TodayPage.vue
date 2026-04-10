@@ -27,6 +27,7 @@ import CardRevealTransition from '../components/result/CardRevealTransition.vue'
 import RelationshipStatusSelect from '../components/reading/RelationshipStatusSelect.vue'
 import StreakBadge from '../components/result/StreakBadge.vue'
 import { useDailyTarot } from '../composables/useDailyTarot.js'
+import { useReadingSession } from '../composables/useReadingSession.js'
 import { applyRelationshipModifier } from '../data/relationshipModifiers.js'
 import { useStreak } from '../composables/useStreak.js'
 import { encodeReadingParams, buildShareUrl, decodeReadingParams } from '../utils/shareLink.js'
@@ -53,6 +54,7 @@ const { streak } = useStreak()
 
 // 연애 상태 - 이미 오늘 뽑은 경우 상태 선택 건너뜀
 const relationshipStatus = ref(null)
+const { clearSession } = useReadingSession('today', { phase, selectedIds, relationshipStatus, deck })
 const showStatusSelect = computed(() => phase.value === 'draw' && !alreadyDrawn.value && !relationshipStatus.value)
 
 const result = computed(() => {
@@ -73,6 +75,7 @@ const shareUrl = computed(() => {
 
 function handleResetToday() {
   relationshipStatus.value = null
+  clearSession()
   resetToday()
 }
 
