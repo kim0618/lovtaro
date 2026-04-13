@@ -3,7 +3,7 @@ import { useRoute } from 'vue-router'
 
 const defaults = {
   title: 'Lovtaro | 감정의 흐름을 읽는 타로',
-  description: '눈에 보이지 않는 의미를 천천히 비춥니다. 관계의 결을 깊고 조용하게 해석하는 프리미엄 타로 리딩, Lovtaro.',
+  description: '눈에 보이지 않는 의미를 천천히 비춥니다. 관계의 결을 깊고 조용하게 해석하는 무료 연애 타로 리딩, Lovtaro.',
 }
 
 // 도메인 변경 시 여기만 수정

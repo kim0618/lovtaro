@@ -4,7 +4,7 @@ import AppShell from '../components/common/AppShell.vue'
 
 useHead({
   title: 'Lovtaro | 무료 연애 타로 - 감정의 흐름을 읽는 타로',
-  description: '무료 연애 타로 리딩. 상대방 속마음, 재회 가능성, 연락 올까 타로, 러브타로 스프레드까지. 관계의 결을 깊고 조용하게 해석하는 프리미엄 타로, Lovtaro.',
+  description: '무료 연애 타로 리딩. 상대방 속마음, 재회 가능성, 연락 올까 타로, 러브타로 스프레드까지. 관계의 결을 깊고 조용하게 해석하는 무료 연애 타로, Lovtaro.',
   jsonLd: {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
@@ -22,13 +22,9 @@ import PageContainer from '../components/ui/PageContainer.vue'
 import SectionBlock from '../components/ui/SectionBlock.vue'
 import HeroSection from '../components/home/HeroSection.vue'
 import TarotMenuGrid from '../components/home/TarotMenuGrid.vue'
-import TodayCardBanner from '../components/home/TodayCardBanner.vue'
-import ThreeCardPromo from '../components/home/ThreeCardPromo.vue'
-import LoveSpreadPromo from '../components/home/LoveSpreadPromo.vue'
 import TrustNoticeBlock from '../components/home/TrustNoticeBlock.vue'
-import BottomNavSection from '../components/home/BottomNavSection.vue'
 
-const scenarioItems = [
+const readingItems = [
   {
     title: '상대방 속마음 타로',
     description: '그 사람의 마음이 어디에 머물고 있는지 읽어봅니다.',
@@ -48,6 +44,13 @@ const scenarioItems = [
     description: '두 사람의 에너지가 만들어내는 케미를 읽어봅니다.',
     to: '/reading/compatibility',
     tag: 'NEW',
+    featured: true,
+  },
+  {
+    title: '3장 리딩',
+    description: '과거, 현재, 미래 — 세 장의 흐름으로 관계를 깊이 살펴봅니다.',
+    to: '/reading/3cards',
+    tag: '스프레드',
     featured: true,
   },
   {
@@ -73,43 +76,15 @@ const scenarioItems = [
       <HeroSection />
 
       <SectionBlock spacing="md">
-        <p class="section-label">상황별 리딩</p>
-        <TarotMenuGrid :items="scenarioItems" />
+        <TarotMenuGrid :items="readingItems" />
       </SectionBlock>
 
       <SectionBlock spacing="md">
-        <p class="section-label">스프레드 리딩</p>
-        <LoveSpreadPromo />
-      </SectionBlock>
-
-      <SectionBlock spacing="sm">
-        <ThreeCardPromo />
-      </SectionBlock>
-
-      <SectionBlock spacing="sm">
-        <TodayCardBanner />
-      </SectionBlock>
-
-      <SectionBlock spacing="sm">
         <TrustNoticeBlock />
-      </SectionBlock>
-
-      <SectionBlock spacing="sm">
-        <BottomNavSection />
       </SectionBlock>
     </PageContainer>
   </AppShell>
 </template>
 
 <style scoped>
-.section-label {
-  font-size: 0.68rem;
-  color: var(--lt-text-muted);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  padding: 0 var(--lt-space-md);
-  margin-bottom: var(--lt-space-md);
-  opacity: 0.8;
-}
-
 </style>

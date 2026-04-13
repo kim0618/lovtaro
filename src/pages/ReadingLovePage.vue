@@ -21,6 +21,7 @@ import CoreInsightBlock from '../components/result/CoreInsightBlock.vue'
 import ReadingClosingBlock from '../components/result/ReadingClosingBlock.vue'
 import DisclaimerBlock from '../components/result/DisclaimerBlock.vue'
 import OtherReadingsNav from '../components/common/OtherReadingsNav.vue'
+import MiniShareBar from '../components/result/MiniShareBar.vue'
 import RelationshipStatusSelect from '../components/reading/RelationshipStatusSelect.vue'
 import { saveLastReading } from '../composables/useLastReading.js'
 import { saveReadingHistory } from '../composables/useReadingHistory.js'
@@ -288,6 +289,14 @@ onMounted(() => {
 
       <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-1">
         <CoreInsightBlock :insight="overall.summary" label="핵심 메시지" />
+      </SectionBlock>
+
+      <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-1">
+        <MiniShareBar
+          reading-type="러브타로"
+          :summary="overall.summary"
+          :share-url="shareUrl"
+        />
       </SectionBlock>
 
       <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-2">

@@ -1,6 +1,9 @@
 <script setup>
 import { useRouter } from 'vue-router'
+import { useStreak } from '../../composables/useStreak.js'
+
 const router = useRouter()
+const { streak } = useStreak()
 </script>
 
 <template>
@@ -24,13 +27,22 @@ const router = useRouter()
     <button class="hero-section__cta" @click="router.push('/reading/love')">
       러브타로 시작하기
     </button>
+
+    <div class="hero-section__secondary">
+      <button class="hero-section__today-link" @click="router.push('/today')">
+        오늘의 카드 한 장 뽑기 →
+      </button>
+      <p v-if="streak > 0" class="hero-section__streak">{{ streak }}일 연속 리딩 중</p>
+    </div>
+
+    <div class="hero-section__fade-out" aria-hidden="true" />
   </div>
 </template>
 
 <style scoped>
 .hero-section {
   text-align: center;
-  padding: var(--lt-space-2xl) var(--lt-space-md) var(--lt-space-2xl);
+  padding: var(--lt-space-2xl) var(--lt-space-md) calc(var(--lt-space-2xl) + 20px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -176,5 +188,47 @@ const router = useRouter()
 
 .hero-section__cta:active {
   transform: scale(0.97) translateY(0);
+}
+
+/* ── Secondary "오늘의 카드" link ── */
+.hero-section__secondary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-top: var(--lt-space-md);
+  position: relative;
+}
+
+.hero-section__today-link {
+  font-size: 0.75rem;
+  color: rgba(200, 169, 110, 0.7);
+  letter-spacing: 0.08em;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  transition: color var(--lt-transition);
+}
+
+.hero-section__today-link:hover {
+  color: rgba(200, 169, 110, 1);
+}
+
+.hero-section__streak {
+  font-size: 0.62rem;
+  color: rgba(100, 220, 180, 0.7);
+  letter-spacing: 0.06em;
+}
+
+/* ── Bottom fade transition ── */
+.hero-section__fade-out {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  background: linear-gradient(to bottom, transparent, var(--lt-bg-0));
+  pointer-events: none;
 }
 </style>

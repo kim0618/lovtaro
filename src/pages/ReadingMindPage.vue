@@ -28,6 +28,7 @@ import ReadingClosingBlock from '../components/result/ReadingClosingBlock.vue'
 import DisclaimerBlock from '../components/result/DisclaimerBlock.vue'
 import OtherReadingsNav from '../components/common/OtherReadingsNav.vue'
 import CardRevealTransition from '../components/result/CardRevealTransition.vue'
+import MiniShareBar from '../components/result/MiniShareBar.vue'
 import RelationshipStatusSelect from '../components/reading/RelationshipStatusSelect.vue'
 import { saveLastReading } from '../composables/useLastReading.js'
 import { useCardDraw } from '../composables/useCardDraw.js'
@@ -201,6 +202,17 @@ onMounted(() => {
 
       <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-2">
         <CoreInsightBlock :insight="result.summary" label="핵심 해석" />
+      </SectionBlock>
+
+      <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-2">
+        <MiniShareBar
+          reading-type="상대방 속마음"
+          :card-name="drawnCard.name"
+          :reversed="drawnCard.reversed"
+          :summary="result.summary"
+          :share-url="shareUrl"
+          :card-image="drawnCard.image"
+        />
       </SectionBlock>
 
       <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-3">

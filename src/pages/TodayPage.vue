@@ -24,6 +24,7 @@ import ReadingClosingBlock from '../components/result/ReadingClosingBlock.vue'
 import DisclaimerBlock from '../components/result/DisclaimerBlock.vue'
 import OtherReadingsNav from '../components/common/OtherReadingsNav.vue'
 import CardRevealTransition from '../components/result/CardRevealTransition.vue'
+import MiniShareBar from '../components/result/MiniShareBar.vue'
 import RelationshipStatusSelect from '../components/reading/RelationshipStatusSelect.vue'
 import StreakBadge from '../components/result/StreakBadge.vue'
 import TomorrowTeaser from '../components/result/TomorrowTeaser.vue'
@@ -180,6 +181,17 @@ onMounted(() => {
         <ResultSummaryBox
           :summary="result.summary"
           label="오늘의 에너지"
+        />
+      </SectionBlock>
+
+      <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-2">
+        <MiniShareBar
+          reading-type="오늘의 연애 카드"
+          :card-name="drawnCard.name"
+          :reversed="drawnCard.reversed"
+          :summary="result.summary"
+          :share-url="shareUrl"
+          :card-image="drawnCard.image"
         />
       </SectionBlock>
 

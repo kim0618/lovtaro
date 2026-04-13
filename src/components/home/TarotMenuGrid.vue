@@ -25,6 +25,5 @@ defineProps({
   display: flex;
   flex-direction: column;
   padding: 0 var(--lt-space-md);
-  border-top: 1px solid var(--lt-border-soft);
 }
 </style>
