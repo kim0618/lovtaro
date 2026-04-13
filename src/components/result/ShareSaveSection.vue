@@ -146,7 +146,7 @@ function handleKakaoShare() {
     kakaoDesc = props.answerLabel
       ? `${props.answerLabel}! ${props.summary || `${cardLabel} 카드가 나왔어요`}`
       : (props.summary || `${cardLabel} 카드가 나왔어요`)
-    buttonTitle = '결과 보기'
+    buttonTitle = props.readingType === '오늘의 연애 카드' ? '나도 뽑아보기' : '결과 보기'
   }
 
   window.Kakao.Share.sendDefault({

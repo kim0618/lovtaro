@@ -48,9 +48,9 @@ function saveTodayResult({ cardId, cardName, cardNameEn, reversed, energy, keywo
  * If user already drew today, returns the saved result directly.
  */
 export function useDailyTarot() {
-  const saved = loadTodayResult()
-  const alreadyDrawn = ref(!!saved)
-  const phase = ref(saved ? 'result' : 'draw')
+  const saved = ref(loadTodayResult())
+  const alreadyDrawn = ref(!!saved.value)
+  const phase = ref(saved.value ? 'result' : 'draw')
   let revealTimer = null
 
   // Card draw state
@@ -59,15 +59,15 @@ export function useDailyTarot() {
 
   // Resolved card (from new draw or from saved)
   const drawnCard = computed(() => {
-    if (saved && alreadyDrawn.value) {
+    if (saved.value && alreadyDrawn.value) {
       return {
-        id: saved.cardId,
-        name: saved.cardName,
-        nameEn: saved.cardNameEn,
-        reversed: saved.reversed,
-        energy: saved.energy,
-        keywords: saved.keywords,
-        image: getCardImage(saved.cardId) || '',
+        id: saved.value.cardId,
+        name: saved.value.cardName,
+        nameEn: saved.value.cardNameEn,
+        reversed: saved.value.reversed,
+        energy: saved.value.energy,
+        keywords: saved.value.keywords,
+        image: getCardImage(saved.value.cardId) || '',
       }
     }
     const id = selectedIds.value[0]
@@ -133,6 +133,7 @@ export function useDailyTarot() {
 
   function resetToday() {
     try { localStorage.removeItem(STORAGE_KEY) } catch { /* ignore */ }
+    saved.value = null
     alreadyDrawn.value = false
     selectedIds.value = []
     deck.value = shuffleCards(TAROT_CARDS)

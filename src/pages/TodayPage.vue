@@ -26,13 +26,13 @@ import OtherReadingsNav from '../components/common/OtherReadingsNav.vue'
 import CardRevealTransition from '../components/result/CardRevealTransition.vue'
 import RelationshipStatusSelect from '../components/reading/RelationshipStatusSelect.vue'
 import StreakBadge from '../components/result/StreakBadge.vue'
+import TomorrowTeaser from '../components/result/TomorrowTeaser.vue'
 import { useDailyTarot } from '../composables/useDailyTarot.js'
 import { useReadingSession } from '../composables/useReadingSession.js'
 import { applyRelationshipModifier } from '../data/relationshipModifiers.js'
 import { useStreak } from '../composables/useStreak.js'
 import { encodeReadingParams, buildShareUrl, decodeReadingParams } from '../utils/shareLink.js'
-import { getCardById } from '../data/tarotCards.js'
-import { getCardImage } from '../data/cardImages.js'
+import { getCardById, TAROT_CARDS, shuffleCards } from '../data/tarotCards.js'
 
 const {
   phase,
@@ -46,7 +46,6 @@ const {
   onSelect,
   confirm,
   reset,
-  resetToday,
   clearRevealTimer,
 } = useDailyTarot()
 
@@ -54,7 +53,7 @@ const { streak } = useStreak()
 
 // 연애 상태 - 이미 오늘 뽑은 경우 상태 선택 건너뜀
 const relationshipStatus = ref(null)
-const { clearSession } = useReadingSession('today', { phase, selectedIds, relationshipStatus, deck })
+useReadingSession('today', { phase, selectedIds, relationshipStatus, deck })
 const showStatusSelect = computed(() => phase.value === 'draw' && !alreadyDrawn.value && !relationshipStatus.value)
 
 const result = computed(() => {
@@ -73,10 +72,17 @@ const shareUrl = computed(() => {
   }))
 })
 
-function handleResetToday() {
+const isSharedView = ref(false)
+
+function startMyReading() {
+  isSharedView.value = false
+  const url = new URL(window.location.href)
+  url.search = ''
+  window.history.replaceState({}, '', url.toString())
+  selectedIds.value = []
+  deck.value = shuffleCards(TAROT_CARDS)
   relationshipStatus.value = null
-  clearSession()
-  resetToday()
+  phase.value = 'draw'
 }
 
 function scrollTop() { window.scrollTo({ top: 0 }) }
@@ -88,6 +94,7 @@ onMounted(() => {
   if (!shared) return
   const base = getCardById(shared.cardId)
   if (!base) return
+  isSharedView.value = true
   onSelect(shared.cardId)
   deck.value = deck.value.map(c => c.id === shared.cardId ? { ...c, reversed: shared.reversed } : c)
   relationshipStatus.value = shared.status || null
@@ -201,6 +208,17 @@ onMounted(() => {
         <ReadingClosingBlock message="오늘 카드가 전한 에너지가 하루를 조용히 비추기를 바랍니다." />
       </SectionBlock>
 
+      <SectionBlock v-if="isSharedView" spacing="md" class="lt-appear lt-appear--delay-5">
+        <div class="try-mine-wrap">
+          <p class="try-mine-wrap__text">나는 어떤 카드가 나올까?</p>
+          <button class="try-mine-wrap__btn" @click="startMyReading">나도 뽑아보기</button>
+        </div>
+      </SectionBlock>
+
+      <SectionBlock v-else spacing="sm" class="lt-appear lt-appear--delay-5">
+        <TomorrowTeaser :energy="drawnCard.energy" />
+      </SectionBlock>
+
       <SectionBlock spacing="md">
         <ShareSaveSection
           reading-type="오늘의 연애 카드"
@@ -218,12 +236,6 @@ onMounted(() => {
         <StreakBadge :streak="streak" :card-name="drawnCard.name" />
       </SectionBlock>
 
-      <SectionBlock spacing="sm">
-        <div class="reading-result__retry-wrap">
-          <button class="reading-result__retry" @click="handleResetToday">다시 뽑기</button>
-        </div>
-      </SectionBlock>
-
       <SectionBlock spacing="md">
         <OtherReadingsNav current="today" />
       </SectionBlock>
@@ -238,31 +250,7 @@ onMounted(() => {
 </template>
 
 <style scoped>
-/* ── Retry button (bottom) ── */
-.reading-result__retry-wrap {
-  display: flex;
-  justify-content: center;
-  padding: 0 var(--lt-space-md);
-}
-
-.reading-result__retry {
-  font-size: 0.72rem;
-  color: var(--lt-accent-2);
-  letter-spacing: 0.06em;
-  opacity: 0.7;
-  border: 1px solid rgba(77, 163, 255, 0.2);
-  border-radius: var(--lt-radius-full);
-  padding: 5px 16px;
-  background: rgba(77, 163, 255, 0.06);
-  transition: opacity var(--lt-transition), border-color var(--lt-transition);
-}
-
-.reading-result__retry:hover {
-  opacity: 1;
-  border-color: rgba(77, 163, 255, 0.4);
-}
-
-/* ── Result type label (replaces ResultHeroCard) ── */
+/* ── Result type label ── */
 .today-result-type {
   text-align: center;
   padding: var(--lt-space-lg) var(--lt-space-md) var(--lt-space-sm);
@@ -281,5 +269,41 @@ onMounted(() => {
   color: rgba(100, 220, 180, 0.8);
   letter-spacing: 0.06em;
   margin-top: 6px;
+}
+
+/* ── "나도 뽑아보기" CTA (공유 방문자용) ── */
+.try-mine-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: var(--lt-space-md) var(--lt-space-lg);
+}
+
+.try-mine-wrap__text {
+  font-size: 0.82rem;
+  color: var(--lt-text-sub);
+  letter-spacing: 0.06em;
+  font-weight: 200;
+  opacity: 0.8;
+}
+
+.try-mine-wrap__btn {
+  padding: 12px 32px;
+  border: 1px solid var(--lt-accent-2);
+  border-radius: var(--lt-radius-full);
+  font-size: 0.85rem;
+  color: var(--lt-accent-2);
+  background: rgba(77, 163, 255, 0.08);
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition:
+    background var(--lt-transition),
+    box-shadow var(--lt-transition);
+}
+
+.try-mine-wrap__btn:hover {
+  background: rgba(77, 163, 255, 0.16);
+  box-shadow: 0 0 20px rgba(77, 163, 255, 0.15);
 }
 </style>

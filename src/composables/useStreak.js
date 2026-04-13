@@ -31,35 +31,32 @@ function saveStreak(data) {
   }
 }
 
-/**
- * Get current streak state.
- * Call recordToday() when user completes a daily reading.
- */
-export function useStreak() {
+function calcCurrentCount() {
   const data = loadStreak()
   const today = getTodayKey()
   const yesterday = getYesterdayKey()
 
-  // Calculate current streak
-  let currentCount = 0
-  if (data.lastDate === today) {
-    // Already recorded today
-    currentCount = data.count
-  } else if (data.lastDate === yesterday) {
-    // Yesterday was recorded, streak is alive but not yet updated for today
-    currentCount = data.count
-  } else {
-    // Streak broken
-    currentCount = 0
-  }
+  if (data.lastDate === today) return data.count
+  if (data.lastDate === yesterday) return data.count
+  return 0
+}
 
-  const streak = ref(currentCount)
-  const recordedToday = ref(data.lastDate === today)
+// 모듈 레벨 공유 상태 — 모든 useStreak() 호출이 같은 ref를 참조
+const streak = ref(calcCurrentCount())
+const recordedToday = ref(loadStreak().lastDate === getTodayKey())
 
+/**
+ * Get current streak state.
+ * Call recordToday() when user completes a daily reading.
+ * All callers share the same reactive refs.
+ */
+export function useStreak() {
   function recordToday() {
+    const today = getTodayKey()
     if (recordedToday.value) return
 
     const prev = loadStreak()
+    const yesterday = getYesterdayKey()
     let newCount = 1
 
     if (prev.lastDate === yesterday) {
