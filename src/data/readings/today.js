@@ -5,6 +5,7 @@ export const TODAY_RESULTS = {
   magician: {
     summary:
       '오늘은 당신의 말과 행동이 평소보다 강한 힘을 가지는 하루예요. 원하는 것을 향해 한 걸음 내딛어 보세요.',
+    emotionHook: '혹시 보내려다 지운 연락, 아직 남아 있지 않나요?',
     emotionTags: ['자신감', '실행력', '매력', '주도'],
     emotionFlow: [
       '오늘은 평소보다 자신감이 올라와 있는 상태예요. 말투도, 표정도 자연스럽게 여유로워질 수 있어요.',
@@ -26,6 +27,7 @@ export const TODAY_RESULTS = {
   priestess: {
     summary:
       '오늘은 말보다 느낌이 더 정확한 하루예요. 머리보다 마음이 먼저 아는 것들에 주의를 기울여 보세요.',
+    emotionHook: '설명은 못 하겠는데, 그냥 느낌이 오는 거 있지 않나요?',
     emotionTags: ['직관', '고요함', '관찰', '내면'],
     emotionFlow: [
       '평소보다 감각이 예민해져 있을 수 있어요. 작은 표정 변화나 말투의 뉘앙스가 유독 또렷하게 느껴질 거예요.',
@@ -47,6 +49,7 @@ export const TODAY_RESULTS = {
   empress: {
     summary:
       '오늘은 따뜻한 감정이 자연스럽게 흘러나오는 하루이고, 그 다정함이 관계를 한 뼘 더 가까이 만들어줄 거예요.',
+    emotionHook: '오늘따라 괜히 다정해지고 싶은 마음, 느껴지지 않나요?',
     emotionTags: ['다정함', '풍요', '돌봄', '편안함'],
     emotionFlow: [
       '마음이 평소보다 부드럽고 따뜻한 상태로 하루가 시작될 거예요.',
@@ -68,6 +71,7 @@ export const TODAY_RESULTS = {
   emperor: {
     summary:
       '오늘은 감정보다 현실적인 판단이 관계에 더 도움이 되는 하루이고, 안정감 있는 태도가 신뢰를 쌓아줄 거예요.',
+    emotionHook: '감정보다 행동으로 보여주고 싶은 날, 맞지 않나요?',
     emotionTags: ['안정', '현실적', '책임감', '주도'],
     emotionFlow: [
       '감정이 요동치기보다 차분하고 단단한 상태로 하루가 흘러갈 거예요.',
@@ -89,6 +93,7 @@ export const TODAY_RESULTS = {
   hierophant: {
     summary:
       '오늘은 깊이 있는 대화가 관계를 한 단계 끌어올리는 하루이고, 서로의 가치관을 나누는 것이 연결의 핵심이에요.',
+    emotionHook: '가벼운 대화 말고, 진짜 하고 싶은 이야기가 있지 않나요?',
     emotionTags: ['진지함', '가치관', '신뢰', '소통'],
     emotionFlow: [
       '오늘 마음속에 진지한 화두가 하나 떠오를 수 있어요. 관계에 대한 근본적인 질문 같은 것이요.',
@@ -110,6 +115,7 @@ export const TODAY_RESULTS = {
   fool: {
     summary:
       '오늘은 정해진 답을 찾기보다, 열린 마음 자체가 가장 좋은 방향이 되는 하루예요.',
+    emotionHook: '너무 많이 생각하고 있진 않았나요? 오늘은 좀 가볍게요.',
     emotionTags: ['가능성', '가벼움', '새 에너지', '유연함'],
     emotionFlow: [
       '오늘 하루, 무거운 기대 없이 가볍게 열려 있는 마음이 더 잘 어울려요.',
@@ -131,6 +137,7 @@ export const TODAY_RESULTS = {
   lovers: {
     summary:
       '오늘은 마음이 향하는 곳이 비교적 선명하게 드러나고, 그 솔직함이 관계를 움직이는 하루예요.',
+    emotionHook: '자꾸 떠오르는 사람, 이미 답은 알고 있지 않나요?',
     emotionTags: ['선명함', '끌림', '선택', '연결'],
     emotionFlow: [
       '마음이 어디를 향하는지, 오늘은 스스로에게도 꽤 또렷하게 느껴질 거예요.',
@@ -152,6 +159,7 @@ export const TODAY_RESULTS = {
   star: {
     summary:
       '흔들렸던 마음이 조용히 제자리를 찾아가고 있고, 오늘은 그 안정을 충분히 누려도 되는 하루예요.',
+    emotionHook: '조금씩 괜찮아지고 있는 거, 스스로도 느끼고 있죠?',
     emotionTags: ['잔잔함', '희망', '치유', '안정'],
     emotionFlow: [
       '최근 복잡했던 마음이 오늘은 한 겹 벗겨진 것처럼 가벼워질 수 있어요.',
@@ -173,6 +181,7 @@ export const TODAY_RESULTS = {
   world: {
     summary:
       '관계 안에서 충분함을 느끼기 좋은 하루이고, 그 만족감을 표현하는 것이 관계를 더 단단하게 만들어요.',
+    emotionHook: '지금 이대로도 충분하다는 거, 가끔 잊고 살진 않나요?',
     emotionTags: ['만족', '안정', '완성', '충족'],
     emotionFlow: [
       '지금 관계나 마음 상태가 꽤 안정된 자리에 놓여 있다고 느껴질 거예요.',
@@ -194,6 +203,7 @@ export const TODAY_RESULTS = {
   chariot: {
     summary:
       '오늘은 망설임을 멈추고 행동으로 옮길 수 있는 추진력이 있는 하루예요.',
+    emotionHook: '계속 미루고만 있던 그 한마디, 오늘은 할 수 있을 것 같지 않나요?',
     emotionTags: ['추진력', '결단', '전진', '확신'],
     emotionFlow: [
       '아침부터 마음속에 "오늘은 뭔가를 해야 한다"는 에너지가 느껴질 수 있어요.',
@@ -215,6 +225,7 @@ export const TODAY_RESULTS = {
   strength: {
     summary:
       '오늘은 내면에서 조용한 용기가 올라오는 하루이고, 그 용기는 관계에서 한 발을 내딛게 해줄 거예요.',
+    emotionHook: '두렵지만 해보고 싶은 것, 하나쯤 있지 않나요?',
     emotionTags: ['용기', '인내', '내면의 힘', '결심'],
     emotionFlow: [
       '그동안 드러내기 어려웠던 마음이 오늘은 조금 더 가벼워져 있을 거예요.',
@@ -236,6 +247,7 @@ export const TODAY_RESULTS = {
   death: {
     summary:
       '오늘은 무언가를 놓아주어야 새로운 것이 들어올 수 있는 하루예요. 끝은 시작의 다른 이름이에요.',
+    emotionHook: '놓아줘야 할 거, 사실은 이미 알고 있지 않나요?',
     emotionTags: ['전환', '놓아줌', '변화', '재탄생'],
     emotionFlow: [
       '마음속에서 무언가가 마무리되고 있다는 감각이 느껴질 수 있어요. 끝이라기보다 탈피에 가까운 느낌이에요.',
@@ -257,6 +269,7 @@ export const TODAY_RESULTS = {
   temperance: {
     summary:
       '오늘은 감정의 균형을 잡는 것 자체가 관계를 위한 가장 좋은 행동이 되는 하루예요.',
+    emotionHook: '급하게 답을 내려고 하진 않았나요? 천천히 가도 괜찮아요.',
     emotionTags: ['균형', '차분함', '조화', '인내'],
     emotionFlow: [
       '감정이 한쪽으로 치우치려 해도, 오늘은 스스로 중심을 잡을 수 있는 힘이 있어요.',

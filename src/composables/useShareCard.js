@@ -60,7 +60,7 @@ function wrapText(ctx, text, maxWidth) {
  * @param {string[]} options.emotionTags - Keyword tags
  * @returns {Promise<string>} Data URL of the generated image
  */
-export async function generateSingleCardShareImage({ readingType, cardName, cardNameEn, summary, emotionTags = [], cardImage = '', reversed = false, format = 'story', answerLabel = '', answerDesc = '' }) {
+export async function generateSingleCardShareImage({ readingType, cardName, cardNameEn, summary, emotionTags = [], cardImage = '', reversed = false, format = 'story', answerLabel = '', answerDesc = '', emotionHook = '' }) {
   const W = format === 'square' ? SQUARE_WIDTH : format === 'feed' ? FEED_WIDTH : STORY_WIDTH
   const H = format === 'square' ? SQUARE_HEIGHT : format === 'feed' ? FEED_HEIGHT : STORY_HEIGHT
   // 카드 이미지 로드
@@ -112,7 +112,7 @@ export async function generateSingleCardShareImage({ readingType, cardName, card
   const isSquare = format === 'square'
 
   if (isFeed) {
-    // ── Feed/Square 레이아웃 ──
+    // ── Feed/Square 레이아웃 — 개선: 타이포 위계 + 공감 훅 ──
     const cardW = isSquare ? 300 : 380
     const cardH = isSquare ? 500 : 630
     const cardX = isSquare ? 80 : 100
@@ -121,14 +121,14 @@ export async function generateSingleCardShareImage({ readingType, cardName, card
     // 카드 그리기
     _drawCardFrame(ctx, img, cardX, cardY, cardW, cardH, reversed)
 
-    // 우측 텍스트 영역
-    const textX = cardX + cardW + 60
+    // 우측 텍스트 영역 — 간격 넓힘
+    const textX = cardX + cardW + 70
     const textW = W - textX - 100
     ctx.textAlign = 'left'
 
-    ctx.font = '300 24px "Noto Sans KR", sans-serif'
+    ctx.font = '300 22px "Noto Sans KR", sans-serif'
     ctx.fillStyle = 'rgba(77, 163, 255, 0.7)'
-    ctx.fillText(readingType, textX, cardY + 40)
+    ctx.fillText(readingType, textX, cardY + 36)
 
     // Yes/No 답변 (Feed/Square)
     let feedTextOffset = 0
@@ -140,63 +140,78 @@ export async function generateSingleCardShareImage({ readingType, cardName, card
       feedTextOffset = 70
     }
 
-    ctx.font = '300 64px "Noto Sans KR", sans-serif'
+    // 카드 이름 — 크게 (64→76px)
+    ctx.font = '300 76px "Noto Sans KR", sans-serif'
     ctx.fillStyle = '#F4F8FF'
-    ctx.fillText(cardName, textX, cardY + 120 + feedTextOffset)
+    ctx.fillText(cardName, textX, cardY + 130 + feedTextOffset)
 
     if (cardNameEn) {
-      ctx.font = 'italic 300 28px "Cormorant Garamond", Georgia, serif'
+      ctx.font = 'italic 300 26px "Cormorant Garamond", Georgia, serif'
       ctx.fillStyle = 'rgba(126, 138, 168, 0.7)'
-      ctx.fillText(cardNameEn, textX, cardY + 160 + feedTextOffset)
+      ctx.fillText(cardNameEn, textX, cardY + 168 + feedTextOffset)
     }
 
     // 구분선
     ctx.strokeStyle = 'rgba(77, 163, 255, 0.2)'
     ctx.lineWidth = 1
     ctx.beginPath()
-    ctx.moveTo(textX, cardY + 190 + feedTextOffset)
-    ctx.lineTo(textX + textW, cardY + 190 + feedTextOffset)
+    ctx.moveTo(textX, cardY + 196 + feedTextOffset)
+    ctx.lineTo(textX + textW, cardY + 196 + feedTextOffset)
     ctx.stroke()
+
+    // 공감 훅 (emotionHook)
+    let feedNextY = cardY + 236 + feedTextOffset
+    if (emotionHook) {
+      ctx.font = 'italic 400 26px "Noto Sans KR", sans-serif'
+      ctx.fillStyle = 'rgba(200, 169, 110, 0.9)'
+      const hookLines = wrapText(ctx, `"${emotionHook}"`, textW)
+      hookLines.slice(0, 2).forEach((line, i) => {
+        ctx.fillText(line, textX, feedNextY + i * 40)
+      })
+      feedNextY += hookLines.slice(0, 2).length * 40 + 12
+    }
 
     // 요약
     if (summary) {
-      const sumFontSize = answerLabel ? 24 : 28
-      const sumLineH = answerLabel ? 38 : 44
-      const sumMaxLines = answerLabel ? 3 : 5
+      const sumFontSize = answerLabel ? 22 : 26
+      const sumLineH = answerLabel ? 36 : 42
+      const sumMaxLines = emotionHook ? 3 : (answerLabel ? 3 : 5)
       ctx.font = `400 ${sumFontSize}px "Noto Sans KR", sans-serif`
       ctx.fillStyle = 'rgba(220, 232, 255, 0.85)'
       const lines = wrapText(ctx, summary, textW)
       lines.slice(0, sumMaxLines).forEach((line, i) => {
-        ctx.fillText(line, textX, cardY + 230 + feedTextOffset + i * sumLineH)
+        ctx.fillText(line, textX, feedNextY + i * sumLineH)
       })
     }
 
     // 하단 CTA
     ctx.textAlign = 'left'
-    ctx.font = '400 26px "Noto Sans KR", sans-serif'
+    ctx.font = '400 24px "Noto Sans KR", sans-serif'
     ctx.fillStyle = 'rgba(143, 211, 255, 0.7)'
-    ctx.fillText('나도 뽑아보기', textX, cardY + cardH - 90)
-
-    ctx.font = '300 22px "Noto Sans KR", sans-serif'
-    ctx.fillStyle = 'rgba(167, 183, 214, 0.5)'
-    ctx.fillText('lovtaro.kr', textX, cardY + cardH - 56)
+    ctx.fillText('나도 뽑아보기', textX, cardY + cardH - 84)
 
     ctx.font = '300 20px "Noto Sans KR", sans-serif'
+    ctx.fillStyle = 'rgba(167, 183, 214, 0.5)'
+    ctx.fillText('lovtaro.kr', textX, cardY + cardH - 54)
+
+    ctx.font = '300 18px "Noto Sans KR", sans-serif'
     ctx.fillStyle = 'rgba(143, 211, 255, 0.45)'
-    ctx.fillText('@lovtarot_', textX, cardY + cardH - 28)
+    ctx.fillText('@lovtarot_', textX, cardY + cardH - 30)
   } else {
-    // ── Story 레이아웃 (9:16) ──
+    // ── Story 레이아웃 (9:16) — 개선: 카드 크게, 타이포 위계 강화, 공감 훅 ──
+    ctx.textAlign = 'center'
+
+    // 상단 리딩 타입 라벨
+    ctx.font = '300 26px "Noto Sans KR", sans-serif'
+    ctx.fillStyle = 'rgba(77, 163, 255, 0.7)'
+    ctx.fillText(readingType, W / 2, 200)
+
     ctx.strokeStyle = lineGrad
     ctx.lineWidth = 1
     ctx.beginPath()
-    ctx.moveTo(200, 280)
-    ctx.lineTo(W - 200, 280)
+    ctx.moveTo(200, 230)
+    ctx.lineTo(W - 200, 230)
     ctx.stroke()
-
-    ctx.font = '300 28px "Noto Sans KR", sans-serif'
-    ctx.fillStyle = 'rgba(77, 163, 255, 0.7)'
-    ctx.textAlign = 'center'
-    ctx.fillText(readingType, W / 2, 240)
 
     // Yes/No 답변 뱃지 (있을 때만)
     let contentOffsetY = 0
@@ -208,91 +223,98 @@ export async function generateSingleCardShareImage({ readingType, cardName, card
       }
       const color = answerColors[answerLabel] || answerColors.Yes
 
-      // 답변 글로우
-      const answerGlow = ctx.createRadialGradient(W / 2, 360, 0, W / 2, 360, 200)
+      const answerGlow = ctx.createRadialGradient(W / 2, 320, 0, W / 2, 320, 200)
       answerGlow.addColorStop(0, color.glow)
       answerGlow.addColorStop(1, 'transparent')
       ctx.fillStyle = answerGlow
-      ctx.fillRect(0, 260, W, 200)
+      ctx.fillRect(0, 220, W, 200)
 
       ctx.font = '400 120px "Cinzel", Georgia, serif'
       ctx.fillStyle = color.text
-      ctx.fillText(answerLabel, W / 2, 400)
+      ctx.fillText(answerLabel, W / 2, 360)
 
       if (answerDesc) {
         ctx.font = '400 28px "Noto Sans KR", sans-serif'
         ctx.fillStyle = 'rgba(167, 183, 214, 0.75)'
-        ctx.fillText(answerDesc, W / 2, 450)
+        ctx.fillText(answerDesc, W / 2, 410)
       }
 
-      contentOffsetY = 160
+      contentOffsetY = 150
     }
 
-    ctx.font = '300 96px "Noto Sans KR", sans-serif'
+    // 카드 이름 — 크게 (96→110px)
+    ctx.font = '300 110px "Noto Sans KR", sans-serif'
     ctx.fillStyle = '#F4F8FF'
-    ctx.fillText(cardName, W / 2, 440 + contentOffsetY)
+    ctx.fillText(cardName, W / 2, 380 + contentOffsetY)
 
     if (cardNameEn) {
-      ctx.font = 'italic 300 36px "Cormorant Garamond", Georgia, serif'
+      ctx.font = 'italic 300 34px "Cormorant Garamond", Georgia, serif'
       ctx.fillStyle = 'rgba(126, 138, 168, 0.8)'
-      ctx.fillText(cardNameEn, W / 2, 500 + contentOffsetY)
+      ctx.fillText(cardNameEn, W / 2, 430 + contentOffsetY)
     }
 
-    const cardW = answerLabel ? 280 : 320
-    const cardH = answerLabel ? 460 : 530
+    // 카드 이미지 — 크게 (320x530→380x630)
+    const cardW = answerLabel ? 300 : 380
+    const cardH = answerLabel ? 500 : 630
     const cardX = (W - cardW) / 2
-    const cardY = (answerLabel ? 540 : 540) + contentOffsetY
+    const cardY = 460 + contentOffsetY
 
     _drawCardFrame(ctx, img, cardX, cardY, cardW, cardH, reversed)
 
-    ctx.strokeStyle = lineGrad
-    ctx.beginPath()
-    ctx.moveTo(200, cardY + cardH + 60)
-    ctx.lineTo(W - 200, cardY + cardH + 60)
-    ctx.stroke()
-
+    // 카드 아래 감정 태그
+    const afterCardY = cardY + cardH + 50
     if (emotionTags.length > 0) {
-      ctx.font = '400 28px "Noto Sans KR", sans-serif'
-      ctx.fillStyle = 'rgba(167, 183, 214, 0.7)'
+      ctx.font = '400 26px "Noto Sans KR", sans-serif'
+      ctx.fillStyle = 'rgba(167, 183, 214, 0.65)'
       ctx.textAlign = 'center'
-      ctx.fillText(emotionTags.join('  ·  '), W / 2, cardY + cardH + 110)
+      ctx.fillText(emotionTags.join('  ·  '), W / 2, afterCardY)
     }
 
+    // 구분선
+    const dividerY = afterCardY + 30
+    ctx.strokeStyle = lineGrad
+    ctx.beginPath()
+    ctx.moveTo(200, dividerY)
+    ctx.lineTo(W - 200, dividerY)
+    ctx.stroke()
+
+    // 공감 훅 (emotionHook) — "이거 내 얘기잖아" 유도 문구
+    let nextY = dividerY + 50
+    if (emotionHook) {
+      ctx.font = 'italic 400 32px "Noto Sans KR", sans-serif'
+      ctx.fillStyle = 'rgba(200, 169, 110, 0.9)'
+      ctx.textAlign = 'center'
+      const hookLines = wrapText(ctx, `"${emotionHook}"`, W - 240)
+      hookLines.slice(0, 2).forEach((line, i) => {
+        ctx.fillText(line, W / 2, nextY + i * 48)
+      })
+      nextY += hookLines.slice(0, 2).length * 48 + 16
+    }
+
+    // 요약 텍스트
     if (summary) {
-      const summaryY = cardY + cardH + 170
-      ctx.font = '400 34px "Noto Sans KR", sans-serif'
-      ctx.fillStyle = 'rgba(220, 232, 255, 0.9)'
+      ctx.font = '400 30px "Noto Sans KR", sans-serif'
+      ctx.fillStyle = 'rgba(220, 232, 255, 0.85)'
       ctx.textAlign = 'center'
       const lines = wrapText(ctx, summary, W - 200)
-      lines.forEach((line, i) => {
-        ctx.fillText(line, W / 2, summaryY + i * 54)
+      lines.slice(0, 3).forEach((line, i) => {
+        ctx.fillText(line, W / 2, nextY + i * 48)
       })
     }
 
-    // Bottom CTA
-    const bottomLineY = H - 260
-    ctx.strokeStyle = lineGrad
-    ctx.beginPath()
-    ctx.moveTo(200, bottomLineY)
-    ctx.lineTo(W - 200, bottomLineY)
-    ctx.stroke()
-
-    ctx.font = '400 30px "Noto Sans KR", sans-serif'
+    // Bottom CTA — 컴팩트하게
+    ctx.font = '400 28px "Noto Sans KR", sans-serif'
     ctx.fillStyle = 'rgba(143, 211, 255, 0.8)'
     ctx.textAlign = 'center'
-    ctx.fillText('나도 뽑아보기', W / 2, bottomLineY + 48)
-
-    ctx.font = '300 26px "Noto Sans KR", sans-serif'
-    ctx.fillStyle = 'rgba(167, 183, 214, 0.6)'
-    ctx.fillText('lovtaro.kr', W / 2, bottomLineY + 82)
+    ctx.fillText('나도 뽑아보기', W / 2, H - 170)
 
     ctx.font = '300 24px "Noto Sans KR", sans-serif'
-    ctx.fillStyle = 'rgba(143, 211, 255, 0.45)'
-    ctx.fillText('@lovtarot_', W / 2, bottomLineY + 114)
+    ctx.fillStyle = 'rgba(167, 183, 214, 0.55)'
+    ctx.fillText('lovtaro.kr', W / 2, H - 136)
 
-    ctx.font = 'italic 300 24px "Cormorant Garamond", Georgia, serif'
-    ctx.fillStyle = 'rgba(126, 138, 168, 0.35)'
-    ctx.fillText('Lovtaro', W / 2, H - 80)
+    ctx.font = '300 22px "Noto Sans KR", sans-serif'
+    ctx.fillStyle = 'rgba(143, 211, 255, 0.4)'
+    ctx.fillText('@lovtarot_', W / 2, H - 108)
   }
 
   return canvas.toDataURL('image/png')
