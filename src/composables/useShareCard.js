@@ -162,19 +162,19 @@ export async function generateSingleCardShareImage({ readingType, cardName, card
     // 공감 훅 (emotionHook)
     let feedNextY = cardY + 236 + feedTextOffset
     if (emotionHook) {
-      ctx.font = 'italic 400 26px "Noto Sans KR", sans-serif'
+      ctx.font = 'italic 400 24px "Noto Sans KR", sans-serif'
       ctx.fillStyle = 'rgba(200, 169, 110, 0.9)'
-      const hookLines = wrapText(ctx, `"${emotionHook}"`, textW)
-      hookLines.slice(0, 2).forEach((line, i) => {
-        ctx.fillText(line, textX, feedNextY + i * 40)
+      const hookParts = emotionHook.split('\n')
+      hookParts.forEach((part, i) => {
+        ctx.fillText(part, textX, feedNextY + i * 38)
       })
-      feedNextY += hookLines.slice(0, 2).length * 40 + 12
+      feedNextY += hookParts.length * 38 + 24
     }
 
     // 요약
     if (summary) {
-      const sumFontSize = answerLabel ? 22 : 26
-      const sumLineH = answerLabel ? 36 : 42
+      const sumFontSize = answerLabel ? 22 : 24
+      const sumLineH = answerLabel ? 36 : 38
       const sumMaxLines = emotionHook ? 3 : (answerLabel ? 3 : 5)
       ctx.font = `400 ${sumFontSize}px "Noto Sans KR", sans-serif`
       ctx.fillStyle = 'rgba(220, 232, 255, 0.85)'
@@ -284,11 +284,11 @@ export async function generateSingleCardShareImage({ readingType, cardName, card
       ctx.font = 'italic 400 32px "Noto Sans KR", sans-serif'
       ctx.fillStyle = 'rgba(200, 169, 110, 0.9)'
       ctx.textAlign = 'center'
-      const hookLines = wrapText(ctx, `"${emotionHook}"`, W - 240)
-      hookLines.slice(0, 2).forEach((line, i) => {
-        ctx.fillText(line, W / 2, nextY + i * 48)
+      const hookParts = emotionHook.split('\n')
+      hookParts.forEach((part, i) => {
+        ctx.fillText(part, W / 2, nextY + i * 50)
       })
-      nextY += hookLines.slice(0, 2).length * 48 + 16
+      nextY += hookParts.length * 50 + 16
     }
 
     // 요약 텍스트
@@ -297,24 +297,37 @@ export async function generateSingleCardShareImage({ readingType, cardName, card
       ctx.fillStyle = 'rgba(220, 232, 255, 0.85)'
       ctx.textAlign = 'center'
       const lines = wrapText(ctx, summary, W - 200)
-      lines.slice(0, 3).forEach((line, i) => {
+      const sumLines = lines.slice(0, 3)
+      sumLines.forEach((line, i) => {
         ctx.fillText(line, W / 2, nextY + i * 48)
       })
+      nextY += sumLines.length * 48 + 40
+    } else {
+      nextY += 20
     }
 
-    // Bottom CTA — 컴팩트하게
+    // CTA — 콘텐츠 바로 아래에 배치 (고정 위치 대신 흐름 따라감)
+    // 단, 최소 위치는 H - 200 이하로 내려가지 않도록
+    const ctaY = Math.min(nextY, H - 200)
+
+    ctx.strokeStyle = lineGrad
+    ctx.beginPath()
+    ctx.moveTo(200, ctaY)
+    ctx.lineTo(W - 200, ctaY)
+    ctx.stroke()
+
     ctx.font = '400 28px "Noto Sans KR", sans-serif'
     ctx.fillStyle = 'rgba(143, 211, 255, 0.8)'
     ctx.textAlign = 'center'
-    ctx.fillText('나도 뽑아보기', W / 2, H - 170)
+    ctx.fillText('나도 뽑아보기', W / 2, ctaY + 44)
 
     ctx.font = '300 24px "Noto Sans KR", sans-serif'
     ctx.fillStyle = 'rgba(167, 183, 214, 0.55)'
-    ctx.fillText('lovtaro.kr', W / 2, H - 136)
+    ctx.fillText('lovtaro.kr', W / 2, ctaY + 76)
 
     ctx.font = '300 22px "Noto Sans KR", sans-serif'
     ctx.fillStyle = 'rgba(143, 211, 255, 0.4)'
-    ctx.fillText('@lovtarot_', W / 2, H - 108)
+    ctx.fillText('@lovtarot_', W / 2, ctaY + 104)
   }
 
   return canvas.toDataURL('image/png')

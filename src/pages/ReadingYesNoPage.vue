@@ -239,6 +239,7 @@ onUnmounted(() => { if (revealTimer) clearTimeout(revealTimer) })
           :reversed="drawnCard.reversed"
           :summary="result.summary"
           :emotion-tags="result.emotionTags"
+          :emotion-hook="result.emotionHook || ''"
           :share-url="shareUrl"
           :share-title="`${result.answerLabel}! ${drawnCard.name} 카드가 나왔어요`"
           :answer-label="result.answerLabel"

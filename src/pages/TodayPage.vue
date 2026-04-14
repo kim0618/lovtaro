@@ -239,6 +239,7 @@ onUnmounted(() => { clearRevealTimer() })
           :reversed="drawnCard.reversed"
           :summary="result.summary"
           :emotion-tags="result.emotionTags"
+          :emotion-hook="result.emotionHook || ''"
           :share-url="shareUrl"
         />
       </SectionBlock>

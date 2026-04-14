@@ -17,6 +17,7 @@ const props = defineProps({
   shareTitle: { type: String, default: '' },
   answerLabel: { type: String, default: '' },
   answerDesc: { type: String, default: '' },
+  emotionHook: { type: String, default: '' },
   card2Name: { type: String, default: '' },
   card2NameEn: { type: String, default: '' },
   card2Image: { type: String, default: '' },
@@ -79,6 +80,7 @@ async function generateImage(format = 'story') {
     emotionTags: props.emotionTags,
     answerLabel: props.answerLabel,
     answerDesc: props.answerDesc,
+    emotionHook: props.emotionHook,
     format,
   })
 }
