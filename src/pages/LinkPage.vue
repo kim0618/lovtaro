@@ -55,6 +55,17 @@ function go(link) {
       </button>
     </div>
 
+    <div class="link-page__social">
+      <a href="https://www.instagram.com/lovtarot_/" target="_blank" rel="noopener" class="link-page__social-btn link-page__social-btn--insta" @click="trackEvent('link_page_click', { label: 'instagram', to: 'instagram' })">
+        <svg class="link-page__social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        <span>@lovtarot_</span>
+      </a>
+      <a href="https://www.youtube.com/@%EB%9F%AC%EB%B8%8C%ED%83%80%EB%A1%9C" target="_blank" rel="noopener" class="link-page__social-btn link-page__social-btn--yt" @click="trackEvent('link_page_click', { label: 'youtube', to: 'youtube' })">
+        <svg class="link-page__social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="4"/><polygon points="10,8.5 16,12 10,15.5" fill="currentColor" stroke="none"/></svg>
+        <span>러브타로</span>
+      </a>
+    </div>
+
     <div class="link-page__footer">
       <p class="link-page__footer-text">lovtaro.kr</p>
     </div>
@@ -211,6 +222,61 @@ function go(link) {
 .link-page__item:hover .link-page__arrow {
   transform: translateX(3px);
   color: var(--lt-accent-2);
+}
+
+.link-page__social {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: var(--lt-space-lg);
+  width: 100%;
+  max-width: 380px;
+}
+
+.link-page__social-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 0;
+  font-size: 0.78rem;
+  border-radius: var(--lt-radius-md);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  transition:
+    border-color 250ms ease,
+    color 250ms ease,
+    background 250ms ease,
+    opacity 250ms ease;
+}
+
+.link-page__social-btn--insta {
+  color: rgba(225, 120, 160, 0.9);
+  background: rgba(225, 120, 160, 0.06);
+  border: 1px solid rgba(225, 120, 160, 0.18);
+}
+
+.link-page__social-btn--insta:hover {
+  background: rgba(225, 120, 160, 0.12);
+  border-color: rgba(225, 120, 160, 0.35);
+}
+
+.link-page__social-btn--yt {
+  color: rgba(255, 80, 80, 0.9);
+  background: rgba(255, 80, 80, 0.06);
+  border: 1px solid rgba(255, 80, 80, 0.18);
+}
+
+.link-page__social-btn--yt:hover {
+  background: rgba(255, 80, 80, 0.12);
+  border-color: rgba(255, 80, 80, 0.35);
+}
+
+.link-page__social-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
 }
 
 .link-page__footer {
