@@ -284,27 +284,27 @@ async function handleCopyLink() {
 }
 
 .share-save-section__btn--insta {
-  background: rgba(225, 48, 108, 0.12);
-  border-color: rgba(225, 48, 108, 0.3);
-  color: rgba(225, 120, 160, 0.9);
+  background: rgba(160, 65, 95, 0.08);
+  border-color: rgba(160, 65, 95, 0.22);
+  color: rgba(180, 105, 130, 0.8);
 }
 
 .share-save-section__btn--insta:hover:not(:disabled) {
-  background: rgba(225, 48, 108, 0.18);
-  border-color: rgba(225, 48, 108, 0.5);
-  box-shadow: 0 0 16px rgba(225, 48, 108, 0.1);
+  background: rgba(160, 65, 95, 0.14);
+  border-color: rgba(160, 65, 95, 0.36);
+  box-shadow: 0 0 12px rgba(160, 65, 95, 0.08);
 }
 
 .share-save-section__btn--kakao {
-  background: rgba(254, 229, 0, 0.12);
-  border-color: rgba(254, 229, 0, 0.3);
-  color: rgba(254, 229, 0, 0.9);
+  background: rgba(180, 148, 48, 0.08);
+  border-color: rgba(180, 148, 48, 0.22);
+  color: rgba(192, 162, 80, 0.8);
 }
 
 .share-save-section__btn--kakao:hover:not(:disabled) {
-  background: rgba(254, 229, 0, 0.18);
-  border-color: rgba(254, 229, 0, 0.5);
-  box-shadow: 0 0 16px rgba(254, 229, 0, 0.1);
+  background: rgba(180, 148, 48, 0.14);
+  border-color: rgba(180, 148, 48, 0.36);
+  box-shadow: 0 0 12px rgba(180, 148, 48, 0.08);
 }
 
 .share-save-section__btn--secondary {

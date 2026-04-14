@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onUnmounted } from 'vue'
 import { useHead } from '../composables/useHead.js'
 import AppShell from '../components/common/AppShell.vue'
 
@@ -42,17 +42,35 @@ const drawStep = ref(1) // 1 = 나의 카드, 2 = 상대 카드
 
 const { clearSession } = useReadingSession('compatibility', { phase, selectedIds, deck })
 
+const _shared = decodeReadingParams()
+if (_shared) {
+  const _base1 = getCardById(_shared.cardId)
+  if (_base1) {
+    selectedIds.value = [null, null]
+    onSelect(_shared.cardId)
+    deck.value = deck.value.map(c => c.id === _shared.cardId ? { ...c, reversed: _shared.reversed } : c)
+    if (_shared.cardId2) {
+      const _base2 = getCardById(_shared.cardId2)
+      if (_base2) {
+        onSelect(_shared.cardId2)
+        deck.value = deck.value.map(c => c.id === _shared.cardId2 ? { ...c, reversed: _shared.reversed2 ?? false } : c)
+      }
+    }
+  }
+}
+
 const card1 = computed(() => selectedCards.value[0] ?? null)
 const card2 = computed(() => selectedCards.value[1] ?? null)
 
 const score = ref(0)
 const result = ref(null)
 
-// 세션 복원 시 결과 재계산
-if (phase.value === 'result' && card1.value && card2.value) {
+// 세션 복원 및 공유 링크 진입 시 결과 재계산
+if ((phase.value === 'result' || _shared) && card1.value && card2.value) {
   const s = calculateCompatibility(card1.value.id, card1.value.reversed, card2.value.id, card2.value.reversed)
   score.value = s
   result.value = generateCompatibilityResult(card1.value, card2.value, s)
+  phase.value = 'result'
 }
 const shareUrl = computed(() => {
   if (!card1.value || !card2.value) return ''
@@ -113,33 +131,6 @@ function retry() { clearSession(); reset(); drawStep.value = 1; phase.value = 'd
 function scrollTop() { window.scrollTo({ top: 0 }) }
 
 onUnmounted(() => { if (revealTimer) clearTimeout(revealTimer) })
-
-onMounted(() => {
-  const shared = decodeReadingParams()
-  if (!shared) return
-  const base1 = getCardById(shared.cardId)
-  if (!base1) return
-  onSelect(shared.cardId)
-  deck.value = deck.value.map(c => c.id === shared.cardId ? { ...c, reversed: shared.reversed } : c)
-
-  if (shared.cardId2) {
-    const base2 = getCardById(shared.cardId2)
-    if (base2) {
-      onSelect(shared.cardId2)
-      deck.value = deck.value.map(c => c.id === shared.cardId2 ? { ...c, reversed: shared.reversed2 ?? false } : c)
-    }
-  }
-
-  // 결과 계산
-  const c1 = selectedCards.value[0]
-  const c2 = selectedCards.value[1]
-  if (c1 && c2) {
-    const s = calculateCompatibility(c1.id, c1.reversed, c2.id, c2.reversed)
-    score.value = s
-    result.value = generateCompatibilityResult(c1, c2, s)
-    phase.value = 'result'
-  }
-})
 </script>
 
 <template>
@@ -338,6 +329,10 @@ onMounted(() => {
 
       <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-5">
         <CautionSection title="조심할 점" :lines="result.caution" />
+      </SectionBlock>
+
+      <SectionBlock v-if="result.spreadNarrative" spacing="sm" class="lt-appear lt-appear--delay-5">
+        <EmotionFlowSection title="두 카드가 함께 말하는 것" :lines="[result.spreadNarrative]" />
       </SectionBlock>
 
       <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-5">

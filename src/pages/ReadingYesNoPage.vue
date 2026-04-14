@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onUnmounted } from 'vue'
 import { useHead } from '../composables/useHead.js'
 import AppShell from '../components/common/AppShell.vue'
 
@@ -21,6 +21,7 @@ import YesNoAnswerBadge from '../components/result/YesNoAnswerBadge.vue'
 import CardImageBlock from '../components/result/CardImageBlock.vue'
 import EmotionTagList from '../components/result/EmotionTagList.vue'
 import CoreInsightBlock from '../components/result/CoreInsightBlock.vue'
+import ReversedNoticeBanner from '../components/result/ReversedNoticeBanner.vue'
 import EmotionFlowSection from '../components/result/EmotionFlowSection.vue'
 import AdviceSection from '../components/result/AdviceSection.vue'
 import CautionSection from '../components/result/CautionSection.vue'
@@ -43,6 +44,17 @@ const { deck, selectedIds, selectedCards, selectedCount, canConfirm, onSelect, r
 const phase = ref('intro') // 'intro' | 'draw' | 'reveal' | 'result'
 
 const { clearSession } = useReadingSession('yesno', { phase, selectedIds, deck })
+
+const _shared = decodeReadingParams()
+if (_shared) {
+  const _base = getCardById(_shared.cardId)
+  if (_base) {
+    selectedIds.value = [null]
+    onSelect(_shared.cardId)
+    deck.value = deck.value.map(c => c.id === _shared.cardId ? { ...c, reversed: _shared.reversed } : c)
+    phase.value = 'result'
+  }
+}
 
 const drawnCard = computed(() => selectedCards.value[0] ?? null)
 const isReversed = computed(() => drawnCard.value?.reversed ?? false)
@@ -87,16 +99,6 @@ function retry() { clearSession(); reset(); phase.value = 'draw' }
 function scrollTop() { window.scrollTo({ top: 0 }) }
 
 onUnmounted(() => { if (revealTimer) clearTimeout(revealTimer) })
-
-onMounted(() => {
-  const shared = decodeReadingParams()
-  if (!shared) return
-  const base = getCardById(shared.cardId)
-  if (!base) return
-  onSelect(shared.cardId)
-  deck.value = deck.value.map(c => c.id === shared.cardId ? { ...c, reversed: shared.reversed } : c)
-  phase.value = 'result'
-})
 </script>
 
 <template>
@@ -191,6 +193,10 @@ onMounted(() => {
 
       <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-2">
         <EmotionTagList :tags="result.emotionTags" />
+      </SectionBlock>
+
+      <SectionBlock v-if="isReversed" spacing="sm" class="lt-appear lt-appear--delay-2">
+        <ReversedNoticeBanner />
       </SectionBlock>
 
       <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-2">

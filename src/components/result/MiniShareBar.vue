@@ -148,15 +148,15 @@ async function handleCopyLink() {
 }
 
 .mini-share-bar__btn--kakao {
-  background: rgba(254, 229, 0, 0.08);
-  border: 1px solid rgba(254, 229, 0, 0.2);
-  color: rgba(254, 229, 0, 0.8);
+  background: rgba(180, 148, 48, 0.08);
+  border: 1px solid rgba(180, 148, 48, 0.22);
+  color: rgba(192, 162, 80, 0.8);
 }
 
 .mini-share-bar__btn--kakao:hover {
-  background: rgba(254, 229, 0, 0.14);
-  border-color: rgba(254, 229, 0, 0.4);
-  box-shadow: 0 0 12px rgba(254, 229, 0, 0.08);
+  background: rgba(180, 148, 48, 0.14);
+  border-color: rgba(180, 148, 48, 0.36);
+  box-shadow: 0 0 12px rgba(180, 148, 48, 0.08);
 }
 
 .mini-share-bar__btn--link {

@@ -1,6 +1,7 @@
 <script setup>
 import AppHeader from './AppHeader.vue'
 import AppFooter from './AppFooter.vue'
+import BottomTabNav from './BottomTabNav.vue'
 
 defineProps({
   hideHeader: { type: Boolean, default: false },
@@ -15,6 +16,7 @@ defineProps({
       <slot />
     </main>
     <AppFooter v-if="!hideFooter" />
+    <BottomTabNav />
   </div>
 </template>
 
@@ -28,5 +30,6 @@ defineProps({
 .app-shell__main {
   flex: 1;
   position: relative;
+  padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px));
 }
 </style>

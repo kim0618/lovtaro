@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onUnmounted } from 'vue'
 import { useHead } from '../composables/useHead.js'
 import AppShell from '../components/common/AppShell.vue'
 import PageContainer from '../components/ui/PageContainer.vue'
@@ -46,6 +46,25 @@ const phase = ref('intro') // 'intro' | 'status' | 'draw' | 'reveal' | 'result'
 const deckKey = ref(0)
 const relationshipStatus = ref(null)
 const { clearSession } = useReadingSession('love', { phase, selectedIds, relationshipStatus, deck })
+
+const _shared = decodeSpreadParams()
+if (_shared && _shared.cards.length >= 3) {
+  const resolved = _shared.cards.map(c => {
+    const base = getCardById(c.id)
+    if (!base) return null
+    return { ...base, reversed: c.reversed, image: getCardImage(c.id) || '' }
+  })
+  if (!resolved.some(c => !c)) {
+    selectedIds.value = [null, null, null]
+    relationshipStatus.value = _shared.status || null
+    resolved.forEach(c => onSelect(c.id))
+    deck.value = deck.value.map(c => {
+      const match = resolved.find(r => r.id === c.id)
+      return match ? { ...c, reversed: match.reversed } : c
+    })
+    phase.value = 'result'
+  }
+}
 
 const drawnTriple = computed(() =>
   selectedCards.value.filter(Boolean).map((card, i) => ({
@@ -108,28 +127,6 @@ const DRAW_INSTRUCTIONS = [
 ]
 const drawInstruction = computed(() => DRAW_INSTRUCTIONS[Math.min(selectedCount.value, 3)])
 
-onMounted(() => {
-  const shared = decodeSpreadParams()
-  if (!shared || shared.cards.length < 3) return
-
-  const resolved = shared.cards.map(c => {
-    const base = getCardById(c.id)
-    if (!base) return null
-    return { ...base, reversed: c.reversed, image: getCardImage(c.id) || '' }
-  })
-  if (resolved.some(c => !c)) return
-
-  relationshipStatus.value = shared.status || null
-  resolved.forEach(c => onSelect(c.id))
-
-  // deck에 reversed 상태 반영
-  deck.value = deck.value.map(c => {
-    const match = resolved.find(r => r.id === c.id)
-    return match ? { ...c, reversed: match.reversed } : c
-  })
-
-  phase.value = 'result'
-})
 </script>
 
 <template>

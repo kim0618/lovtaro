@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onUnmounted } from 'vue'
 import { useHead } from '../composables/useHead.js'
 import AppShell from '../components/common/AppShell.vue'
 
@@ -75,6 +75,19 @@ const shareUrl = computed(() => {
 
 const isSharedView = ref(false)
 
+const _shared = decodeReadingParams()
+if (_shared) {
+  const _base = getCardById(_shared.cardId)
+  if (_base) {
+    isSharedView.value = true
+    selectedIds.value = []
+    onSelect(_shared.cardId)
+    deck.value = deck.value.map(c => c.id === _shared.cardId ? { ...c, reversed: _shared.reversed } : c)
+    relationshipStatus.value = _shared.status || null
+    phase.value = 'result'
+  }
+}
+
 function startMyReading() {
   isSharedView.value = false
   const url = new URL(window.location.href)
@@ -89,18 +102,6 @@ function startMyReading() {
 function scrollTop() { window.scrollTo({ top: 0 }) }
 
 onUnmounted(() => { clearRevealTimer() })
-
-onMounted(() => {
-  const shared = decodeReadingParams()
-  if (!shared) return
-  const base = getCardById(shared.cardId)
-  if (!base) return
-  isSharedView.value = true
-  onSelect(shared.cardId)
-  deck.value = deck.value.map(c => c.id === shared.cardId ? { ...c, reversed: shared.reversed } : c)
-  relationshipStatus.value = shared.status || null
-  phase.value = 'result'
-})
 </script>
 
 <template>
@@ -220,14 +221,7 @@ onMounted(() => {
         <ReadingClosingBlock message="오늘 카드가 전한 에너지가 하루를 조용히 비추기를 바랍니다." />
       </SectionBlock>
 
-      <SectionBlock v-if="isSharedView" spacing="md" class="lt-appear lt-appear--delay-5">
-        <div class="try-mine-wrap">
-          <p class="try-mine-wrap__text">나는 어떤 카드가 나올까?</p>
-          <button class="try-mine-wrap__btn" @click="startMyReading">나도 뽑아보기</button>
-        </div>
-      </SectionBlock>
-
-      <SectionBlock v-else spacing="sm" class="lt-appear lt-appear--delay-5">
+      <SectionBlock v-if="!isSharedView" spacing="sm" class="lt-appear lt-appear--delay-5">
         <TomorrowTeaser :energy="drawnCard.energy" />
       </SectionBlock>
 
@@ -242,6 +236,13 @@ onMounted(() => {
           :emotion-tags="result.emotionTags"
           :share-url="shareUrl"
         />
+      </SectionBlock>
+
+      <SectionBlock v-if="isSharedView" spacing="md">
+        <div class="try-mine-wrap">
+          <p class="try-mine-wrap__text">나는 어떤 카드가 나올까?</p>
+          <button class="try-mine-wrap__btn" @click="startMyReading">나도 뽑아보기</button>
+        </div>
       </SectionBlock>
 
       <SectionBlock v-if="streak >= 2" spacing="md">
@@ -301,21 +302,24 @@ onMounted(() => {
 }
 
 .try-mine-wrap__btn {
-  padding: 12px 32px;
-  border: 1px solid var(--lt-accent-2);
+  padding: 6px 20px;
+  border: 1px solid rgba(77, 163, 255, 0.22);
   border-radius: var(--lt-radius-full);
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   color: var(--lt-accent-2);
-  background: rgba(77, 163, 255, 0.08);
-  letter-spacing: 0.08em;
+  background: rgba(77, 163, 255, 0.06);
+  letter-spacing: 0.06em;
+  opacity: 0.8;
   cursor: pointer;
   transition:
-    background var(--lt-transition),
+    opacity var(--lt-transition),
+    border-color var(--lt-transition),
     box-shadow var(--lt-transition);
 }
 
 .try-mine-wrap__btn:hover {
-  background: rgba(77, 163, 255, 0.16);
-  box-shadow: 0 0 20px rgba(77, 163, 255, 0.15);
+  opacity: 1;
+  border-color: rgba(77, 163, 255, 0.4);
+  box-shadow: 0 0 12px rgba(77, 163, 255, 0.1);
 }
 </style>

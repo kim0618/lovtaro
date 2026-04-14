@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onUnmounted } from 'vue'
 import { useHead } from '../composables/useHead.js'
 import AppShell from '../components/common/AppShell.vue'
 
@@ -20,6 +20,7 @@ import DrawActionBar from '../components/draw/DrawActionBar.vue'
 import CardImageBlock from '../components/result/CardImageBlock.vue'
 import EmotionTagList from '../components/result/EmotionTagList.vue'
 import CoreInsightBlock from '../components/result/CoreInsightBlock.vue'
+import ReversedNoticeBanner from '../components/result/ReversedNoticeBanner.vue'
 import EmotionFlowSection from '../components/result/EmotionFlowSection.vue'
 import AdviceSection from '../components/result/AdviceSection.vue'
 import CautionSection from '../components/result/CautionSection.vue'
@@ -46,6 +47,18 @@ const phase = ref('intro') // 'intro' | 'status' | 'draw' | 'reveal' | 'result'
 const relationshipStatus = ref(null)
 
 const { clearSession } = useReadingSession('reunion', { phase, selectedIds, relationshipStatus, deck })
+
+const _shared = decodeReadingParams()
+if (_shared) {
+  const _base = getCardById(_shared.cardId)
+  if (_base) {
+    selectedIds.value = [null]
+    onSelect(_shared.cardId)
+    deck.value = deck.value.map(c => c.id === _shared.cardId ? { ...c, reversed: _shared.reversed } : c)
+    relationshipStatus.value = _shared.status || null
+    phase.value = 'result'
+  }
+}
 
 const drawnCard = computed(() => selectedCards.value[0] ?? null)
 const isReversed = computed(() => drawnCard.value?.reversed ?? false)
@@ -92,17 +105,6 @@ function retry() { clearSession(); reset(); phase.value = 'draw' }
 function scrollTop() { window.scrollTo({ top: 0 }) }
 
 onUnmounted(() => { if (revealTimer) clearTimeout(revealTimer) })
-
-onMounted(() => {
-  const shared = decodeReadingParams()
-  if (!shared) return
-  const base = getCardById(shared.cardId)
-  if (!base) return
-  onSelect(shared.cardId)
-  deck.value = deck.value.map(c => c.id === shared.cardId ? { ...c, reversed: shared.reversed } : c)
-  relationshipStatus.value = shared.status || null
-  phase.value = 'result'
-})
 </script>
 
 <template>
@@ -122,6 +124,12 @@ onMounted(() => {
         <ReadingDescriptionBox
           description="이별 후 흐름이 어디로 향하는지 방향이 보이지 않을 때. 재회 타로는 결과를 단정하지 않습니다. 지금 두 사람 사이에 어떤 기류가 흐르는지 읽어내는 리딩입니다."
         />
+      </SectionBlock>
+
+      <SectionBlock spacing="sm">
+        <div class="intro-notice">
+          이 리딩은 재회를 보장하지 않으며, 지금 감정의 흐름을 참고하는 용도입니다. 카드는 방향을 비출 뿐, 선택은 언제나 당신의 것입니다.
+        </div>
       </SectionBlock>
 
       <SectionBlock spacing="md">
@@ -200,6 +208,10 @@ onMounted(() => {
         <EmotionTagList :tags="result.emotionTags" />
       </SectionBlock>
 
+      <SectionBlock v-if="isReversed" spacing="sm" class="lt-appear lt-appear--delay-2">
+        <ReversedNoticeBanner />
+      </SectionBlock>
+
       <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-2">
         <CoreInsightBlock :insight="result.summary" label="핵심 해석" />
       </SectionBlock>
@@ -264,6 +276,17 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.intro-notice {
+  margin: 0 var(--lt-space-md);
+  padding: var(--lt-space-md) var(--lt-space-lg);
+  font-size: 0.75rem;
+  color: var(--lt-text-muted);
+  line-height: 1.7;
+  letter-spacing: 0.03em;
+  text-align: center;
+  opacity: 0.7;
+}
+
 .reading-result__hero {
   background: linear-gradient(180deg, var(--lt-bg-1) 0%, var(--lt-bg-0) 100%);
   padding-bottom: var(--lt-space-md);

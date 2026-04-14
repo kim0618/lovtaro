@@ -21,7 +21,7 @@ import BrandLogo from './BrandLogo.vue'
 .app-footer {
   border-top: 1px solid var(--lt-border-soft);
   background-color: var(--lt-bg-0);
-  margin-top: var(--lt-space-2xl);
+  margin-top: var(--lt-space-lg);
 }
 
 .app-footer__inner {

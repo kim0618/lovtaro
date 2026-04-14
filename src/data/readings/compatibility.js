@@ -114,27 +114,59 @@ const CHEMISTRY_TEMPLATES = {
   highPassion: [
     '두 사람 사이에 강렬한 끌림이 흐르고 있어요. 서로에게 빠져드는 속도가 빠를 수 있어요.',
     '만나면 심장이 뛰는 관계예요. 이 열기를 오래 유지하는 것이 관건이에요.',
+    '첫 만남부터 뭔가 달랐던 느낌, 이 카드 조합이 그걸 말해주고 있어요.',
   ],
   highStability: [
     '함께 있으면 편안하고 안정감을 느끼는 관계예요. 오래 갈 수 있는 기반이 있어요.',
     '서로에게 안식처가 될 수 있는 관계예요. 신뢰가 이 관계의 핵심이에요.',
+    '흔들리는 날에도 옆에 있으면 괜찮아지는 에너지예요. 그게 이 조합의 힘이에요.',
   ],
   highCommunication: [
     '서로의 마음을 읽는 능력이 뛰어난 조합이에요. 말하지 않아도 통하는 순간이 많을 거예요.',
     '대화가 잘 통하고 서로를 이해하는 속도가 빠른 관계예요.',
+    '같은 것을 보고 같은 걸 느끼는 순간이 많을 조합이에요. 그 교감이 이 관계를 특별하게 만들어요.',
   ],
   highGrowth: [
     '함께하면 서로가 더 나은 사람이 되는 관계예요. 성장을 촉진하는 아름다운 만남이에요.',
     '이 관계를 통해 두 사람 모두 한 단계 성장할 수 있어요.',
+    '서로가 서로의 거울이 되는 조합이에요. 불편할 수도 있지만, 그만큼 깊이가 생겨요.',
   ],
   balanced: [
     '열정, 안정, 소통, 성장이 고르게 어우러진 관계예요. 균형 잡힌 사랑이 가능해요.',
     '어느 하나에 치우치지 않은 건강한 에너지가 흐르고 있어요.',
+    '극단적이지 않아서 오히려 오래가는 조합이에요. 일상 속에서 자연스럽게 깊어지는 관계예요.',
   ],
   lowMatch: [
     '서로 다른 파장을 가지고 있어요. 하지만 다름이 반드시 나쁜 것은 아니에요.',
     '맞춰가는 과정이 필요하지만, 그 과정 자체가 관계를 깊게 만들 수 있어요.',
+    '지금은 템포가 잘 맞지 않는 흐름이에요. 서두르기보다 상대의 리듬을 먼저 느껴보세요.',
   ],
+}
+
+// ── 카드 조합 서사 (두 카드가 만날 때 만들어지는 이야기) ──
+const NARRATIVE_BY_CATEGORY = {
+  // 열정 강한 조합
+  highPassion_high: '두 사람이 만나면 공기가 달라지는 느낌이에요. 강렬한 끌림 뒤에는 서로를 향한 진짜 감정이 있어요. 이 에너지를 조급하게 소진하지 않는 것이 중요해요. 불꽃은 오래 타오를수록 아름다운 법이니까요.',
+  highPassion_mid: '열정적인 끌림이 있지만, 그 온도 차이가 때로 상처가 될 수 있어요. 한쪽이 더 뜨겁게 타오를 때, 상대가 그 열기를 받아낼 준비가 되어 있는지 확인하는 것이 필요해요.',
+  highPassion_low: '서로에게 끌리는 마음은 분명히 있어요. 하지만 지금 그 에너지를 어떻게 다루느냐가 이 관계의 방향을 결정할 거예요. 열정만으로는 관계를 유지하기 어려워요.',
+  // 안정 강한 조합
+  highStability_high: '함께 있는 것이 자연스럽고, 억지로 맞추지 않아도 편안한 관계예요. 이런 안정감은 쉽게 얻어지는 것이 아니에요. 지금 이 관계가 얼마나 소중한지 기억하세요.',
+  highStability_mid: '안정을 원하는 마음은 같지만, 그 방식이 조금 다를 수 있어요. 한 사람의 안정이 다른 사람에게는 답답함으로 느껴질 수도 있어요. 서로의 기준을 이야기해 보세요.',
+  highStability_low: '안정적인 기반을 만들고 싶지만 지금은 아직 그 토대가 약한 흐름이에요. 조급하지 않게, 한 발씩 신뢰를 쌓아가는 것이 이 관계를 위한 가장 현명한 방법이에요.',
+  // 소통 강한 조합
+  highCommunication_high: '말하지 않아도 통하고, 말했을 때 더 깊어지는 관계예요. 이 조합에서 소통은 단순한 대화가 아니라 서로를 알아가는 방식이에요. 이 연결을 소중히 다루세요.',
+  highCommunication_mid: '소통하려는 마음은 있지만, 타이밍이나 방식이 엇갈릴 수 있어요. 말하고 싶은 것보다 듣고 싶은 것이 무엇인지 먼저 생각해 보면 더 가까워질 수 있어요.',
+  highCommunication_low: '서로의 언어가 달라서 오해가 생기기 쉬운 흐름이에요. 틀린 게 아니라 다른 거예요. 상대의 표현 방식을 이해하려는 노력이 이 관계의 가장 큰 열쇠예요.',
+  // 성장 강한 조합
+  highGrowth_high: '이 만남은 단순한 연애가 아니라 서로를 더 나은 사람으로 만드는 여정이에요. 때로는 불편하고 도전적인 순간이 있겠지만, 그게 바로 이 관계가 특별한 이유예요.',
+  highGrowth_mid: '함께하면 성장할 수 있지만, 그 과정이 항상 편하지는 않을 수 있어요. 서로를 자극하는 에너지가 때로는 마찰로 느껴질 수 있어요. 그 불편함이 성장의 신호임을 기억하세요.',
+  highGrowth_low: '이 관계에서 배울 수 있는 것이 분명히 있어요. 지금 당장은 힘들게 느껴지더라도, 이 만남이 당신에게 무엇을 가르쳐주려 하는지 생각해 보세요.',
+  // 균형 조합
+  balanced_high: '화려하지 않아도 든든하고, 뜨겁지 않아도 따뜻한 관계예요. 이런 균형 잡힌 에너지가 흐르는 관계는 오래 갈 수 있는 힘이 있어요. 일상 속에서 천천히 깊어지는 사랑이에요.',
+  balanced_mid: '어느 한쪽으로 치우치지 않는 에너지가 흐르고 있어요. 지금은 방향을 정하는 시간이에요. 서로가 이 관계에서 원하는 것이 무엇인지 솔직하게 나눠보세요.',
+  balanced_low: '지금 두 사람 사이에는 균형을 찾으려는 시도가 필요한 시기예요. 어느 한쪽이 더 많이 애쓰고 있다면, 그 불균형을 먼저 알아차리는 것이 중요해요.',
+  // 저조합
+  lowMatch_any: '지금 이 순간 두 사람의 에너지가 잘 맞지 않는 흐름이에요. 하지만 타로는 현재의 흐름을 읽는 것이지, 미래를 단정하지 않아요. 지금 이 관계에서 할 수 있는 가장 작은 한 가지를 생각해 보세요.',
 }
 
 /**
@@ -241,21 +273,27 @@ export function generateCompatibilityResult(card1, card2, score) {
   const advice = []
   const caution = []
 
-  if (score >= 70) {
+  if (score >= 80) {
     advice.push('좋은 에너지를 유지하기 위해 서로에게 감사하는 마음을 표현하세요.')
     advice.push('자연스러운 흐름을 믿되, 당연하게 여기지 않는 것이 중요해요.')
+    advice.push('지금 이 설렘을 기억해 두세요. 나중에 관계가 익숙해질 때 꺼내볼 수 있어요.')
     caution.push('좋은 관계도 노력 없이 유지되지는 않아요. 소통을 게을리하지 마세요.')
     caution.push('서로에 대한 기대가 높아질 수 있어요. 상대를 있는 그대로 바라보세요.')
-  } else if (score >= 50) {
+    caution.push('너무 빠르게 가까워지려 하면 오히려 부담이 될 수 있어요. 적당한 거리도 관계를 지켜주는 힘이에요.')
+  } else if (score >= 60) {
     advice.push('서로의 다름을 인정하는 것이 첫 번째 단계예요.')
     advice.push('작은 것부터 맞춰가보세요. 작은 성공이 큰 변화를 만들어요.')
+    advice.push('상대가 편하게 느끼는 방식으로 마음을 표현해 보세요. 진심은 방식에 따라 더 잘 전달돼요.')
     caution.push('상대를 바꾸려 하기보다 이해하려는 자세가 필요해요.')
     caution.push('기대와 현실의 차이에 실망하지 마세요. 모든 관계는 시간이 필요해요.')
+    caution.push('감정을 참고 혼자 해결하려 하면 상대는 알 수 없어요. 표현하는 연습이 필요해요.')
   } else {
     advice.push('지금은 서로를 이해하는 데 집중하세요. 결과를 서두르지 마세요.')
     advice.push('이 관계에서 배울 수 있는 것에 집중하면 더 나은 방향을 찾을 수 있어요.')
+    advice.push('지금 당장 결론을 내리지 않아도 돼요. 조금 더 지켜보는 시간이 필요할 수 있어요.')
     caution.push('억지로 맞추려 하면 서로 지칠 수 있어요. 자연스러운 흐름도 중요해요.')
     caution.push('상대의 입장에서 한 번 더 생각해보세요. 다른 시각이 열릴 수 있어요.')
+    caution.push('지금의 어려움이 이 관계의 전부가 아니에요. 한 단면만 보고 판단하지 마세요.')
   }
 
   // 감정 흐름
@@ -269,7 +307,11 @@ export function generateCompatibilityResult(card1, card2, score) {
   emotionFlow.push(chemistry)
 
   const attrLabels = { passion: '열정', stability: '안정', communication: '소통', growth: '성장' }
+  const minAttrLabels = { passion: '열정', stability: '안정감', communication: '소통', growth: '성장' }
   emotionFlow.push(`두 사람의 가장 강한 에너지는 "${attrLabels[maxKey]}"이에요. 이것이 관계의 중심축이 될 거예요.`)
+  if (maxKey !== minKey && combined[minKey] < 12) {
+    emotionFlow.push(`반면 "${minAttrLabels[minKey]}" 부분은 조금 더 의식적으로 채워가면 좋아요. 약점을 알고 있다는 것 자체가 이미 강점이에요.`)
+  }
 
   if (score >= 70) {
     emotionFlow.push('전체적으로 서로를 끌어당기는 좋은 기류가 흐르고 있어요.')
@@ -278,6 +320,16 @@ export function generateCompatibilityResult(card1, card2, score) {
   } else {
     emotionFlow.push('지금은 에너지가 엇갈리는 흐름이지만, 이해의 폭을 넓히면 달라질 수 있어요.')
   }
+
+  // 두 카드가 함께 만들어내는 서사
+  let narrativeKey
+  if (score < 50) {
+    narrativeKey = 'lowMatch_any'
+  } else {
+    const tier2 = score >= 70 ? 'high' : score >= 60 ? 'mid' : 'low'
+    narrativeKey = `${chemistryType}_${tier2}`
+  }
+  const spreadNarrative = NARRATIVE_BY_CATEGORY[narrativeKey] || NARRATIVE_BY_CATEGORY['balanced_mid']
 
   return {
     score,
@@ -291,5 +343,6 @@ export function generateCompatibilityResult(card1, card2, score) {
     specialCombo,
     isSameCard,
     chemistryType,
+    spreadNarrative,
   }
 }
