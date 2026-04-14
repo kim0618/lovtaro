@@ -165,6 +165,66 @@
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
+  <!-- Minor Arcana - Cups -->
+  <url><loc>https://lovtaro.kr/cards/ace-of-cups</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/two-of-cups</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/three-of-cups</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/four-of-cups</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/five-of-cups</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/six-of-cups</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/seven-of-cups</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/eight-of-cups</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/nine-of-cups</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/ten-of-cups</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/page-of-cups</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/knight-of-cups</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/queen-of-cups</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/king-of-cups</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <!-- Minor Arcana - Pentacles -->
+  <url><loc>https://lovtaro.kr/cards/ace-of-pentacles</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/two-of-pentacles</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/three-of-pentacles</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/four-of-pentacles</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/five-of-pentacles</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/six-of-pentacles</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/seven-of-pentacles</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/eight-of-pentacles</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/nine-of-pentacles</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/ten-of-pentacles</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/page-of-pentacles</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/knight-of-pentacles</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/queen-of-pentacles</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/king-of-pentacles</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <!-- Minor Arcana - Swords -->
+  <url><loc>https://lovtaro.kr/cards/ace-of-swords</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/two-of-swords</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/three-of-swords</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/four-of-swords</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/five-of-swords</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/six-of-swords</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/seven-of-swords</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/eight-of-swords</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/nine-of-swords</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/ten-of-swords</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/page-of-swords</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/knight-of-swords</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/queen-of-swords</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/king-of-swords</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <!-- Minor Arcana - Wands -->
+  <url><loc>https://lovtaro.kr/cards/ace-of-wands</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/two-of-wands</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/three-of-wands</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/four-of-wands</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/five-of-wands</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/six-of-wands</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/seven-of-wands</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/eight-of-wands</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/nine-of-wands</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/ten-of-wands</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/page-of-wands</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/knight-of-wands</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/queen-of-wands</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://lovtaro.kr/cards/king-of-wands</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url>
     <loc>https://lovtaro.kr/link</loc>
     <changefreq>weekly</changefreq>

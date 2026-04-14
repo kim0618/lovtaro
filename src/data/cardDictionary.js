@@ -2,6 +2,8 @@
  * 카드 의미 사전 데이터
  * SEO 확장을 위한 각 카드의 상세 설명
  */
+import { MINOR_ARCANA } from './minorArcana.js'
+
 export const CARD_DICTIONARY = {
   magician: {
     number: 1,
@@ -401,11 +403,21 @@ export const CARD_DICTIONARY = {
   },
 }
 
+export const ALL_CARDS = { ...CARD_DICTIONARY, ...MINOR_ARCANA }
+
 export function getCardDetail(id) {
-  const data = CARD_DICTIONARY[id]
+  const data = ALL_CARDS[id]
   return data ? { id, ...data } : null
 }
 
 export function getAllCards() {
+  return Object.entries(ALL_CARDS).map(([id, data]) => ({ id, ...data }))
+}
+
+export function getMajorCards() {
   return Object.entries(CARD_DICTIONARY).map(([id, data]) => ({ id, ...data }))
+}
+
+export function getMinorCards() {
+  return Object.entries(MINOR_ARCANA).map(([id, data]) => ({ id, ...data }))
 }

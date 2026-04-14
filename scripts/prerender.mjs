@@ -99,8 +99,8 @@ const ROUTES = [
   },
   {
     path: '/cards',
-    title: '타로 카드 의미 사전 - 메이저 아르카나 22장 정방향 역방향 해석 | Lovtaro',
-    description: '타로 카드 의미 총정리. 메이저 아르카나 22장의 정방향·역방향 뜻과 연애 해석. 바보, 마법사, 여사제, 여황제, 황제, 교황, 연인, 전차, 힘, 은둔자, 운명의 수레바퀴, 정의, 매달린 사람, 죽음, 절제, 악마, 탑, 별, 달, 태양, 심판, 세계 카드 해설.',
+    title: '타로 카드 의미 사전 - 메이저·마이너 아르카나 78장 정방향 역방향 해석 | Lovtaro',
+    description: '타로 카드 의미 총정리. 메이저 아르카나 22장과 마이너 아르카나 56장(컵, 펜타클, 소드, 완드) 정방향·역방향 뜻과 연애 해석. 78장 타로 카드 의미 사전.',
   },
   {
     path: '/link',
@@ -114,13 +114,85 @@ const ROUTES = [
   },
 ]
 
+// Minor Arcana card data (mirrors src/data/minorArcana.js)
+const MINOR_CARDS = [
+  // Cups
+  { id: 'ace-of-cups',      name: '컵 에이스',     nameEn: 'Ace of Cups',      keywords: ['새로운 사랑', '감정의 시작', '풍요로운 마음'] },
+  { id: 'two-of-cups',      name: '컵 2',           nameEn: 'Two of Cups',      keywords: ['상호 감정', '연결', '조화로운 만남'] },
+  { id: 'three-of-cups',    name: '컵 3',           nameEn: 'Three of Cups',    keywords: ['축하', '기쁨', '함께하는 행복'] },
+  { id: 'four-of-cups',     name: '컵 4',           nameEn: 'Four of Cups',     keywords: ['권태', '성찰', '새로운 관점'] },
+  { id: 'five-of-cups',     name: '컵 5',           nameEn: 'Five of Cups',     keywords: ['상실', '후회', '슬픔'] },
+  { id: 'six-of-cups',      name: '컵 6',           nameEn: 'Six of Cups',      keywords: ['추억', '재회', '순수한 마음'] },
+  { id: 'seven-of-cups',    name: '컵 7',           nameEn: 'Seven of Cups',    keywords: ['환상', '선택', '혼란'] },
+  { id: 'eight-of-cups',    name: '컵 8',           nameEn: 'Eight of Cups',    keywords: ['떠남', '포기', '더 깊은 것을 향해'] },
+  { id: 'nine-of-cups',     name: '컵 9',           nameEn: 'Nine of Cups',     keywords: ['소원 성취', '만족', '행복'] },
+  { id: 'ten-of-cups',      name: '컵 10',          nameEn: 'Ten of Cups',      keywords: ['완전한 행복', '관계의 완성', '진정한 사랑'] },
+  { id: 'page-of-cups',     name: '컵 페이지',      nameEn: 'Page of Cups',     keywords: ['새로운 감정', '메시지', '감수성'] },
+  { id: 'knight-of-cups',   name: '컵 나이트',      nameEn: 'Knight of Cups',   keywords: ['로맨틱', '감정적 행동', '구애'] },
+  { id: 'queen-of-cups',    name: '컵 여왕',        nameEn: 'Queen of Cups',    keywords: ['공감', '직관', '깊은 감정'] },
+  { id: 'king-of-cups',     name: '컵 킹',          nameEn: 'King of Cups',     keywords: ['감정적 성숙', '안정', '이해'] },
+  // Pentacles
+  { id: 'ace-of-pentacles',    name: '펜타클 에이스', nameEn: 'Ace of Pentacles',    keywords: ['새로운 시작', '현실적 기반', '기회'] },
+  { id: 'two-of-pentacles',    name: '펜타클 2',      nameEn: 'Two of Pentacles',    keywords: ['균형', '조율', '유연함'] },
+  { id: 'three-of-pentacles',  name: '펜타클 3',      nameEn: 'Three of Pentacles',  keywords: ['협력', '함께 만들어가는 것', '성장'] },
+  { id: 'four-of-pentacles',   name: '펜타클 4',      nameEn: 'Four of Pentacles',   keywords: ['안전', '집착', '통제'] },
+  { id: 'five-of-pentacles',   name: '펜타클 5',      nameEn: 'Five of Pentacles',   keywords: ['결핍', '고난', '외로움'] },
+  { id: 'six-of-pentacles',    name: '펜타클 6',      nameEn: 'Six of Pentacles',    keywords: ['나눔', '균형 잡힌 관계', '베풂'] },
+  { id: 'seven-of-pentacles',  name: '펜타클 7',      nameEn: 'Seven of Pentacles',  keywords: ['인내', '기다림', '중간 점검'] },
+  { id: 'eight-of-pentacles',  name: '펜타클 8',      nameEn: 'Eight of Pentacles',  keywords: ['노력', '성실함', '꾸준한 발전'] },
+  { id: 'nine-of-pentacles',   name: '펜타클 9',      nameEn: 'Nine of Pentacles',   keywords: ['독립', '풍요', '자기 완성'] },
+  { id: 'ten-of-pentacles',    name: '펜타클 10',     nameEn: 'Ten of Pentacles',    keywords: ['안정', '함께 쌓은 것', '오래가는 사랑'] },
+  { id: 'page-of-pentacles',   name: '펜타클 페이지', nameEn: 'Page of Pentacles',   keywords: ['탐구', '배움', '새로운 기회'] },
+  { id: 'knight-of-pentacles', name: '펜타클 나이트', nameEn: 'Knight of Pentacles', keywords: ['성실함', '신뢰', '꾸준함'] },
+  { id: 'queen-of-pentacles',  name: '펜타클 여왕',   nameEn: 'Queen of Pentacles',  keywords: ['실용적 사랑', '풍요', '안정적 돌봄'] },
+  { id: 'king-of-pentacles',   name: '펜타클 킹',     nameEn: 'King of Pentacles',   keywords: ['안정적 성공', '신뢰', '든든한 보호'] },
+  // Swords
+  { id: 'ace-of-swords',    name: '소드 에이스', nameEn: 'Ace of Swords',    keywords: ['명확함', '진실', '결단'] },
+  { id: 'two-of-swords',    name: '소드 2',      nameEn: 'Two of Swords',    keywords: ['결정 회피', '균형', '긴장'] },
+  { id: 'three-of-swords',  name: '소드 3',      nameEn: 'Three of Swords',  keywords: ['이별', '상처', '슬픔'] },
+  { id: 'four-of-swords',   name: '소드 4',      nameEn: 'Four of Swords',   keywords: ['휴식', '회복', '내면의 고요'] },
+  { id: 'five-of-swords',   name: '소드 5',      nameEn: 'Five of Swords',   keywords: ['갈등', '충돌', '상처를 남기는 승리'] },
+  { id: 'six-of-swords',    name: '소드 6',      nameEn: 'Six of Swords',    keywords: ['전환', '이동', '나아감'] },
+  { id: 'seven-of-swords',  name: '소드 7',      nameEn: 'Seven of Swords',  keywords: ['기만', '회피', '숨겨진 것'] },
+  { id: 'eight-of-swords',  name: '소드 8',      nameEn: 'Eight of Swords',  keywords: ['속박', '제한', '스스로 만든 감옥'] },
+  { id: 'nine-of-swords',   name: '소드 9',      nameEn: 'Nine of Swords',   keywords: ['불안', '걱정', '과도한 생각'] },
+  { id: 'ten-of-swords',    name: '소드 10',     nameEn: 'Ten of Swords',    keywords: ['끝', '배신', '완전한 마무리'] },
+  { id: 'page-of-swords',   name: '소드 페이지', nameEn: 'Page of Swords',   keywords: ['호기심', '경계심', '새로운 소식'] },
+  { id: 'knight-of-swords', name: '소드 나이트', nameEn: 'Knight of Swords', keywords: ['돌진', '급진적 행동', '갈등'] },
+  { id: 'queen-of-swords',  name: '소드 여왕',   nameEn: 'Queen of Swords',  keywords: ['독립적', '명석함', '냉정한 판단'] },
+  { id: 'king-of-swords',   name: '소드 킹',     nameEn: 'King of Swords',   keywords: ['이성', '공정함', '결단력'] },
+  // Wands
+  { id: 'ace-of-wands',    name: '완드 에이스', nameEn: 'Ace of Wands',    keywords: ['열정', '영감', '불꽃 같은 시작'] },
+  { id: 'two-of-wands',    name: '완드 2',      nameEn: 'Two of Wands',    keywords: ['계획', '가능성', '더 넓은 세계'] },
+  { id: 'three-of-wands',  name: '완드 3',      nameEn: 'Three of Wands',  keywords: ['확장', '기다림', '전진'] },
+  { id: 'four-of-wands',   name: '완드 4',      nameEn: 'Four of Wands',   keywords: ['축하', '기쁨', '안정된 행복'] },
+  { id: 'five-of-wands',   name: '완드 5',      nameEn: 'Five of Wands',   keywords: ['경쟁', '갈등', '혼란'] },
+  { id: 'six-of-wands',    name: '완드 6',      nameEn: 'Six of Wands',    keywords: ['승리', '인정', '자신감'] },
+  { id: 'seven-of-wands',  name: '완드 7',      nameEn: 'Seven of Wands',  keywords: ['방어', '인내', '자기 입장 지키기'] },
+  { id: 'eight-of-wands',  name: '완드 8',      nameEn: 'Eight of Wands',  keywords: ['빠른 전개', '메시지', '신속한 움직임'] },
+  { id: 'nine-of-wands',   name: '완드 9',      nameEn: 'Nine of Wands',   keywords: ['회복력', '경계', '마지막 힘'] },
+  { id: 'ten-of-wands',    name: '완드 10',     nameEn: 'Ten of Wands',    keywords: ['과부하', '책임', '무거운 짐'] },
+  { id: 'page-of-wands',   name: '완드 페이지', nameEn: 'Page of Wands',   keywords: ['열정', '탐험', '새로운 아이디어'] },
+  { id: 'knight-of-wands', name: '완드 나이트', nameEn: 'Knight of Wands', keywords: ['모험', '자유', '열정적 행동'] },
+  { id: 'queen-of-wands',  name: '완드 여왕',   nameEn: 'Queen of Wands',  keywords: ['자신감', '카리스마', '따뜻한 열정'] },
+  { id: 'king-of-wands',   name: '완드 킹',     nameEn: 'King of Wands',   keywords: ['리더십', '비전', '추진력'] },
+]
+
+// Major Arcana slug mapping for OG images (matches cardImages.js)
+const OG_SLUG_MAP = {
+  priestess: 'high-priestess',
+  wheel: 'wheel-of-fortune',
+  hanged: 'hanged-man',
+}
+
 // Generate card detail routes from card data
-for (const card of CARDS) {
+for (const card of [...CARDS, ...MINOR_CARDS]) {
+  const ogSlug = OG_SLUG_MAP[card.id] || card.id
   ROUTES.push({
     path: `/cards/${card.id}`,
     title: `${card.name}(${card.nameEn}) 타로 카드 의미 - 정방향 역방향 연애 해석 | Lovtaro`,
     description: `${card.name}(${card.nameEn}) 타로 카드 정방향·역방향 의미와 연애 해석. 키워드: ${card.keywords.join(', ')}. 무료 타로 카드 의미 사전.`,
-    ogImage: `${SITE_URL}/cards-png/${card.id}.png`,
+    ogImage: `${SITE_URL}/images/cards-png/${ogSlug}.png`,
   })
 }
 

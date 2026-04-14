@@ -5,20 +5,20 @@ import AppShell from '../components/common/AppShell.vue'
 import PageContainer from '../components/ui/PageContainer.vue'
 import SectionBlock from '../components/ui/SectionBlock.vue'
 import CardSymbol from '../components/cards/CardSymbol.vue'
-import { getAllCards } from '../data/cardDictionary.js'
+import { getAllCards, getMajorCards, getMinorCards } from '../data/cardDictionary.js'
 import { getCardImage } from '../data/cardImages.js'
 
 const allCards = getAllCards()
 
 useHead({
-  title: '타로 카드 의미 사전 - 메이저 아르카나 22장 정방향 역방향 해석 | Lovtaro',
-  description: '타로 카드 의미 총정리. 메이저 아르카나 22장의 정방향·역방향 뜻과 연애 해석. 바보, 마법사, 여사제, 여황제, 황제, 교황, 연인, 전차, 힘, 은둔자, 운명의 수레바퀴, 정의, 매달린 사람, 죽음, 절제, 악마, 탑, 별, 달, 태양, 심판, 세계 카드 해설.',
+  title: '타로 카드 의미 사전 - 메이저·마이너 아르카나 78장 정방향 역방향 해석 | Lovtaro',
+  description: '타로 카드 의미 총정리. 메이저 아르카나 22장과 마이너 아르카나 56장(컵, 펜타클, 소드, 완드) 정방향·역방향 뜻과 연애 해석. 78장 타로 카드 의미 사전.',
   jsonLd: {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: '타로 카드 의미 사전',
-    description: '메이저 아르카나 22장의 정방향, 역방향 의미와 연애 해석',
-    numberOfItems: 22,
+    description: '메이저·마이너 아르카나 78장의 정방향, 역방향 의미와 연애 해석',
+    numberOfItems: 78,
     itemListElement: allCards.map((card, i) => ({
       '@type': 'ListItem',
       position: i + 1,
@@ -28,18 +28,34 @@ useHead({
   },
 })
 
-const activeFilter = ref('all')
+const activeSuit = ref('all')
+const activeEnergy = ref('all')
 
-const filters = [
-  { key: 'all', label: '전체' },
-  { key: 'positive', label: '긍정' },
-  { key: 'neutral', label: '중립' },
+const suitTabs = [
+  { key: 'all',       label: '전체 78장' },
+  { key: 'major',     label: '메이저 22' },
+  { key: 'cups',      label: '컵' },
+  { key: 'pentacles', label: '펜타클' },
+  { key: 'swords',    label: '소드' },
+  { key: 'wands',     label: '완드' },
+]
+
+const energyFilters = [
+  { key: 'all',        label: '전체' },
+  { key: 'positive',   label: '긍정' },
+  { key: 'neutral',    label: '중립' },
   { key: 'challenging', label: '도전' },
 ]
 
+const suitedCards = computed(() => {
+  if (activeSuit.value === 'all') return allCards
+  if (activeSuit.value === 'major') return getMajorCards()
+  return getMinorCards().filter(c => c.suit === activeSuit.value)
+})
+
 const cards = computed(() => {
-  if (activeFilter.value === 'all') return allCards
-  return allCards.filter(c => c.energy === activeFilter.value)
+  if (activeEnergy.value === 'all') return suitedCards.value
+  return suitedCards.value.filter(c => c.energy === activeEnergy.value)
 })
 
 const energyLabel = {
@@ -66,17 +82,29 @@ const energyBorder = {
     <PageContainer>
       <div class="cards-header">
         <h1 class="cards-header__title">타로 카드 의미 사전</h1>
-        <p class="cards-header__sub">22장의 메이저 아르카나가 품고 있는 이야기를 확인하세요</p>
+        <p class="cards-header__sub">메이저·마이너 아르카나 78장의 정방향·역방향 의미와 연애 해석</p>
       </div>
     </PageContainer>
 
-    <!-- Filter tabs -->
+    <!-- Suit tabs -->
+    <div class="cards-suit-tabs">
+      <button
+        v-for="t in suitTabs"
+        :key="t.key"
+        :class="['cards-suit-tabs__btn', { 'cards-suit-tabs__btn--active': activeSuit === t.key }]"
+        @click="activeSuit = t.key; activeEnergy = 'all'"
+      >
+        {{ t.label }}
+      </button>
+    </div>
+
+    <!-- Energy filter -->
     <div class="cards-filter">
       <button
-        v-for="f in filters"
+        v-for="f in energyFilters"
         :key="f.key"
-        :class="['cards-filter__btn', { 'cards-filter__btn--active': activeFilter === f.key }]"
-        @click="activeFilter = f.key"
+        :class="['cards-filter__btn', { 'cards-filter__btn--active': activeEnergy === f.key }]"
+        @click="activeEnergy = f.key"
       >
         {{ f.label }}
       </button>
@@ -89,7 +117,7 @@ const energyBorder = {
           :key="card.id"
           :to="`/cards/${card.id}`"
           :class="['cards-grid__item', energyBorder[card.energy]]"
-          :style="{ animationDelay: `${idx * 60}ms` }"
+          :style="{ animationDelay: `${Math.min(idx * 40, 600)}ms` }"
         >
           <!-- Card image or fallback -->
           <div class="cards-grid__visual">
@@ -139,6 +167,38 @@ const energyBorder = {
   font-size: 0.82rem;
   color: var(--lt-text-muted);
   letter-spacing: 0.04em;
+}
+
+/* ── Suit tabs ── */
+.cards-suit-tabs {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0 var(--lt-space-md) var(--lt-space-sm);
+}
+
+.cards-suit-tabs__btn {
+  font-size: 0.68rem;
+  padding: 6px 14px;
+  border-radius: var(--lt-radius-full);
+  color: var(--lt-text-muted);
+  border: 1px solid var(--lt-border-soft);
+  background: transparent;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 250ms ease;
+}
+
+.cards-suit-tabs__btn:hover {
+  border-color: rgba(180, 140, 255, 0.3);
+  color: var(--lt-text-sub);
+}
+
+.cards-suit-tabs__btn--active {
+  color: rgba(180, 140, 255, 0.95);
+  border-color: rgba(180, 140, 255, 0.45);
+  background: rgba(180, 140, 255, 0.08);
 }
 
 /* ── Filter tabs ── */

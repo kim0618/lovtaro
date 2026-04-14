@@ -177,10 +177,11 @@ async function generateStory(card, hook) {
 }
 
 // ══════════════════════════════════════
-// 캐러셀 슬라이드 생성 (1080x1080)
+// 캐러셀 슬라이드 생성 (1080x1350, 4:5)
 // ══════════════════════════════════════
+const C_H = 1350
 function carouselBg(content) {
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080">
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="${C_H}">
   <defs>
     <linearGradient id="cbg" x1="0" y1="0" x2="0.3" y2="1">
       <stop offset="0%" stop-color="#03050A"/>
@@ -188,7 +189,7 @@ function carouselBg(content) {
       <stop offset="100%" stop-color="#03050A"/>
     </linearGradient>
   </defs>
-  <rect width="1080" height="1080" fill="url(#cbg)"/>
+  <rect width="1080" height="${C_H}" fill="url(#cbg)"/>
   ${content}
 </svg>`
 }
@@ -215,7 +216,7 @@ async function carouselCover(title, subtitle, tagline, cardSlugs) {
     const offset = i - center
     positions.push({
       left: 540 + offset * spacing - cW / 2,
-      top: 430 + Math.abs(offset) * 25,
+      top: 530 + Math.abs(offset) * 25,
       rotate: offset * 7,
     })
   }
@@ -226,8 +227,8 @@ async function carouselCover(title, subtitle, tagline, cardSlugs) {
   <line x1="380" y1="238" x2="700" y2="238" stroke="rgba(77,163,255,0.15)" stroke-width="1"/>
   <text x="540" y="274" font-family="sans-serif" font-size="24" fill="rgba(167,183,214,0.55)" text-anchor="middle">${esc(subtitle)}</text>
   <text x="540" y="310" font-family="sans-serif" font-size="20" fill="rgba(143,211,255,0.35)" text-anchor="middle">${esc(tagline)}</text>
-  <text x="540" y="970" font-family="sans-serif" font-size="20" fill="rgba(143,211,255,0.4)" text-anchor="middle">스와이프해서 확인하세요 →</text>
-  <text x="540" y="1030" font-family="sans-serif" font-size="16" fill="rgba(143,211,255,0.25)" text-anchor="middle">@lovtarot_</text>
+  <text x="540" y="1230" font-family="sans-serif" font-size="20" fill="rgba(143,211,255,0.4)" text-anchor="middle">스와이프해서 확인하세요 →</text>
+  <text x="540" y="1300" font-family="sans-serif" font-size="16" fill="rgba(143,211,255,0.25)" text-anchor="middle">@lovtarot_</text>
   `)
   let base = await sharp(Buffer.from(svg)).png().toBuffer()
 
@@ -250,13 +251,13 @@ async function carouselCover(title, subtitle, tagline, cardSlugs) {
 }
 
 async function carouselDayCard(card) {
-  const cW = 460, cH = 690
-  const cardTop = 75
+  const cW = 520, cH = 780
+  const cardTop = 100
   const img = await loadCard(card.slug, cW, cH)
   const masked = img ? await roundImg(img, cW, cH, 14) : null
 
   const cardBottom = cardTop + cH
-  const nameY = cardBottom + 45
+  const nameY = cardBottom + 50
   const nameEnY = nameY + 32
   const divY = nameEnY + 20
   const line1Y = divY + 40
@@ -274,7 +275,7 @@ async function carouselDayCard(card) {
   <text x="540" y="${nameEnY}" font-family="Georgia, serif" font-size="15" font-style="italic" fill="rgba(126,138,168,0.38)" text-anchor="middle">${esc(card.nameEn)}</text>
   <line x1="420" y1="${divY}" x2="660" y2="${divY}" stroke="rgba(77,163,255,0.12)" stroke-width="1"/>
   ${lineSvg}
-  <text x="540" y="1050" font-family="sans-serif" font-size="15" fill="rgba(143,211,255,0.22)" text-anchor="middle">@lovtarot_</text>
+  <text x="540" y="1310" font-family="sans-serif" font-size="15" fill="rgba(143,211,255,0.22)" text-anchor="middle">@lovtarot_</text>
   `)
   const base = await sharp(Buffer.from(svg)).png().toBuffer()
   if (masked) {
@@ -287,15 +288,15 @@ async function carouselCTACombined(bgCardSlug, saveLines, shareLines) {
   const sLines = saveLines || ['저장해두고 매일 아침 확인하세요']
   const shLines = shareLines || ['이번 주 연애운이 궁금한 친구에게 공유해도 좋아요']
 
-  const saveIcon = `<g transform="translate(396, 220)">
+  const saveIcon = `<g transform="translate(396, 320)">
     <path d="M14 0 L82 0 Q96 0 96 14 L96 110 L48 82 L0 110 L0 14 Q0 0 14 0 Z" fill="none" stroke="rgba(143,211,255,0.55)" stroke-width="2.5"/>
   </g>`
-  const shareIcon = `<g transform="translate(588, 220)">
+  const shareIcon = `<g transform="translate(588, 320)">
     <path d="M65 0 L96 32 L65 64" fill="none" stroke="rgba(143,211,255,0.55)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
     <path d="M96 32 L15 32 L15 96" fill="none" stroke="rgba(143,211,255,0.55)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
   </g>`
 
-  let curY = 415
+  let curY = 520
   const saveSvg = sLines.map((l, i) => {
     const s = `<text x="540" y="${curY}" font-family="sans-serif" font-size="${i === 0 ? 32 : 24}" font-weight="300" fill="${i === 0 ? '#F4F8FF' : 'rgba(244,248,255,0.65)'}" text-anchor="middle">${esc(l)}</text>`
     curY += 40
@@ -319,7 +320,7 @@ async function carouselCTACombined(bgCardSlug, saveLines, shareLines) {
   ${shareSvg}
   <line x1="380" y1="${divY}" x2="700" y2="${divY}" stroke="rgba(77,163,255,0.12)" stroke-width="1"/>
   <text x="540" y="${urlY}" font-family="sans-serif" font-size="22" fill="rgba(143,211,255,0.5)" text-anchor="middle">무료로 직접 뽑아보기 · lovtaro.kr</text>
-  <text x="540" y="1040" font-family="sans-serif" font-size="16" fill="rgba(143,211,255,0.25)" text-anchor="middle">@lovtarot_</text>
+  <text x="540" y="1310" font-family="sans-serif" font-size="16" fill="rgba(143,211,255,0.25)" text-anchor="middle">@lovtarot_</text>
   `)
   let base = await sharp(Buffer.from(svg)).png().toBuffer()
 
@@ -336,7 +337,7 @@ async function carouselCTACombined(bgCardSlug, saveLines, shareLines) {
         }])
         .png().toBuffer()
       base = await sharp(base)
-        .composite([{ input: faded, left: (1080 - bgW) / 2, top: 400 }])
+        .composite([{ input: faded, left: (1080 - bgW) / 2, top: 550 }])
         .png().toBuffer()
     }
   }
@@ -356,7 +357,7 @@ async function carouselEduSlide(title, body, index) {
     bodyTotalH += l === '' ? blankGap : lineGap
   }
   const totalH = titleSize + titleBodyGap + bodyTotalH
-  const startY = Math.round((1080 - totalH) / 2)
+  const startY = Math.round((C_H - totalH) / 2)
 
   const titleY = startY + titleSize
   let curY = titleY + titleBodyGap + bodySize
@@ -373,7 +374,7 @@ async function carouselEduSlide(title, body, index) {
   <text x="540" y="${titleY}" font-family="sans-serif" font-size="${titleSize}" font-weight="200" fill="#F4F8FF" text-anchor="middle">${esc(title)}</text>
   <line x1="390" y1="${titleY + 15}" x2="690" y2="${titleY + 15}" stroke="rgba(77,163,255,0.15)" stroke-width="1"/>
   ${bodySvg}
-  <text x="540" y="1040" font-family="sans-serif" font-size="16" fill="rgba(143,211,255,0.25)" text-anchor="middle">@lovtarot_</text>
+  <text x="540" y="1310" font-family="sans-serif" font-size="16" fill="rgba(143,211,255,0.25)" text-anchor="middle">@lovtarot_</text>
   `)
   return sharp(Buffer.from(svg)).png().toBuffer()
 }
@@ -384,38 +385,38 @@ async function carouselEduCover(card, title, subtitle) {
   const masked = img ? await roundImg(img, cW, cH, 14) : null
 
   const svg = carouselBg(`
-  <text x="540" y="70" font-family="sans-serif" font-size="18" fill="rgba(77,163,255,0.5)" text-anchor="middle" letter-spacing="6">카드 해설</text>
-  <text x="540" y="890" font-family="sans-serif" font-size="44" font-weight="200" fill="#F4F8FF" text-anchor="middle">${esc(title)}</text>
-  <text x="540" y="940" font-family="sans-serif" font-size="24" fill="rgba(167,183,214,0.5)" text-anchor="middle">${esc(subtitle)}</text>
-  <text x="540" y="1020" font-family="sans-serif" font-size="16" fill="rgba(143,211,255,0.25)" text-anchor="middle">@lovtarot_</text>
+  <text x="540" y="80" font-family="sans-serif" font-size="18" fill="rgba(77,163,255,0.5)" text-anchor="middle" letter-spacing="6">카드 해설</text>
+  <text x="540" y="1050" font-family="sans-serif" font-size="44" font-weight="200" fill="#F4F8FF" text-anchor="middle">${esc(title)}</text>
+  <text x="540" y="1100" font-family="sans-serif" font-size="24" fill="rgba(167,183,214,0.5)" text-anchor="middle">${esc(subtitle)}</text>
+  <text x="540" y="1310" font-family="sans-serif" font-size="16" fill="rgba(143,211,255,0.25)" text-anchor="middle">@lovtarot_</text>
   `)
   const base = await sharp(Buffer.from(svg)).png().toBuffer()
   if (masked) {
-    return sharp(base).composite([{ input: masked, left: (1080 - cW) / 2, top: 100 }]).png().toBuffer()
+    return sharp(base).composite([{ input: masked, left: (1080 - cW) / 2, top: 130 }]).png().toBuffer()
   }
   return base
 }
 
 async function carouselTestSlide(item) {
-  const cW = 320, cH = 480
+  const cW = 380, cH = 570
   const img = await loadCard(item.slug, cW, cH)
   const masked = img ? await roundImg(img, cW, cH, 12) : null
 
   const lines = item.desc.split('\n')
   const descSvg = lines.map((l, i) =>
-    `<text x="540" y="${780 + i * 36}" font-family="sans-serif" font-size="26" font-weight="300" fill="rgba(244,248,255,0.85)" text-anchor="middle">${esc(l)}</text>`
+    `<text x="540" y="${920 + i * 36}" font-family="sans-serif" font-size="26" font-weight="300" fill="rgba(244,248,255,0.85)" text-anchor="middle">${esc(l)}</text>`
   ).join('\n  ')
 
   const svg = carouselBg(`
-  <text x="540" y="80" font-family="sans-serif" font-size="48" font-weight="200" fill="rgba(77,163,255,0.7)" text-anchor="middle">${esc(item.type)}</text>
-  <text x="540" y="135" font-family="sans-serif" font-size="26" fill="rgba(244,248,255,0.7)" text-anchor="middle">${esc(item.label)}</text>
-  <text x="540" y="680" font-family="sans-serif" font-size="30" font-weight="200" fill="#F4F8FF" text-anchor="middle">${esc(item.cardName)}</text>
+  <text x="540" y="100" font-family="sans-serif" font-size="48" font-weight="200" fill="rgba(77,163,255,0.7)" text-anchor="middle">${esc(item.type)}</text>
+  <text x="540" y="155" font-family="sans-serif" font-size="26" fill="rgba(244,248,255,0.7)" text-anchor="middle">${esc(item.label)}</text>
+  <text x="540" y="830" font-family="sans-serif" font-size="30" font-weight="200" fill="#F4F8FF" text-anchor="middle">${esc(item.cardName)}</text>
   ${descSvg}
-  <text x="540" y="1020" font-family="sans-serif" font-size="16" fill="rgba(143,211,255,0.25)" text-anchor="middle">@lovtarot_</text>
+  <text x="540" y="1310" font-family="sans-serif" font-size="16" fill="rgba(143,211,255,0.25)" text-anchor="middle">@lovtarot_</text>
   `)
   const base = await sharp(Buffer.from(svg)).png().toBuffer()
   if (masked) {
-    return sharp(base).composite([{ input: masked, left: (1080 - cW) / 2, top: 170 }]).png().toBuffer()
+    return sharp(base).composite([{ input: masked, left: (1080 - cW) / 2, top: 200 }]).png().toBuffer()
   }
   return base
 }
@@ -575,27 +576,27 @@ async function reelScene3(card, interpret, cta) {
 }
 
 // ══════════════════════════════════════
-// 단일 피드 이미지 (1080x1080) - 일요일용
+// 단일 피드 이미지 (1080x1350, 4:5) - 일요일용
 // ══════════════════════════════════════
 async function generateFeedSingle(card, quote) {
-  const cW = 540, cH = 810
+  const cW = 600, cH = 900
   const img = await loadCard(card.slug, cW, cH)
   const masked = img ? await roundImg(img, cW, cH, 16) : null
 
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080">
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1350">
   <defs>
     <linearGradient id="fbg" x1="0" y1="0" x2="0.3" y2="1">
       <stop offset="0%" stop-color="#03050A"/><stop offset="50%" stop-color="#0A1020"/><stop offset="100%" stop-color="#03050A"/>
     </linearGradient>
   </defs>
-  <rect width="1080" height="1080" fill="url(#fbg)"/>
-  <text x="540" y="60" font-family="sans-serif" font-size="18" fill="rgba(77,163,255,0.5)" text-anchor="middle" letter-spacing="6">일요일 한줄 위로</text>
-  <text x="540" y="1000" font-family="sans-serif" font-size="30" font-weight="300" fill="rgba(244,248,255,0.7)" text-anchor="middle">${esc(quote)}</text>
-  <text x="540" y="1050" font-family="sans-serif" font-size="16" fill="rgba(143,211,255,0.25)" text-anchor="middle">@lovtarot_</text>
+  <rect width="1080" height="1350" fill="url(#fbg)"/>
+  <text x="540" y="70" font-family="sans-serif" font-size="18" fill="rgba(77,163,255,0.5)" text-anchor="middle" letter-spacing="6">일요일 한줄 위로</text>
+  <text x="540" y="1220" font-family="sans-serif" font-size="30" font-weight="300" fill="rgba(244,248,255,0.7)" text-anchor="middle">${esc(quote)}</text>
+  <text x="540" y="1310" font-family="sans-serif" font-size="16" fill="rgba(143,211,255,0.25)" text-anchor="middle">@lovtarot_</text>
 </svg>`
   const base = await sharp(Buffer.from(svg)).png().toBuffer()
   if (masked) {
-    return sharp(base).composite([{ input: masked, left: (1080 - cW) / 2, top: 85 }]).png().toBuffer()
+    return sharp(base).composite([{ input: masked, left: (1080 - cW) / 2, top: 120 }]).png().toBuffer()
   }
   return base
 }
