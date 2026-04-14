@@ -28,6 +28,7 @@ import MiniShareBar from '../components/result/MiniShareBar.vue'
 import RelationshipStatusSelect from '../components/reading/RelationshipStatusSelect.vue'
 import StreakBadge from '../components/result/StreakBadge.vue'
 import TomorrowTeaser from '../components/result/TomorrowTeaser.vue'
+import ReversedNoticeBanner from '../components/result/ReversedNoticeBanner.vue'
 import { useDailyTarot } from '../composables/useDailyTarot.js'
 import { useReadingSession } from '../composables/useReadingSession.js'
 import { applyRelationshipModifier } from '../data/relationshipModifiers.js'
@@ -172,6 +173,10 @@ onUnmounted(() => { clearRevealTimer() })
 
       <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-1">
         <CardImageBlock :image-src="drawnCard.image" :card-name="drawnCard.name" :card-name-en="drawnCard.nameEn" :energy="drawnCard.energy" :keywords="[]" :reversed="isReversed" />
+      </SectionBlock>
+
+      <SectionBlock v-if="isReversed" spacing="sm" class="lt-appear lt-appear--delay-1">
+        <ReversedNoticeBanner />
       </SectionBlock>
 
       <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-2">

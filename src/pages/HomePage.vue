@@ -48,7 +48,7 @@ const readingItems = [
   },
   {
     title: '3장 리딩',
-    description: '과거, 현재, 미래 — 세 장의 흐름으로 관계를 깊이 살펴봅니다.',
+    description: '과거, 현재, 미래 세 장의 흐름으로 관계를 깊이 살펴봅니다.',
     to: '/reading/3cards',
     tag: '스프레드',
     featured: true,
