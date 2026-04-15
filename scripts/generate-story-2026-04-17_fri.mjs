@@ -1,0 +1,116 @@
+/**
+ * 2026-04-17 금요일 story 이미지 생성 (카드 포함 완성형)
+ * - story01: 심판 카드 + 점심 예고
+ * - story02: 심판 카드 + 업로드 공유
+ *
+ * 실행: node scripts/generate-story-2026-04-17_fri.mjs
+ */
+import sharp from 'sharp'
+import { writeFileSync, mkdirSync, existsSync } from 'fs'
+import { resolve, dirname } from 'path'
+import { fileURLToPath } from 'url'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
+const rootDir = resolve(__dirname, '..')
+const cardsDir = resolve(rootDir, 'public/images/cards-png')
+const outputDir = resolve(rootDir, 'content-output/2026-04-17_fri/story')
+const W = 1080, H = 1920
+
+function generateStars(count, xMin, xMax, yMin, yMax) {
+  let stars = ''
+  const seed = [0.12,0.87,0.34,0.56,0.78,0.23,0.91,0.45,0.67,0.09,0.38,0.72,0.15,0.83,0.51,0.29,0.94,0.61,0.03,0.76,0.42,0.88,0.17,0.55,0.33,0.69]
+  for (let i = 0; i < count; i++) {
+    const x = xMin + seed[i % seed.length] * (xMax - xMin)
+    const y = yMin + seed[(i + 7) % seed.length] * (yMax - yMin)
+    const size = 1 + seed[(i + 3) % seed.length] * 2.5
+    const opacity = 0.3 + seed[(i + 5) % seed.length] * 0.7
+    stars += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${size.toFixed(1)}" fill="rgba(255,255,255,${opacity.toFixed(2)})"/>\n`
+  }
+  return stars
+}
+
+async function loadCard(slug, w, h) {
+  const p = resolve(cardsDir, `${slug}.png`)
+  if (!existsSync(p)) { console.error(`카드 없음: ${p}`); return null }
+  return sharp(p).resize(w, h, { fit: 'cover' }).toBuffer()
+}
+
+async function roundImg(buf, w, h, r) {
+  const m = `<svg width="${w}" height="${h}"><rect width="${w}" height="${h}" rx="${r}" ry="${r}" fill="white"/></svg>`
+  return sharp(buf).composite([{ input: Buffer.from(m), blend: 'dest-in' }]).png().toBuffer()
+}
+
+function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') }
+
+async function generateStory(filename, slug, hookLines, cardName, keywords) {
+  const cW = 760, cH = 1040
+  const cardLeft = (W - cW) / 2
+  const cardTop = 180
+
+  const img = await loadCard(slug, cW, cH)
+  if (!img) { console.error(`❌ ${slug}.png 없음`); return }
+  const masked = await roundImg(img, cW, cH, 20)
+
+  const stars = generateStars(15, 50, 1030, 30, 160)
+  const textAreaTop = cardTop + cH + 40
+  const nameY = textAreaTop + 45
+  const hookStartY = nameY + 65
+
+  const hookSvg = hookLines.map((l, i) =>
+    `<text x="540" y="${hookStartY + i * 60}" font-family="sans-serif" font-size="40" font-weight="500" fill="#FFFFFF" text-anchor="middle">${esc(l)}</text>`
+  ).join('\n  ')
+
+  const kwY = hookStartY + hookLines.length * 60 + 30
+  const kwText = keywords.map(k => esc(k)).join('  ·  ')
+
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.2" y2="1">
+      <stop offset="0%" stop-color="#08061A"/>
+      <stop offset="30%" stop-color="#0E0F2E"/>
+      <stop offset="70%" stop-color="#0D0E28"/>
+      <stop offset="100%" stop-color="#06050F"/>
+    </linearGradient>
+    <radialGradient id="cardGlow" cx="50%" cy="40%" r="38%">
+      <stop offset="0%" stop-color="rgba(140,120,220,0.15)"/>
+      <stop offset="60%" stop-color="rgba(100,80,180,0.05)"/>
+      <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+    </radialGradient>
+    <filter id="glow1" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+  <rect width="${W}" height="${H}" fill="url(#bg)"/>
+  <ellipse cx="540" cy="${cardTop + cH / 2}" rx="500" ry="650" fill="url(#cardGlow)"/>
+  ${stars}
+  <text x="540" y="100" font-family="sans-serif" font-size="26" fill="rgba(180,170,230,0.75)" text-anchor="middle" letter-spacing="10" font-weight="300">오늘의 연애 카드</text>
+  <line x1="380" y1="120" x2="700" y2="120" stroke="rgba(180,170,230,0.15)" stroke-width="1"/>
+  <rect x="${cardLeft - 4}" y="${cardTop - 4}" width="${cW + 8}" height="${cH + 8}" rx="24" fill="none" stroke="rgba(160,140,240,0.2)" stroke-width="2" filter="url(#glow1)"/>
+  <text x="540" y="${nameY}" font-family="sans-serif" font-size="36" font-weight="300" fill="rgba(210,200,250,0.85)" text-anchor="middle" letter-spacing="8">${esc(cardName)}</text>
+  ${hookSvg}
+  <text x="540" y="${kwY}" font-family="sans-serif" font-size="20" fill="rgba(180,170,220,0.45)" text-anchor="middle" letter-spacing="2">${kwText}</text>
+</svg>`
+
+  const base = await sharp(Buffer.from(svg)).png().toBuffer()
+  const result = await sharp(base)
+    .composite([{ input: masked, left: cardLeft, top: cardTop }])
+    .png({ quality: 90 }).toBuffer()
+
+  mkdirSync(outputDir, { recursive: true })
+  writeFileSync(resolve(outputDir, filename), result)
+  console.log(`✅ ${filename} (${(result.length / 1024).toFixed(0)} KB)`)
+}
+
+async function main() {
+  console.log('=== 2026-04-17 story 이미지 생성 ===')
+  await generateStory('story01.png', 'judgement',
+    ['읽씹 후에도 연락이 올 수 있을까?', '오늘 캐러셀에서 카드 3장 정리했어요'],
+    '심판', ['부활', '재연결', '각성'])
+  await generateStory('story02.png', 'judgement',
+    ['방금 올렸어요!', '읽씹 후 연락운, 저장해두세요 🔖'],
+    '심판', ['부활', '재연결', '각성'])
+  console.log('완료!')
+}
+
+main().catch(err => { console.error('❌:', err); process.exit(1) })
