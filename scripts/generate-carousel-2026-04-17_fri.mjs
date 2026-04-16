@@ -93,8 +93,8 @@ async function slide01() {
       </linearGradient>
     </defs>
     <rect x="0" y="850" width="${W}" height="500" fill="url(#bf)"/>
-    <text x="540" y="1100" font-family="sans-serif" font-size="52" font-weight="600" fill="#FFFFFF" text-anchor="middle">읽씹했던 그 사람,</text>
-    <text x="540" y="1165" font-family="sans-serif" font-size="52" font-weight="600" fill="#FFFFFF" text-anchor="middle">다시 연락이 올까?</text>
+    <text x="540" y="1105" font-family="sans-serif" font-size="44" font-weight="300" fill="#F4F8FF" text-anchor="middle">읽씹했던 그 사람,</text>
+    <text x="540" y="1160" font-family="sans-serif" font-size="44" font-weight="300" fill="#F4F8FF" text-anchor="middle">다시 연락이 올까?</text>
     <text x="540" y="1310" font-family="sans-serif" font-size="22" fill="rgba(180,170,220,0.45)" text-anchor="middle">스와이프해서 확인하세요 →</text>
     </svg>`
     base = await sharp(base).composite([{ input: Buffer.from(overlay), left: 0, top: 0 }]).png().toBuffer()
@@ -105,7 +105,7 @@ async function slide01() {
 }
 
 // ── slide02~04: 카드 풀배경 + 텍스트 오버레이 ──
-async function contentSlide(cardSlug, title, bodyText, index, filename) {
+async function contentSlide(cardSlug, nameEn, subtitle, bodyText, index, filename) {
   const bgImg = await loadCard(cardSlug, W, H)
   let bgCard = null
   if (bgImg) {
@@ -115,18 +115,22 @@ async function contentSlide(cardSlug, title, bodyText, index, filename) {
   }
 
   const lines = bodyText.split('\n')
-  const titleSize = 44
+  const engNameSize = 22
+  const subtitleSize = 36
   const bodySize = 28
   const lineGap = 44
   const blankGap = 26
 
   let bodyTotalH = 0
   for (const l of lines) bodyTotalH += l === '' ? blankGap : lineGap
-  const totalTextH = titleSize + 50 + bodyTotalH
+  const totalTextH = engNameSize + 20 + subtitleSize + 50 + bodyTotalH
   const startY = Math.round((H - totalTextH) / 2)
-  const titleY = startY + titleSize
+  const engNameY = startY + engNameSize
+  const subtitleY = engNameY + 50
+  const lineY1 = engNameY - engNameSize - 12
+  const lineY2 = subtitleY + 16
 
-  let curY = titleY + 60
+  let curY = subtitleY + 60
   const bodySvg = lines.map(l => {
     if (l === '') { curY += blankGap; return '' }
     const s = `<text x="540" y="${curY}" font-family="sans-serif" font-size="${bodySize}" font-weight="300" fill="rgba(240,238,255,0.95)" text-anchor="middle">${esc(l)}</text>`
@@ -157,9 +161,10 @@ async function contentSlide(cardSlug, title, bodyText, index, filename) {
   const overlay = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
   <rect width="${W}" height="${H}" fill="rgba(8,6,26,0.45)"/>
   <text x="1030" y="50" font-family="sans-serif" font-size="18" fill="rgba(180,170,230,0.5)" text-anchor="end">${index}/3</text>
-  <line x1="340" y1="${titleY - titleSize - 12}" x2="740" y2="${titleY - titleSize - 12}" stroke="rgba(180,170,230,0.2)" stroke-width="1"/>
-  <text x="540" y="${titleY}" font-family="sans-serif" font-size="${titleSize}" font-weight="600" fill="#FFFFFF" text-anchor="middle">${esc(title)}</text>
-  <line x1="340" y1="${titleY + 16}" x2="740" y2="${titleY + 16}" stroke="rgba(180,170,230,0.2)" stroke-width="1"/>
+  <line x1="340" y1="${lineY1}" x2="740" y2="${lineY1}" stroke="rgba(180,170,230,0.2)" stroke-width="1"/>
+  <text x="540" y="${engNameY}" font-family="Georgia, serif" font-size="${engNameSize}" font-style="italic" fill="rgba(200,180,140,0.65)" text-anchor="middle">${esc(nameEn)}</text>
+  <text x="540" y="${subtitleY}" font-family="sans-serif" font-size="${subtitleSize}" font-weight="300" fill="#F4F8FF" text-anchor="middle">${esc(subtitle)}</text>
+  <line x1="340" y1="${lineY2}" x2="740" y2="${lineY2}" stroke="rgba(180,170,230,0.2)" stroke-width="1"/>
   ${bodySvg}
   </svg>`
 
@@ -230,7 +235,7 @@ async function slide05() {
     const textOverlay = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
     ${saveIcon}
     ${shareIcon}
-    <text x="540" y="1060" font-family="sans-serif" font-size="36" font-weight="500" fill="#FFFFFF" text-anchor="middle">저장해두고</text>
+    <text x="540" y="1060" font-family="sans-serif" font-size="36" font-weight="300" fill="#F4F8FF" text-anchor="middle">저장해두고</text>
     <text x="540" y="1105" font-family="sans-serif" font-size="24" fill="rgba(210,200,250,0.65)" text-anchor="middle">연락운이 궁금할 때 다시 꺼내보세요</text>
     <line x1="400" y1="1140" x2="680" y2="1140" stroke="rgba(180,170,230,0.12)" stroke-width="1"/>
     <text x="540" y="1180" font-family="sans-serif" font-size="22" fill="rgba(200,190,240,0.5)" text-anchor="middle">읽씹 고민하는 친구가 있다면</text>
@@ -250,17 +255,17 @@ async function main() {
   await slide01()
 
   await contentSlide('knight-of-cups',
-    '컵의 기사, 감정 정리 중',
+    'Knight of Cups', '감정 정리 중',
     '이 카드는 감정을 정리하고\n다가오고 있다는 신호예요\n\n읽씹이 무관심이 아니라\n아직 마음을 정리하는 중일 수 있어요\n\n키워드: 감정 정리 · 다가옴 · 진심',
     1, 'slide02.png')
 
   await contentSlide('ace-of-wands',
-    '완드 에이스, 불꽃 같은 연락',
+    'Ace of Wands', '불꽃 같은 연락',
     '갑자기 불꽃처럼\n연락이 올 수 있는 카드예요\n\n예상치 못한 타이밍에\n새로운 시작의 에너지가 열려요\n\n키워드: 새로운 시작 · 열정 · 불꽃',
     2, 'slide03.png')
 
   await contentSlide('star',
-    '별, 끊어지지 않은 연결',
+    'The Star', '끊어지지 않은 연결',
     '시간이 걸리더라도\n연결은 끊어지지 않았어요\n\n이 카드는 희망과 치유의 카드\n기다림이 헛되지 않다는 의미예요\n\n키워드: 희망 · 치유 · 연결',
     3, 'slide04.png')
 

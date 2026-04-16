@@ -108,8 +108,8 @@ async function textOnCardSlide(cardSlug, title, bodyText, index, total) {
   const bgImg = await loadCard(cardSlug, W, H)
   let bgCard = null
   if (bgImg) {
-    const faded = await sharp(bgImg).ensureAlpha().modulate({ brightness: 0.8 }).png().toBuffer()
-    const fadeMask = `<svg width="${W}" height="${H}"><rect width="${W}" height="${H}" fill="rgba(255,255,255,0.55)"/></svg>`
+    const faded = await sharp(bgImg).ensureAlpha().modulate({ brightness: 0.9 }).png().toBuffer()
+    const fadeMask = `<svg width="${W}" height="${H}"><rect width="${W}" height="${H}" fill="rgba(255,255,255,0.7)"/></svg>`
     bgCard = await sharp(faded).composite([{ input: Buffer.from(fadeMask), blend: 'dest-in' }]).png().toBuffer()
   }
 
@@ -140,7 +140,7 @@ async function textOnCardSlide(cardSlug, title, bodyText, index, total) {
 
   const indexLabel = (index !== '' && total !== '') ? `${index}/${total}` : ''
   const overlay = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
-  <rect width="${W}" height="${H}" fill="rgba(8,6,26,0.45)"/>
+  <rect width="${W}" height="${H}" fill="rgba(8,6,26,0.3)"/>
   ${indexLabel ? `<text x="1030" y="60" font-family="sans-serif" font-size="20" fill="rgba(180,170,230,0.5)" text-anchor="end">${indexLabel}</text>` : ''}
   <line x1="300" y1="${titleY - titleSize - 15}" x2="780" y2="${titleY - titleSize - 15}" stroke="rgba(180,170,230,0.2)" stroke-width="1"/>
   <text x="540" y="${titleY}" font-family="sans-serif" font-size="${titleSize}" font-weight="600" fill="#FFFFFF" text-anchor="middle">${esc(title)}</text>
@@ -192,8 +192,8 @@ async function testTypeSlide(item) {
   const bgImg = await loadCard(item.slug, W, H)
   let bgCard = null
   if (bgImg) {
-    const faded = await sharp(bgImg).ensureAlpha().modulate({ brightness: 0.8 }).png().toBuffer()
-    const fadeMask = `<svg width="${W}" height="${H}"><rect width="${W}" height="${H}" fill="rgba(255,255,255,0.55)"/></svg>`
+    const faded = await sharp(bgImg).ensureAlpha().modulate({ brightness: 0.9 }).png().toBuffer()
+    const fadeMask = `<svg width="${W}" height="${H}"><rect width="${W}" height="${H}" fill="rgba(255,255,255,0.7)"/></svg>`
     bgCard = await sharp(faded).composite([{ input: Buffer.from(fadeMask), blend: 'dest-in' }]).png().toBuffer()
   }
 
@@ -206,7 +206,7 @@ async function testTypeSlide(item) {
   if (bgCard) base = await sharp(base).composite([{ input: bgCard, left: 0, top: 0 }]).png().toBuffer()
 
   const overlay = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
-  <rect width="${W}" height="${H}" fill="rgba(8,6,26,0.45)"/>
+  <rect width="${W}" height="${H}" fill="rgba(8,6,26,0.3)"/>
   <text x="540" y="680" font-family="sans-serif" font-size="72" font-weight="600" fill="rgba(180,170,230,0.7)" text-anchor="middle">${esc(item.type)}</text>
   <text x="540" y="750" font-family="sans-serif" font-size="34" fill="rgba(240,238,255,0.85)" text-anchor="middle">${esc(item.label)}</text>
   <line x1="320" y1="795" x2="760" y2="795" stroke="rgba(180,170,230,0.2)" stroke-width="1"/>
@@ -231,8 +231,8 @@ async function ctaSlide(cardSlug, saveLines, shareLines) {
   let masked = null
   if (img) {
     const m = await roundImg(img, cW, cH, 18)
-    const faded = await sharp(m).ensureAlpha().modulate({ brightness: 0.85 }).png().toBuffer()
-    const fadeMask = `<svg width="${cW}" height="${cH}"><rect width="${cW}" height="${cH}" rx="18" fill="rgba(255,255,255,0.5)"/></svg>`
+    const faded = await sharp(m).ensureAlpha().modulate({ brightness: 0.9 }).png().toBuffer()
+    const fadeMask = `<svg width="${cW}" height="${cH}"><rect width="${cW}" height="${cH}" rx="18" fill="rgba(255,255,255,0.65)"/></svg>`
     masked = await sharp(faded).composite([{ input: Buffer.from(fadeMask), blend: 'dest-in' }]).png().toBuffer()
   }
 

@@ -2,6 +2,7 @@
  * 2026-04-16 목요일 참여형 shortform 이미지 생성
  * - scene01: 질문 훅 + 카드 뒷면 3장 + 번호 표시
  * - scene02: 댓글 CTA 텍스트 + 우주 배경
+ * - 카드 뒷면: 러브타로 사이트 실사용 원본 (TarotCard.vue)
  *
  * 실행: node scripts/generate-shortform-2026-04-16_thu.mjs
  */
@@ -9,6 +10,7 @@ import sharp from 'sharp'
 import { writeFileSync, mkdirSync } from 'fs'
 import { resolve, dirname } from 'path'
 import { fileURLToPath } from 'url'
+import { siteCardBackSvg, siteCardBackDefs, CARD_WIDTH, CARD_HEIGHT } from './lib/card-back-svg.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const rootDir = resolve(__dirname, '..')
@@ -32,139 +34,69 @@ function generateStars(count, xMin, xMax, yMin, yMax, goldMode = false) {
   return stars
 }
 
-function cardBackSvg(cx, cy, scale = 1) {
-  const s = scale
-  return `
-    <g transform="translate(${cx}, ${cy}) scale(${s})">
-      <rect x="-165" y="-240" width="330" height="480" rx="16" ry="16" fill="url(#cardBg)" stroke="url(#cardBorder)" stroke-width="3"/>
-      <rect x="-148" y="-223" width="296" height="446" rx="10" ry="10" fill="none" stroke="#c9a84c" stroke-width="1" opacity="0.4"/>
-      <g stroke="url(#patternGold)" fill="none" stroke-width="1.2" opacity="0.5">
-        <path d="M-130,-205 C-130,-185 -115,-185 -110,-205"/>
-        <path d="M-130,-205 C-110,-205 -110,-190 -130,-185"/>
-        <path d="M130,-205 C130,-185 115,-185 110,-205"/>
-        <path d="M130,-205 C110,-205 110,-190 130,-185"/>
-        <path d="M-130,205 C-130,185 -115,185 -110,205"/>
-        <path d="M-130,205 C-110,205 -110,190 -130,185"/>
-        <path d="M130,205 C130,185 115,185 110,205"/>
-        <path d="M130,205 C110,205 110,190 130,185"/>
-      </g>
-      <circle cx="0" cy="0" r="120" fill="none" stroke="#c9a84c" stroke-width="1" opacity="0.3"/>
-      <circle cx="0" cy="0" r="105" fill="none" stroke="#c9a84c" stroke-width="0.5" opacity="0.2"/>
-      <polygon points="0,-90 75,0 0,90 -75,0" fill="none" stroke="#c9a84c" stroke-width="1" opacity="0.35"/>
-      <g stroke="#c9a84c" stroke-width="1" opacity="0.4">
-        <line x1="0" y1="-65" x2="0" y2="65"/>
-        <line x1="-65" y1="0" x2="65" y2="0"/>
-        <line x1="-46" y1="-46" x2="46" y2="46"/>
-        <line x1="46" y1="-46" x2="-46" y2="46"/>
-      </g>
-      <circle cx="0" cy="0" r="35" fill="none" stroke="#e8d48b" stroke-width="1.5" opacity="0.5"/>
-      <path d="M-8,-20 A22,22 0 1,1 -8,20 A16,16 0 1,0 -8,-20" fill="#c9a84c" opacity="0.3"/>
-      <circle cx="0" cy="-35" r="3" fill="#c9a84c" opacity="0.5"/>
-      <circle cx="0" cy="35" r="3" fill="#c9a84c" opacity="0.5"/>
-      <circle cx="-35" cy="0" r="3" fill="#c9a84c" opacity="0.5"/>
-      <circle cx="35" cy="0" r="3" fill="#c9a84c" opacity="0.5"/>
-      <g fill="#e8d48b" opacity="0.45">
-        <polygon points="0,-122 3,-115 0,-108 -3,-115"/>
-        <polygon points="0,108 3,115 0,122 -3,115"/>
-        <polygon points="-122,0 -115,3 -108,0 -115,-3"/>
-        <polygon points="108,0 115,3 122,0 115,-3"/>
-      </g>
-      <line x1="-50" y1="-170" x2="-50" y2="-130" stroke="#c9a84c" stroke-width="0.8" opacity="0.25"/>
-      <line x1="50" y1="-170" x2="50" y2="-130" stroke="#c9a84c" stroke-width="0.8" opacity="0.25"/>
-      <line x1="-50" y1="130" x2="-50" y2="170" stroke="#c9a84c" stroke-width="0.8" opacity="0.25"/>
-      <line x1="50" y1="130" x2="50" y2="170" stroke="#c9a84c" stroke-width="0.8" opacity="0.25"/>
-      <path d="M-25,-155 A15,15 0 0,1 25,-155" fill="none" stroke="#c9a84c" stroke-width="0.8" opacity="0.3"/>
-      <path d="M-25,155 A15,15 0 0,0 25,155" fill="none" stroke="#c9a84c" stroke-width="0.8" opacity="0.3"/>
-      <text x="0" y="-185" text-anchor="middle" font-family="Georgia, serif" font-size="14" letter-spacing="6" fill="#c9a84c" opacity="0.45">LOVTARO</text>
-      <text x="0" y="198" text-anchor="middle" font-family="Georgia, serif" font-size="14" letter-spacing="6" fill="#c9a84c" opacity="0.45">LOVTARO</text>
-    </g>`
-}
-
 async function generateScene01() {
-  const goldStars = generateStars(40, 30, 1050, 100, 1800, true)
-  const dimStars = generateStars(40, 30, 1050, 100, 1800, false)
+  const cardScale = 2.5
+  const cardPixelW = CARD_WIDTH * cardScale   // 300
+  const cardPixelH = CARD_HEIGHT * cardScale  // 495
+  const cardGap = 50
+  const totalWidth = cardPixelW * 3 + cardGap * 2  // 1068
+  const startCX = (W - totalWidth) / 2 + cardPixelW / 2
+  const cardY = 920
 
-  // 3 cards side by side, scale=0.6 → card width ~198, height ~288
-  const cardScale = 0.6
-  const cardGap = 60
-  const cardW = 330 * cardScale
-  const totalWidth = cardW * 3 + cardGap * 2
-  const startX = (W - totalWidth) / 2 + cardW / 2
-  const cardY = 980
+  const numberY = cardY + cardPixelH / 2 + 50
 
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
   <defs>
-    <radialGradient id="bgGlow" cx="50%" cy="45%" r="65%" fx="50%" fy="45%">
-      <stop offset="0%" stop-color="#1a1040"/>
-      <stop offset="40%" stop-color="#110d2e"/>
-      <stop offset="100%" stop-color="#07060f"/>
-    </radialGradient>
-    <radialGradient id="cardGlowBg" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#c9a84c" stop-opacity="0.12"/>
-      <stop offset="50%" stop-color="#8b6fb0" stop-opacity="0.05"/>
-      <stop offset="100%" stop-color="#1a1040" stop-opacity="0"/>
-    </radialGradient>
-    <linearGradient id="cardBg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1e1545"/>
-      <stop offset="50%" stop-color="#2a1f5e"/>
-      <stop offset="100%" stop-color="#1a1040"/>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.15" y2="1">
+      <stop offset="0%" stop-color="#100e2a"/>
+      <stop offset="50%" stop-color="#121030"/>
+      <stop offset="100%" stop-color="#0a0918"/>
     </linearGradient>
-    <linearGradient id="cardBorder" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#c9a84c"/>
-      <stop offset="50%" stop-color="#e8d48b"/>
-      <stop offset="100%" stop-color="#a08030"/>
-    </linearGradient>
-    <linearGradient id="patternGold" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#c9a84c" stop-opacity="0.6"/>
-      <stop offset="100%" stop-color="#e8d48b" stop-opacity="0.3"/>
-    </linearGradient>
-    <filter id="bigGlow" x="-60%" y="-60%" width="220%" height="220%">
-      <feGaussianBlur stdDeviation="90"/>
-    </filter>
-    <filter id="textGlow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="3" result="blur"/>
-      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
+    ${siteCardBackDefs()}
     <filter id="cardShadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="8" stdDeviation="20" flood-color="#000000" flood-opacity="0.5"/>
+      <feDropShadow dx="0" dy="6" stdDeviation="15" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+    <radialGradient id="cardGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#c9a84c" stop-opacity="0.15"/>
+      <stop offset="40%" stop-color="#8b6fb0" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="transparent" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="glowBlur" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="60"/>
+    </filter>
+    <filter id="numGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
   </defs>
 
-  <rect width="${W}" height="${H}" fill="url(#bgGlow)"/>
+  <rect width="${W}" height="${H}" fill="url(#bg)"/>
 
-  <ellipse cx="540" cy="850" rx="550" ry="500" fill="#2d1b69" opacity="0.15"/>
-  <ellipse cx="300" cy="500" rx="350" ry="300" fill="#3d2080" opacity="0.08"/>
-  <ellipse cx="780" cy="1100" rx="300" ry="280" fill="#2a1560" opacity="0.08"/>
-
-  <ellipse cx="540" cy="${cardY}" rx="400" ry="350" fill="url(#cardGlowBg)" filter="url(#bigGlow)"/>
-
-  ${goldStars}
-  ${dimStars}
+  <!-- Card area glow -->
+  <ellipse cx="540" cy="${cardY}" rx="500" ry="380" fill="url(#cardGlow)" filter="url(#glowBlur)"/>
 
   <!-- Hook text -->
-  <g filter="url(#textGlow)">
-    <text x="540" y="340" text-anchor="middle" font-family="sans-serif" font-size="54" fill="#f0e6cc" letter-spacing="2" opacity="0.95" font-weight="500">그 사람이 보내는 신호,</text>
-    <text x="540" y="420" text-anchor="middle" font-family="sans-serif" font-size="54" fill="#f0e6cc" letter-spacing="2" opacity="0.95" font-weight="500">어떤 의미일까?</text>
-  </g>
+  <text x="540" y="280" text-anchor="middle" font-family="sans-serif" font-size="48" fill="#F4F8FF" letter-spacing="2" font-weight="300">그 사람이 보내는 신호,</text>
+  <text x="540" y="350" text-anchor="middle" font-family="sans-serif" font-size="48" fill="#F4F8FF" letter-spacing="2" font-weight="300">어떤 의미일까?</text>
 
   <!-- 3 card backs -->
   <g filter="url(#cardShadow)">
-    ${cardBackSvg(startX, cardY, cardScale)}
-    ${cardBackSvg(startX + cardW + cardGap, cardY, cardScale)}
-    ${cardBackSvg(startX + (cardW + cardGap) * 2, cardY, cardScale)}
+    ${siteCardBackSvg(startCX, cardY, cardScale)}
+    ${siteCardBackSvg(startCX + cardPixelW + cardGap, cardY, cardScale)}
+    ${siteCardBackSvg(startCX + (cardPixelW + cardGap) * 2, cardY, cardScale)}
   </g>
 
   <!-- Number labels -->
-  <g filter="url(#textGlow)">
-    <text x="${startX}" y="${cardY + 288 * cardScale / 2 + 60}" text-anchor="middle" font-family="sans-serif" font-size="36" fill="#e8d48b" opacity="0.8" font-weight="600">1번</text>
-    <text x="${startX + cardW + cardGap}" y="${cardY + 288 * cardScale / 2 + 60}" text-anchor="middle" font-family="sans-serif" font-size="36" fill="#e8d48b" opacity="0.8" font-weight="600">2번</text>
-    <text x="${startX + (cardW + cardGap) * 2}" y="${cardY + 288 * cardScale / 2 + 60}" text-anchor="middle" font-family="sans-serif" font-size="36" fill="#e8d48b" opacity="0.8" font-weight="600">3번</text>
+  <g filter="url(#numGlow)">
+    <text x="${startCX}" y="${numberY}" text-anchor="middle" font-family="sans-serif" font-size="40" fill="#e8d48b" font-weight="600">1번</text>
+    <text x="${startCX + cardPixelW + cardGap}" y="${numberY}" text-anchor="middle" font-family="sans-serif" font-size="40" fill="#e8d48b" font-weight="600">2번</text>
+    <text x="${startCX + (cardPixelW + cardGap) * 2}" y="${numberY}" text-anchor="middle" font-family="sans-serif" font-size="40" fill="#e8d48b" font-weight="600">3번</text>
   </g>
 
   <!-- Bottom guide -->
-  <text x="540" y="1580" text-anchor="middle" font-family="sans-serif" font-size="36" fill="rgba(240,230,204,0.6)" letter-spacing="3">직감으로 골라보세요</text>
+  <text x="540" y="1600" text-anchor="middle" font-family="sans-serif" font-size="30" fill="rgba(244,248,255,0.5)" letter-spacing="3" font-weight="300">직감으로 골라보세요</text>
 
-  <text x="540" y="1780" text-anchor="middle" font-family="sans-serif" font-size="24" fill="#c9a84c" opacity="0.35" letter-spacing="2">@lovtarot_</text>
+  <text x="540" y="1820" text-anchor="middle" font-family="sans-serif" font-size="22" fill="rgba(200,180,140,0.3)" letter-spacing="2">@lovtarot_</text>
 </svg>`
 
   const buf = await sharp(Buffer.from(svg)).png({ quality: 90 }).toBuffer()
@@ -201,8 +133,9 @@ async function generateScene02() {
 
   <!-- CTA text -->
   <g filter="url(#textGlow2)">
-    <text x="540" y="860" text-anchor="middle" font-family="sans-serif" font-size="52" fill="#f0e6cc" letter-spacing="2" opacity="0.95" font-weight="500">댓글에 번호를 남겨주세요</text>
-    <text x="540" y="980" text-anchor="middle" font-family="sans-serif" font-size="40" fill="rgba(232,212,139,0.7)" letter-spacing="3">해석을 답글로 알려드릴게요 ✨</text>
+    <text x="540" y="840" text-anchor="middle" font-family="sans-serif" font-size="46" fill="#F4F8FF" letter-spacing="2" opacity="0.95" font-weight="300">직감으로 고른 번호를</text>
+    <text x="540" y="910" text-anchor="middle" font-family="sans-serif" font-size="46" fill="#F4F8FF" letter-spacing="2" opacity="0.95" font-weight="300">댓글에 적어주세요</text>
+    <text x="540" y="1020" text-anchor="middle" font-family="sans-serif" font-size="36" fill="rgba(232,212,139,0.7)" letter-spacing="3">해석을 댓글로 달아드릴게요</text>
   </g>
 
   <!-- Decorative elements -->

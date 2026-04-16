@@ -1,7 +1,8 @@
 /**
- * 2026-04-16 목요일 story 이미지 생성 (카드 포함 완성형)
- * - story01: 여사제 카드 + "그 사람의 신호, 읽고 있나요?" 점심 예고
- * - story02: 여사제 카드 + "방금 올렸어요" 업로드 공유
+ * 2026-04-16 목요일 story 이미지 생성 (마이너 아르카나)
+ * - story01: Two of Cups + "아직 연결된 마음이 있을까?"
+ * - 카드 경로: public/images/mcards/cups/Two of Cups.png
+ * - 영어 카드명: Georgia, serif / 한국어 문구: sans-serif
  *
  * 실행: node scripts/generate-story-2026-04-16_thu.mjs
  */
@@ -12,7 +13,7 @@ import { fileURLToPath } from 'url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const rootDir = resolve(__dirname, '..')
-const cardsDir = resolve(rootDir, 'public/images/cards-png')
+const mcardsDir = resolve(rootDir, 'public/images/mcards')
 const outputDir = resolve(rootDir, 'content-output/2026-04-16_thu/story')
 const W = 1080, H = 1920
 
@@ -29,8 +30,8 @@ function generateStars(count, xMin, xMax, yMin, yMax) {
   return stars
 }
 
-async function loadCard(slug, w, h) {
-  const p = resolve(cardsDir, `${slug}.png`)
+async function loadCard(suit, name, w, h) {
+  const p = resolve(mcardsDir, suit, `${name}.png`)
   if (!existsSync(p)) { console.error(`카드 없음: ${p}`); return null }
   return sharp(p).resize(w, h, { fit: 'cover' }).toBuffer()
 }
@@ -42,25 +43,33 @@ async function roundImg(buf, w, h, r) {
 
 function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') }
 
-async function generateStory(filename, hookLines, cardName, keywords) {
-  const cW = 760, cH = 1040
-  const cardLeft = (W - cW) / 2
-  const cardTop = 180
+async function main() {
+  console.log('=== 2026-04-16 story 이미지 생성 (마이너 아르카나) ===')
+  mkdirSync(outputDir, { recursive: true })
 
-  const img = await loadCard('high-priestess', cW, cH)
-  if (!img) { console.error('❌ high-priestess.png 없음'); return }
+  const cW = 680, cH = 930
+  const cardLeft = (W - cW) / 2
+  const cardTop = 170
+
+  const img = await loadCard('cups', 'Two of Cups', cW, cH)
+  if (!img) { console.error('❌ Two of Cups.png 없음'); process.exit(1) }
   const masked = await roundImg(img, cW, cH, 20)
 
   const stars = generateStars(15, 50, 1030, 30, 160)
-  const textAreaTop = cardTop + cH + 40
-  const nameY = textAreaTop + 45
-  const hookStartY = nameY + 65
+  const textAreaTop = cardTop + cH + 50
+
+  // 영어 카드명 (Georgia, serif italic)
+  const engNameY = textAreaTop + 40
+  // 한국어 훅 (sans-serif)
+  const hookStartY = engNameY + 80
+  const hookLines = ['아직 연결된 마음이 있을까?', '카드가 보여주는 두 사람의 흐름']
+  const keywords = ['유대', '감정 교류', '연결']
 
   const hookSvg = hookLines.map((l, i) =>
-    `<text x="540" y="${hookStartY + i * 60}" font-family="sans-serif" font-size="40" font-weight="500" fill="#FFFFFF" text-anchor="middle">${esc(l)}</text>`
+    `<text x="540" y="${hookStartY + i * 55}" font-family="sans-serif" font-size="38" font-weight="300" fill="#F4F8FF" text-anchor="middle">${esc(l)}</text>`
   ).join('\n  ')
 
-  const kwY = hookStartY + hookLines.length * 60 + 30
+  const kwY = hookStartY + hookLines.length * 64 + 35
   const kwText = keywords.map(k => esc(k)).join('  ·  ')
 
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
@@ -87,7 +96,9 @@ async function generateStory(filename, hookLines, cardName, keywords) {
   <text x="540" y="100" font-family="sans-serif" font-size="26" fill="rgba(180,170,230,0.75)" text-anchor="middle" letter-spacing="10" font-weight="300">오늘의 연애 카드</text>
   <line x1="380" y1="120" x2="700" y2="120" stroke="rgba(180,170,230,0.15)" stroke-width="1"/>
   <rect x="${cardLeft - 4}" y="${cardTop - 4}" width="${cW + 8}" height="${cH + 8}" rx="24" fill="none" stroke="rgba(160,140,240,0.2)" stroke-width="2" filter="url(#glow1)"/>
-  <text x="540" y="${nameY}" font-family="sans-serif" font-size="36" font-weight="300" fill="rgba(210,200,250,0.85)" text-anchor="middle" letter-spacing="8">${esc(cardName)}</text>
+  <!-- 영어 카드명: Georgia, serif italic -->
+  <text x="540" y="${engNameY}" font-family="Georgia, serif" font-size="22" font-style="italic" fill="rgba(200,180,140,0.65)" text-anchor="middle">Two of Cups</text>
+  <!-- 한국어 훅: sans-serif -->
   ${hookSvg}
   <text x="540" y="${kwY}" font-family="sans-serif" font-size="20" fill="rgba(180,170,220,0.45)" text-anchor="middle" letter-spacing="2">${kwText}</text>
 </svg>`
@@ -97,19 +108,8 @@ async function generateStory(filename, hookLines, cardName, keywords) {
     .composite([{ input: masked, left: cardLeft, top: cardTop }])
     .png({ quality: 90 }).toBuffer()
 
-  mkdirSync(outputDir, { recursive: true })
-  writeFileSync(resolve(outputDir, filename), result)
-  console.log(`✅ ${filename} (${(result.length / 1024).toFixed(0)} KB)`)
-}
-
-async function main() {
-  console.log('=== 2026-04-16 story 이미지 생성 ===')
-  await generateStory('story01.png',
-    ['그 사람의 신호, 읽고 있나요?', '오늘 저녁 릴스에서 확인해보세요'],
-    '여사제', ['직관', '숨겨진 감정', '신호'])
-  await generateStory('story02.png',
-    ['방금 올렸어요 ✨', '그 사람의 신호, 카드로 읽어볼까요?'],
-    '여사제', ['직관', '숨겨진 감정', '신호'])
+  writeFileSync(resolve(outputDir, 'story01.png'), result)
+  console.log(`✅ story01.png (${(result.length / 1024).toFixed(0)} KB)`)
   console.log('완료!')
 }
 

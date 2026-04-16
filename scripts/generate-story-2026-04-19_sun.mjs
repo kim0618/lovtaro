@@ -1,7 +1,8 @@
 /**
- * 2026-04-19 일요일 story 이미지 생성 (story만 운영)
- * - story01: Star 카드 + "이번 주도 수고했어요" 마무리
- * - story02는 사용 안 함 (story01만 생성)
+ * 2026-04-19 일요일 story 이미지 생성 (마이너 아르카나)
+ * - story01: Ace of Cups + "한 주간의 따뜻한 마음을 모아요"
+ * - 카드 경로: public/images/mcards/cups/Ace of Cups.png
+ * - 영어 카드명: Georgia, serif / 한국어 문구: sans-serif
  *
  * 실행: node scripts/generate-story-2026-04-19_sun.mjs
  */
@@ -12,7 +13,7 @@ import { fileURLToPath } from 'url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const rootDir = resolve(__dirname, '..')
-const cardsDir = resolve(rootDir, 'public/images/cards-png')
+const mcardsDir = resolve(rootDir, 'public/images/mcards')
 const outputDir = resolve(rootDir, 'content-output/2026-04-19_sun/story')
 const W = 1080, H = 1920
 
@@ -30,9 +31,9 @@ function generateStars(count, xMin, xMax, yMin, yMax) {
   return stars
 }
 
-async function loadCard(slug, w, h) {
-  const p = resolve(cardsDir, `${slug}.png`)
-  if (!existsSync(p)) return null
+async function loadCard(suit, name, w, h) {
+  const p = resolve(mcardsDir, suit, `${name}.png`)
+  if (!existsSync(p)) { console.error(`카드 없음: ${p}`); return null }
   return sharp(p).resize(w, h, { fit: 'cover' }).toBuffer()
 }
 
@@ -41,42 +42,76 @@ async function roundImg(buf, w, h, r) {
   return sharp(buf).composite([{ input: Buffer.from(m), blend: 'dest-in' }]).png().toBuffer()
 }
 
+function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') }
+
 async function main() {
-  console.log('=== 2026-04-19 story 이미지 생성 ===')
+  console.log('=== 2026-04-19 story 이미지 생성 (마이너 아르카나) ===')
   mkdirSync(outputDir, { recursive: true })
 
-  const cW = 600, cH = 800
-  const cardTop = 280
+  const cW = 680, cH = 930
   const cardLeft = (W - cW) / 2
+  const cardTop = 170
 
-  const cardImg = await loadCard('star', cW, cH)
-  if (!cardImg) { console.error('❌ star.png 없음'); process.exit(1) }
-  const masked = await roundImg(cardImg, cW, cH, 20)
+  const img = await loadCard('cups', 'Ace of Cups', cW, cH)
+  if (!img) { console.error('❌ Ace of Cups.png 없음'); process.exit(1) }
+  const masked = await roundImg(img, cW, cH, 20)
 
   const stars = generateStars(30, 50, 1030, 50, 1850)
-  const textY = cardTop + cH + 80
+  const textAreaTop = cardTop + cH + 50
+  const engNameY = textAreaTop + 40
+  const hookStartY = engNameY + 80
+  const hookLines = ['한 주간의 따뜻한 마음을 모아요', '다음 주도 좋은 흐름이 올 거예요']
+  const keywords = ['새로운 감정', '넘침', '따뜻함']
+
+  const hookSvg = hookLines.map((l, i) =>
+    `<text x="540" y="${hookStartY + i * 55}" font-family="sans-serif" font-size="38" font-weight="300" fill="#F4F8FF" text-anchor="middle">${esc(l)}</text>`
+  ).join('\n  ')
+
+  const kwY = hookStartY + hookLines.length * 64 + 35
+  const kwText = keywords.map(k => esc(k)).join('  ·  ')
 
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="0.2" y2="1"><stop offset="0%" stop-color="#08061A"/><stop offset="30%" stop-color="#0E0F2E"/><stop offset="70%" stop-color="#0D0E28"/><stop offset="100%" stop-color="#06050F"/></linearGradient>
-    <radialGradient id="glow" cx="50%" cy="40%" r="40%"><stop offset="0%" stop-color="rgba(140,120,220,0.15)"/><stop offset="100%" stop-color="rgba(0,0,0,0)"/></radialGradient>
-    <filter id="glowF" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="10" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter>
-    <filter id="tg" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.2" y2="1">
+      <stop offset="0%" stop-color="#08061A"/>
+      <stop offset="30%" stop-color="#0E0F2E"/>
+      <stop offset="70%" stop-color="#0D0E28"/>
+      <stop offset="100%" stop-color="#06050F"/>
+    </linearGradient>
+    <radialGradient id="cardGlow" cx="50%" cy="40%" r="38%">
+      <stop offset="0%" stop-color="rgba(140,120,220,0.15)"/>
+      <stop offset="60%" stop-color="rgba(100,80,180,0.05)"/>
+      <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+    </radialGradient>
+    <filter id="glow1" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+    <filter id="tg" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
   </defs>
   <rect width="${W}" height="${H}" fill="url(#bg)"/>
-  <ellipse cx="540" cy="700" rx="450" ry="500" fill="url(#glow)"/>
+  <ellipse cx="540" cy="${cardTop + cH / 2}" rx="500" ry="650" fill="url(#cardGlow)"/>
   ${stars}
-  <text x="540" y="180" font-family="sans-serif" font-size="26" fill="rgba(180,170,230,0.7)" text-anchor="middle" letter-spacing="10" font-weight="300">오늘의 연애 카드</text>
-  <line x1="380" y1="200" x2="700" y2="200" stroke="rgba(180,170,230,0.15)" stroke-width="1"/>
-  <rect x="${cardLeft - 3}" y="${cardTop - 3}" width="${cW + 6}" height="${cH + 6}" rx="23" fill="none" stroke="rgba(160,140,240,0.2)" stroke-width="2" filter="url(#glowF)"/>
+  <text x="540" y="100" font-family="sans-serif" font-size="26" fill="rgba(180,170,230,0.75)" text-anchor="middle" letter-spacing="10" font-weight="300">오늘의 연애 카드</text>
+  <line x1="380" y1="120" x2="700" y2="120" stroke="rgba(180,170,230,0.15)" stroke-width="1"/>
+  <rect x="${cardLeft - 4}" y="${cardTop - 4}" width="${cW + 8}" height="${cH + 8}" rx="24" fill="none" stroke="rgba(160,140,240,0.2)" stroke-width="2" filter="url(#glow1)"/>
+  <!-- 영어 카드명: Georgia, serif italic -->
+  <text x="540" y="${engNameY}" font-family="Georgia, serif" font-size="22" font-style="italic" fill="rgba(200,180,140,0.65)" text-anchor="middle">Ace of Cups</text>
+  <!-- 한국어 훅: sans-serif -->
   <g filter="url(#tg)">
-    <text x="540" y="${textY}" text-anchor="middle" font-family="sans-serif" font-size="44" fill="#f0e6cc" letter-spacing="2" font-weight="500" opacity="0.95">이번 주도 수고했어요</text>
-    <text x="540" y="${textY + 70}" text-anchor="middle" font-family="sans-serif" font-size="30" fill="rgba(232,212,139,0.55)" letter-spacing="3">내일은 새로운 카드가 기다리고 있어요 ✨</text>
+    ${hookSvg}
   </g>
+  <text x="540" y="${kwY}" font-family="sans-serif" font-size="20" fill="rgba(180,170,220,0.45)" text-anchor="middle" letter-spacing="2">${kwText}</text>
 </svg>`
 
   const base = await sharp(Buffer.from(svg)).png().toBuffer()
-  const result = await sharp(base).composite([{ input: masked, left: cardLeft, top: cardTop }]).png({ quality: 90 }).toBuffer()
+  const result = await sharp(base)
+    .composite([{ input: masked, left: cardLeft, top: cardTop }])
+    .png({ quality: 90 }).toBuffer()
+
   writeFileSync(resolve(outputDir, 'story01.png'), result)
   console.log(`✅ story01.png (${(result.length / 1024).toFixed(0)} KB)`)
   console.log('완료!')
