@@ -37,6 +37,7 @@ import { YESNO_RESULTS } from '../data/readings/yesno.js'
 import { applyYesNoReversedModifier } from '../data/yesnoReversedModifiers.js'
 import { saveReadingHistory } from '../composables/useReadingHistory.js'
 import { useReadingSession } from '../composables/useReadingSession.js'
+import { trackReadingStart, trackCardDrawn, trackReadingReveal, trackReadingReset } from '../composables/useReadingTracking.js'
 import { encodeReadingParams, buildShareUrl, decodeReadingParams } from '../utils/shareLink.js'
 import { getCardById } from '../data/tarotCards.js'
 
@@ -80,10 +81,14 @@ const flowPoints = [
 
 let revealTimer = null
 
-function startReading() { phase.value = 'draw' }
+function startReading() { trackReadingStart('Yes/No 타로'); phase.value = 'draw' }
 function confirm() {
   if (!canConfirm.value) return
   const card = drawnCard.value
+  trackCardDrawn('Yes/No 타로', {
+    spreadType: 'single',
+    cards: [{ id: card.id, reversed: card.reversed, position: 'yesno' }],
+  })
   saveLastReading({ readingType: 'Yes/No 타로', cardId: card.id, cardName: card.name, cardNameEn: card.nameEn })
   saveReadingHistory({
     readingType: 'Yes/No 타로',
@@ -93,9 +98,12 @@ function confirm() {
     details: result.value ? { answer: result.value.answer, answerLabel: result.value.answerLabel, emotionTags: result.value.emotionTags, advice: result.value.advice, caution: result.value.caution } : null,
   })
   phase.value = 'reveal'
-  revealTimer = setTimeout(() => { phase.value = 'result' }, 2200)
+  revealTimer = setTimeout(() => {
+    phase.value = 'result'
+    trackReadingReveal('Yes/No 타로', { spreadType: 'single', cardCount: 1 })
+  }, 2200)
 }
-function retry() { clearSession(); reset(); phase.value = 'draw' }
+function retry() { trackReadingReset('Yes/No 타로'); clearSession(); reset(); phase.value = 'draw' }
 function scrollTop() { window.scrollTo({ top: 0 }) }
 
 onUnmounted(() => { if (revealTimer) clearTimeout(revealTimer) })

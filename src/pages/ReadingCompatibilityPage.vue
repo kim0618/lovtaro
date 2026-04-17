@@ -32,6 +32,7 @@ import { useCardDraw } from '../composables/useCardDraw.js'
 import { calculateCompatibility, generateCompatibilityResult } from '../data/readings/compatibility.js'
 import { saveReadingHistory } from '../composables/useReadingHistory.js'
 import { useReadingSession } from '../composables/useReadingSession.js'
+import { trackReadingStart, trackCardDrawn, trackReadingReveal, trackReadingReset } from '../composables/useReadingTracking.js'
 import { encodeReadingParams, buildShareUrl, decodeReadingParams } from '../utils/shareLink.js'
 import { getCardById } from '../data/tarotCards.js'
 import { getCardImage } from '../data/cardImages.js'
@@ -93,7 +94,7 @@ const drawHeaders = {
 
 let revealTimer = null
 
-function startReading() { phase.value = 'draw'; drawStep.value = 1 }
+function startReading() { trackReadingStart('궁합 타로'); phase.value = 'draw'; drawStep.value = 1 }
 
 function handleSelect(id) {
   if (drawStep.value === 1 && selectedCount.value === 0) {
@@ -112,6 +113,13 @@ function confirm() {
   score.value = s
   result.value = generateCompatibilityResult(c1, c2, s)
 
+  trackCardDrawn('궁합 타로', {
+    spreadType: 'pair',
+    cards: [
+      { id: c1.id, reversed: c1.reversed, position: 'self' },
+      { id: c2.id, reversed: c2.reversed, position: 'other' },
+    ],
+  })
   saveLastReading({ readingType: '궁합 타로', cardId: c1.id, cardName: c1.name, cardNameEn: c1.nameEn })
   saveReadingHistory({
     readingType: '궁합 타로',
@@ -124,10 +132,13 @@ function confirm() {
     details: result.value ? { score: s, scoreLabel: result.value.scoreLabel, advice: result.value.advice, caution: result.value.caution } : null,
   })
   phase.value = 'reveal'
-  revealTimer = setTimeout(() => { phase.value = 'result' }, 2800)
+  revealTimer = setTimeout(() => {
+    phase.value = 'result'
+    trackReadingReveal('궁합 타로', { spreadType: 'pair', cardCount: 2 })
+  }, 2800)
 }
 
-function retry() { clearSession(); reset(); drawStep.value = 1; phase.value = 'draw' }
+function retry() { trackReadingReset('궁합 타로'); clearSession(); reset(); drawStep.value = 1; phase.value = 'draw' }
 function scrollTop() { window.scrollTo({ top: 0 }) }
 
 onUnmounted(() => { if (revealTimer) clearTimeout(revealTimer) })

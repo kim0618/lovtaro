@@ -1,10 +1,10 @@
 /**
- * 2026-04-18 토요일 기존형 shortform 이미지 생성 (코스믹 스타일)
- * - scene01: 코스믹 배경 + 달 + 훅 + 프레임 카드 뒷면
- * - scene02: 코스믹 + 큰 프레임 카드(The Moon) + 카드명 + 키워드
- * - scene03: 코스믹 + 헤더 + 작은 프레임 카드 + 해석 + CTA
+ * 2026-04-20 월요일 shortform 이미지 생성 (코스믹 성운 스타일)
+ * - scene01: 코스믹 배경 + 달 + 훅 + 카드 뒷면(프레임)
+ * - scene02: 코스믹 배경 + 달 + 큰 프레임 카드(Lovers) + 카드명 + 키워드
+ * - scene03: 코스믹 배경 + 헤더 + 작은 프레임 카드 + 해석 + CTA
  *
- * 실행: node scripts/generate-shortform-2026-04-18_sat.mjs
+ * 실행: node scripts/generate-shortform-2026-04-20_mon.mjs
  */
 import sharp from 'sharp'
 import { writeFileSync, mkdirSync, existsSync } from 'fs'
@@ -15,7 +15,7 @@ import { siteCardBackSvg, siteCardBackDefs } from './lib/card-back-svg.mjs'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const rootDir = resolve(__dirname, '..')
 const cardsDir = resolve(rootDir, 'public/images/cards-png')
-const outputDir = resolve(rootDir, 'content-output/2026-04-18_sat/shortform')
+const outputDir = resolve(rootDir, 'content-output/2026-04-20_mon/shortform')
 const W = 1080, H = 1920
 
 function mulberry32(seed) {
@@ -144,11 +144,11 @@ async function scene01() {
       ${cosmicDefs()}
       ${siteCardBackDefs()}
     </defs>
-    ${cosmicBody(true, 41)}
+    ${cosmicBody(true, 3)}
 
     <g filter="url(#softGlow)">
-      <text x="540" y="400" text-anchor="middle" font-family="sans-serif" font-size="48" fill="#F4F8FF" letter-spacing="3" font-weight="300">그 사람이 아직</text>
-      <text x="540" y="475" text-anchor="middle" font-family="sans-serif" font-size="48" fill="#F4F8FF" letter-spacing="3" font-weight="300">나를 생각하고 있을까?</text>
+      <text x="540" y="400" text-anchor="middle" font-family="sans-serif" font-size="48" fill="#F4F8FF" letter-spacing="3" font-weight="300">이 사람과 나,</text>
+      <text x="540" y="475" text-anchor="middle" font-family="sans-serif" font-size="48" fill="#F4F8FF" letter-spacing="3" font-weight="300">정말 운명일까?</text>
     </g>
 
     ${drawFrame(frameX, frameY, frameW, frameH)}
@@ -173,30 +173,31 @@ async function scene02() {
   const cardLeft = frameX + framePad
   const cardTop = frameY + framePad
 
-  const cardImg = await loadCard('moon', cardW, cardH)
+  const cardImg = await loadCard('lovers', cardW, cardH)
   const masked = await roundImg(cardImg, cardW, cardH, 8)
 
   const divideY = cardTop + cardH + 30
   const nameKrY = divideY + 70
   const nameEnY = nameKrY + 56
+
   const kwY = frameY + frameH + 80
 
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
     <defs>
       ${cosmicDefs()}
     </defs>
-    ${cosmicBody(true, 47)}
+    ${cosmicBody(true, 7)}
 
     ${drawFrame(frameX, frameY, frameW, frameH)}
 
     <line x1="${frameX + 60}" y1="${divideY}" x2="${frameX + frameW - 60}" y2="${divideY}" stroke="rgba(201,168,76,0.3)" stroke-width="1"/>
 
     <g filter="url(#softGlow)">
-      <text x="540" y="${nameKrY}" text-anchor="middle" font-family="sans-serif" font-size="62" fill="#F4F8FF" font-weight="300" letter-spacing="8">달</text>
-      <text x="540" y="${nameEnY}" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="32" fill="rgba(232,212,139,0.88)" letter-spacing="2">The Moon</text>
+      <text x="540" y="${nameKrY}" text-anchor="middle" font-family="sans-serif" font-size="62" fill="#F4F8FF" font-weight="300" letter-spacing="8">연인</text>
+      <text x="540" y="${nameEnY}" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="32" fill="rgba(232,212,139,0.88)" letter-spacing="2">The Lovers</text>
     </g>
 
-    <text x="540" y="${kwY}" text-anchor="middle" font-family="sans-serif" font-size="30" fill="rgba(232,212,139,0.72)" letter-spacing="7" font-weight="300">무의식 · 숨겨진 감정 · 그리움</text>
+    <text x="540" y="${kwY}" text-anchor="middle" font-family="sans-serif" font-size="30" fill="rgba(232,212,139,0.72)" letter-spacing="8" font-weight="300">운명적 끌림 · 진심의 선택</text>
 
     <text x="540" y="1860" text-anchor="middle" font-family="sans-serif" font-size="24" fill="rgba(232,212,139,0.45)" letter-spacing="4">@lovtarot_</text>
   </svg>`
@@ -219,13 +220,15 @@ async function scene03() {
   const cardLeft = frameX + framePad
   const cardTop = frameY + framePad
 
-  const cardImg = await loadCard('moon', cardW, cardH)
+  const cardImg = await loadCard('lovers', cardW, cardH)
   const masked = await roundImg(cardImg, cardW, cardH, 5)
 
   const divideY = cardTop + cardH + 16
   const nameKrY = divideY + 42
   const nameEnY = nameKrY + 30
+
   const kwY = frameY + frameH + 60
+
   const interpY = kwY + 160
   const ctaY = interpY + 270
 
@@ -233,25 +236,25 @@ async function scene03() {
     <defs>
       ${cosmicDefs()}
     </defs>
-    ${cosmicBody(true, 53)}
+    ${cosmicBody(true, 13)}
 
     <g filter="url(#softGlow)">
-      <text x="540" y="${headerY}" text-anchor="middle" font-family="sans-serif" font-size="40" fill="#F4F8FF" font-weight="300" letter-spacing="6">놓지 못한 감정</text>
+      <text x="540" y="${headerY}" text-anchor="middle" font-family="sans-serif" font-size="40" fill="#F4F8FF" font-weight="300" letter-spacing="6">운명의 끌림</text>
     </g>
 
     ${drawFrame(frameX, frameY, frameW, frameH, 0.95)}
 
     <line x1="${frameX + 30}" y1="${divideY}" x2="${frameX + frameW - 30}" y2="${divideY}" stroke="rgba(201,168,76,0.28)" stroke-width="1"/>
 
-    <text x="540" y="${nameKrY}" text-anchor="middle" font-family="sans-serif" font-size="32" fill="#F4F8FF" font-weight="300" letter-spacing="5">달</text>
-    <text x="540" y="${nameEnY}" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="19" fill="rgba(232,212,139,0.78)">The Moon</text>
+    <text x="540" y="${nameKrY}" text-anchor="middle" font-family="sans-serif" font-size="32" fill="#F4F8FF" font-weight="300" letter-spacing="5">연인</text>
+    <text x="540" y="${nameEnY}" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="19" fill="rgba(232,212,139,0.78)">The Lovers</text>
 
-    <text x="540" y="${kwY}" text-anchor="middle" font-family="sans-serif" font-size="22" fill="rgba(232,212,139,0.6)" letter-spacing="5" font-weight="300">무의식 · 숨겨진 감정 · 그리움</text>
+    <text x="540" y="${kwY}" text-anchor="middle" font-family="sans-serif" font-size="22" fill="rgba(232,212,139,0.6)" letter-spacing="5" font-weight="300">운명적 끌림 · 진심의 선택</text>
 
     <g filter="url(#softGlow)">
-      <text x="540" y="${interpY}" text-anchor="middle" font-family="sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="1">표면 아래에 감정이 남아 있어요.</text>
-      <text x="540" y="${interpY + 58}" text-anchor="middle" font-family="sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="1">아직 완전히 놓지 못한,</text>
-      <text x="540" y="${interpY + 116}" text-anchor="middle" font-family="sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="1">그런 마음이 맞아요.</text>
+      <text x="540" y="${interpY}" text-anchor="middle" font-family="sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="1">지금 느끼는 끌림은 진짜예요.</text>
+      <text x="540" y="${interpY + 58}" text-anchor="middle" font-family="sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="1">당신의 선택이 이 관계를</text>
+      <text x="540" y="${interpY + 116}" text-anchor="middle" font-family="sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="1">운명으로 완성할 거예요.</text>
     </g>
 
     <text x="540" y="${ctaY}" text-anchor="middle" font-family="sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="3">당신도 직접 뽑아보세요</text>
@@ -267,7 +270,7 @@ async function scene03() {
 }
 
 async function main() {
-  console.log('=== 2026-04-18 토요일 기존형 shortform (코스믹 스타일) ===')
+  console.log('=== 2026-04-20 월요일 shortform 이미지 생성 (코스믹 스타일) ===')
   mkdirSync(outputDir, { recursive: true })
   await scene01()
   await scene02()

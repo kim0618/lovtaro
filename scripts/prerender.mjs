@@ -196,12 +196,201 @@ for (const card of [...CARDS, ...MINOR_CARDS]) {
   })
 }
 
+// ── JSON-LD builders ──────────────────────────────────────────────────────
+// JSON.stringify 결과에 섞이면 </script> 블록을 조기 종료시키므로 이스케이프
+function escapeJsonLd(jsonStr) {
+  return jsonStr.replace(/<\/script/gi, '<\\/script').replace(/<!--/g, '<\\!--')
+}
+
+function buildBreadcrumb(routePath, routeTitle) {
+  const segments = routePath.split('/').filter(Boolean)
+  const items = [{ name: '홈', url: `${SITE_URL}/` }]
+  let accumulated = ''
+  segments.forEach((seg, i) => {
+    accumulated += `/${seg}`
+    const isLast = i === segments.length - 1
+    const name = isLast ? routeTitle.split(' - ')[0].split(' | ')[0] : decodeLabel(seg)
+    items.push({ name, url: `${SITE_URL}${accumulated}` })
+  })
+  return {
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((it, idx) => ({
+      '@type': 'ListItem',
+      position: idx + 1,
+      name: it.name,
+      item: it.url,
+    })),
+  }
+}
+
+function decodeLabel(seg) {
+  const labels = {
+    today: '오늘의 연애 카드',
+    reading: '타로 리딩',
+    mind: '상대방 속마음 타로',
+    love: '러브타로',
+    reunion: '재회 가능성 타로',
+    contact: '연락 올까 타로',
+    yesno: 'Yes/No 타로',
+    compatibility: '궁합 타로',
+    '3cards': '3장 리딩',
+    cards: '타로 카드 의미 사전',
+    history: '리딩 기록',
+    link: '링크',
+    privacy: '개인정보처리방침',
+  }
+  return labels[seg] || seg
+}
+
+function buildOrganization() {
+  return {
+    '@type': 'Organization',
+    '@id': `${SITE_URL}#organization`,
+    name: 'Lovtaro',
+    alternateName: '러브타로',
+    url: SITE_URL,
+    logo: `${SITE_URL}/icon-512.png`,
+    sameAs: [
+      'https://www.instagram.com/lovtarot_/',
+    ],
+  }
+}
+
+function buildWebSite() {
+  return {
+    '@type': 'WebSite',
+    '@id': `${SITE_URL}#website`,
+    url: SITE_URL,
+    name: 'Lovtaro',
+    alternateName: '러브타로',
+    description: '무료 연애 타로 리딩. 상대방 속마음, 재회 가능성, 연락 올까 타로, 러브타로 스프레드.',
+    inLanguage: 'ko',
+    publisher: { '@id': `${SITE_URL}#organization` },
+  }
+}
+
+function buildHomeMain() {
+  return {
+    '@type': 'WebApplication',
+    name: 'Lovtaro',
+    alternateName: '러브타로',
+    url: SITE_URL,
+    description: '무료 연애 타로 리딩. 상대방 속마음, 재회 가능성, 연락 올까 타로, 러브타로 스프레드까지.',
+    applicationCategory: 'EntertainmentApplication',
+    operatingSystem: 'All',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'KRW' },
+    inLanguage: 'ko',
+  }
+}
+
+function buildCardsListMain(allCards) {
+  return {
+    '@type': 'ItemList',
+    name: '타로 카드 의미 사전',
+    description: '메이저·마이너 아르카나 78장의 정방향, 역방향 의미와 연애 해석',
+    numberOfItems: allCards.length,
+    itemListElement: allCards.map((card, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: `${card.name} (${card.nameEn})`,
+      url: `${SITE_URL}/cards/${card.id}`,
+    })),
+  }
+}
+
+function buildCardDetailMain(card, detail, imageUrl) {
+  const keywordsStr = card.keywords.join(', ')
+  return {
+    '@type': 'Article',
+    headline: `${card.name}(${card.nameEn}) 타로 카드 의미`,
+    description: `${card.name} 타로 카드의 정방향, 역방향 의미와 연애 해석. 키워드: ${keywordsStr}.`,
+    image: imageUrl,
+    author: { '@id': `${SITE_URL}#organization` },
+    publisher: { '@id': `${SITE_URL}#organization` },
+    inLanguage: 'ko',
+    about: {
+      '@type': 'Thing',
+      name: `${card.name} (${card.nameEn})`,
+      description: keywordsStr,
+    },
+  }
+}
+
+function buildCardFAQ(card, detail) {
+  if (!detail || !detail.upright || !detail.reversed) return null
+  return {
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: `${card.name}(${card.nameEn}) 정방향의 의미는?`,
+        acceptedAnswer: { '@type': 'Answer', text: detail.upright.core },
+      },
+      {
+        '@type': 'Question',
+        name: `${card.name} 정방향 연애 해석은?`,
+        acceptedAnswer: { '@type': 'Answer', text: detail.upright.love },
+      },
+      {
+        '@type': 'Question',
+        name: `${card.name}(${card.nameEn}) 역방향의 의미는?`,
+        acceptedAnswer: { '@type': 'Answer', text: detail.reversed.core },
+      },
+      {
+        '@type': 'Question',
+        name: `${card.name} 역방향 연애 해석은?`,
+        acceptedAnswer: { '@type': 'Answer', text: detail.reversed.love },
+      },
+    ],
+  }
+}
+
+function buildReadingMain(route) {
+  return {
+    '@type': 'WebPage',
+    name: route.title.split(' | ')[0],
+    description: route.description,
+    url: `${SITE_URL}${route.path}`,
+    inLanguage: 'ko',
+    isPartOf: { '@id': `${SITE_URL}#website` },
+    primaryImageOfPage: route.ogImage ? { '@type': 'ImageObject', url: route.ogImage } : undefined,
+  }
+}
+
+function buildGraph(route, { allCards, cardDetailMap } = {}) {
+  const graph = []
+  const isHome = route.path === '/'
+  const isCardsList = route.path === '/cards'
+  const cardDetailMatch = route.path.match(/^\/cards\/(.+)$/)
+  const isReading = route.path.startsWith('/reading/') || route.path === '/today'
+
+  if (isHome) {
+    graph.push(buildOrganization(), buildWebSite(), buildHomeMain())
+  } else if (isCardsList && allCards) {
+    graph.push(buildCardsListMain(allCards))
+  } else if (cardDetailMatch) {
+    const cardId = cardDetailMatch[1]
+    const card = allCards.find(c => c.id === cardId)
+    if (card) {
+      graph.push(buildCardDetailMain(card, cardDetailMap[cardId], route.ogImage))
+      const faq = buildCardFAQ(card, cardDetailMap[cardId])
+      if (faq) graph.push(faq)
+    }
+  } else if (isReading) {
+    graph.push(buildReadingMain(route))
+  }
+
+  graph.push(buildBreadcrumb(route.path, route.title))
+
+  return { '@context': 'https://schema.org', '@graph': graph }
+}
+
 // ── Meta injection ─────────────────────────────────────────────────────────
 function escapeAttr(str) {
   return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 }
 
-function injectMeta(html, { path: urlPath, title, description, ogImage }) {
+function injectMeta(html, { path: urlPath, title, description, ogImage, jsonLd }) {
   const url = `${SITE_URL}${urlPath}`
   const safeTitle = escapeAttr(title)
   const safeDesc = escapeAttr(description)
@@ -257,22 +446,39 @@ function injectMeta(html, { path: urlPath, title, description, ogImage }) {
     `$1${safeUrl}$2`,
   )
 
+  // JSON-LD 주입. useHead.js가 동일 id로 클라이언트에서 교체함.
+  if (jsonLd) {
+    const jsonText = escapeJsonLd(JSON.stringify(jsonLd))
+    const script = `<script type="application/ld+json" id="lovtaro-jsonld">${jsonText}</script>`
+    // 기존 같은 id script가 있으면 교체, 없으면 </head> 직전에 삽입
+    if (/<script[^>]*id="lovtaro-jsonld"[^>]*>[\s\S]*?<\/script>/.test(html)) {
+      html = html.replace(/<script[^>]*id="lovtaro-jsonld"[^>]*>[\s\S]*?<\/script>/, script)
+    } else {
+      html = html.replace(/<\/head>/, `  ${script}\n  </head>`)
+    }
+  }
+
   return html
 }
 
 // ── Main ──────────────────────────────────────────────────────────────────
-function run() {
+async function run() {
   const indexPath = path.join(DIST, 'index.html')
   if (!fs.existsSync(indexPath)) {
     console.error('[prerender] dist/index.html not found - run vite build first')
     process.exit(1)
   }
 
+  // 카드 상세 FAQ용 데이터 로드 (src는 빌드 후에도 남아있음)
+  const { ALL_CARDS } = await import('../src/data/cardDictionary.js')
+  const allCardsList = [...CARDS, ...MINOR_CARDS]
+
   const baseHtml = fs.readFileSync(indexPath, 'utf8')
   let success = 0
 
   for (const route of ROUTES) {
-    const html = injectMeta(baseHtml, route)
+    const jsonLd = buildGraph(route, { allCards: allCardsList, cardDetailMap: ALL_CARDS })
+    const html = injectMeta(baseHtml, { ...route, jsonLd })
 
     if (route.path === '/') {
       fs.writeFileSync(indexPath, html, 'utf8')

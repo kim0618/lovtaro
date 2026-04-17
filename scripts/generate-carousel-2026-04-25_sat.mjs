@@ -1,12 +1,12 @@
 /**
- * 2026-04-17 금요일 carousel 이미지 생성 (5장) - 풀배경 카드 스타일
- * - slide01: 커버 — Judgement 풀사이즈 + 하단 페이드 + 훅
- * - slide02: Knight of Cups 풀배경 + 해석 텍스트
- * - slide03: Ace of Wands 풀배경 + 해석 텍스트
- * - slide04: The Star 풀배경 + 해석 텍스트
- * - slide05: CTA — Star 카드 작게 + 저장/공유
+ * 2026-04-25 토요일 carousel 이미지 생성 (5장)
+ * - slide01: 커버 — The Sun 풀사이즈 + 하단 페이드 + 훅
+ * - slide02: Queen of Cups - 감정이 따뜻한 사람
+ * - slide03: Ace of Pentacles - 안정감을 주는 사람
+ * - slide04: The Star - 희망을 잃지 않는 사람
+ * - slide05: CTA - The Sun 작게 + 저장/공유
  *
- * 실행: node scripts/generate-carousel-2026-04-17_fri.mjs
+ * 실행: node scripts/generate-carousel-2026-04-25_sat.mjs
  */
 import sharp from 'sharp'
 import { writeFileSync, mkdirSync, existsSync } from 'fs'
@@ -16,7 +16,7 @@ import { fileURLToPath } from 'url'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const rootDir = resolve(__dirname, '..')
 const cardsDir = resolve(rootDir, 'public/images/cards-png')
-const outputDir = resolve(rootDir, 'content-output/2026-04-17_fri/carousel')
+const outputDir = resolve(rootDir, 'content-output/2026-04-25_sat/carousel')
 
 const W = 1080, H = 1350
 
@@ -46,12 +46,11 @@ async function roundImg(buf, w, h, r) {
   return sharp(buf).composite([{ input: Buffer.from(m), blend: 'dest-in' }]).png().toBuffer()
 }
 
-// ── slide01: 커버 — Judgement 풀사이즈 + 하단 페이드 + 훅 ──
 async function slide01() {
   const cW = 750, cH = 940
   const cardTop = 80
   const cardLeft = (W - cW) / 2
-  const img = await loadCard('judgement', cW, cH)
+  const img = await loadCard('sun', cW, cH)
   const masked = img ? await roundImg(img, cW, cH, 20) : null
   const stars = generateStars(10, 50, 1030, 30, 70)
 
@@ -91,8 +90,9 @@ async function slide01() {
       </linearGradient>
     </defs>
     <rect x="0" y="850" width="${W}" height="500" fill="url(#bf)"/>
-    <text x="540" y="1105" font-family="sans-serif" font-size="44" font-weight="300" fill="#F4F8FF" text-anchor="middle">읽씹했던 그 사람,</text>
-    <text x="540" y="1160" font-family="sans-serif" font-size="44" font-weight="300" fill="#F4F8FF" text-anchor="middle">다시 연락이 올까?</text>
+    <text x="540" y="1085" font-family="sans-serif" font-size="44" font-weight="300" fill="#F4F8FF" text-anchor="middle">이별 후에도</text>
+    <text x="540" y="1145" font-family="sans-serif" font-size="44" font-weight="300" fill="#F4F8FF" text-anchor="middle">다시 사랑받는 사람의</text>
+    <text x="540" y="1205" font-family="sans-serif" font-size="44" font-weight="300" fill="#F4F8FF" text-anchor="middle">3가지 특징</text>
     <text x="540" y="1310" font-family="sans-serif" font-size="22" fill="rgba(180,170,220,0.45)" text-anchor="middle">스와이프해서 확인하세요 →</text>
     </svg>`
     base = await sharp(base).composite([{ input: Buffer.from(overlay), left: 0, top: 0 }]).png().toBuffer()
@@ -102,7 +102,6 @@ async function slide01() {
   console.log(`✅ slide01.png (${(base.length / 1024).toFixed(0)} KB)`)
 }
 
-// ── slide02~04: 카드 풀배경 + 텍스트 오버레이 ──
 async function contentSlide(cardSlug, nameEn, subtitle, bodyText, index, filename) {
   const bgImg = await loadCard(cardSlug, W, H)
   let bgCard = null
@@ -149,7 +148,6 @@ async function contentSlide(cardSlug, nameEn, subtitle, bodyText, index, filenam
   </svg>`
 
   let base = await sharp(Buffer.from(bgSvg)).png().toBuffer()
-
   if (bgCard) {
     base = await sharp(base).composite([{ input: bgCard, left: 0, top: 0 }]).png().toBuffer()
   }
@@ -170,12 +168,11 @@ async function contentSlide(cardSlug, nameEn, subtitle, bodyText, index, filenam
   console.log(`✅ ${filename} (${(base.length / 1024).toFixed(0)} KB)`)
 }
 
-// ── slide05: CTA — Star 카드 작게 + 저장/공유 ──
 async function slide05() {
   const cW = 500, cH = 670
   const cardTop = 150
   const cardLeft = (W - cW) / 2
-  const img = await loadCard('star', cW, cH)
+  const img = await loadCard('sun', cW, cH)
   let masked = null
   if (img) {
     const m = await roundImg(img, cW, cH, 18)
@@ -212,13 +209,6 @@ async function slide05() {
   <rect width="${W}" height="${H}" fill="url(#bg)"/>
   <ellipse cx="540" cy="500" rx="400" ry="400" fill="url(#glow)"/>
   <rect x="${cardLeft - 3}" y="${cardTop - 3}" width="${cW + 6}" height="${cH + 6}" rx="21" fill="none" stroke="rgba(160,140,240,0.12)" stroke-width="1.5" filter="url(#glowF)"/>
-  ${saveIcon}
-  ${shareIcon}
-  <text x="540" y="1060" font-family="sans-serif" font-size="36" font-weight="500" fill="#FFFFFF" text-anchor="middle">저장해두고</text>
-  <text x="540" y="1105" font-family="sans-serif" font-size="24" fill="rgba(210,200,250,0.65)" text-anchor="middle">연락운이 궁금할 때 다시 꺼내보세요</text>
-  <line x1="400" y1="1140" x2="680" y2="1140" stroke="rgba(180,170,230,0.12)" stroke-width="1"/>
-  <text x="540" y="1180" font-family="sans-serif" font-size="22" fill="rgba(200,190,240,0.5)" text-anchor="middle">읽씹 고민하는 친구가 있다면</text>
-  <text x="540" y="1212" font-family="sans-serif" font-size="22" fill="rgba(200,190,240,0.5)" text-anchor="middle">가볍게 공유해보세요</text>
   </svg>`
 
   let base = await sharp(Buffer.from(svg)).png().toBuffer()
@@ -229,9 +219,9 @@ async function slide05() {
     ${saveIcon}
     ${shareIcon}
     <text x="540" y="1060" font-family="sans-serif" font-size="36" font-weight="300" fill="#F4F8FF" text-anchor="middle">저장해두고</text>
-    <text x="540" y="1105" font-family="sans-serif" font-size="24" fill="rgba(210,200,250,0.65)" text-anchor="middle">연락운이 궁금할 때 다시 꺼내보세요</text>
+    <text x="540" y="1105" font-family="sans-serif" font-size="24" fill="rgba(210,200,250,0.65)" text-anchor="middle">마음이 약해질 때 다시 꺼내보세요</text>
     <line x1="400" y1="1140" x2="680" y2="1140" stroke="rgba(180,170,230,0.12)" stroke-width="1"/>
-    <text x="540" y="1180" font-family="sans-serif" font-size="22" fill="rgba(200,190,240,0.5)" text-anchor="middle">읽씹 고민하는 친구가 있다면</text>
+    <text x="540" y="1180" font-family="sans-serif" font-size="22" fill="rgba(200,190,240,0.5)" text-anchor="middle">힘들어하는 친구가 있다면</text>
     <text x="540" y="1212" font-family="sans-serif" font-size="22" fill="rgba(200,190,240,0.5)" text-anchor="middle">가볍게 공유해보세요</text>
     </svg>`
     base = await sharp(base).composite([{ input: Buffer.from(textOverlay), left: 0, top: 0 }]).png().toBuffer()
@@ -242,24 +232,24 @@ async function slide05() {
 }
 
 async function main() {
-  console.log('=== 2026-04-17 carousel (풀배경 스타일 복원) ===')
+  console.log('=== 2026-04-25 carousel 이미지 생성 ===')
   mkdirSync(outputDir, { recursive: true })
 
   await slide01()
 
-  await contentSlide('knight-of-cups',
-    'Knight of Cups', '감정 정리 중',
-    '이 카드는 감정을 정리하고\n다가오고 있다는 신호예요\n\n읽씹이 무관심이 아니라\n아직 마음을 정리하는 중일 수 있어요\n\n키워드: 감정 정리 · 다가옴 · 진심',
+  await contentSlide('queen-of-cups',
+    'Queen of Cups', '감정이 따뜻한 사람',
+    '감정을 누르지 않고\n따뜻하게 받아주는 사람이에요\n\n자기 마음도 상대 마음도\n다정하게 안아줄 줄 알아요\n\n키워드: 공감 · 다정함 · 감정의 깊이',
     1, 'slide02.png')
 
-  await contentSlide('ace-of-wands',
-    'Ace of Wands', '불꽃 같은 연락',
-    '갑자기 불꽃처럼\n연락이 올 수 있는 카드예요\n\n예상치 못한 타이밍에\n새로운 시작의 에너지가 열려요\n\n키워드: 새로운 시작 · 열정 · 불꽃',
+  await contentSlide('ace-of-pentacles',
+    'Ace of Pentacles', '안정감을 주는 사람',
+    '곁에 있으면 마음이 단단해지는 사람\n감정이 튀지 않고 꾸준해요\n\n자극보다 신뢰를 쌓는 관계를\n만들 줄 아는 사람이에요\n\n키워드: 안정 · 신뢰 · 꾸준함',
     2, 'slide03.png')
 
   await contentSlide('star',
-    'The Star', '끊어지지 않은 연결',
-    '시간이 걸리더라도\n연결은 끊어지지 않았어요\n\n이 카드는 희망과 치유의 카드\n기다림이 헛되지 않다는 의미예요\n\n키워드: 희망 · 치유 · 연결',
+    'The Star', '희망을 잃지 않는 사람',
+    '상처 속에서도\n자신을 믿는 빛을 잃지 않아요\n\n이 빛은 타인에게도 전해지고\n자연스럽게 사랑을 끌어와요\n\n키워드: 희망 · 자기 믿음 · 회복력',
     3, 'slide04.png')
 
   await slide05()

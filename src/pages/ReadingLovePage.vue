@@ -27,6 +27,7 @@ import { saveLastReading } from '../composables/useLastReading.js'
 import { saveReadingHistory } from '../composables/useReadingHistory.js'
 import { useCardDraw } from '../composables/useCardDraw.js'
 import { useReadingSession } from '../composables/useReadingSession.js'
+import { trackReadingStart, trackCardDrawn, trackReadingReveal, trackReadingReset } from '../composables/useReadingTracking.js'
 import { getCardById } from '../data/tarotCards.js'
 import { getCardImage } from '../data/cardImages.js'
 import { LOVE_CARD_INTERPRETATIONS, getLoveOverall } from '../data/readings/love.js'
@@ -96,12 +97,16 @@ const flowPoints = [
 
 let revealTimer = null
 
-function startReading() { phase.value = 'status' }
+function startReading() { trackReadingStart('러브타로'); phase.value = 'status' }
 function selectStatus(s) { relationshipStatus.value = s; phase.value = 'draw' }
 
 function confirm() {
   if (!canConfirm.value) return
   const names = drawnTriple.value.map(c => c.name).join(' · ')
+  trackCardDrawn('러브타로', {
+    spreadType: 'three',
+    cards: drawnTriple.value.map(c => ({ id: c.id, reversed: c.reversed, position: c.position })),
+  })
   saveLastReading({ readingType: '러브타로', cardId: 'love', cardName: names, cardNameEn: '' })
   saveReadingHistory({
     readingType: '러브타로',
@@ -110,11 +115,14 @@ function confirm() {
     summary: overall.value?.summary ?? '',
   })
   phase.value = 'reveal'
-  revealTimer = setTimeout(() => { phase.value = 'result' }, 2800)
+  revealTimer = setTimeout(() => {
+    phase.value = 'result'
+    trackReadingReveal('러브타로', { spreadType: 'three', cardCount: drawnTriple.value.length })
+  }, 2800)
 }
 
 function doReset() { reset(); deckKey.value++ }
-function retry() { clearSession(); doReset(); phase.value = 'draw' }
+function retry() { trackReadingReset('러브타로'); clearSession(); doReset(); phase.value = 'draw' }
 function scrollTop() { window.scrollTo({ top: 0 }) }
 
 onUnmounted(() => { if (revealTimer) clearTimeout(revealTimer) })

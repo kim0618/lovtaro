@@ -1,11 +1,10 @@
 /**
- * 2026-04-17 금요일 shortform (캐러셀용 릴스) 이미지 생성 (코스믹 스타일, 5장)
- * - 캐러셀과 동일 내용, 1080x1920 레이아웃
- * - scene01: 커버 - Judgement + 하단 훅
+ * 2026-04-25 토요일 shortform (캐러셀용 릴스) 이미지 생성 (코스믹 스타일)
+ * - scene01: 커버 - The Sun 프레임 + 하단 훅
  * - scene02-04: 작은 프레임 카드 + 카드명 + 해석
- * - scene05: CTA - Star + 저장/공유
+ * - scene05: CTA - The Sun + 저장/공유
  *
- * 실행: node scripts/generate-shortform-2026-04-17_fri.mjs
+ * 실행: node scripts/generate-shortform-2026-04-25_sat.mjs
  */
 import sharp from 'sharp'
 import { writeFileSync, mkdirSync, existsSync } from 'fs'
@@ -15,7 +14,7 @@ import { fileURLToPath } from 'url'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const rootDir = resolve(__dirname, '..')
 const cardsDir = resolve(rootDir, 'public/images/cards-png')
-const outputDir = resolve(rootDir, 'content-output/2026-04-17_fri/shortform')
+const outputDir = resolve(rootDir, 'content-output/2026-04-25_sat/shortform')
 
 const W = 1080, H = 1920
 
@@ -77,7 +76,7 @@ function cosmicDefs() {
       <circle cx="125" cy="225" r="52" fill="white"/>
       <circle cx="158" cy="215" r="52" fill="black"/>
     </mask>
-    <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+    <filter id="softGlow" x="-30%" y="-30%" width="140%" height="140%">
       <feGaussianBlur stdDeviation="2" result="blur"/>
       <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
@@ -142,22 +141,23 @@ async function scene01() {
   const cardLeft = frameX + framePad
   const cardTop = frameY + framePad
 
-  const img = await loadCard('judgement', cardW, cardH)
+  const img = await loadCard('sun', cardW, cardH)
   const masked = img ? await roundImg(img, cardW, cardH, 8) : null
 
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
     <defs>
       ${cosmicDefs()}
     </defs>
-    ${cosmicBody(true, 91)}
+    ${cosmicBody(true, 311)}
 
     ${drawFrame(frameX, frameY, frameW, frameH)}
 
     <g filter="url(#softGlow)">
-      <text x="540" y="1530" text-anchor="middle" font-family="sans-serif" font-size="48" font-weight="300" fill="#F4F8FF" letter-spacing="3">읽씹했던 그 사람,</text>
-      <text x="540" y="1600" text-anchor="middle" font-family="sans-serif" font-size="48" font-weight="300" fill="#F4F8FF" letter-spacing="3">다시 연락이 올까?</text>
+      <text x="540" y="1510" text-anchor="middle" font-family="sans-serif" font-size="46" font-weight="300" fill="#F4F8FF" letter-spacing="3">이별 후에도</text>
+      <text x="540" y="1572" text-anchor="middle" font-family="sans-serif" font-size="46" font-weight="300" fill="#F4F8FF" letter-spacing="3">다시 사랑받는 사람의</text>
+      <text x="540" y="1634" text-anchor="middle" font-family="sans-serif" font-size="46" font-weight="300" fill="#F4F8FF" letter-spacing="3">3가지 특징</text>
     </g>
-    <text x="540" y="1730" text-anchor="middle" font-family="sans-serif" font-size="24" fill="rgba(180,170,220,0.55)" letter-spacing="3">스와이프해서 확인하세요 →</text>
+    <text x="540" y="1740" text-anchor="middle" font-family="sans-serif" font-size="24" fill="rgba(180,170,220,0.55)" letter-spacing="3">스와이프해서 확인하세요 →</text>
 
     <text x="540" y="1870" text-anchor="middle" font-family="sans-serif" font-size="22" fill="rgba(232,212,139,0.4)" letter-spacing="4">@lovtarot_</text>
   </svg>`
@@ -188,7 +188,6 @@ async function contentScene(cardSlug, nameKr, nameEn, subtitle, bodyText, index,
   const divideY = cardTop + cardH + 18
   const nameKrY = divideY + 48
   const nameEnY = nameKrY + 34
-
   const kwY = frameY + frameH + 70
   const interpY = kwY + 100
 
@@ -207,7 +206,7 @@ async function contentScene(cardSlug, nameKr, nameEn, subtitle, bodyText, index,
     <defs>
       ${cosmicDefs()}
     </defs>
-    ${cosmicBody(true, 101 + index * 13)}
+    ${cosmicBody(true, 331 + index * 13)}
 
     <g filter="url(#softGlow)">
       <text x="540" y="${subtitleY}" text-anchor="middle" font-family="sans-serif" font-size="44" fill="#F4F8FF" font-weight="300" letter-spacing="6">${esc(subtitle)}</text>
@@ -246,7 +245,7 @@ async function scene05() {
   const cardLeft = frameX + framePad
   const cardTop = frameY + framePad
 
-  const img = await loadCard('star', cardW, cardH)
+  const img = await loadCard('sun', cardW, cardH)
   const masked = img ? await roundImg(img, cardW, cardH, 7) : null
 
   const divideY = cardTop + cardH + 18
@@ -265,24 +264,24 @@ async function scene05() {
     <defs>
       ${cosmicDefs()}
     </defs>
-    ${cosmicBody(true, 149)}
+    ${cosmicBody(true, 371)}
 
     ${drawFrame(frameX, frameY, frameW, frameH, 0.9)}
 
     <line x1="${frameX + 30}" y1="${divideY}" x2="${frameX + frameW - 30}" y2="${divideY}" stroke="rgba(201,168,76,0.28)" stroke-width="1"/>
 
-    <text x="540" y="${nameKrY}" text-anchor="middle" font-family="sans-serif" font-size="38" fill="#F4F8FF" font-weight="300" letter-spacing="5">별</text>
-    <text x="540" y="${nameEnY}" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="22" fill="rgba(232,212,139,0.78)">The Star</text>
+    <text x="540" y="${nameKrY}" text-anchor="middle" font-family="sans-serif" font-size="38" fill="#F4F8FF" font-weight="300" letter-spacing="5">태양</text>
+    <text x="540" y="${nameEnY}" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="22" fill="rgba(232,212,139,0.78)">The Sun</text>
 
     ${saveIcon}
     ${shareIcon}
 
     <g filter="url(#softGlow)">
       <text x="540" y="1380" text-anchor="middle" font-family="sans-serif" font-size="38" font-weight="300" fill="#F4F8FF" letter-spacing="3">저장해두고</text>
-      <text x="540" y="1435" text-anchor="middle" font-family="sans-serif" font-size="26" fill="rgba(232,212,139,0.78)" letter-spacing="2">연락운이 궁금할 때 다시 꺼내보세요</text>
+      <text x="540" y="1435" text-anchor="middle" font-family="sans-serif" font-size="26" fill="rgba(232,212,139,0.78)" letter-spacing="2">마음이 약해질 때 다시 꺼내보세요</text>
     </g>
     <line x1="380" y1="1485" x2="700" y2="1485" stroke="rgba(201,168,76,0.25)" stroke-width="1"/>
-    <text x="540" y="1535" text-anchor="middle" font-family="sans-serif" font-size="24" fill="rgba(200,190,240,0.55)">읽씹 고민하는 친구가 있다면</text>
+    <text x="540" y="1535" text-anchor="middle" font-family="sans-serif" font-size="24" fill="rgba(200,190,240,0.55)">힘들어하는 친구가 있다면</text>
     <text x="540" y="1572" text-anchor="middle" font-family="sans-serif" font-size="24" fill="rgba(200,190,240,0.55)">가볍게 공유해보세요</text>
 
     <text x="540" y="1870" text-anchor="middle" font-family="sans-serif" font-size="22" fill="rgba(232,212,139,0.4)" letter-spacing="4">@lovtarot_</text>
@@ -297,27 +296,27 @@ async function scene05() {
 }
 
 async function main() {
-  console.log('=== 2026-04-17 shortform 릴스 (코스믹 스타일) ===')
+  console.log('=== 2026-04-25 shortform 릴스 (코스믹 스타일) ===')
   mkdirSync(outputDir, { recursive: true })
 
   await scene01()
 
-  await contentScene('knight-of-cups',
-    '컵의 기사', 'Knight of Cups',
-    '감정 정리 중',
-    '이 카드는 감정을 정리하고\n다가오고 있다는 신호예요\n\n읽씹이 무관심이 아니라\n아직 마음을 정리하는 중일 수 있어요\n\n키워드: 감정 정리 · 다가옴 · 진심',
+  await contentScene('queen-of-cups',
+    '컵의 여왕', 'Queen of Cups',
+    '감정이 따뜻한 사람',
+    '감정을 누르지 않고\n따뜻하게 받아주는 사람이에요\n\n자기 마음도 상대 마음도\n다정하게 안아줄 줄 알아요\n\n키워드: 공감 · 다정함 · 감정의 깊이',
     1, 'scene02.png')
 
-  await contentScene('ace-of-wands',
-    '완드 에이스', 'Ace of Wands',
-    '불꽃 같은 연락',
-    '갑자기 불꽃처럼\n연락이 올 수 있는 카드예요\n\n예상치 못한 타이밍에\n새로운 시작의 에너지가 열려요\n\n키워드: 새로운 시작 · 열정 · 불꽃',
+  await contentScene('ace-of-pentacles',
+    '펜타클 에이스', 'Ace of Pentacles',
+    '안정감을 주는 사람',
+    '곁에 있으면 마음이 단단해지는 사람\n감정이 튀지 않고 꾸준해요\n\n자극보다 신뢰를 쌓는 관계를\n만들 줄 아는 사람이에요\n\n키워드: 안정 · 신뢰 · 꾸준함',
     2, 'scene03.png')
 
   await contentScene('star',
     '별', 'The Star',
-    '끊어지지 않은 연결',
-    '시간이 걸리더라도\n연결은 끊어지지 않았어요\n\n이 카드는 희망과 치유의 카드\n기다림이 헛되지 않다는 의미예요\n\n키워드: 희망 · 치유 · 연결',
+    '희망을 잃지 않는 사람',
+    '상처 속에서도\n자신을 믿는 빛을 잃지 않아요\n\n이 빛은 타인에게도 전해지고\n자연스럽게 사랑을 끌어와요\n\n키워드: 희망 · 자기 믿음 · 회복력',
     3, 'scene04.png')
 
   await scene05()

@@ -27,6 +27,7 @@ import { saveLastReading } from '../composables/useLastReading.js'
 import { saveReadingHistory } from '../composables/useReadingHistory.js'
 import { useCardDraw } from '../composables/useCardDraw.js'
 import { useReadingSession } from '../composables/useReadingSession.js'
+import { trackReadingStart, trackCardDrawn, trackReadingReveal, trackReadingReset } from '../composables/useReadingTracking.js'
 import { THREE_CARD_INTERPRETATIONS, getThreeCardOverall } from '../data/readings/threecards.js'
 import { applyRelationshipModifierToOverall } from '../data/relationshipModifiers.js'
 import { encodeSpreadParams, buildShareUrl, decodeSpreadParams } from '../utils/shareLink.js'
@@ -99,11 +100,15 @@ const flowPoints = [
 
 let revealTimer = null
 
-function startReading() { phase.value = 'status' }
+function startReading() { trackReadingStart('3장 리딩'); phase.value = 'status' }
 function selectStatus(s) { relationshipStatus.value = s; phase.value = 'draw' }
 function confirm() {
   if (!canConfirm.value) return
   const names = drawnTriple.value.map(c => c.name).join(' · ')
+  trackCardDrawn('3장 리딩', {
+    spreadType: 'three',
+    cards: drawnTriple.value.map(c => ({ id: c.id, reversed: c.reversed, position: c.positionKey })),
+  })
   saveLastReading({ readingType: '3장 리딩', cardId: 'three', cardName: names, cardNameEn: '' })
   saveReadingHistory({
     readingType: '3장 리딩',
@@ -112,9 +117,12 @@ function confirm() {
     summary: overall.value?.summary ?? '',
   })
   phase.value = 'reveal'
-  revealTimer = setTimeout(() => { phase.value = 'result' }, REVEAL_DURATION)
+  revealTimer = setTimeout(() => {
+    phase.value = 'result'
+    trackReadingReveal('3장 리딩', { spreadType: 'three', cardCount: drawnTriple.value.length })
+  }, REVEAL_DURATION)
 }
-function retry() { clearSession(); reset(); deckKey.value++; phase.value = 'draw' }
+function retry() { trackReadingReset('3장 리딩'); clearSession(); reset(); deckKey.value++; phase.value = 'draw' }
 function scrollTop() { window.scrollTo({ top: 0 }) }
 
 onUnmounted(() => { if (revealTimer) clearTimeout(revealTimer) })

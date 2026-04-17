@@ -38,6 +38,7 @@ import { applyReversedModifier } from '../data/reversedModifiers.js'
 import { applyRelationshipModifier } from '../data/relationshipModifiers.js'
 import { saveReadingHistory } from '../composables/useReadingHistory.js'
 import { useReadingSession } from '../composables/useReadingSession.js'
+import { trackReadingStart, trackCardDrawn, trackReadingReveal, trackReadingReset } from '../composables/useReadingTracking.js'
 import { encodeReadingParams, buildShareUrl, decodeReadingParams } from '../utils/shareLink.js'
 import { getCardById } from '../data/tarotCards.js'
 import { getCardImage } from '../data/cardImages.js'
@@ -85,11 +86,15 @@ const flowPoints = [
 
 let revealTimer = null
 
-function startReading() { phase.value = 'status' }
+function startReading() { trackReadingStart('상대방 속마음'); phase.value = 'status' }
 function selectStatus(s) { relationshipStatus.value = s; phase.value = 'draw' }
 function confirm() {
   if (!canConfirm.value) return
   const card = drawnCard.value
+  trackCardDrawn('상대방 속마음', {
+    spreadType: 'single',
+    cards: [{ id: card.id, reversed: card.reversed, position: 'mind' }],
+  })
   saveLastReading({ readingType: '상대방 속마음', cardId: card.id, cardName: card.name, cardNameEn: card.nameEn })
   saveReadingHistory({
     readingType: '상대방 속마음',
@@ -99,9 +104,12 @@ function confirm() {
     details: result.value ? { emotionTags: result.value.emotionTags, advice: result.value.advice, caution: result.value.caution } : null,
   })
   phase.value = 'reveal'
-  revealTimer = setTimeout(() => { phase.value = 'result' }, 2200)
+  revealTimer = setTimeout(() => {
+    phase.value = 'result'
+    trackReadingReveal('상대방 속마음', { spreadType: 'single', cardCount: 1 })
+  }, 2200)
 }
-function retry() { clearSession(); reset(); phase.value = 'draw' }
+function retry() { trackReadingReset('상대방 속마음'); clearSession(); reset(); phase.value = 'draw' }
 function scrollTop() { window.scrollTo({ top: 0 }) }
 
 onUnmounted(() => { if (revealTimer) clearTimeout(revealTimer) })

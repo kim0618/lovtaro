@@ -1,9 +1,9 @@
 /**
- * 2026-04-16 목요일 참여형 shortform 이미지 생성 (코스믹 감성)
- * - scene01: 어두운 밤하늘 + 작은 달 + 별 + 카드 뒷면 3장 + 번호
- * - scene02: 풀 코스믹 + CTA 고정 템플릿
+ * 2026-04-21 화요일 참여형 shortform 이미지 생성 (코스믹 감성 보강)
+ * - scene01: 어두운 밤하늘 + 작은 달 + 별 밀도 ↑ + 카드 뒷면 3장 + 번호 (가독성 유지)
+ * - scene02: 풀 코스믹 (성운 + 달 + 많은 별) + CTA 고정 템플릿
  *
- * 실행: node scripts/generate-shortform-2026-04-16_thu.mjs
+ * 실행: node scripts/generate-shortform-2026-04-21_tue.mjs
  */
 import sharp from 'sharp'
 import { writeFileSync, mkdirSync } from 'fs'
@@ -13,7 +13,7 @@ import { siteCardBackSvg, siteCardBackDefs, CARD_WIDTH, CARD_HEIGHT } from './li
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const rootDir = resolve(__dirname, '..')
-const outputDir = resolve(rootDir, 'content-output/2026-04-16_thu/shortform')
+const outputDir = resolve(rootDir, 'content-output/2026-04-21_tue/shortform')
 const W = 1080, H = 1920
 
 function mulberry32(seed) {
@@ -117,6 +117,7 @@ function fullCosmicBody(starSeed = 1) {
   `
 }
 
+// 참여형 scene01 전용: 어두운 밤하늘 (카드 가독성 위해 성운 최소화)
 function participationBody(starSeed = 1) {
   const stars1 = genStars(260, starSeed, 0, W, 0, H, false)
   const stars2 = genStars(70, starSeed + 11, 0, W, 0, H, true)
@@ -146,13 +147,14 @@ async function generateScene01() {
       ${cosmicDefs()}
       ${siteCardBackDefs()}
     </defs>
-    ${participationBody(31)}
+    ${participationBody(3)}
 
+    <!-- Card area subtle glow for depth -->
     <ellipse cx="540" cy="${cardY}" rx="500" ry="380" fill="url(#cardAreaGlow)" filter="url(#glowBlur)"/>
 
     <g filter="url(#softGlow)">
-      <text x="540" y="380" text-anchor="middle" font-family="sans-serif" font-size="48" fill="#F4F8FF" letter-spacing="3" font-weight="300">그 사람이 보내는 신호,</text>
-      <text x="540" y="455" text-anchor="middle" font-family="sans-serif" font-size="48" fill="#F4F8FF" letter-spacing="3" font-weight="300">어떤 의미일까?</text>
+      <text x="540" y="380" text-anchor="middle" font-family="sans-serif" font-size="48" fill="#F4F8FF" letter-spacing="3" font-weight="300">그 사람 마음 속에서</text>
+      <text x="540" y="455" text-anchor="middle" font-family="sans-serif" font-size="48" fill="#F4F8FF" letter-spacing="3" font-weight="300">나는 어떤 존재일까?</text>
     </g>
 
     <g filter="url(#cardShadow)">
@@ -189,8 +191,9 @@ async function generateScene02() {
         <stop offset="100%" stop-color="#c9a84c" stop-opacity="0"/>
       </linearGradient>
     </defs>
-    ${fullCosmicBody(37)}
+    ${fullCosmicBody(7)}
 
+    <!-- Decorative divider lines -->
     <line x1="280" y1="820" x2="800" y2="820" stroke="url(#goldDivider)" stroke-width="1.5"/>
     <line x1="280" y1="1150" x2="800" y2="1150" stroke="url(#goldDivider)" stroke-width="1.5"/>
 
@@ -200,6 +203,7 @@ async function generateScene02() {
       <text x="540" y="1100" text-anchor="middle" font-family="sans-serif" font-size="34" fill="rgba(232,212,139,0.85)" letter-spacing="4" font-weight="300">해석을 댓글로 달아드릴게요</text>
     </g>
 
+    <!-- Small card hint decoration -->
     <g opacity="0.35">
       <circle cx="420" cy="1300" r="3" fill="#e8d48b"/>
       <circle cx="540" cy="1300" r="3" fill="#e8d48b"/>
@@ -216,7 +220,7 @@ async function generateScene02() {
 }
 
 async function main() {
-  console.log('=== 2026-04-16 참여형 shortform 이미지 생성 (코스믹 감성) ===')
+  console.log('=== 2026-04-21 참여형 shortform 이미지 생성 (코스믹 감성) ===')
   await generateScene01()
   await generateScene02()
   console.log('완료!')

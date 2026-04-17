@@ -5,6 +5,7 @@ import { TODAY_RESULTS } from '../data/readings/today.js'
 import { applyReversedModifier } from '../data/reversedModifiers.js'
 import { saveReadingHistory } from './useReadingHistory.js'
 import { useStreak } from './useStreak.js'
+import { trackTodayDraw, trackCardDrawn, trackReadingReveal, trackReadingReset } from './useReadingTracking.js'
 
 const STORAGE_KEY = 'lovtaro_daily_tarot'
 
@@ -98,6 +99,11 @@ export function useDailyTarot() {
     if (!canConfirm.value) return
     const card = drawnCard.value
     if (card) {
+      trackTodayDraw({ cardId: card.id, reversed: card.reversed })
+      trackCardDrawn('오늘의 연애 카드', {
+        spreadType: 'single',
+        cards: [{ id: card.id, reversed: card.reversed, position: 'today' }],
+      })
       saveTodayResult({
         cardId: card.id,
         cardName: card.name,
@@ -119,7 +125,10 @@ export function useDailyTarot() {
       recordToday()
     }
     phase.value = 'reveal'
-    revealTimer = setTimeout(() => { phase.value = 'result' }, 2200)
+    revealTimer = setTimeout(() => {
+      phase.value = 'result'
+      trackReadingReveal('오늘의 연애 카드', { spreadType: 'single', cardCount: 1 })
+    }, 2200)
   }
 
   function clearRevealTimer() {
@@ -132,6 +141,7 @@ export function useDailyTarot() {
   }
 
   function resetToday() {
+    trackReadingReset('오늘의 연애 카드')
     try { localStorage.removeItem(STORAGE_KEY) } catch { /* ignore */ }
     saved.value = null
     alreadyDrawn.value = false
