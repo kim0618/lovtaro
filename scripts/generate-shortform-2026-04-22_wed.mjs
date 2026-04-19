@@ -185,8 +185,9 @@ async function contentScene(cardSlug, nameKr, nameEn, subtitle, bodyText, index,
 
   const subtitleY = 190
   const divideY = cardTop + cardH + 18
+  const hasKr = nameKr && nameKr.trim().length > 0
   const nameKrY = divideY + 48
-  const nameEnY = nameKrY + 34
+  const nameEnY = hasKr ? nameKrY + 34 : divideY + 58
   const kwY = frameY + frameH + 70
   const interpY = kwY + 100
 
@@ -200,6 +201,13 @@ async function contentScene(cardSlug, nameKr, nameEn, subtitle, bodyText, index,
     curY += lineGap
     return s
   }).filter(Boolean).join('\n')
+
+  const nameKrSvg = hasKr
+    ? `<text x="540" y="${nameKrY}" text-anchor="middle" font-family="sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="5">${esc(nameKr)}</text>`
+    : ''
+  const nameEnSize = hasKr ? 22 : 30
+  const nameEnFill = hasKr ? 'rgba(232,212,139,0.78)' : '#F4F8FF'
+  const nameEnWeight = hasKr ? 'normal' : '300'
 
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
     <defs>
@@ -217,8 +225,8 @@ async function contentScene(cardSlug, nameKr, nameEn, subtitle, bodyText, index,
 
     <line x1="${frameX + 30}" y1="${divideY}" x2="${frameX + frameW - 30}" y2="${divideY}" stroke="rgba(201,168,76,0.28)" stroke-width="1"/>
 
-    <text x="540" y="${nameKrY}" text-anchor="middle" font-family="sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="5">${esc(nameKr)}</text>
-    <text x="540" y="${nameEnY}" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="22" fill="rgba(232,212,139,0.78)">${esc(nameEn)}</text>
+    ${nameKrSvg}
+    <text x="540" y="${nameEnY}" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="${nameEnSize}" fill="${nameEnFill}" font-weight="${nameEnWeight}">${esc(nameEn)}</text>
 
     ${interpSvg}
 
@@ -307,7 +315,7 @@ async function main() {
     1, 'scene02.png')
 
   await contentScene('six-of-cups',
-    '컵 6', 'Six of Cups',
+    '', 'Six of Cups',
     '과거 감정 정리',
     '과거의 기억이 떠오르는 이유는\n정리할 시간이 됐다는 신호예요\n\n미련이 아니라 마무리가 필요한 감정\n이 과정 후에 새로운 감정이 들어와요\n\n키워드: 추억 · 정리 · 놓아줌',
     2, 'scene03.png')

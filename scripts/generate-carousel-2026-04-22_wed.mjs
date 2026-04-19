@@ -1,6 +1,6 @@
 /**
  * 2026-04-22 수요일 carousel 이미지 생성 (5장)
- * - slide01: 커버 — Wheel of Fortune 풀사이즈 + 하단 페이드 + 훅
+ * - slide01: 커버 - Wheel of Fortune 풀사이즈 + 하단 페이드 + 훅
  * - slide02: The Hermit - 잠시 멈추고 내 마음 들여다보기
  * - slide03: Six of Cups - 과거의 감정을 정리할 시간
  * - slide04: Temperance - 서두르지 않고 균형 찾기

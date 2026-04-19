@@ -41,7 +41,7 @@ function calcCurrentCount() {
   return 0
 }
 
-// 모듈 레벨 공유 상태 — 모든 useStreak() 호출이 같은 ref를 참조
+// 모듈 레벨 공유 상태 - 모든 useStreak() 호출이 같은 ref를 참조
 const streak = ref(calcCurrentCount())
 const recordedToday = ref(loadStreak().lastDate === getTodayKey())
 

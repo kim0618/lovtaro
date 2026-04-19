@@ -62,7 +62,7 @@ export function useReadingSession(key, { phase, selectedIds, relationshipStatus,
 
   // Clean up when reading is complete and user leaves
   onUnmounted(() => {
-    // Keep session data — it clears when browser tab closes
+    // Keep session data - it clears when browser tab closes
   })
 
   function clearSession() {

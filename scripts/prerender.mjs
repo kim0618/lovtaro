@@ -112,7 +112,80 @@ const ROUTES = [
     title: '개인정보처리방침 | Lovtaro',
     description: 'Lovtaro 개인정보처리방침 안내.',
   },
+  {
+    path: '/about',
+    title: 'Lovtaro 소개 - 무료 연애 타로 리딩 서비스 | Lovtaro',
+    description: 'Lovtaro는 연애 고민을 가진 분들을 위한 무료 타로 리딩 서비스입니다. 상대방 속마음, 재회 가능성, 연락 올까 타로까지 - 감정의 흐름을 조용하게 읽어드립니다.',
+  },
+  {
+    path: '/contact',
+    title: '문의하기 | Lovtaro',
+    description: 'Lovtaro 서비스 관련 문의는 이메일 또는 인스타그램 DM으로 연락해 주세요.',
+  },
+  {
+    path: '/editorial-policy',
+    title: '편집 방침 | Lovtaro',
+    description: 'Lovtaro 타로 가이드 콘텐츠의 작성 기준, 정확성 원칙, 업데이트 정책을 안내합니다.',
+  },
+  {
+    path: '/disclaimer',
+    title: '면책 조항 | Lovtaro',
+    description: 'Lovtaro 타로 리딩 서비스 이용 시 적용되는 면책 조항을 안내합니다. 타로 결과는 오락 및 참고 목적으로만 활용해 주세요.',
+  },
+  {
+    path: '/guide',
+    title: '연애 타로 가이드 - 카드 해석부터 상황별 리딩까지 | Lovtaro',
+    description: '연애 타로 카드 해석 가이드. 메이저 아르카나 연애 의미, 상황별 타로 읽는 법, 재회·썸·이별 타로 조합까지. Lovtaro 연애 타로 가이드.',
+  },
 ]
+
+// ── 가이드 글 배열 (글 추가 시 여기에도 등록) ─────────────────────────────
+// { slug, title, description, createdAt, ogImage? }
+const GUIDES = [
+  {
+    slug: 'moon-love-meaning',
+    title: '달 카드 연애 해석 - 불안한 감정의 신호를 읽는 법',
+    description: '연애 타로에서 달 카드가 나왔을 때의 의미를 정방향·역방향 분기별로, 짝사랑·썸·연인·재회 상황에 맞게 풀어냈어요. 자주 나오는 카드 조합과 FAQ까지 담았습니다.',
+    createdAt: '2026-04-19',
+    updatedAt: '2026-04-19',
+    faq: [
+      {
+        question: '달 카드가 재회 타로에서 나왔을 때는 어떻게 해석해야 하나요?',
+        answer: '재회 리딩에서 달 카드는 아직 결론이 나지 않은 상태를 나타내는 경우가 많아요. 상대방도, 나도 감정 정리가 완전히 끝나지 않은 시기예요. 재회가 불가능하다는 뜻보다는 지금 당장 판단하기에 이른 상황에 가까워요. 달빛이 걷히듯 시간이 지나면 상황이 더 선명하게 보일 수 있어요.',
+      },
+      {
+        question: '썸 상대에게 달 카드가 뜨면 좋은 신호인가요, 나쁜 신호인가요?',
+        answer: '달 카드는 좋고 나쁨으로 나누기 어려운 카드예요. 상대방 자리에 달이 나왔다면 상대의 감정이 아직 정리 중이거나, 나를 의식하고 있지만 표현하지 않고 있는 상태일 수 있어요. 확실한 답을 바라는 입장에서는 답답할 수 있지만, 상대가 나를 완전히 닫아버린 건 아닌 상태예요.',
+      },
+      {
+        question: '달 카드 역방향이면 이별을 의미하는 건가요?',
+        answer: '꼭 이별을 의미하지는 않아요. 역방향 달 카드는 감정이 흐려져 있거나, 상황을 실제보다 부정적으로 혹은 긍정적으로 읽고 있을 때 자주 나와요. 이별 여부보다는 지금 내가 상황을 얼마나 명확하게 보고 있는지를 먼저 점검해보라는 의미에 가까운 경우가 많아요.',
+      },
+      {
+        question: '달 카드가 나왔을 때 상대에게 먼저 연락해도 될까요?',
+        answer: '연락 자체보다 타이밍과 방식이 중요한 시기예요. 달 카드가 나왔을 때는 상황이 아직 유동적이에요. 먼저 연락하는 것 자체가 문제는 아니지만, 결과에 대한 기대를 크게 갖기보다 가볍게 시도하는 쪽이 마음이 편해요. 상대의 반응을 보면서 천천히 흐름을 파악하는 방식이 맞아요.',
+      },
+      {
+        question: '상대방 마음 자리에 달 카드가 나왔어요. 어떻게 봐야 하나요?',
+        answer: '상대방이 나에 대해 복잡한 감정을 갖고 있거나, 자기 마음을 아직 정확히 파악하지 못하고 있는 상태일 수 있어요. 나쁜 감정을 가졌다는 뜻이 아니라, 감정이 아직 윤곽을 잡지 못한 단계에 가까워요. 상대를 다그쳐 답을 얻으려 하기보다 자연스럽게 함께할 시간을 더 만드는 게 효과적인 시기예요.',
+      },
+      {
+        question: '달 카드가 리딩에서 연속으로 두 번 나왔어요. 뭔가 특별한 의미가 있나요?',
+        answer: '같은 카드가 반복해서 나오는 건 지금 그 에너지가 강하게 작용하고 있다는 신호로 볼 수 있어요. 달이 두 번 나왔다면, 불확실한 상황이 상당히 오래 지속되고 있거나 그 안개 속에서 내가 많이 지쳐있을 수 있어요. 리딩 결과를 하나의 신호로 받아들이면서, 지금 내 감정 상태를 한 번 돌봐주는 게 먼저예요.',
+      },
+    ],
+  },
+]
+
+for (const guide of GUIDES) {
+  ROUTES.push({
+    path: `/guide/${guide.slug}`,
+    title: `${guide.title} | Lovtaro`,
+    description: guide.description,
+    ogImage: guide.ogImage || null,
+    _guide: guide,
+  })
+}
 
 // Minor Arcana card data (mirrors src/data/minorArcana.js)
 const MINOR_CARDS = [
@@ -238,6 +311,11 @@ function decodeLabel(seg) {
     history: '리딩 기록',
     link: '링크',
     privacy: '개인정보처리방침',
+    about: 'Lovtaro 소개',
+    contact: '문의하기',
+    'editorial-policy': '편집 방침',
+    disclaimer: '면책 조항',
+    guide: '연애 타로 가이드',
   }
   return labels[seg] || seg
 }
@@ -345,6 +423,33 @@ function buildCardFAQ(card, detail) {
   }
 }
 
+function buildGuideMain(guide) {
+  return {
+    '@type': 'Article',
+    headline: guide.title,
+    description: guide.description,
+    url: `${SITE_URL}/guide/${guide.slug}`,
+    datePublished: guide.createdAt,
+    dateModified: guide.updatedAt || guide.createdAt,
+    author: { '@id': `${SITE_URL}#organization` },
+    publisher: { '@id': `${SITE_URL}#organization` },
+    inLanguage: 'ko',
+    image: guide.ogImage || `${SITE_URL}/og-image.png`,
+  }
+}
+
+function buildGuideFAQ(guide) {
+  if (!guide.faq || !guide.faq.length) return null
+  return {
+    '@type': 'FAQPage',
+    mainEntity: guide.faq.map(item => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: { '@type': 'Answer', text: item.answer },
+    })),
+  }
+}
+
 function buildReadingMain(route) {
   return {
     '@type': 'WebPage',
@@ -363,11 +468,26 @@ function buildGraph(route, { allCards, cardDetailMap } = {}) {
   const isCardsList = route.path === '/cards'
   const cardDetailMatch = route.path.match(/^\/cards\/(.+)$/)
   const isReading = route.path.startsWith('/reading/') || route.path === '/today'
+  const isGuideIndex = route.path === '/guide'
+  const isGuideDetail = route.path.startsWith('/guide/') && route._guide
 
   if (isHome) {
     graph.push(buildOrganization(), buildWebSite(), buildHomeMain())
   } else if (isCardsList && allCards) {
     graph.push(buildCardsListMain(allCards))
+  } else if (isGuideIndex) {
+    graph.push({
+      '@type': 'CollectionPage',
+      name: '연애 타로 가이드',
+      description: '연애 타로 카드 해석 가이드 모음',
+      url: `${SITE_URL}/guide`,
+      inLanguage: 'ko',
+      isPartOf: { '@id': `${SITE_URL}#website` },
+    })
+  } else if (isGuideDetail) {
+    graph.push(buildGuideMain(route._guide))
+    const faq = buildGuideFAQ(route._guide)
+    if (faq) graph.push(faq)
   } else if (cardDetailMatch) {
     const cardId = cardDetailMatch[1]
     const card = allCards.find(c => c.id === cardId)

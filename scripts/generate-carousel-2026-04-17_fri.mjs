@@ -1,10 +1,10 @@
 /**
  * 2026-04-17 금요일 carousel 이미지 생성 (5장) - 풀배경 카드 스타일
- * - slide01: 커버 — Judgement 풀사이즈 + 하단 페이드 + 훅
+ * - slide01: 커버 - Judgement 풀사이즈 + 하단 페이드 + 훅
  * - slide02: Knight of Cups 풀배경 + 해석 텍스트
  * - slide03: Ace of Wands 풀배경 + 해석 텍스트
  * - slide04: The Star 풀배경 + 해석 텍스트
- * - slide05: CTA — Star 카드 작게 + 저장/공유
+ * - slide05: CTA - Star 카드 작게 + 저장/공유
  *
  * 실행: node scripts/generate-carousel-2026-04-17_fri.mjs
  */
@@ -46,7 +46,7 @@ async function roundImg(buf, w, h, r) {
   return sharp(buf).composite([{ input: Buffer.from(m), blend: 'dest-in' }]).png().toBuffer()
 }
 
-// ── slide01: 커버 — Judgement 풀사이즈 + 하단 페이드 + 훅 ──
+// ── slide01: 커버 - Judgement 풀사이즈 + 하단 페이드 + 훅 ──
 async function slide01() {
   const cW = 750, cH = 940
   const cardTop = 80
@@ -170,7 +170,7 @@ async function contentSlide(cardSlug, nameEn, subtitle, bodyText, index, filenam
   console.log(`✅ ${filename} (${(base.length / 1024).toFixed(0)} KB)`)
 }
 
-// ── slide05: CTA — Star 카드 작게 + 저장/공유 ──
+// ── slide05: CTA - Star 카드 작게 + 저장/공유 ──
 async function slide05() {
   const cW = 500, cH = 670
   const cardTop = 150

@@ -29,6 +29,12 @@ const tabs = [
     match: (path) => path === '/history',
     icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 12"/></svg>`,
   },
+  {
+    label: '가이드',
+    to: '/guide',
+    match: (path) => path === '/guide' || path.startsWith('/guide/'),
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="11" x2="15" y2="11"/></svg>`,
+  },
 ]
 
 const activeIndex = computed(() => tabs.findIndex(t => t.match(route.path)))

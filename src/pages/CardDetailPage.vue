@@ -302,6 +302,7 @@ const energyLabel = { positive: '긍정적 에너지', neutral: '중립적 에�
   color: var(--lt-text-sub);
   line-height: 1.9;
   letter-spacing: 0.02em;
+  white-space: pre-line;
 }
 
 .card-detail__advice {

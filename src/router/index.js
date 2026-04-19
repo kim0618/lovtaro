@@ -72,6 +72,36 @@ const routes = [
     component: () => import('../pages/PrivacyPage.vue'),
   },
   {
+    path: '/about',
+    name: 'about',
+    component: () => import('../pages/AboutPage.vue'),
+  },
+  {
+    path: '/contact',
+    name: 'contact',
+    component: () => import('../pages/ContactPage.vue'),
+  },
+  {
+    path: '/editorial-policy',
+    name: 'editorial-policy',
+    component: () => import('../pages/EditorialPolicyPage.vue'),
+  },
+  {
+    path: '/disclaimer',
+    name: 'disclaimer',
+    component: () => import('../pages/DisclaimerPage.vue'),
+  },
+  {
+    path: '/guide',
+    name: 'guide',
+    component: () => import('../pages/GuideIndexPage.vue'),
+  },
+  {
+    path: '/guide/:slug',
+    name: 'guide-detail',
+    component: () => import('../pages/GuideDetailPage.vue'),
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'not-found',
     component: () => import('../pages/NotFoundPage.vue'),

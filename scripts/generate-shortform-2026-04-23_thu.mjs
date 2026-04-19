@@ -1,157 +1,236 @@
 /**
- * 2026-04-23 목요일 카드소개형 shortform 이미지 생성
- * - scene01: 카드 관심 끄는 질문 훅 (텍스트 중심)
- * - scene02: Strength 카드 공개
- * - scene03: 감정 해석 + 약한 CTA
+ * 2026-04-23 목요일 참여형 shortform 이미지 생성 (코스믹 감성)
+ * - scene01: participationBody (작은 달 + 어두운 밤하늘 + 하단 성운) + 카드 뒷면 3장(랜덤 7스킴) + 번호
+ * - scene02: fullCosmicBody + goldDivider 상/하 장식 라인 + CTA 고정 템플릿
  *
  * 실행: node scripts/generate-shortform-2026-04-23_thu.mjs
  */
 import sharp from 'sharp'
-import { writeFileSync, mkdirSync, existsSync } from 'fs'
+import { writeFileSync, mkdirSync } from 'fs'
 import { resolve, dirname } from 'path'
 import { fileURLToPath } from 'url'
+import { colorCardBackSvg, colorCardBackDefs, CARD_WIDTH, CARD_HEIGHT, pickRandomSchemes, getSchemeAccent } from './lib/color-card-back-svg.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const rootDir = resolve(__dirname, '..')
-const cardsDir = resolve(rootDir, 'public/images/cards-png')
 const outputDir = resolve(rootDir, 'content-output/2026-04-23_thu/shortform')
 const W = 1080, H = 1920
 
-function generateStars(count, xMin, xMax, yMin, yMax, goldMode = false) {
+function mulberry32(seed) {
+  return function() {
+    let t = seed += 0x6D2B79F5
+    t = Math.imul(t ^ t >>> 15, t | 1)
+    t ^= t + Math.imul(t ^ t >>> 7, t | 61)
+    return ((t ^ t >>> 14) >>> 0) / 4294967296
+  }
+}
+
+function genStars(count, seed, xMin, xMax, yMin, yMax, bright = false) {
+  const rand = mulberry32(seed)
+  const colors = bright
+    ? ['#ffe9b3', '#f4d99f', '#e8d48b', '#ffffff', '#fff5d4']
+    : ['#e8d48b', '#c9a84c', '#d4b85c', '#b89858', '#8f7a4a']
   let stars = ''
-  const seed = [0.12,0.87,0.34,0.56,0.78,0.23,0.91,0.45,0.67,0.09,0.38,0.72,0.15,0.83,0.51,0.29,0.94,0.61,0.03,0.76,0.42,0.88,0.17,0.55,0.33,0.69]
-  const goldColors = ['#e8d48b','#c9a84c','#d4b85c']
   for (let i = 0; i < count; i++) {
-    const x = xMin + seed[i % seed.length] * (xMax - xMin)
-    const y = yMin + seed[(i + 7) % seed.length] * (yMax - yMin)
-    const size = goldMode ? (1 + seed[(i + 3) % seed.length] * 2) : (0.8 + seed[(i + 3) % seed.length] * 1.5)
-    const opacity = goldMode ? (0.4 + seed[(i + 5) % seed.length] * 0.5) : (0.2 + seed[(i + 5) % seed.length] * 0.3)
-    const fill = goldMode ? goldColors[i % goldColors.length] : `rgba(139,127,176,${opacity.toFixed(2)})`
-    const finalOpacity = goldMode ? opacity.toFixed(2) : '1'
-    stars += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${size.toFixed(1)}" fill="${fill}" opacity="${finalOpacity}"/>\n`
+    const x = xMin + rand() * (xMax - xMin)
+    const y = yMin + rand() * (yMax - yMin)
+    const s = bright ? (1 + rand() * 2.5) : (0.5 + rand() * 1.8)
+    const op = bright ? (0.5 + rand() * 0.5) : (0.25 + rand() * 0.55)
+    const color = colors[Math.floor(rand() * colors.length)]
+    stars += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${s.toFixed(2)}" fill="${color}" opacity="${op.toFixed(2)}"/>`
   }
   return stars
 }
 
-async function loadCard(slug, w, h) {
-  const p = resolve(cardsDir, `${slug}.png`)
-  if (!existsSync(p)) return null
-  return sharp(p).resize(w, h, { fit: 'cover' }).toBuffer()
+function cosmicDefs() {
+  return `
+    <radialGradient id="cosmicBg" cx="50%" cy="45%" r="85%">
+      <stop offset="0%" stop-color="#1a0f38"/>
+      <stop offset="35%" stop-color="#140b2c"/>
+      <stop offset="75%" stop-color="#0c0820"/>
+      <stop offset="100%" stop-color="#06040f"/>
+    </radialGradient>
+    <radialGradient id="neb1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="rgba(190,110,60,0.22)"/>
+      <stop offset="60%" stop-color="rgba(160,80,50,0.08)"/>
+      <stop offset="100%" stop-color="rgba(180,100,60,0)"/>
+    </radialGradient>
+    <radialGradient id="neb2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="rgba(140,70,130,0.18)"/>
+      <stop offset="100%" stop-color="rgba(130,60,120,0)"/>
+    </radialGradient>
+    <radialGradient id="neb3" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="rgba(210,150,90,0.14)"/>
+      <stop offset="100%" stop-color="rgba(200,140,80,0)"/>
+    </radialGradient>
+    <radialGradient id="moonGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="rgba(255,235,180,0.18)"/>
+      <stop offset="100%" stop-color="rgba(255,235,180,0)"/>
+    </radialGradient>
+    <mask id="moonMaskBig">
+      <rect x="0" y="0" width="${W}" height="${H}" fill="black"/>
+      <circle cx="125" cy="225" r="52" fill="white"/>
+      <circle cx="158" cy="215" r="52" fill="black"/>
+    </mask>
+    <mask id="moonMaskSmall">
+      <rect x="0" y="0" width="${W}" height="${H}" fill="black"/>
+      <circle cx="115" cy="200" r="34" fill="white"/>
+      <circle cx="138" cy="192" r="34" fill="black"/>
+    </mask>
+    <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="numGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="cardShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="15" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+    <radialGradient id="cardAreaGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#c9a84c" stop-opacity="0.12"/>
+      <stop offset="50%" stop-color="#8b6fb0" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="transparent" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="glowBlur" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="60"/>
+    </filter>
+  `
 }
 
-async function roundImg(buf, w, h, r) {
-  const m = `<svg width="${w}" height="${h}"><rect width="${w}" height="${h}" rx="${r}" ry="${r}" fill="white"/></svg>`
-  return sharp(buf).composite([{ input: Buffer.from(m), blend: 'dest-in' }]).png().toBuffer()
+function fullCosmicBody(starSeed = 1) {
+  const stars1 = genStars(320, starSeed, 0, W, 0, H, false)
+  const stars2 = genStars(120, starSeed + 11, 0, W, 0, H, true)
+  const stars3 = genStars(60, starSeed + 23, 0, W, 0, H, true)
+  return `
+    <rect width="${W}" height="${H}" fill="url(#cosmicBg)"/>
+    <ellipse cx="120" cy="720" rx="520" ry="420" fill="url(#neb1)"/>
+    <ellipse cx="980" cy="1280" rx="520" ry="460" fill="url(#neb2)"/>
+    <ellipse cx="540" cy="1750" rx="620" ry="320" fill="url(#neb3)"/>
+    <ellipse cx="760" cy="400" rx="380" ry="300" fill="url(#neb3)"/>
+    ${stars1}
+    ${stars2}
+    ${stars3}
+    <circle cx="140" cy="220" r="120" fill="url(#moonGlow)"/>
+    <rect x="50" y="150" width="180" height="180" fill="rgba(248,230,185,0.95)" mask="url(#moonMaskBig)"/>
+  `
+}
+
+function participationBody(starSeed = 1) {
+  const stars1 = genStars(260, starSeed, 0, W, 0, H, false)
+  const stars2 = genStars(70, starSeed + 11, 0, W, 0, H, true)
+  return `
+    <rect width="${W}" height="${H}" fill="url(#cosmicBg)"/>
+    <ellipse cx="900" cy="1700" rx="500" ry="350" fill="url(#neb3)"/>
+    <ellipse cx="180" cy="1550" rx="400" ry="300" fill="url(#neb2)"/>
+    ${stars1}
+    ${stars2}
+    <circle cx="125" cy="205" r="80" fill="url(#moonGlow)"/>
+    <rect x="70" y="150" width="120" height="120" fill="rgba(248,230,185,0.9)" mask="url(#moonMaskSmall)"/>
+  `
 }
 
 async function generateScene01() {
-  const goldStars = generateStars(40, 30, 1050, 100, 1800, true)
-  const dimStars = generateStars(50, 30, 1050, 100, 1800, false)
+  const cardScale = 2.5
+  const cardPixelW = CARD_WIDTH * cardScale
+  const cardPixelH = CARD_HEIGHT * cardScale
+  const cardGap = 50
+  const totalWidth = cardPixelW * 3 + cardGap * 2
+  const startCX = (W - totalWidth) / 2 + cardPixelW / 2
+  const cardY = 980
+  const numberY = cardY + cardPixelH / 2 + 55
+
+  const cx1 = startCX
+  const cx2 = startCX + cardPixelW + cardGap
+  const cx3 = startCX + (cardPixelW + cardGap) * 2
+
+  const [s1, s2, s3] = pickRandomSchemes(3)
+  console.log(`🎴 schemes: ${s1} / ${s2} / ${s3}`)
 
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
-  <defs>
-    <radialGradient id="bgGlow" cx="50%" cy="45%" r="65%"><stop offset="0%" stop-color="#1a1040"/><stop offset="40%" stop-color="#110d2e"/><stop offset="100%" stop-color="#07060f"/></radialGradient>
-    <radialGradient id="centerGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#c9a84c" stop-opacity="0.2"/><stop offset="50%" stop-color="#8b6fb0" stop-opacity="0.08"/><stop offset="100%" stop-color="#1a1040" stop-opacity="0"/></radialGradient>
-    <filter id="bigGlow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="100"/></filter>
-    <filter id="textGlow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-    <linearGradient id="goldLine" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#c9a84c" stop-opacity="0"/><stop offset="50%" stop-color="#e8d48b" stop-opacity="0.5"/><stop offset="100%" stop-color="#c9a84c" stop-opacity="0"/></linearGradient>
-  </defs>
-  <rect width="${W}" height="${H}" fill="url(#bgGlow)"/>
-  <ellipse cx="540" cy="960" rx="550" ry="600" fill="url(#centerGlow)" filter="url(#bigGlow)"/>
-  ${goldStars}${dimStars}
-  <line x1="280" y1="830" x2="800" y2="830" stroke="url(#goldLine)" stroke-width="1.5"/>
-  <line x1="280" y1="1180" x2="800" y2="1180" stroke="url(#goldLine)" stroke-width="1.5"/>
-  <g filter="url(#textGlow)">
-    <text x="540" y="900" text-anchor="middle" font-family="sans-serif" font-size="54" fill="#F4F8FF" letter-spacing="2" font-weight="300">감정을 누르고 참아야만</text>
-    <text x="540" y="970" text-anchor="middle" font-family="sans-serif" font-size="54" fill="#F4F8FF" letter-spacing="2" font-weight="300">진짜 강한 걸까?</text>
-    <text x="540" y="1100" text-anchor="middle" font-family="sans-serif" font-size="30" fill="rgba(232,212,139,0.7)" letter-spacing="5">이 카드의 답을 들어보세요</text>
-  </g>
-  <text x="540" y="1780" text-anchor="middle" font-family="sans-serif" font-size="24" fill="#c9a84c" opacity="0.35" letter-spacing="2">@lovtarot_</text>
-</svg>`
+    <defs>
+      ${cosmicDefs()}
+      ${colorCardBackDefs()}
+    </defs>
+    ${participationBody(17)}
+
+    <ellipse cx="540" cy="${cardY}" rx="500" ry="380" fill="url(#cardAreaGlow)" filter="url(#glowBlur)"/>
+
+    <g filter="url(#softGlow)">
+      <text x="540" y="380" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="48" fill="#F4F8FF" letter-spacing="3" font-weight="300">이 관계,</text>
+      <text x="540" y="455" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="48" fill="#F4F8FF" letter-spacing="3" font-weight="300">지금 어디쯤 와 있을까?</text>
+    </g>
+
+    <ellipse cx="${cx1}" cy="${cardY}" rx="${cardPixelW * 0.8}" ry="${cardPixelH * 0.55}" fill="url(#colorCardGlow_${s1})" filter="url(#glowBlur)"/>
+    <ellipse cx="${cx2}" cy="${cardY}" rx="${cardPixelW * 0.8}" ry="${cardPixelH * 0.55}" fill="url(#colorCardGlow_${s2})" filter="url(#glowBlur)"/>
+    <ellipse cx="${cx3}" cy="${cardY}" rx="${cardPixelW * 0.8}" ry="${cardPixelH * 0.55}" fill="url(#colorCardGlow_${s3})" filter="url(#glowBlur)"/>
+
+    <g filter="url(#cardShadow)">
+      ${colorCardBackSvg(cx1, cardY, cardScale, s1)}
+      ${colorCardBackSvg(cx2, cardY, cardScale, s2)}
+      ${colorCardBackSvg(cx3, cardY, cardScale, s3)}
+    </g>
+
+    <g filter="url(#numGlow)">
+      <text x="${cx1}" y="${numberY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="42" fill="${getSchemeAccent(s1)}" font-weight="600">1번</text>
+      <text x="${cx2}" y="${numberY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="42" fill="${getSchemeAccent(s2)}" font-weight="600">2번</text>
+      <text x="${cx3}" y="${numberY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="42" fill="${getSchemeAccent(s3)}" font-weight="600">3번</text>
+    </g>
+
+    <text x="540" y="1640" text-anchor="middle" font-family="sans-serif" font-size="30" fill="rgba(244,248,255,0.6)" letter-spacing="5" font-weight="300">직감으로 골라보세요</text>
+
+    <text x="540" y="1860" text-anchor="middle" font-family="sans-serif" font-size="24" fill="rgba(232,212,139,0.45)" letter-spacing="4">@lovtarot_</text>
+  </svg>`
 
   const buf = await sharp(Buffer.from(svg)).png({ quality: 90 }).toBuffer()
+  mkdirSync(outputDir, { recursive: true })
   writeFileSync(resolve(outputDir, 'scene01.png'), buf)
   console.log(`✅ scene01.png (${(buf.length / 1024).toFixed(0)} KB)`)
 }
 
 async function generateScene02() {
-  const cardH = 864, cardW = 576
-  const cardLeft = Math.round((W - cardW) / 2), cardTop = 380
-  const cardImg = await loadCard('strength', cardW, cardH)
-  if (!cardImg) { console.error('❌ strength.png 없음'); return }
-  const masked = await roundImg(cardImg, cardW, cardH, 20)
-  const stars = generateStars(25, 30, 1050, 50, 1870)
-
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
-  <defs>
-    <radialGradient id="bgGlow" cx="50%" cy="45%" r="65%"><stop offset="0%" stop-color="#1a1040"/><stop offset="40%" stop-color="#110d2e"/><stop offset="100%" stop-color="#07060f"/></radialGradient>
-    <radialGradient id="revealGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#c9a84c" stop-opacity="0.18"/><stop offset="30%" stop-color="#8b6fb0" stop-opacity="0.1"/><stop offset="100%" stop-color="#1a1040" stop-opacity="0"/></radialGradient>
-    <filter id="bigGlow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="80"/></filter>
-    <filter id="textGlow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-    <filter id="borderGlow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="8" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-  </defs>
-  <rect width="${W}" height="${H}" fill="url(#bgGlow)"/>
-  <ellipse cx="540" cy="750" rx="450" ry="500" fill="#2d1b69" opacity="0.12"/>
-  <ellipse cx="540" cy="${cardTop + cardH / 2}" rx="380" ry="500" fill="url(#revealGlow)" filter="url(#bigGlow)"/>
-  ${stars}
-  <rect x="${cardLeft - 6}" y="${cardTop - 6}" width="${cardW + 12}" height="${cardH + 12}" rx="24" fill="none" stroke="rgba(160,140,240,0.2)" stroke-width="2" filter="url(#borderGlow)"/>
-  <g filter="url(#textGlow)">
-    <text x="540" y="280" text-anchor="middle" font-family="sans-serif" font-size="52" fill="#F4F8FF" letter-spacing="4" font-weight="300" opacity="0.95">힘</text>
-    <text x="540" y="330" text-anchor="middle" font-family="Georgia, serif" font-size="22" font-style="italic" fill="rgba(200,180,140,0.65)" letter-spacing="6">Strength</text>
-  </g>
-  <g filter="url(#textGlow)">
-    <text x="540" y="${cardTop + cardH + 80}" text-anchor="middle" font-family="sans-serif" font-size="30" fill="rgba(200,180,140,0.6)" letter-spacing="6">부드러움 · 내면의 용기</text>
-  </g>
-</svg>`
+    <defs>
+      ${cosmicDefs()}
+      <linearGradient id="goldDivider" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#c9a84c" stop-opacity="0"/>
+        <stop offset="30%" stop-color="#e8d48b" stop-opacity="0.95"/>
+        <stop offset="70%" stop-color="#e8d48b" stop-opacity="0.95"/>
+        <stop offset="100%" stop-color="#c9a84c" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    ${fullCosmicBody(23)}
 
-  const base = await sharp(Buffer.from(svg)).png().toBuffer()
-  const result = await sharp(base).composite([{ input: masked, left: cardLeft, top: cardTop }]).png({ quality: 90 }).toBuffer()
-  writeFileSync(resolve(outputDir, 'scene02.png'), result)
-  console.log(`✅ scene02.png (${(result.length / 1024).toFixed(0)} KB)`)
-}
+    <line x1="240" y1="820" x2="840" y2="820" stroke="#e8d48b" stroke-width="2" opacity="0.8"/>
+    <line x1="240" y1="1150" x2="840" y2="1150" stroke="#e8d48b" stroke-width="2" opacity="0.8"/>
 
-async function generateScene03() {
-  const cardH = 480, cardW = 320
-  const cardLeft = Math.round((W - cardW) / 2), cardTop = 120
-  const cardImg = await loadCard('strength', cardW, cardH)
-  if (!cardImg) { console.error('❌ strength.png 없음'); return }
-  const masked = await roundImg(cardImg, cardW, cardH, 16)
-  const stars = generateStars(15, 30, 1050, 50, 1870)
-  const dividerY = cardTop + cardH + 50
-  const textStartY = dividerY + 130
+    <g filter="url(#softGlow)">
+      <text x="540" y="910" text-anchor="middle" font-family="sans-serif" font-size="48" fill="#F4F8FF" letter-spacing="3" font-weight="300">직감으로 고른 번호를</text>
+      <text x="540" y="985" text-anchor="middle" font-family="sans-serif" font-size="48" fill="#F4F8FF" letter-spacing="3" font-weight="300">댓글에 적어주세요</text>
+      <text x="540" y="1100" text-anchor="middle" font-family="sans-serif" font-size="34" fill="rgba(232,212,139,0.85)" letter-spacing="4" font-weight="300">해석을 댓글로 달아드릴게요</text>
+    </g>
 
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
-  <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="0.15" y2="1"><stop offset="0%" stop-color="#0c0a24"/><stop offset="40%" stop-color="#100e2a"/><stop offset="100%" stop-color="#07060f"/></linearGradient>
-    <linearGradient id="goldLine" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#c9a84c" stop-opacity="0"/><stop offset="20%" stop-color="#c9a84c" stop-opacity="0.4"/><stop offset="80%" stop-color="#e8d48b" stop-opacity="0.4"/><stop offset="100%" stop-color="#c9a84c" stop-opacity="0"/></linearGradient>
-    <filter id="textGlow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-    <filter id="cardShadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="4" stdDeviation="12" flood-color="#000000" flood-opacity="0.4"/></filter>
-  </defs>
-  <rect width="${W}" height="${H}" fill="url(#bg)"/>
-  <ellipse cx="540" cy="900" rx="400" ry="500" fill="#1a1040" opacity="0.15"/>
-  ${stars}
-  <line x1="80" y1="${dividerY}" x2="1000" y2="${dividerY}" stroke="url(#goldLine)" stroke-width="1.5"/>
-  <g filter="url(#textGlow)">
-    <text x="540" y="${textStartY}" text-anchor="middle" font-family="sans-serif" font-size="44" fill="#F4F8FF" letter-spacing="1" font-weight="300" opacity="0.95">"진짜 강함은 누르는 게 아니라</text>
-    <text x="540" y="${textStartY + 62}" text-anchor="middle" font-family="sans-serif" font-size="44" fill="#F4F8FF" letter-spacing="1" font-weight="300" opacity="0.95">껴안는 거예요.</text>
-    <text x="540" y="${textStartY + 150}" text-anchor="middle" font-family="sans-serif" font-size="36" fill="rgba(240,238,255,0.8)" letter-spacing="1" font-weight="300">불안한 감정도 다정하게 안아주면</text>
-    <text x="540" y="${textStartY + 200}" text-anchor="middle" font-family="sans-serif" font-size="36" fill="rgba(240,238,255,0.8)" letter-spacing="1" font-weight="300">오히려 가라앉아요."</text>
-  </g>
-  <text x="540" y="${textStartY + 340}" text-anchor="middle" font-family="sans-serif" font-size="28" fill="#c9a84c" opacity="0.5" letter-spacing="2">이 카드가 와닿는다면 프로필 링크에서 확인해보세요</text>
-</svg>`
+    <g opacity="0.85" filter="url(#softGlow)">
+      <circle cx="480" cy="1300" r="5" fill="#e8d48b"/>
+      <circle cx="540" cy="1300" r="5" fill="#e8d48b"/>
+      <circle cx="600" cy="1300" r="5" fill="#e8d48b"/>
+    </g>
 
-  const base = await sharp(Buffer.from(svg)).png().toBuffer()
-  const result = await sharp(base).composite([{ input: masked, left: cardLeft, top: cardTop }]).png({ quality: 90 }).toBuffer()
-  writeFileSync(resolve(outputDir, 'scene03.png'), result)
-  console.log(`✅ scene03.png (${(result.length / 1024).toFixed(0)} KB)`)
+    <text x="540" y="1860" text-anchor="middle" font-family="sans-serif" font-size="24" fill="rgba(232,212,139,0.45)" letter-spacing="4">@lovtarot_</text>
+  </svg>`
+
+  const buf = await sharp(Buffer.from(svg)).png({ quality: 90 }).toBuffer()
+  mkdirSync(outputDir, { recursive: true })
+  writeFileSync(resolve(outputDir, 'scene02.png'), buf)
+  console.log(`✅ scene02.png (${(buf.length / 1024).toFixed(0)} KB)`)
 }
 
 async function main() {
-  console.log('=== 2026-04-23 카드소개형 shortform 이미지 생성 ===')
-  mkdirSync(outputDir, { recursive: true })
+  console.log('=== 2026-04-23 목요일 참여형 shortform 이미지 생성 ===')
   await generateScene01()
   await generateScene02()
-  await generateScene03()
   console.log('완료!')
 }
+
 main().catch(err => { console.error('❌:', err); process.exit(1) })

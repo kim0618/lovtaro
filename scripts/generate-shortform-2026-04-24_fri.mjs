@@ -1,148 +1,293 @@
 /**
- * 2026-04-24 금요일 참여형 shortform 이미지 생성
- * - scene01: 질문 훅 + 카드 뒷면 3장 + 번호 표시
- * - scene02: 댓글 CTA 고정 템플릿
+ * 2026-04-24 금요일 shortform 이미지 생성 (소개형 마이너 - 기존 디자인)
+ * - scene01: 코스믹 배경 + 달 + 훅 + 프레임 카드 뒷면 (cardScale 3.2)
+ * - scene02: 큰 프레임 카드(780x1170) Two of Cups + vignette + cardGlow + 카드명/키워드
+ * - scene03: 헤더 + 중간 프레임 카드(440x660) + 해석 3줄 + CTA
  *
  * 실행: node scripts/generate-shortform-2026-04-24_fri.mjs
  */
 import sharp from 'sharp'
-import { writeFileSync, mkdirSync } from 'fs'
+import { writeFileSync, mkdirSync, existsSync } from 'fs'
 import { resolve, dirname } from 'path'
 import { fileURLToPath } from 'url'
-import { siteCardBackSvg, siteCardBackDefs, CARD_WIDTH, CARD_HEIGHT } from './lib/card-back-svg.mjs'
+import { siteCardBackSvg, siteCardBackDefs } from './lib/card-back-svg.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const rootDir = resolve(__dirname, '..')
+const mcardsDir = resolve(rootDir, 'public/images/mcards/cups')
 const outputDir = resolve(rootDir, 'content-output/2026-04-24_fri/shortform')
-
 const W = 1080, H = 1920
 
-function generateStars(count, xMin, xMax, yMin, yMax, goldMode = false) {
+function mulberry32(seed) {
+  return function() {
+    let t = seed += 0x6D2B79F5
+    t = Math.imul(t ^ t >>> 15, t | 1)
+    t ^= t + Math.imul(t ^ t >>> 7, t | 61)
+    return ((t ^ t >>> 14) >>> 0) / 4294967296
+  }
+}
+
+function genStars(count, seed, xMin, xMax, yMin, yMax, bright = false) {
+  const rand = mulberry32(seed)
+  const colors = bright
+    ? ['#ffe9b3', '#f4d99f', '#e8d48b', '#ffffff', '#fff5d4']
+    : ['#e8d48b', '#c9a84c', '#d4b85c', '#b89858', '#8f7a4a']
   let stars = ''
-  const seed = [0.12,0.87,0.34,0.56,0.78,0.23,0.91,0.45,0.67,0.09,0.38,0.72,0.15,0.83,0.51,0.29,0.94,0.61,0.03,0.76,0.42,0.88,0.17,0.55,0.33,0.69]
-  const goldColors = ['#e8d48b','#c9a84c','#d4b85c']
   for (let i = 0; i < count; i++) {
-    const x = xMin + seed[i % seed.length] * (xMax - xMin)
-    const y = yMin + seed[(i + 7) % seed.length] * (yMax - yMin)
-    const size = goldMode ? (1 + seed[(i + 3) % seed.length] * 2) : (0.8 + seed[(i + 3) % seed.length] * 1.5)
-    const opacity = goldMode ? (0.4 + seed[(i + 5) % seed.length] * 0.5) : (0.2 + seed[(i + 5) % seed.length] * 0.3)
-    const fill = goldMode ? goldColors[i % goldColors.length] : `rgba(139,127,176,${opacity.toFixed(2)})`
-    const finalOpacity = goldMode ? opacity.toFixed(2) : '1'
-    stars += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${size.toFixed(1)}" fill="${fill}" opacity="${finalOpacity}"/>\n`
+    const x = xMin + rand() * (xMax - xMin)
+    const y = yMin + rand() * (yMax - yMin)
+    const s = bright ? (1 + rand() * 2.5) : (0.5 + rand() * 1.8)
+    const op = bright ? (0.5 + rand() * 0.5) : (0.25 + rand() * 0.55)
+    const color = colors[Math.floor(rand() * colors.length)]
+    stars += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${s.toFixed(2)}" fill="${color}" opacity="${op.toFixed(2)}"/>`
   }
   return stars
 }
 
-async function generateScene01() {
-  const cardScale = 2.5
-  const cardPixelW = CARD_WIDTH * cardScale
-  const cardPixelH = CARD_HEIGHT * cardScale
-  const cardGap = 50
-  const totalWidth = cardPixelW * 3 + cardGap * 2
-  const startCX = (W - totalWidth) / 2 + cardPixelW / 2
-  const cardY = 920
-  const numberY = cardY + cardPixelH / 2 + 50
-
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
-  <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="0.15" y2="1">
-      <stop offset="0%" stop-color="#100e2a"/>
-      <stop offset="50%" stop-color="#121030"/>
-      <stop offset="100%" stop-color="#0a0918"/>
-    </linearGradient>
-    ${siteCardBackDefs()}
-    <filter id="cardShadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="6" stdDeviation="15" flood-color="#000000" flood-opacity="0.4"/>
-    </filter>
-    <radialGradient id="cardGlow" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#c9a84c" stop-opacity="0.15"/>
-      <stop offset="40%" stop-color="#8b6fb0" stop-opacity="0.08"/>
-      <stop offset="100%" stop-color="transparent" stop-opacity="0"/>
+function cosmicDefs() {
+  return `
+    <radialGradient id="cosmicBg" cx="50%" cy="45%" r="85%">
+      <stop offset="0%" stop-color="#1a0f38"/>
+      <stop offset="35%" stop-color="#140b2c"/>
+      <stop offset="75%" stop-color="#0c0820"/>
+      <stop offset="100%" stop-color="#06040f"/>
     </radialGradient>
-    <filter id="glowBlur" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="60"/>
-    </filter>
-    <filter id="numGlow" x="-30%" y="-30%" width="160%" height="160%">
+    <radialGradient id="neb1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="rgba(190,110,60,0.22)"/>
+      <stop offset="60%" stop-color="rgba(160,80,50,0.08)"/>
+      <stop offset="100%" stop-color="rgba(180,100,60,0)"/>
+    </radialGradient>
+    <radialGradient id="neb2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="rgba(140,70,130,0.18)"/>
+      <stop offset="100%" stop-color="rgba(130,60,120,0)"/>
+    </radialGradient>
+    <radialGradient id="neb3" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="rgba(210,150,90,0.14)"/>
+      <stop offset="100%" stop-color="rgba(200,140,80,0)"/>
+    </radialGradient>
+    <radialGradient id="moonGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="rgba(255,235,180,0.18)"/>
+      <stop offset="100%" stop-color="rgba(255,235,180,0)"/>
+    </radialGradient>
+    <mask id="moonMask">
+      <rect x="0" y="0" width="${W}" height="${H}" fill="black"/>
+      <circle cx="125" cy="225" r="52" fill="white"/>
+      <circle cx="158" cy="215" r="52" fill="black"/>
+    </mask>
+    <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
       <feGaussianBlur stdDeviation="2" result="blur"/>
       <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
-  </defs>
+  `
+}
 
-  <rect width="${W}" height="${H}" fill="url(#bg)"/>
-  <ellipse cx="540" cy="${cardY}" rx="500" ry="380" fill="url(#cardGlow)" filter="url(#glowBlur)"/>
+function cosmicBody(withMoon = true, starSeed = 1) {
+  const stars1 = genStars(320, starSeed, 0, W, 0, H, false)
+  const stars2 = genStars(120, starSeed + 11, 0, W, 0, H, true)
+  const stars3 = genStars(60, starSeed + 23, 0, W, 0, H, true)
+  const moon = withMoon ? `
+    <circle cx="140" cy="220" r="120" fill="url(#moonGlow)"/>
+    <rect x="50" y="150" width="180" height="180" fill="rgba(248,230,185,0.95)" mask="url(#moonMask)"/>
+  ` : ''
+  return `
+    <rect width="${W}" height="${H}" fill="url(#cosmicBg)"/>
+    <ellipse cx="120" cy="720" rx="520" ry="420" fill="url(#neb1)"/>
+    <ellipse cx="980" cy="1280" rx="520" ry="460" fill="url(#neb2)"/>
+    <ellipse cx="540" cy="1750" rx="620" ry="320" fill="url(#neb3)"/>
+    <ellipse cx="760" cy="400" rx="380" ry="300" fill="url(#neb3)"/>
+    ${stars1}
+    ${stars2}
+    ${stars3}
+    ${moon}
+  `
+}
 
-  <text x="540" y="280" text-anchor="middle" font-family="sans-serif" font-size="48" fill="#F4F8FF" letter-spacing="2" font-weight="300">이번 주말,</text>
-  <text x="540" y="350" text-anchor="middle" font-family="sans-serif" font-size="48" fill="#F4F8FF" letter-spacing="2" font-weight="300">그 사람에게 흐르는 마음은?</text>
+function drawFrame(x, y, w, h, strong = 1) {
+  const gap = 10
+  const cornerSize = 32
+  const c1 = `rgba(201,168,76,${0.75 * strong})`
+  const c2 = `rgba(201,168,76,${0.38 * strong})`
+  const c3 = `rgba(232,212,139,${0.7 * strong})`
+  return `
+    <rect x="${x}" y="${y}" width="${w}" height="${h}" fill="none" stroke="${c1}" stroke-width="2.5"/>
+    <rect x="${x + gap}" y="${y + gap}" width="${w - 2 * gap}" height="${h - 2 * gap}" fill="none" stroke="${c2}" stroke-width="1"/>
+    <path d="M ${x + cornerSize} ${y + gap / 2} L ${x + gap / 2} ${y + gap / 2} L ${x + gap / 2} ${y + cornerSize}" fill="none" stroke="${c3}" stroke-width="1.5"/>
+    <path d="M ${x + w - cornerSize} ${y + gap / 2} L ${x + w - gap / 2} ${y + gap / 2} L ${x + w - gap / 2} ${y + cornerSize}" fill="none" stroke="${c3}" stroke-width="1.5"/>
+    <path d="M ${x + cornerSize} ${y + h - gap / 2} L ${x + gap / 2} ${y + h - gap / 2} L ${x + gap / 2} ${y + h - cornerSize}" fill="none" stroke="${c3}" stroke-width="1.5"/>
+    <path d="M ${x + w - cornerSize} ${y + h - gap / 2} L ${x + w - gap / 2} ${y + h - gap / 2} L ${x + w - gap / 2} ${y + h - cornerSize}" fill="none" stroke="${c3}" stroke-width="1.5"/>
+  `
+}
 
-  <g filter="url(#cardShadow)">
-    ${siteCardBackSvg(startCX, cardY, cardScale)}
-    ${siteCardBackSvg(startCX + cardPixelW + cardGap, cardY, cardScale)}
-    ${siteCardBackSvg(startCX + (cardPixelW + cardGap) * 2, cardY, cardScale)}
-  </g>
+async function loadMinorCard(filename, w, h) {
+  const p = resolve(mcardsDir, filename)
+  if (!existsSync(p)) { console.error(`❌ 카드 없음: ${p}`); return null }
+  return sharp(p).resize(w, h, { fit: 'cover' }).toBuffer()
+}
 
-  <g filter="url(#numGlow)">
-    <text x="${startCX}" y="${numberY}" text-anchor="middle" font-family="sans-serif" font-size="40" fill="#e8d48b" font-weight="600">1번</text>
-    <text x="${startCX + cardPixelW + cardGap}" y="${numberY}" text-anchor="middle" font-family="sans-serif" font-size="40" fill="#e8d48b" font-weight="600">2번</text>
-    <text x="${startCX + (cardPixelW + cardGap) * 2}" y="${numberY}" text-anchor="middle" font-family="sans-serif" font-size="40" fill="#e8d48b" font-weight="600">3번</text>
-  </g>
+async function roundImg(buf, w, h, r) {
+  const m = `<svg width="${w}" height="${h}"><rect width="${w}" height="${h}" rx="${r}" ry="${r}" fill="white"/></svg>`
+  return sharp(buf).composite([{ input: Buffer.from(m), blend: 'dest-in' }]).png().toBuffer()
+}
 
-  <text x="540" y="1600" text-anchor="middle" font-family="sans-serif" font-size="30" fill="rgba(244,248,255,0.5)" letter-spacing="3" font-weight="300">직감으로 골라보세요</text>
-  <text x="540" y="1820" text-anchor="middle" font-family="sans-serif" font-size="22" fill="rgba(200,180,140,0.3)" letter-spacing="2">@lovtarot_</text>
-</svg>`
+async function scene01() {
+  const cardScale = 3.2
+  const cardW = Math.round(120 * cardScale)
+  const cardH = Math.round(198 * cardScale)
+  const cardCX = 540, cardCY = 1080
+  const cardLeft = cardCX - cardW / 2, cardTop = cardCY - cardH / 2
+  const framePad = 28
+  const frameX = cardLeft - framePad, frameY = cardTop - framePad
+  const frameW = cardW + 2 * framePad, frameH = cardH + 2 * framePad
+
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
+    <defs>
+      ${cosmicDefs()}
+      ${siteCardBackDefs()}
+    </defs>
+    ${cosmicBody(true, 61)}
+
+    <g filter="url(#softGlow)">
+      <text x="540" y="400" text-anchor="middle" font-family="sans-serif" font-size="48" fill="#F4F8FF" letter-spacing="3" font-weight="300">그 사람도</text>
+      <text x="540" y="475" text-anchor="middle" font-family="sans-serif" font-size="48" fill="#F4F8FF" letter-spacing="3" font-weight="300">나를 좋아하고 있을까?</text>
+    </g>
+
+    ${drawFrame(frameX, frameY, frameW, frameH)}
+    ${siteCardBackSvg(cardCX, cardCY, cardScale)}
+
+    <text x="540" y="1860" text-anchor="middle" font-family="sans-serif" font-size="24" fill="rgba(232,212,139,0.45)" letter-spacing="4">@lovtarot_</text>
+  </svg>`
 
   const buf = await sharp(Buffer.from(svg)).png({ quality: 90 }).toBuffer()
-  mkdirSync(outputDir, { recursive: true })
   writeFileSync(resolve(outputDir, 'scene01.png'), buf)
   console.log(`✅ scene01.png (${(buf.length / 1024).toFixed(0)} KB)`)
 }
 
-async function generateScene02() {
-  const goldStars = generateStars(30, 30, 1050, 100, 1800, true)
-  const dimStars = generateStars(30, 30, 1050, 100, 1800, false)
+async function scene02() {
+  const cardW = 780, cardH = 1170
+  const framePad = 30
+  const frameW = cardW + 2 * framePad
+  const frameH = cardH + 2 * framePad
+  const frameX = (W - frameW) / 2
+  const frameY = 210
+  const cardLeft = frameX + framePad
+  const cardTop = frameY + framePad
+
+  const cardRaw = await loadMinorCard('Two of Cups.png', cardW, cardH)
+  const cardEnhanced = await sharp(cardRaw)
+    .sharpen({ sigma: 0.7, m1: 0.5, m2: 2.2 })
+    .modulate({ saturation: 1.12, brightness: 1.03 })
+    .toBuffer()
+  const masked = await roundImg(cardEnhanced, cardW, cardH, 8)
+
+  const labelStartY = frameY + frameH + 90
+  const nameKrY = labelStartY
+  const nameEnY = nameKrY + 60
+  const kwY = nameEnY + 70
+
+  const glowCX = W / 2
+  const glowCY = frameY + frameH / 2
 
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
-  <defs>
-    <radialGradient id="bgGlow2" cx="50%" cy="45%" r="65%">
-      <stop offset="0%" stop-color="#1a1040"/>
-      <stop offset="40%" stop-color="#110d2e"/>
-      <stop offset="100%" stop-color="#07060f"/>
-    </radialGradient>
-    <filter id="textGlow2" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="3" result="blur"/>
-      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
-  </defs>
+    <defs>
+      ${cosmicDefs()}
+      <radialGradient id="cardGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="rgba(232,212,139,0.32)"/>
+        <stop offset="55%" stop-color="rgba(180,140,210,0.14)"/>
+        <stop offset="100%" stop-color="rgba(20,10,40,0)"/>
+      </radialGradient>
+      <radialGradient id="vignette" cx="50%" cy="50%" r="72%">
+        <stop offset="60%" stop-color="rgba(0,0,0,0)"/>
+        <stop offset="100%" stop-color="rgba(0,0,0,0.55)"/>
+      </radialGradient>
+    </defs>
+    ${cosmicBody(false, 67)}
 
-  <rect width="${W}" height="${H}" fill="url(#bgGlow2)"/>
+    <rect width="${W}" height="${H}" fill="url(#vignette)"/>
+    <ellipse cx="${glowCX}" cy="${glowCY}" rx="${frameW * 0.82}" ry="${frameH * 0.65}" fill="url(#cardGlow)"/>
 
-  <ellipse cx="540" cy="960" rx="500" ry="400" fill="#2d1b69" opacity="0.12"/>
-  <ellipse cx="300" cy="600" rx="300" ry="250" fill="#3d2080" opacity="0.06"/>
+    ${drawFrame(frameX, frameY, frameW, frameH, 1.3)}
 
-  ${goldStars}
-  ${dimStars}
+    <g filter="url(#softGlow)">
+      <text x="540" y="${nameKrY}" text-anchor="middle" font-family="sans-serif" font-size="52" fill="#F4F8FF" font-weight="300" letter-spacing="3">컵의 2</text>
+      <text x="540" y="${nameEnY}" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="30" fill="rgba(232,212,139,0.88)" letter-spacing="1">Two of Cups</text>
+    </g>
 
-  <g filter="url(#textGlow2)">
-    <text x="540" y="840" text-anchor="middle" font-family="sans-serif" font-size="46" fill="#F4F8FF" letter-spacing="2" opacity="0.95" font-weight="300">직감으로 고른 번호를</text>
-    <text x="540" y="910" text-anchor="middle" font-family="sans-serif" font-size="46" fill="#F4F8FF" letter-spacing="2" opacity="0.95" font-weight="300">댓글에 적어주세요</text>
-    <text x="540" y="1020" text-anchor="middle" font-family="sans-serif" font-size="36" fill="rgba(232,212,139,0.7)" letter-spacing="3">해석을 댓글로 달아드릴게요</text>
-  </g>
+    <text x="540" y="${kwY}" text-anchor="middle" font-family="sans-serif" font-size="26" fill="rgba(232,212,139,0.72)" letter-spacing="4" font-weight="300">상호감 · 연결 · 끌림</text>
 
-  <line x1="280" y1="780" x2="800" y2="780" stroke="rgba(201,168,76,0.2)" stroke-width="1"/>
-  <line x1="280" y1="1060" x2="800" y2="1060" stroke="rgba(201,168,76,0.2)" stroke-width="1"/>
+    <text x="540" y="1860" text-anchor="middle" font-family="sans-serif" font-size="24" fill="rgba(232,212,139,0.45)" letter-spacing="4">@lovtarot_</text>
+  </svg>`
 
-  <text x="540" y="1780" text-anchor="middle" font-family="sans-serif" font-size="24" fill="#c9a84c" opacity="0.35" letter-spacing="2">@lovtarot_</text>
-</svg>`
+  let base = await sharp(Buffer.from(svg)).png().toBuffer()
+  base = await sharp(base).composite([{ input: masked, left: cardLeft, top: cardTop }]).png({ quality: 90 }).toBuffer()
+  writeFileSync(resolve(outputDir, 'scene02.png'), base)
+  console.log(`✅ scene02.png (${(base.length / 1024).toFixed(0)} KB)`)
+}
 
-  const buf = await sharp(Buffer.from(svg)).png({ quality: 90 }).toBuffer()
-  mkdirSync(outputDir, { recursive: true })
-  writeFileSync(resolve(outputDir, 'scene02.png'), buf)
-  console.log(`✅ scene02.png (${(buf.length / 1024).toFixed(0)} KB)`)
+async function scene03() {
+  const headerY = 200
+  const cardW = 440, cardH = 660
+  const framePad = 22
+  const nameArea = 130
+  const frameW = cardW + 2 * framePad
+  const frameH = cardH + 2 * framePad + nameArea
+  const frameX = (W - frameW) / 2
+  const frameY = 235
+  const cardLeft = frameX + framePad
+  const cardTop = frameY + framePad
+
+  const cardImg = await loadMinorCard('Two of Cups.png', cardW, cardH)
+  const masked = await roundImg(cardImg, cardW, cardH, 6)
+
+  const divideY = cardTop + cardH + 20
+  const nameKrY = divideY + 50
+  const nameEnY = nameKrY + 36
+  const kwY = frameY + frameH + 70
+  const interpY = kwY + 180
+  const ctaY = interpY + 290
+
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
+    <defs>
+      ${cosmicDefs()}
+    </defs>
+    ${cosmicBody(true, 73)}
+
+    <g filter="url(#softGlow)">
+      <text x="540" y="${headerY}" text-anchor="middle" font-family="sans-serif" font-size="40" fill="#F4F8FF" font-weight="300" letter-spacing="6">이어지는 감정</text>
+    </g>
+
+    ${drawFrame(frameX, frameY, frameW, frameH, 0.95)}
+
+    <line x1="${frameX + 34}" y1="${divideY}" x2="${frameX + frameW - 34}" y2="${divideY}" stroke="rgba(201,168,76,0.28)" stroke-width="1"/>
+
+    <text x="540" y="${nameKrY}" text-anchor="middle" font-family="sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="4">컵의 2</text>
+    <text x="540" y="${nameEnY}" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="20" fill="rgba(232,212,139,0.8)" letter-spacing="1">Two of Cups</text>
+
+    <text x="540" y="${kwY}" text-anchor="middle" font-family="sans-serif" font-size="22" fill="rgba(232,212,139,0.6)" letter-spacing="4" font-weight="300">상호감 · 연결 · 끌림</text>
+
+    <g filter="url(#softGlow)">
+      <text x="540" y="${interpY}" text-anchor="middle" font-family="sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="1">두 사람 사이에 감정이 흐르고 있어요.</text>
+      <text x="540" y="${interpY + 58}" text-anchor="middle" font-family="sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="1">서로를 향한 끌림은</text>
+      <text x="540" y="${interpY + 116}" text-anchor="middle" font-family="sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="1">혼자만의 것이 아니에요.</text>
+    </g>
+
+    <text x="540" y="${ctaY}" text-anchor="middle" font-family="sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="3">당신도 직접 뽑아보세요</text>
+    <text x="540" y="${ctaY + 54}" text-anchor="middle" font-family="sans-serif" font-size="26" fill="rgba(232,212,139,0.78)" letter-spacing="2">무료 타로 리딩 lovtaro.kr</text>
+
+    <text x="540" y="1870" text-anchor="middle" font-family="sans-serif" font-size="22" fill="rgba(232,212,139,0.4)" letter-spacing="4">@lovtarot_</text>
+  </svg>`
+
+  let base = await sharp(Buffer.from(svg)).png().toBuffer()
+  base = await sharp(base).composite([{ input: masked, left: cardLeft, top: cardTop }]).png({ quality: 90 }).toBuffer()
+  writeFileSync(resolve(outputDir, 'scene03.png'), base)
+  console.log(`✅ scene03.png (${(base.length / 1024).toFixed(0)} KB)`)
 }
 
 async function main() {
-  console.log('=== 2026-04-24 참여형 shortform 이미지 생성 ===')
-  await generateScene01()
-  await generateScene02()
+  console.log('=== 2026-04-24 금요일 소개형 마이너 shortform 이미지 생성 ===')
+  mkdirSync(outputDir, { recursive: true })
+  await scene01()
+  await scene02()
+  await scene03()
   console.log('완료!')
 }
 

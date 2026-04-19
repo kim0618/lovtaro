@@ -45,7 +45,7 @@ for (const [origName, slug] of Object.entries(nameMap)) {
     const kb = (statSync(dest).size / 1024).toFixed(0)
     console.log(`✓ ${origName} → ${slug}.webp (${kb}KB)`)
   } catch (e) {
-    console.log(`✗ ${origName} — ${e.message}`)
+    console.log(`✗ ${origName} - ${e.message}`)
   }
 }
 

@@ -112,7 +112,7 @@ export async function generateSingleCardShareImage({ readingType, cardName, card
   const isSquare = format === 'square'
 
   if (isFeed) {
-    // ── Feed/Square 레이아웃 — 개선: 타이포 위계 + 공감 훅 ──
+    // ── Feed/Square 레이아웃 - 개선: 타이포 위계 + 공감 훅 ──
     const cardW = isSquare ? 300 : 380
     const cardH = isSquare ? 500 : 630
     const cardX = isSquare ? 80 : 100
@@ -121,7 +121,7 @@ export async function generateSingleCardShareImage({ readingType, cardName, card
     // 카드 그리기
     _drawCardFrame(ctx, img, cardX, cardY, cardW, cardH, reversed)
 
-    // 우측 텍스트 영역 — 간격 넓힘
+    // 우측 텍스트 영역 - 간격 넓힘
     const textX = cardX + cardW + 70
     const textW = W - textX - 100
     ctx.textAlign = 'left'
@@ -140,7 +140,7 @@ export async function generateSingleCardShareImage({ readingType, cardName, card
       feedTextOffset = 70
     }
 
-    // 카드 이름 — 크게 (64→76px)
+    // 카드 이름 - 크게 (64→76px)
     ctx.font = '300 76px "Noto Sans KR", sans-serif'
     ctx.fillStyle = '#F4F8FF'
     ctx.fillText(cardName, textX, cardY + 130 + feedTextOffset)
@@ -198,7 +198,7 @@ export async function generateSingleCardShareImage({ readingType, cardName, card
     ctx.fillStyle = 'rgba(143, 211, 255, 0.45)'
     ctx.fillText('@lovtarot_', textX, cardY + cardH - 30)
   } else {
-    // ── Story 레이아웃 (9:16) — 개선: 카드 크게, 타이포 위계 강화, 공감 훅 ──
+    // ── Story 레이아웃 (9:16) - 개선: 카드 크게, 타이포 위계 강화, 공감 훅 ──
     ctx.textAlign = 'center'
 
     // 상단 리딩 타입 라벨
@@ -242,7 +242,7 @@ export async function generateSingleCardShareImage({ readingType, cardName, card
       contentOffsetY = 150
     }
 
-    // 카드 이름 — 크게 (96→110px)
+    // 카드 이름 - 크게 (96→110px)
     ctx.font = '300 110px "Noto Sans KR", sans-serif'
     ctx.fillStyle = '#F4F8FF'
     ctx.fillText(cardName, W / 2, 380 + contentOffsetY)
@@ -253,7 +253,7 @@ export async function generateSingleCardShareImage({ readingType, cardName, card
       ctx.fillText(cardNameEn, W / 2, 430 + contentOffsetY)
     }
 
-    // 카드 이미지 — 크게 (320x530→380x630)
+    // 카드 이미지 - 크게 (320x530→380x630)
     const cardW = answerLabel ? 300 : 380
     const cardH = answerLabel ? 500 : 630
     const cardX = (W - cardW) / 2
@@ -278,7 +278,7 @@ export async function generateSingleCardShareImage({ readingType, cardName, card
     ctx.lineTo(W - 200, dividerY)
     ctx.stroke()
 
-    // 공감 훅 (emotionHook) — "이거 내 얘기잖아" 유도 문구
+    // 공감 훅 (emotionHook) - "이거 내 얘기잖아" 유도 문구
     let nextY = dividerY + 50
     if (emotionHook) {
       ctx.font = 'italic 400 32px "Noto Sans KR", sans-serif'
@@ -306,7 +306,7 @@ export async function generateSingleCardShareImage({ readingType, cardName, card
       nextY += 20
     }
 
-    // CTA — 콘텐츠 바로 아래에 배치 (고정 위치 대신 흐름 따라감)
+    // CTA - 콘텐츠 바로 아래에 배치 (고정 위치 대신 흐름 따라감)
     // 단, 최소 위치는 H - 200 이하로 내려가지 않도록
     const ctaY = Math.min(nextY, H - 200)
 
@@ -469,7 +469,7 @@ export async function generateCompatibilityShareImage({ card1Name, card1NameEn, 
       ctx.fillText('@lovtarot_', W / 2, H - 56)
 
     } else {
-      // ═══ FEED 1080x1350 — 세로 여유있게 배치 ═══
+      // ═══ FEED 1080x1350 - 세로 여유있게 배치 ═══
       // 라벨 y=130
       ctx.font = '300 24px "Noto Sans KR", sans-serif'
       ctx.fillStyle = 'rgba(77, 163, 255, 0.7)'

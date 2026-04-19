@@ -45,7 +45,7 @@ self.addEventListener('fetch', (event) => {
   }
 
   // Cache-first for hashed static assets (JS, CSS bundles)
-  // Vite produces filenames like index-bfe130c8.js — safe to cache permanently
+  // Vite produces filenames like index-bfe130c8.js - safe to cache permanently
   if (url.pathname.startsWith('/assets/')) {
     event.respondWith(
       caches.match(event.request).then((cached) => {

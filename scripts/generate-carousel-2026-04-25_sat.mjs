@@ -1,6 +1,6 @@
 /**
  * 2026-04-25 토요일 carousel 이미지 생성 (5장)
- * - slide01: 커버 — The Sun 풀사이즈 + 하단 페이드 + 훅
+ * - slide01: 커버 - The Sun 풀사이즈 + 하단 페이드 + 훅
  * - slide02: Queen of Cups - 감정이 따뜻한 사람
  * - slide03: Ace of Pentacles - 안정감을 주는 사람
  * - slide04: The Star - 희망을 잃지 않는 사람

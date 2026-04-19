@@ -130,7 +130,7 @@ async function roundImg(buf, w, h, r) {
 }
 
 async function scene01() {
-  const cardScale = 2.55
+  const cardScale = 3.2
   const cardW = Math.round(120 * cardScale)
   const cardH = Math.round(198 * cardScale)
   const cardCX = 540, cardCY = 1080
@@ -163,40 +163,57 @@ async function scene01() {
 }
 
 async function scene02() {
-  const cardW = 620, cardH = 930
+  // 프레임은 카드만 감싸고, 한/영 카드명 + 키워드 모두 프레임 바깥 아래로 통일.
+  const cardW = 780, cardH = 1170
   const framePad = 30
-  const nameArea = 230
   const frameW = cardW + 2 * framePad
-  const frameH = cardH + 2 * framePad + nameArea
+  const frameH = cardH + 2 * framePad
   const frameX = (W - frameW) / 2
-  const frameY = 260
+  const frameY = 210
   const cardLeft = frameX + framePad
   const cardTop = frameY + framePad
 
-  const cardImg = await loadCard('moon', cardW, cardH)
-  const masked = await roundImg(cardImg, cardW, cardH, 8)
+  const cardRaw = await loadCard('moon', cardW, cardH)
+  const cardEnhanced = await sharp(cardRaw)
+    .sharpen({ sigma: 0.7, m1: 0.5, m2: 2.2 })
+    .modulate({ saturation: 1.12, brightness: 1.03 })
+    .toBuffer()
+  const masked = await roundImg(cardEnhanced, cardW, cardH, 8)
 
-  const divideY = cardTop + cardH + 30
-  const nameKrY = divideY + 70
-  const nameEnY = nameKrY + 56
-  const kwY = frameY + frameH + 80
+  const labelStartY = frameY + frameH + 90
+  const nameKrY = labelStartY
+  const nameEnY = nameKrY + 60
+  const kwY = nameEnY + 70
+
+  const glowCX = W / 2
+  const glowCY = frameY + frameH / 2
 
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
     <defs>
       ${cosmicDefs()}
+      <radialGradient id="cardGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="rgba(232,212,139,0.32)"/>
+        <stop offset="55%" stop-color="rgba(180,140,210,0.14)"/>
+        <stop offset="100%" stop-color="rgba(20,10,40,0)"/>
+      </radialGradient>
+      <radialGradient id="vignette" cx="50%" cy="50%" r="72%">
+        <stop offset="60%" stop-color="rgba(0,0,0,0)"/>
+        <stop offset="100%" stop-color="rgba(0,0,0,0.55)"/>
+      </radialGradient>
     </defs>
-    ${cosmicBody(true, 47)}
+    ${cosmicBody(false, 47)}
 
-    ${drawFrame(frameX, frameY, frameW, frameH)}
+    <rect width="${W}" height="${H}" fill="url(#vignette)"/>
+    <ellipse cx="${glowCX}" cy="${glowCY}" rx="${frameW * 0.82}" ry="${frameH * 0.65}" fill="url(#cardGlow)"/>
 
-    <line x1="${frameX + 60}" y1="${divideY}" x2="${frameX + frameW - 60}" y2="${divideY}" stroke="rgba(201,168,76,0.3)" stroke-width="1"/>
+    ${drawFrame(frameX, frameY, frameW, frameH, 1.3)}
 
     <g filter="url(#softGlow)">
-      <text x="540" y="${nameKrY}" text-anchor="middle" font-family="sans-serif" font-size="62" fill="#F4F8FF" font-weight="300" letter-spacing="8">달</text>
-      <text x="540" y="${nameEnY}" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="32" fill="rgba(232,212,139,0.88)" letter-spacing="2">The Moon</text>
+      <text x="540" y="${nameKrY}" text-anchor="middle" font-family="sans-serif" font-size="58" fill="#F4F8FF" font-weight="300" letter-spacing="4">달</text>
+      <text x="540" y="${nameEnY}" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="30" fill="rgba(232,212,139,0.88)" letter-spacing="1">The Moon</text>
     </g>
 
-    <text x="540" y="${kwY}" text-anchor="middle" font-family="sans-serif" font-size="30" fill="rgba(232,212,139,0.72)" letter-spacing="7" font-weight="300">무의식 · 숨겨진 감정 · 그리움</text>
+    <text x="540" y="${kwY}" text-anchor="middle" font-family="sans-serif" font-size="26" fill="rgba(232,212,139,0.72)" letter-spacing="4" font-weight="300">무의식 · 숨겨진 감정 · 그리움</text>
 
     <text x="540" y="1860" text-anchor="middle" font-family="sans-serif" font-size="24" fill="rgba(232,212,139,0.45)" letter-spacing="4">@lovtarot_</text>
   </svg>`
@@ -209,25 +226,25 @@ async function scene02() {
 
 async function scene03() {
   const headerY = 200
-  const cardW = 300, cardH = 450
-  const framePad = 18
-  const nameArea = 115
+  const cardW = 440, cardH = 660
+  const framePad = 22
+  const nameArea = 130
   const frameW = cardW + 2 * framePad
   const frameH = cardH + 2 * framePad + nameArea
   const frameX = (W - frameW) / 2
-  const frameY = 280
+  const frameY = 235
   const cardLeft = frameX + framePad
   const cardTop = frameY + framePad
 
   const cardImg = await loadCard('moon', cardW, cardH)
-  const masked = await roundImg(cardImg, cardW, cardH, 5)
+  const masked = await roundImg(cardImg, cardW, cardH, 6)
 
-  const divideY = cardTop + cardH + 16
-  const nameKrY = divideY + 42
-  const nameEnY = nameKrY + 30
-  const kwY = frameY + frameH + 60
-  const interpY = kwY + 160
-  const ctaY = interpY + 270
+  const divideY = cardTop + cardH + 20
+  const nameKrY = divideY + 50
+  const nameEnY = nameKrY + 36
+  const kwY = frameY + frameH + 70
+  const interpY = kwY + 180
+  const ctaY = interpY + 290
 
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
     <defs>
@@ -241,12 +258,12 @@ async function scene03() {
 
     ${drawFrame(frameX, frameY, frameW, frameH, 0.95)}
 
-    <line x1="${frameX + 30}" y1="${divideY}" x2="${frameX + frameW - 30}" y2="${divideY}" stroke="rgba(201,168,76,0.28)" stroke-width="1"/>
+    <line x1="${frameX + 34}" y1="${divideY}" x2="${frameX + frameW - 34}" y2="${divideY}" stroke="rgba(201,168,76,0.28)" stroke-width="1"/>
 
-    <text x="540" y="${nameKrY}" text-anchor="middle" font-family="sans-serif" font-size="32" fill="#F4F8FF" font-weight="300" letter-spacing="5">달</text>
-    <text x="540" y="${nameEnY}" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="19" fill="rgba(232,212,139,0.78)">The Moon</text>
+    <text x="540" y="${nameKrY}" text-anchor="middle" font-family="sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="4">달</text>
+    <text x="540" y="${nameEnY}" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="20" fill="rgba(232,212,139,0.8)" letter-spacing="1">The Moon</text>
 
-    <text x="540" y="${kwY}" text-anchor="middle" font-family="sans-serif" font-size="22" fill="rgba(232,212,139,0.6)" letter-spacing="5" font-weight="300">무의식 · 숨겨진 감정 · 그리움</text>
+    <text x="540" y="${kwY}" text-anchor="middle" font-family="sans-serif" font-size="22" fill="rgba(232,212,139,0.6)" letter-spacing="4" font-weight="300">무의식 · 숨겨진 감정 · 그리움</text>
 
     <g filter="url(#softGlow)">
       <text x="540" y="${interpY}" text-anchor="middle" font-family="sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="1">표면 아래에 감정이 남아 있어요.</text>

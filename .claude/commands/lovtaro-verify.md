@@ -1,0 +1,1 @@
+/home/tjd618/.claude/commands/lovtaro-verify.md

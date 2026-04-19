@@ -9,7 +9,8 @@ import sharp from 'sharp'
 import { writeFileSync, mkdirSync } from 'fs'
 import { resolve, dirname } from 'path'
 import { fileURLToPath } from 'url'
-import { siteCardBackSvg, siteCardBackDefs, CARD_WIDTH, CARD_HEIGHT } from './lib/card-back-svg.mjs'
+import { siteCardBackSvg, siteCardBackDefs } from './lib/card-back-svg.mjs'
+import { colorCardBackSvg, colorCardBackDefs, CARD_WIDTH, CARD_HEIGHT, pickRandomSchemes, getSchemeAccent } from './lib/color-card-back-svg.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const rootDir = resolve(__dirname, '..')
@@ -141,30 +142,42 @@ async function generateScene01() {
   const cardY = 980
   const numberY = cardY + cardPixelH / 2 + 55
 
+  const cx1 = startCX
+  const cx2 = startCX + cardPixelW + cardGap
+  const cx3 = startCX + (cardPixelW + cardGap) * 2
+
+  // 7개 스킴 풀에서 랜덤 3개 픽 (중복 없음)
+  const [s1, s2, s3] = pickRandomSchemes(3)
+  console.log(`🎴 schemes: ${s1} / ${s2} / ${s3}`)
+
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
     <defs>
       ${cosmicDefs()}
-      ${siteCardBackDefs()}
+      ${colorCardBackDefs()}
     </defs>
     ${participationBody(31)}
 
     <ellipse cx="540" cy="${cardY}" rx="500" ry="380" fill="url(#cardAreaGlow)" filter="url(#glowBlur)"/>
 
     <g filter="url(#softGlow)">
-      <text x="540" y="380" text-anchor="middle" font-family="sans-serif" font-size="48" fill="#F4F8FF" letter-spacing="3" font-weight="300">그 사람이 보내는 신호,</text>
-      <text x="540" y="455" text-anchor="middle" font-family="sans-serif" font-size="48" fill="#F4F8FF" letter-spacing="3" font-weight="300">어떤 의미일까?</text>
+      <text x="540" y="380" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="48" fill="#F4F8FF" letter-spacing="3" font-weight="300">그 사람이 보내는 신호,</text>
+      <text x="540" y="455" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="48" fill="#F4F8FF" letter-spacing="3" font-weight="300">어떤 의미일까?</text>
     </g>
 
+    <ellipse cx="${cx1}" cy="${cardY}" rx="${cardPixelW * 0.8}" ry="${cardPixelH * 0.55}" fill="url(#colorCardGlow_${s1})" filter="url(#glowBlur)"/>
+    <ellipse cx="${cx2}" cy="${cardY}" rx="${cardPixelW * 0.8}" ry="${cardPixelH * 0.55}" fill="url(#colorCardGlow_${s2})" filter="url(#glowBlur)"/>
+    <ellipse cx="${cx3}" cy="${cardY}" rx="${cardPixelW * 0.8}" ry="${cardPixelH * 0.55}" fill="url(#colorCardGlow_${s3})" filter="url(#glowBlur)"/>
+
     <g filter="url(#cardShadow)">
-      ${siteCardBackSvg(startCX, cardY, cardScale)}
-      ${siteCardBackSvg(startCX + cardPixelW + cardGap, cardY, cardScale)}
-      ${siteCardBackSvg(startCX + (cardPixelW + cardGap) * 2, cardY, cardScale)}
+      ${colorCardBackSvg(cx1, cardY, cardScale, s1)}
+      ${colorCardBackSvg(cx2, cardY, cardScale, s2)}
+      ${colorCardBackSvg(cx3, cardY, cardScale, s3)}
     </g>
 
     <g filter="url(#numGlow)">
-      <text x="${startCX}" y="${numberY}" text-anchor="middle" font-family="sans-serif" font-size="42" fill="#e8d48b" font-weight="600">1번</text>
-      <text x="${startCX + cardPixelW + cardGap}" y="${numberY}" text-anchor="middle" font-family="sans-serif" font-size="42" fill="#e8d48b" font-weight="600">2번</text>
-      <text x="${startCX + (cardPixelW + cardGap) * 2}" y="${numberY}" text-anchor="middle" font-family="sans-serif" font-size="42" fill="#e8d48b" font-weight="600">3번</text>
+      <text x="${cx1}" y="${numberY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="42" fill="${getSchemeAccent(s1)}" font-weight="600">1번</text>
+      <text x="${cx2}" y="${numberY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="42" fill="${getSchemeAccent(s2)}" font-weight="600">2번</text>
+      <text x="${cx3}" y="${numberY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="42" fill="${getSchemeAccent(s3)}" font-weight="600">3번</text>
     </g>
 
     <text x="540" y="1640" text-anchor="middle" font-family="sans-serif" font-size="30" fill="rgba(244,248,255,0.6)" letter-spacing="5" font-weight="300">직감으로 골라보세요</text>
