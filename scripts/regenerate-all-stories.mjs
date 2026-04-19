@@ -90,7 +90,7 @@ async function generateMorningStory(slug, name, hookText, keywords) {
   <rect width="${W}" height="${H}" fill="url(#bg)"/>
   <ellipse cx="540" cy="${cardTop + cardH / 2}" rx="500" ry="650" fill="url(#cardGlow)"/>
   ${stars}
-  <text x="540" y="100" font-family="sans-serif" font-size="26" fill="rgba(180,170,230,0.75)" text-anchor="middle" letter-spacing="10" font-weight="300">오늘의 연애 카드</text>
+  <text x="540" y="100" font-family="sans-serif" font-size="26" fill="rgba(180,170,230,0.75)" text-anchor="middle" letter-spacing="10" font-weight="300">오늘의 소개 카드</text>
   <line x1="380" y1="120" x2="700" y2="120" stroke="rgba(180,170,230,0.15)" stroke-width="1"/>
   <rect x="${cardLeft - 4}" y="${cardTop - 4}" width="${cardW + 8}" height="${cardH + 8}" rx="24" fill="none" stroke="rgba(160,140,240,0.2)" stroke-width="2" filter="url(#glow1)"/>
   <text x="540" y="${nameY}" font-family="sans-serif" font-size="36" font-weight="300" fill="rgba(210,200,250,0.85)" text-anchor="middle" letter-spacing="8">${esc(name)}</text>

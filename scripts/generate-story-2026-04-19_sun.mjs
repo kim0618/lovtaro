@@ -95,7 +95,7 @@ async function main() {
   <rect width="${W}" height="${H}" fill="url(#bg)"/>
   <ellipse cx="540" cy="${cardTop + cH / 2}" rx="500" ry="650" fill="url(#cardGlow)"/>
   ${stars}
-  <text x="540" y="100" font-family="sans-serif" font-size="26" fill="rgba(180,170,230,0.75)" text-anchor="middle" letter-spacing="10" font-weight="300">오늘의 연애 카드</text>
+  <text x="540" y="100" font-family="sans-serif" font-size="26" fill="rgba(180,170,230,0.75)" text-anchor="middle" letter-spacing="10" font-weight="300">오늘의 소개 카드</text>
   <line x1="380" y1="120" x2="700" y2="120" stroke="rgba(180,170,230,0.15)" stroke-width="1"/>
   <rect x="${cardLeft - 4}" y="${cardTop - 4}" width="${cW + 8}" height="${cH + 8}" rx="24" fill="none" stroke="rgba(160,140,240,0.2)" stroke-width="2" filter="url(#glow1)"/>
   <!-- 영어 카드명: Georgia, serif italic -->
