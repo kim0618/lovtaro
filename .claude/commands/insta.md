@@ -86,11 +86,12 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, AskUserQuestion, Todo
 | 목 | shortform (2컷) | 참여형 #1 | 공개 카드 3장(메이저) | 코스믹 참여형 |
 | 금 | shortform (3컷) | **소개형 마이너** | 마이너 1장 | 기존 (`scene*.png`) |
 | 토 | carousel + carousel용 릴스 | carousel 주제 | 메이저 커버 + 마이너 본문 | 풀배경 + 하이브리드 |
-| 일 | story only | 주간 리캡 or 다음주 예고 | 마이너 1장 | 스토리 |
+| 일 | shortform (7컷) + story | **Sunday Tarot Preview** (주간 예고형) | 공개 카드 3장(메이저+마이너 혼합) | 코스믹 예고형 |
 
 - 매일: story 1장 + twitter.txt 1개
 - 참여형 릴스는 화·목 2회, reply_templates.txt 포함
 - **소개형 메이저는 NEW 디자인(scene*_new)**, **소개형 마이너는 기존 디자인(scene*)** — 절대 섞지 말 것
+- **일요일 Sunday Preview**는 참여형/소개형과 다른 전용 포맷. 7컷 구조 + 주간 시리즈명 고정("Sunday Tarot Preview"). 참여형과 구조적 차별화 필수: ① 타임라인 축(주 초반/중반/후반) ② 3번째 카드 공개 씬 전 정지 유도 씬(scene03) ③ 마지막 저장 CTA 씬(scene07)
 
 ---
 
@@ -168,6 +169,82 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, AskUserQuestion, Todo
 **scene03**: 헤더 + 중간 프레임 카드(내부 하단에 카드명 한/영) + 해석 3줄 + CTA
 - 프레임 외부 하단에 키워드 라인
 - CTA: "당신도 직접 뽑아보세요" + "무료 타로 리딩 lovtaro.kr"
+
+### D. Sunday Tarot Preview shortform (7컷) — 일요일 전용 주간 예고형
+
+디자인 의도만 서술. 수치·좌표는 레퍼런스 스크립트(`scripts/generate-shortform-2026-04-26_sun.mjs`)가 단일 소스. 매주 일요일 같은 포맷으로 재생성하되 카드 3장은 매주 새로 배정.
+
+**구조 (7컷 고정 순서)**:
+
+- **scene01** - 훅 + 흐릿한 카드 뒷면 3장 + "Sunday Tarot Preview" 시리즈 블록
+  - `cosmicBodyNoMoon(seed)` + `cardAura` 골든/퍼플 글로우 ellipse
+  - 카드 뒷면 3장: `cardScale=2.4`, gap=44, `softBlur`(stdDeviation=7) + opacity=0.55로 흐릿
+  - 상단 훅 2줄 "다음 주 연애 흐름, / 월요일 전에 미리 확인하세요"(58px) → goldDivider(y=610) → "Sunday Tarot Preview"(Georgia italic 32px, y=680) → 보조 설명 1줄 "지금 고른 카드가 다음 주 흐름을 열어줘요"(28px, y=725)
+  - **중요**: 시리즈명과 보조 설명은 하나의 블록처럼 보이도록 간격 45px 유지
+
+- **scene02** - 선택 유도 (선명한 컬러 variant 카드 뒷면 3장 + 번호)
+  - `participationBody(seed)` 라이트 배경 (참여형 scene01과 동일)
+  - `cardScale=2.5`, gap=50, 훅 "직감으로 하나 골라보세요"(1줄, 52px)
+  - 번호: 1번/3번 46px weight 600 + softGlow, **2번만 48px weight 700 + midNumGlow** (카드색에 묻히지 않도록 강조)
+  - 하단 "멈추고 선택해보세요"(32px, opacity 0.95, midNumGlow) - 빠르게 지나가도 읽히는 밝기
+
+- **scene03** - 정지 유도 (카드 확대 + 강한 중앙 글로우)
+  - `participationBody(seed)` + `stopGlowStrong` 넓은 글로우 + `centerPulse` 중앙 카드 전용 펄스
+  - `cardScale=2.65`, gap=20, cardY=1160 (scene02보다 아래로 이동)
+  - 상단 "선택했나요?"(68px, y=330) + 서브 "고른 번호를 기억하세요"(30px, y=420)
+  - 하단 3점 장식(y=1620) + "결과는 다음 장에서 열려요"(32px, y=1695)
+  - **구조적 차별화**: cardScale 2.5→2.65 + gap 50→20 + cardY 아래로 → scene02 반복이 아닌 "정지" 순간
+
+- **scene04~06** - 번호별 카드 공개 (프레임 카드 + 키워드 + 훅)
+  - 마이너 scene02 레이아웃 재사용 (780×1170 프레임 + vignette + cardGlow), `frameY=265`
+  - **상단**: 번호(Georgia 60px) → 훅(KO_STACK 42px)
+  - 훅은 `string`(1줄) 또는 `[string, string]`(2줄) 둘 다 지원. 짧으면 1줄, 길면 2줄
+  - 프레임 외부 하단: 한국어 카드명(54px, softGlow) + 영어(Georgia italic 32px, **softGlow 제외**) + 키워드(28px, ls 4)
+  - **중요**: 영문 카드명에 softGlow 적용 금지 - Georgia italic 세리프 사이 글로우가 누적되어 콜론(":") 같은 아티팩트 발생. 한국어 카드명만 softGlow로 감싸기
+  - 훅은 **타임라인 축**으로 작성: "주 초반, ~", "주 중반, ~" 또는 "수~목 사이, ~", "주 후반, ~"
+
+- **scene07** - 저장 CTA (3장 썸네일 + 저장 유도 + 댓글 답글 유도)
+  - `cosmicBodyNoMoon(seed)` + `thumbGlow` 전체 썸네일 뒤 글로우
+  - **계층 3단**:
+    - 최상단(56px, y=260/340): "저장해두고 / 다음 주에 다시 확인해보세요"
+    - 중단(36px, y=1260/1325): "고른 번호를 댓글에 남겨주세요 / 답글로 더 깊은 해석을 남겨드릴게요"
+    - 하단(Georgia 28px, y=1600): "Sunday Tarot Preview" → 서브(22px, y=1640, opacity 0.82, weight 400): "매주 일요일, 다음 주 연애 흐름"
+  - 3장 썸네일 300x450 + 프레임(strong=1.1) + 1번/2번/3번 라벨(36px)
+
+**카드 이미지 소스 (중요)**:
+- `public/images/cards-png/*.png` 중 일부(`knight-of-cups`, `ace-of-wands` 등)는 **1200x630 OG 이미지**라 780x1170 세로 리사이즈 시 내용 손실 큼
+- portrait 원본 경로로 명시적 오버라이드:
+  - 메이저: `public/images/cards-png/{slug}.png` (1024x1536, 정상)
+  - 마이너: `public/images/cards/{slug}.webp` (600x900) 또는 `public/images/mcards/{suit}/{Name}.png` (1024x1536)
+- `CARDS` 배열 각 항목에 `imageSrc` 필드 추가. revealScene·scene07 양쪽 모두 `card.imageSrc || cardsDir/{slug}.png` 순으로 조회
+
+**카드 배정 규칙 (3장 3축)**:
+- 3장은 주의 리듬을 각각 다른 축으로 보여줌:
+  - **희망/접근/급변**: The Star / Knight of Cups / Ace of Wands (2026-04-26 레퍼런스)
+  - 매주 새로운 3축 조합 권장 (예: 안정/변동/결단, 회복/재회/전환 등)
+- 메이저·마이너 혼합 가능. 단 `project_lovtaro_card_usage.md`와 대조해 중복 배정 금지
+- 각 카드 훅은 "주 초반/수~목 사이/주 후반 + 가능성 언어" 포맷 엄수. "반드시/100%/무조건" 금지
+
+**색상 일관성 (필수)**:
+- scene01·02·03은 **동일한 카드 뒷면 컬러 3종** 사용 (선택 지속성)
+- 구현: 모듈 최상위에서 `const [SCHEME_1, SCHEME_2, SCHEME_3] = pickRandomSchemes(3)` 한 번 픽해서 세 씬 전부에서 동일 상수 참조
+- scene04~06은 실제 카드 공개이므로 무관
+
+**복제 시 변경 항목**:
+1. 파일명 날짜 치환
+2. `CARDS` 배열 3장 교체 (slug / imageSrc / nameKr / nameEn / keywords / hook)
+3. `starSeed` 값 교체 (시각 다양성)
+4. copy.txt의 카드명/설명 갱신
+5. reply_templates.txt의 1/2/3번 답글 갱신 (가능성 언어 유지)
+6. capcut.txt는 장면 길이·줌 효과 템플릿 유지 가능 (매주 재사용)
+
+**필수 출력물** (`content-output/{date}_sun/shortform/`):
+- `scene01.png ~ scene07.png`
+- `copy.txt` (릴스 해시태그 5개, 한국어 위주)
+- `reply_templates.txt` (번호별 답글 3종, 심플 포맷: `1번 (한글/영문)` 헤더 + 4줄 마침표 구분)
+- `capcut.txt` (장면별 길이·줌·트랜지션 디렉션) - CapCut 편집용
+
+---
 
 ### C. 소개형 shortform (3장) — 메이저 아르카나 전용 / NEW 디자인
 
@@ -307,6 +384,7 @@ const svg = carouselShortformSlide({
 - **[유튜브 설명]**: 본문 + 해시태그 5개 (**한국어 3 + 영어 2**). 영어는 `#tarot` `#tarotreading` `#lovereading` `#dailytarot` `#tarotcards` 등에서 2개 선택
 - **[틱톡 캡션]**: 본문(릴스보다 짧고 훅 중심, 1~2줄) + 해시태그 **5개** (**한국어 3 + 영어 2**: `#fyp` `#foryou` `#tarot` `#tarottok` `#lovereading` 등에서 2개 선택, `#fyp`는 가급적 포함)
 - **[틱톡 첫 댓글]**: 프로필 링크 유도 멘트 1줄 (틱톡은 캡션 내 링크 비활성이라 고정 댓글로 유도)
+- **파일 맨 끝**: `[틱톡 첫 댓글]` 아래 빈 줄 3개 추가 (복사 시 여백 확보)
 
 ### carousel/copy.txt
 ```
