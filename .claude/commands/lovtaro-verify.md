@@ -242,6 +242,30 @@ prerender JSON-LD 생성을 위해 두 배열이 완전히 일치해야 함.
 
 수동 또는 스크립트로 비교 (초기엔 수동 확인). 불일치 시 prerender.mjs 쪽을 guide 파일 기준으로 맞춘다.
 
+### O. 얇은 카드 스캔 (2026-04-20 추가)
+
+보강 완료로 표시된 카드인데 필드 합계가 2,000자에 못 미치는 경우가 있어 전수 순찰한다. 스킬의 필드별 목표(각 OK)만 보고 총합을 놓친 케이스 방지 목적.
+
+```bash
+node --input-type=module -e "
+import { CARD_DICTIONARY } from '/home/tjd618/lovtaro/src/data/cardDictionary.js'
+import { MINOR_ARCANA } from '/home/tjd618/lovtaro/src/data/minorArcana.js'
+const ALL = { ...CARD_DICTIONARY, ...MINOR_ARCANA }
+const thin = []
+for (const [id, c] of Object.entries(ALL)) {
+  if (!c.upright || !c.reversed) continue
+  const sum = c.upright.core.length + c.upright.love.length + c.upright.advice.length +
+              c.reversed.core.length + c.reversed.love.length + c.reversed.advice.length
+  if (sum < 2000) thin.push({ id, sum })
+}
+thin.sort((a,b) => a.sum - b.sum)
+console.log('얇은 카드(<2,000자):', thin.length, '장')
+thin.slice(0,10).forEach(x => console.log(' ', x.id, x.sum, '자'))
+"
+```
+
+보강 완료 명단(`/home/tjd618/.claude/commands/lovtaro-card-expand.md` 진행률)에 있는데 얇은 카드는 **최우선 재보강 대상**. 리포트에만 올리고 자동 수정은 하지 않는다 (보강은 `/lovtaro-card-expand` 스킬의 역할).
+
 ## 실행 순서
 
 1. **대상 범위 확인**

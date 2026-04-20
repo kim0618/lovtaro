@@ -7,8 +7,10 @@
  */
 
 import moonLoveMeaning from './moon-love-meaning.js'
+import loversLoveMeaning from './lovers-love-meaning.js'
 
 const guides = [
+  loversLoveMeaning,
   moonLoveMeaning,
 ]
 

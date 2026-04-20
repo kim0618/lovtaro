@@ -36,6 +36,8 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 <!-- 보강 완료 카드 아래에 `- {id} ({YYYY-MM-DD})` 추가 -->
 - moon (2026-04-19)
 - lovers (2026-04-19)
+- empress (2026-04-20)
+- emperor (2026-04-20)
 
 ### Minor Arcana (56장)
 
@@ -185,14 +187,42 @@ cd /home/tjd618/lovtaro && npm run build 2>&1 | tail -10
 grep -c 'application/ld+json' /home/tjd618/lovtaro/dist/cards/{id}/index.html
 ```
 
-### 6) 본문 분량 확인
+### 6) 본문 분량 검증 (필수, 2026-04-20 회고)
+
+**필드별 + 총합 둘 다 검증한다.** 과거에 필드별 목표만 맞추고 총합 미달로 발행된 사례가 있어 반드시 둘 다 통과시킨 뒤 완료 처리.
 
 ```bash
-sed 's/<[^>]*>//g' /home/tjd618/lovtaro/dist/cards/{id}/index.html \
-  | tr -s ' \n' | wc -c
+node --input-type=module -e "
+import { CARD_DICTIONARY } from '/home/tjd618/lovtaro/src/data/cardDictionary.js'
+const FIELD_TARGETS = {
+  'upright.core': [200,350], 'upright.love': [400,600], 'upright.advice': [100,200],
+  'reversed.core': [200,350], 'reversed.love': [400,600], 'reversed.advice': [100,200]
+}
+const TOTAL_MIN = 2000, TOTAL_MAX = 2800
+for (const id of ['{id1}','{id2}']) {
+  const c = CARD_DICTIONARY[id]
+  let sum = 0
+  const issues = []
+  for (const [k,[lo,hi]] of Object.entries(FIELD_TARGETS)) {
+    const [t,f] = k.split('.')
+    const n = c[t][f].length
+    sum += n
+    if (n<lo) issues.push(k+' 미달('+n+'/'+lo+')')
+    else if (n>hi) issues.push(k+' 초과('+n+'/'+hi+')')
+  }
+  const totalMark = sum<TOTAL_MIN ? ' ***총합 미달('+sum+'/'+TOTAL_MIN+')***' :
+                    sum>TOTAL_MAX ? ' ***총합 초과('+sum+'/'+TOTAL_MAX+')***' : ' 총합 OK('+sum+')'
+  console.log(id+':'+totalMark+(issues.length ? ' | '+issues.join(', ') : ''))
+}
+"
 ```
 
-보강 전후 차이가 1,000자 이상 증가했는지 확인. 미달 시 상황별 분기 추가.
+**모두 `총합 OK` 표시 나올 때까지 보강 계속**. 미달일 경우:
+- 우선 `upright.love`/`reversed.love`에 **상대방 자리 해석** 한 단락 추가 (가장 자연스러운 확장 지점)
+- 그다음 `core`에 카드의 장기적/근원적 메시지 한 문장 추가
+- `advice`는 1-2 문장 추가
+
+총합이 `초과`면 가장 장황한 필드에서 중복 표현 제거. 억지로 깎지 말 것.
 
 ### 7) 진행률 갱신
 
@@ -235,7 +265,8 @@ Read /home/tjd618/.claude/projects/-home-tjd618/memory/project_lovtaro_card_usag
 
 ```
 □ npm run build 성공, 문법 에러 0
-□ 본문 증분 1,000자 이상
+□ 필드별 목표 전 통과 (upright/reversed × core/love/advice 6개)
+□ **총합 2,000-2,800자 통과** (2026-04-20 회고 - 필드별 OK여도 총합 미달 가능)
 □ em dash(—) 0건
 □ AI 패턴 0건
 □ 단정 표현 0건
