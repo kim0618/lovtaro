@@ -23,7 +23,7 @@ useHead({
       '@type': 'ListItem',
       position: i + 1,
       name: `${card.name} (${card.nameEn})`,
-      url: `https://lovtaro.kr/cards/${card.id}`,
+      url: `https://lovtaro.kr/cards/${card.id}/`,
     })),
   },
 })

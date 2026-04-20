@@ -14,7 +14,7 @@ useHead({
     '@type': 'CollectionPage',
     name: '연애 타로 가이드',
     description: '연애 타로 카드 해석 가이드 모음',
-    url: 'https://lovtaro.kr/guide',
+    url: 'https://lovtaro.kr/guide/',
     inLanguage: 'ko',
   },
 })

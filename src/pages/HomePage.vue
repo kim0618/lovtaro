@@ -10,7 +10,7 @@ useHead({
     '@type': 'WebApplication',
     name: 'Lovtaro',
     alternateName: '러브타로',
-    url: 'https://lovtaro.kr',
+    url: 'https://lovtaro.kr/',
     description: '무료 연애 타로 리딩. 상대방 속마음, 재회 가능성, 연락 올까 타로, 러브타로 스프레드까지.',
     applicationCategory: 'EntertainmentApplication',
     operatingSystem: 'All',

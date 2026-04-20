@@ -11,7 +11,7 @@ useHead({
     '@type': 'ContactPage',
     name: '문의하기',
     description: 'Lovtaro 서비스 문의',
-    url: 'https://lovtaro.kr/contact',
+    url: 'https://lovtaro.kr/contact/',
     inLanguage: 'ko',
     isPartOf: { '@id': 'https://lovtaro.kr#website' },
   },

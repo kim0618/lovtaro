@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useHead } from '../composables/useHead.js'
+import { useHead, SITE_URL, canonicalUrl } from '../composables/useHead.js'
 import AppShell from '../components/common/AppShell.vue'
 import PageContainer from '../components/ui/PageContainer.vue'
 import { getGuide, GUIDE_CATEGORIES } from '../data/guides/index.js'
@@ -14,8 +14,6 @@ const categoryLabel = computed(() =>
   GUIDE_CATEGORIES.find(c => c.key === guide.value?.category)?.label ?? ''
 )
 
-const SITE_URL = 'https://lovtaro.kr'
-
 useHead({
   title: () => guide.value ? `${guide.value.title} | Lovtaro` : '가이드 | Lovtaro',
   description: () => guide.value?.description ?? '',
@@ -27,11 +25,11 @@ useHead({
       '@type': 'Article',
       headline: guide.value.title,
       description: guide.value.description,
-      url: `${SITE_URL}/guide/${guide.value.slug}`,
+      url: canonicalUrl(`/guide/${guide.value.slug}`),
       datePublished: guide.value.createdAt,
       dateModified: guide.value.updatedAt,
-      author: { '@type': 'Organization', name: 'Lovtaro', url: SITE_URL },
-      publisher: { '@type': 'Organization', name: 'Lovtaro', url: SITE_URL },
+      author: { '@type': 'Organization', name: 'Lovtaro', url: canonicalUrl('/') },
+      publisher: { '@type': 'Organization', name: 'Lovtaro', url: canonicalUrl('/') },
       inLanguage: 'ko',
     }
     if (guide.value.ogImage) base.image = guide.value.ogImage

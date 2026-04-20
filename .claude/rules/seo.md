@@ -72,7 +72,10 @@ useHead({
 
 ## URL 규칙
 
-- trailingSlash 없음 (Vite 기본): `/cards/fool` (O), `/cards/fool/` (X)
+- **trailingSlash 있음** (Cloudflare Pages 디렉토리 기반 정규화와 일치): `/cards/fool/` (O), `/cards/fool` (X)
+  - canonical, sitemap.xml, JSON-LD `url`, `<router-link>` 내부 링크 모두 슬래시로 끝나야 함
+  - `useHead.js`의 `canonicalUrl(path)` 헬퍼 사용 (prerender.mjs에도 동일 함수 존재)
+  - 슬래시 없는 요청은 Cloudflare가 308로 슬래시 버전에 리다이렉트 — canonical/sitemap이 불일치하면 Google이 "redirect error"로 분류
 - 쿼리스트링 기반 상태 사용 금지 — 크롤링 중복 방지
 - hreflang: 한국어 단일 (`ko_KR`), 영문 추가 계획 없음
 

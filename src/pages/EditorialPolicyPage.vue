@@ -11,7 +11,7 @@ useHead({
     '@type': 'WebPage',
     name: '편집 방침',
     description: 'Lovtaro 콘텐츠 편집 방침',
-    url: 'https://lovtaro.kr/editorial-policy',
+    url: 'https://lovtaro.kr/editorial-policy/',
     inLanguage: 'ko',
     isPartOf: { '@id': 'https://lovtaro.kr#website' },
   },

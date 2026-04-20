@@ -11,7 +11,7 @@ useHead({
     '@type': 'AboutPage',
     name: 'Lovtaro 소개',
     description: 'Lovtaro 무료 연애 타로 리딩 서비스 소개',
-    url: 'https://lovtaro.kr/about',
+    url: 'https://lovtaro.kr/about/',
     inLanguage: 'ko',
     isPartOf: { '@id': 'https://lovtaro.kr#website' },
   },

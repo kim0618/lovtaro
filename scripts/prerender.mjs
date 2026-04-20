@@ -19,6 +19,14 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const DIST = path.resolve(__dirname, '../dist')
 const SITE_URL = 'https://lovtaro.kr'
 
+// Cloudflare Pages serves directory-based output at trailing-slash URLs.
+// canonical / sitemap / JSON-LD / breadcrumbs must match the served URL form
+// or Google reports "redirect error" from canonical/308 mismatch.
+function canonicalUrl(urlPath) {
+  if (urlPath === '/' || urlPath === '') return `${SITE_URL}/`
+  return `${SITE_URL}${urlPath.replace(/\/$/, '')}/`
+}
+
 // ── Card data (mirrors src/data/tarotCards.js) ────────────────────────────
 const CARDS = [
   { id: 'fool',       name: '바보',             nameEn: 'The Fool',           keywords: ['새로운 시작', '가능성', '순수함'] },
@@ -306,13 +314,13 @@ function escapeJsonLd(jsonStr) {
 
 function buildBreadcrumb(routePath, routeTitle) {
   const segments = routePath.split('/').filter(Boolean)
-  const items = [{ name: '홈', url: `${SITE_URL}/` }]
+  const items = [{ name: '홈', url: canonicalUrl('/') }]
   let accumulated = ''
   segments.forEach((seg, i) => {
     accumulated += `/${seg}`
     const isLast = i === segments.length - 1
     const name = isLast ? routeTitle.split(' - ')[0].split(' | ')[0] : decodeLabel(seg)
-    items.push({ name, url: `${SITE_URL}${accumulated}` })
+    items.push({ name, url: canonicalUrl(accumulated) })
   })
   return {
     '@type': 'BreadcrumbList',
@@ -355,7 +363,7 @@ function buildOrganization() {
     '@id': `${SITE_URL}#organization`,
     name: 'Lovtaro',
     alternateName: '러브타로',
-    url: SITE_URL,
+    url: canonicalUrl('/'),
     logo: `${SITE_URL}/icon-512.png`,
     sameAs: [
       'https://www.instagram.com/lovtarot_/',
@@ -367,7 +375,7 @@ function buildWebSite() {
   return {
     '@type': 'WebSite',
     '@id': `${SITE_URL}#website`,
-    url: SITE_URL,
+    url: canonicalUrl('/'),
     name: 'Lovtaro',
     alternateName: '러브타로',
     description: '무료 연애 타로 리딩. 상대방 속마음, 재회 가능성, 연락 올까 타로, 러브타로 스프레드.',
@@ -381,7 +389,7 @@ function buildHomeMain() {
     '@type': 'WebApplication',
     name: 'Lovtaro',
     alternateName: '러브타로',
-    url: SITE_URL,
+    url: canonicalUrl('/'),
     description: '무료 연애 타로 리딩. 상대방 속마음, 재회 가능성, 연락 올까 타로, 러브타로 스프레드까지.',
     applicationCategory: 'EntertainmentApplication',
     operatingSystem: 'All',
@@ -400,7 +408,7 @@ function buildCardsListMain(allCards) {
       '@type': 'ListItem',
       position: i + 1,
       name: `${card.name} (${card.nameEn})`,
-      url: `${SITE_URL}/cards/${card.id}`,
+      url: canonicalUrl(`/cards/${card.id}`),
     })),
   }
 }
@@ -457,7 +465,7 @@ function buildGuideMain(guide) {
     '@type': 'Article',
     headline: guide.title,
     description: guide.description,
-    url: `${SITE_URL}/guide/${guide.slug}`,
+    url: canonicalUrl(`/guide/${guide.slug}`),
     datePublished: guide.createdAt,
     dateModified: guide.updatedAt || guide.createdAt,
     author: { '@id': `${SITE_URL}#organization` },
@@ -484,7 +492,7 @@ function buildReadingMain(route) {
     '@type': 'WebPage',
     name: route.title.split(' | ')[0],
     description: route.description,
-    url: `${SITE_URL}${route.path}`,
+    url: canonicalUrl(route.path),
     inLanguage: 'ko',
     isPartOf: { '@id': `${SITE_URL}#website` },
     primaryImageOfPage: route.ogImage ? { '@type': 'ImageObject', url: route.ogImage } : undefined,
@@ -509,7 +517,7 @@ function buildGraph(route, { allCards, cardDetailMap } = {}) {
       '@type': 'CollectionPage',
       name: '연애 타로 가이드',
       description: '연애 타로 카드 해석 가이드 모음',
-      url: `${SITE_URL}/guide`,
+      url: canonicalUrl('/guide'),
       inLanguage: 'ko',
       isPartOf: { '@id': `${SITE_URL}#website` },
     })
@@ -540,7 +548,7 @@ function escapeAttr(str) {
 }
 
 function injectMeta(html, { path: urlPath, title, description, ogImage, jsonLd }) {
-  const url = `${SITE_URL}${urlPath}`
+  const url = canonicalUrl(urlPath)
   const safeTitle = escapeAttr(title)
   const safeDesc = escapeAttr(description)
   const safeUrl = escapeAttr(url)

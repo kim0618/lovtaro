@@ -11,7 +11,7 @@ useHead({
     '@type': 'WebPage',
     name: '면책 조항',
     description: 'Lovtaro 타로 서비스 면책 조항',
-    url: 'https://lovtaro.kr/disclaimer',
+    url: 'https://lovtaro.kr/disclaimer/',
     inLanguage: 'ko',
     isPartOf: { '@id': 'https://lovtaro.kr#website' },
   },

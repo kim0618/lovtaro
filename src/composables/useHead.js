@@ -9,6 +9,13 @@ const defaults = {
 // 도메인 변경 시 여기만 수정
 export const SITE_URL = 'https://lovtaro.kr'
 
+// Cloudflare Pages가 디렉토리 기반 출력을 trailing-slash URL로 정규화하므로
+// canonical/og:url도 동일 형태로 맞춘다. (prerender.mjs의 canonicalUrl과 동일)
+export function canonicalUrl(urlPath) {
+  if (urlPath === '/' || urlPath === '') return `${SITE_URL}/`
+  return `${SITE_URL}${urlPath.replace(/\/$/, '')}/`
+}
+
 const JSON_LD_ID = 'lovtaro-jsonld'
 
 export function useHead({ title, description, jsonLd, ogImage }) {
@@ -18,7 +25,7 @@ export function useHead({ title, description, jsonLd, ogImage }) {
     const t = typeof title === 'function' ? title() : title
     const d = typeof description === 'function' ? description() : description
     const img = typeof ogImage === 'function' ? ogImage() : ogImage
-    const url = `${SITE_URL}${route.path}`
+    const url = canonicalUrl(route.path)
 
     document.title = t || defaults.title
 
@@ -43,9 +50,9 @@ export function useHead({ title, description, jsonLd, ogImage }) {
     setMeta('description', defaults.description)
     setMeta('og:title', defaults.title, 'property')
     setMeta('og:description', defaults.description, 'property')
-    setMeta('og:url', SITE_URL, 'property')
+    setMeta('og:url', canonicalUrl('/'), 'property')
     setMeta('og:image', `${SITE_URL}/og-image.png`, 'property')
-    setLink('canonical', SITE_URL)
+    setLink('canonical', canonicalUrl('/'))
     removeJsonLd()
   })
 }
