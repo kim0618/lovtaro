@@ -97,13 +97,13 @@ function dotState(i) {
 }
 
 .card-draw-header__title {
-  font-size: 1.4rem;
+  font-size: 1.15rem;
   color: var(--lt-text-strong);
   margin-bottom: var(--lt-space-sm);
 }
 
 .card-draw-header__instruction {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: var(--lt-text-sub);
 }
 
