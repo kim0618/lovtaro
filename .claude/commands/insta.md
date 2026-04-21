@@ -547,3 +547,11 @@ const svg = carouselShortformSlide({
 - [ ] shortform/copy.txt에 `[틱톡 캡션]`과 `[틱톡 첫 댓글]` 섹션이 포함되어 있는가
 - [ ] 모든 이미지가 정상 생성되었는가
 - [ ] em dash(-) 사용 안 했는가 (쉼표로 연결)
+
+## 완료 후 로그 기록
+
+스킬 실행이 완료되면 반드시 아래 명령으로 `skill-log.json`에 기록한다:
+
+```bash
+python3 -c "import json,datetime; logs=json.load(open('/home/tjd618/skill-log.json')); now=datetime.datetime.now(); logs.insert(0,{'date':now.strftime('%Y-%m-%d'),'time':now.strftime('%H:%M'),'project':'lovtaro','skill':'insta'}); open('/home/tjd618/skill-log.json','w').write(json.dumps(logs,ensure_ascii=False,indent=2))"
+```
