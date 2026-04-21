@@ -10,7 +10,8 @@ import { writeFileSync, mkdirSync } from 'fs'
 import { resolve, dirname } from 'path'
 import { fileURLToPath } from 'url'
 import { siteCardBackSvg, siteCardBackDefs } from './lib/card-back-svg.mjs'
-import { colorCardBackSvg, colorCardBackDefs, CARD_WIDTH, CARD_HEIGHT, pickRandomSchemes, getSchemeAccent } from './lib/color-card-back-svg.mjs'
+import { colorCardBackSvg, colorCardBackDefs, CARD_WIDTH, CARD_HEIGHT, getSchemeAccent } from './lib/color-card-back-svg.mjs'
+import { SCHEMES_2026_04_21 } from './lib/schemes-2026-04-21.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const rootDir = resolve(__dirname, '..')
@@ -147,8 +148,8 @@ async function generateScene01() {
   const cx2 = startCX + cardPixelW + cardGap
   const cx3 = startCX + (cardPixelW + cardGap) * 2
 
-  // 7개 스킴 풀에서 랜덤 3개 픽 (중복 없음)
-  const [s1, s2, s3] = pickRandomSchemes(3)
+  // 고정 schemes (cover.png와 동일 색상)
+  const [s1, s2, s3] = SCHEMES_2026_04_21
   console.log(`🎴 schemes: ${s1} / ${s2} / ${s3}`)
 
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
