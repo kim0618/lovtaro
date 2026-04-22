@@ -266,13 +266,36 @@ thin.slice(0,10).forEach(x => console.log(' ', x.id, x.sum, '자'))
 
 보강 완료 명단(`/home/tjd618/.claude/commands/lovtaro-card-expand.md` 진행률)에 있는데 얇은 카드는 **최우선 재보강 대상**. 리포트에만 올리고 자동 수정은 하지 않는다 (보강은 `/lovtaro-card-expand` 스킬의 역할).
 
+### P. 가이드-카드 본문 의미 중복 검사 (2026-04-22 추가)
+
+카드 해석 가이드(category: card-interpretation)의 본문/FAQ와 해당 카드 cardDictionary.js / minorArcana.js 블록의 본문을 N-gram으로 비교해 연속 15자 이상 공유하는 문자열을 찾는다. 정규식 기반 감사(A~O)로는 잡히지 않는 **의미 레벨 중복**을 감지하는 유일한 단계.
+
+**배경 (2026-04-22 회고)**: star 가이드 FAQ가 cardDictionary.js star 블록의 문장을 거의 그대로 재서술한 사례 발생. 작성자(AI)의 주관적 판단으로는 "심화"했다고 느꼈지만 실제로 32자 연속 겹침이 있었음. 객관적 측정이 필요해 이 스크립트를 도입.
+
+```bash
+# 전체 가이드 전수 검사
+cd /home/tjd618/lovtaro && node scripts/verify/guide-card-overlap.mjs
+
+# 특정 슬러그만 (부분 매치 가능)
+cd /home/tjd618/lovtaro && node scripts/verify/guide-card-overlap.mjs star
+```
+
+**판정 기준**:
+- 연속 **20자 이상 겹침**: 거의 확실한 의미 중복. 해당 문단을 심화·사례·다른 관점으로 재작성.
+- 연속 **15-19자 겹침**: 문맥 확인 필요. 정형 표현("~경우가 많아요", "~도움이 돼요" 등)이면 허용, 카드 고유 관점 재서술이면 수정.
+- **15자 미만**: 자연스러운 한국어 연결어 수준. 무시.
+
+**자동 수정하지 않는다.** 중복은 의미를 재구성해야 하므로 수작업이 안전. 리포트만 내고 담당 가이드를 Edit.
+
+**수정 후 동기화**: 가이드 파일을 수정하면 `scripts/prerender.mjs`의 GUIDES[].faq도 동일하게 수정해야 JSON-LD 일치 유지.
+
 ## 실행 순서
 
 1. **대상 범위 확인**
    - 인자로 파일 지정되면 해당 파일만 (`/lovtaro-verify moon-love-meaning`)
    - 인자 없으면 전수 스캔
 
-2. **A~N 순서대로 실행**
+2. **A~P 순서대로 실행**
 
 3. **자동 수정 가능한 건 즉시 Edit**
    - em dash → 하이픈 (문맥 판단)
@@ -351,5 +374,14 @@ cd /home/tjd618/lovtaro && npm run build 2>&1 | tail -8
 - 글·카드 **삭제** (플래그만 올림)
 - `slug`/`id` 변경
 - `relatedCards`, `relatedReadings` 배열 재구성 (실존 확인만)
+
+
+## 완료 후 로그 기록
+
+스킬 실행이 완료되면 반드시 아래 명령으로 `skill-log.json`에 기록한다:
+
+```bash
+python3 -c "import json,datetime; logs=json.load(open('/home/tjd618/skill-log.json')); now=datetime.datetime.now(); logs.insert(0,{'date':now.strftime('%Y-%m-%d'),'time':now.strftime('%H:%M'),'project':'lovtaro','skill':'lovtaro-verify'}); open('/home/tjd618/skill-log.json','w').write(json.dumps(logs,ensure_ascii=False,indent=2))"
+```
 
 $ARGUMENTS

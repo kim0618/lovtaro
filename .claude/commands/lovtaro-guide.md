@@ -447,12 +447,22 @@ export default {
 - Yes → 이 글에만 해당하는 구체 디테일이 있음. OK.
 - No → 추상적 조언만 반복 중. 사례·장면·조합을 더 넣어 다시.
 
-### 질문 2. 중복 테스트
+### 질문 2. 중복 테스트 (정량 검사 필수, 2026-04-22 강화)
 
-"카드 해석 글이라면 - `cardDictionary.js`의 해당 카드 `love`/`core` 문장과 이 글의 어느 문단이 **같은 정보**를 반복하고 있지 않은가?"
+카드 해석 글이라면 AI의 주관 판단에 의존하지 말고 **반드시 스크립트로 측정**. 파일 생성(9단계) 직후 아래 명령 실행:
 
-- Yes (반복 없음) → OK
-- No (반복 있음) → 해당 문단을 심화·사례·조합 관점으로 재작성
+```bash
+cd /home/tjd618/lovtaro && node scripts/verify/guide-card-overlap.mjs {slug}
+```
+
+**판정 기준**:
+- 연속 **20자 이상 겹침 발견** → 해당 문단 즉시 재작성. 심화·사례·다른 관점으로.
+- 연속 **15-19자 겹침** → 문맥 확인. 정형 표현("~경우가 많아요")이면 허용, 카드 고유 재서술이면 수정.
+- 중복 0건 또는 정형 표현만 → Pass.
+
+**배경 (2026-04-22 회고)**: star 가이드 작성 시 AI 자가진단으로는 "심화했다"고 판단했으나 실제로 32자 연속 겹침(FAQ)이 있었음. cardDictionary.js의 love/core 문장을 무의식적으로 재서술하는 AI 패턴이 있어 객관적 측정이 유일한 방어선.
+
+**수정 후**: 가이드 파일과 prerender.mjs의 GUIDES[].faq를 함께 업데이트. 스크립트 재실행해서 0건 또는 정형만 남는지 확인.
 
 ### 질문 3. 독자 감정 테스트
 
@@ -662,5 +672,14 @@ grep -nE '반드시|100%|절대|무조건|확실히' /home/tjd618/lovtaro/src/da
 - 외부 URL·이미지·스크립트 삽입
 - 사용자 질문·개인정보 수집 유도
 - 타로 외부 인용 (논문·기사 링크 금지. 자체 관점으로)
+
+
+## 완료 후 로그 기록
+
+스킬 실행이 완료되면 반드시 아래 명령으로 `skill-log.json`에 기록한다:
+
+```bash
+python3 -c "import json,datetime; logs=json.load(open('/home/tjd618/skill-log.json')); now=datetime.datetime.now(); logs.insert(0,{'date':now.strftime('%Y-%m-%d'),'time':now.strftime('%H:%M'),'project':'lovtaro','skill':'lovtaro-guide'}); open('/home/tjd618/skill-log.json','w').write(json.dumps(logs,ensure_ascii=False,indent=2))"
+```
 
 $ARGUMENTS

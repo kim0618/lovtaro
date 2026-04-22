@@ -38,6 +38,10 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 - lovers (2026-04-19)
 - empress (2026-04-20)
 - emperor (2026-04-20)
+- star (2026-04-21)
+- tower (2026-04-21)
+- fool (2026-04-22)
+- sun (2026-04-22)
 
 ### Minor Arcana (56장)
 
@@ -309,5 +313,14 @@ Read /home/tjd618/.claude/projects/-home-tjd618/memory/project_lovtaro_card_usag
 2. 이 스킬 파일(`/home/tjd618/.claude/commands/lovtaro-card-expand.md`) 삭제
 3. 프로젝트 스킬(`/home/tjd618/lovtaro/.claude/commands/lovtaro-card-expand.md`)도 함께 삭제 (symlink면 원본 삭제로 끝)
 4. 애드센스 계획 메모리(`project_lovtaro_adsense_plan.md`)에 완료 표시 갱신
+
+
+## 완료 후 로그 기록
+
+스킬 실행이 완료되면 반드시 아래 명령으로 `skill-log.json`에 기록한다:
+
+```bash
+python3 -c "import json,datetime; logs=json.load(open('/home/tjd618/skill-log.json')); now=datetime.datetime.now(); logs.insert(0,{'date':now.strftime('%Y-%m-%d'),'time':now.strftime('%H:%M'),'project':'lovtaro','skill':'lovtaro-card-expand'}); open('/home/tjd618/skill-log.json','w').write(json.dumps(logs,ensure_ascii=False,indent=2))"
+```
 
 $ARGUMENTS
