@@ -24,12 +24,12 @@ const { streak } = useStreak()
     <h1 class="hero-section__title">그 사람을 떠올린 채,<br><em>카드가 말하게 하세요</em></h1>
     <p class="hero-section__subtitle">감정의 결을 읽고, 관계의 흐름을 비춰봅니다</p>
     <div class="hero-section__divider" aria-hidden="true" />
-    <button class="hero-section__cta" @click="router.push('/reading/love')">
+    <button class="hero-section__cta" @click="router.push('/reading/love/')">
       러브타로 시작하기
     </button>
 
     <div class="hero-section__secondary">
-      <button class="hero-section__today-link" @click="router.push('/today')">
+      <button class="hero-section__today-link" @click="router.push('/today/')">
         오늘의 카드 한 장 뽑기 →
       </button>
       <p v-if="streak > 0" class="hero-section__streak">{{ streak }}일 연속 리딩 중</p>

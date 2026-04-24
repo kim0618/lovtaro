@@ -9,13 +9,13 @@ import BrandLogo from './BrandLogo.vue'
       <p class="app-footer__tagline">보이지 않는 의미를 천천히 비추는 공간</p>
       <p class="app-footer__copy">&copy; 2026 Lovtaro. 타로 리딩은 오락 및 자기 성찰 목적이며, 전문 상담을 대체하지 않습니다.</p>
       <div class="app-footer__links app-footer__links--main">
-        <router-link to="/about" class="app-footer__link app-footer__link--main">소개</router-link>
-        <router-link to="/contact" class="app-footer__link app-footer__link--main">문의</router-link>
+        <router-link to="/about/" class="app-footer__link app-footer__link--main">소개</router-link>
+        <router-link to="/contact/" class="app-footer__link app-footer__link--main">문의</router-link>
       </div>
       <div class="app-footer__links">
-        <router-link to="/editorial-policy" class="app-footer__link">편집 방침</router-link>
-        <router-link to="/disclaimer" class="app-footer__link">면책 조항</router-link>
-        <router-link to="/privacy" class="app-footer__link">개인정보처리방침</router-link>
+        <router-link to="/editorial-policy/" class="app-footer__link">편집 방침</router-link>
+        <router-link to="/disclaimer/" class="app-footer__link">면책 조항</router-link>
+        <router-link to="/privacy/" class="app-footer__link">개인정보처리방침</router-link>
       </div>
     </div>
   </footer>

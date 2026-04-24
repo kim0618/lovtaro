@@ -57,7 +57,7 @@ const router = useRouter()
             v-for="guide in filtered"
             :key="guide.slug"
             class="guide-index__item"
-            @click="router.push(`/guide/${guide.slug}`)"
+            @click="router.push(`/guide/${guide.slug}/`)"
           >
             <div class="guide-index__item-meta">
               <span class="guide-index__item-category">

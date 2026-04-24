@@ -109,8 +109,8 @@ export default {
     },
   ],
   relatedReadings: [
-    { label: '상대방 속마음', path: '/reading/mind' },
-    { label: '재회 가능성', path: '/reading/reunion' },
+    { label: '상대방 속마음', path: '/reading/mind/' },
+    { label: '재회 가능성', path: '/reading/reunion/' },
   ],
   relatedCards: [
     { id: 'moon', name: '달' },

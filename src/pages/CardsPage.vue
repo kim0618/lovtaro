@@ -115,7 +115,7 @@ const energyBorder = {
         <router-link
           v-for="(card, idx) in cards"
           :key="card.id"
-          :to="`/cards/${card.id}`"
+          :to="`/cards/${card.id}/`"
           :class="['cards-grid__item', energyBorder[card.energy]]"
           :style="{ animationDelay: `${Math.min(idx * 40, 600)}ms` }"
         >

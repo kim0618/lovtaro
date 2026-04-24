@@ -66,7 +66,7 @@ useHead({
         <section class="editorial__section">
           <h2>5. 문의</h2>
           <p>
-            콘텐츠 오류 발견 또는 개선 제안은 <a href="/contact">문의하기</a> 페이지를 통해 알려주세요.
+            콘텐츠 오류 발견 또는 개선 제안은 <a href="/contact/">문의하기</a> 페이지를 통해 알려주세요.
           </p>
         </section>
       </div>

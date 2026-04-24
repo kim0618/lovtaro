@@ -4,14 +4,14 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 const links = [
-  { label: '러브',   to: '/reading/love' },
-  { label: '속마음', to: '/reading/mind' },
-  { label: '재회',   to: '/reading/reunion' },
-  { label: '연락',   to: '/reading/contact' },
-  { label: '3장',    to: '/reading/3cards' },
-  { label: '오늘',   to: '/today' },
-  { label: '카드사전', to: '/cards' },
-  { label: '기록',   to: '/history' },
+  { label: '러브',   to: '/reading/love/' },
+  { label: '속마음', to: '/reading/mind/' },
+  { label: '재회',   to: '/reading/reunion/' },
+  { label: '연락',   to: '/reading/contact/' },
+  { label: '3장',    to: '/reading/3cards/' },
+  { label: '오늘',   to: '/today/' },
+  { label: '카드사전', to: '/cards/' },
+  { label: '기록',   to: '/history/' },
 ]
 </script>
 

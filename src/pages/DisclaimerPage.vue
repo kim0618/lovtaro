@@ -70,7 +70,7 @@ useHead({
         <section class="disclaimer__section">
           <h2>6. 문의</h2>
           <p>
-            면책 조항에 관한 문의는 <a href="/contact">문의하기</a> 페이지를 통해 연락해 주세요.
+            면책 조항에 관한 문의는 <a href="/contact/">문의하기</a> 페이지를 통해 연락해 주세요.
           </p>
         </section>
       </div>

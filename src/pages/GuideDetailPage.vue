@@ -47,7 +47,7 @@ useHead({
           <nav class="guide-detail__breadcrumb" aria-label="breadcrumb">
             <span class="guide-detail__bc-item" @click="router.push('/')">홈</span>
             <span class="guide-detail__bc-sep">›</span>
-            <span class="guide-detail__bc-item" @click="router.push('/guide')">가이드</span>
+            <span class="guide-detail__bc-item" @click="router.push('/guide/')">가이드</span>
             <span class="guide-detail__bc-sep">›</span>
             <span class="guide-detail__bc-current">{{ guide.title }}</span>
           </nav>
@@ -114,14 +114,14 @@ useHead({
                 v-for="card in guide.relatedCards"
                 :key="card.id"
                 class="guide-detail__related-card"
-                @click.prevent="router.push(`/cards/${card.id}`)"
+                @click.prevent="router.push(`/cards/${card.id}/`)"
                 href="#"
               >{{ card.name }}</a>
             </div>
           </div>
 
           <!-- back -->
-          <button class="guide-detail__back" @click="router.push('/guide')">← 가이드 목록</button>
+          <button class="guide-detail__back" @click="router.push('/guide/')">← 가이드 목록</button>
         </div>
       </PageContainer>
     </template>
@@ -131,7 +131,7 @@ useHead({
       <PageContainer>
         <div class="guide-detail guide-detail--404">
           <p class="guide-detail__404-msg">찾을 수 없는 가이드입니다.</p>
-          <button class="guide-detail__back" @click="router.push('/guide')">← 가이드 목록</button>
+          <button class="guide-detail__back" @click="router.push('/guide/')">← 가이드 목록</button>
         </div>
       </PageContainer>
     </template>

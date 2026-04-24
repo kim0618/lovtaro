@@ -98,9 +98,9 @@ export default {
     },
   ],
   relatedReadings: [
-    { label: '재회 가능성', path: '/reading/reunion' },
-    { label: '상대방 속마음', path: '/reading/mind' },
-    { label: '러브타로 3장', path: '/reading/love' },
+    { label: '재회 가능성', path: '/reading/reunion/' },
+    { label: '상대방 속마음', path: '/reading/mind/' },
+    { label: '러브타로 3장', path: '/reading/love/' },
   ],
   relatedCards: [
     { id: 'star', name: '별' },

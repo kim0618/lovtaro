@@ -48,7 +48,7 @@ const positions = ['과거', '현재', '미래']
     <div class="three-card-promo__copy">
       <h3 class="three-card-promo__title">3장 리딩</h3>
       <p class="three-card-promo__desc">과거, 현재, 미래 - 세 장의 흐름으로 관계를 깊이 살펴봅니다.</p>
-      <button class="three-card-promo__btn" @click="router.push('/reading/3cards')">
+      <button class="three-card-promo__btn" @click="router.push('/reading/3cards/')">
         시작하기
       </button>
     </div>

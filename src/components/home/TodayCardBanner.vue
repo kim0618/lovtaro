@@ -7,7 +7,7 @@ const { streak } = useStreak()
 </script>
 
 <template>
-  <div class="today-card-banner" @click="router.push('/today')">
+  <div class="today-card-banner" @click="router.push('/today/')">
     <div class="today-card-banner__inner">
       <div class="today-card-banner__glow" aria-hidden="true"></div>
       <div class="today-card-banner__content">

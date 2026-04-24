@@ -11,14 +11,14 @@ const props = defineProps({
 const router = useRouter()
 
 const ALL_READINGS = [
-  { id: 'love',    label: '러브타로',     desc: '두 사람의 마음과 관계의 방향',          to: '/reading/love' },
-  { id: 'mind',    label: '상대방 속마음', desc: '그 사람의 마음이 어디에 머무는지',      to: '/reading/mind' },
-  { id: 'reunion', label: '재회 가능성',   desc: '다시 만날 수 있는 흐름인지',           to: '/reading/reunion' },
-  { id: 'contact', label: '연락 올까',     desc: '연락의 기류가 흐르고 있는지',          to: '/reading/contact' },
-  { id: 'yesno',         label: 'Yes/No 타로',  desc: '지금 궁금한 것에 카드가 답하기',       to: '/reading/yesno' },
-  { id: 'compatibility', label: '궁합 타로',    desc: '두 사람의 케미와 궁합 점수',          to: '/reading/compatibility' },
-  { id: '3cards',        label: '3장 리딩',      desc: '과거, 현재, 미래 흐름 전체 보기',     to: '/reading/3cards' },
-  { id: 'today',   label: '오늘의 카드',   desc: '오늘 하루 에너지를 한 장으로',          to: '/today' },
+  { id: 'love',    label: '러브타로',     desc: '두 사람의 마음과 관계의 방향',          to: '/reading/love/' },
+  { id: 'mind',    label: '상대방 속마음', desc: '그 사람의 마음이 어디에 머무는지',      to: '/reading/mind/' },
+  { id: 'reunion', label: '재회 가능성',   desc: '다시 만날 수 있는 흐름인지',           to: '/reading/reunion/' },
+  { id: 'contact', label: '연락 올까',     desc: '연락의 기류가 흐르고 있는지',          to: '/reading/contact/' },
+  { id: 'yesno',         label: 'Yes/No 타로',  desc: '지금 궁금한 것에 카드가 답하기',       to: '/reading/yesno/' },
+  { id: 'compatibility', label: '궁합 타로',    desc: '두 사람의 케미와 궁합 점수',          to: '/reading/compatibility/' },
+  { id: '3cards',        label: '3장 리딩',      desc: '과거, 현재, 미래 흐름 전체 보기',     to: '/reading/3cards/' },
+  { id: 'today',   label: '오늘의 카드',   desc: '오늘 하루 에너지를 한 장으로',          to: '/today/' },
 ]
 
 const items = ALL_READINGS.filter(r => r.id !== props.current)

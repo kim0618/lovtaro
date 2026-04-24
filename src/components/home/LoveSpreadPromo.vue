@@ -49,7 +49,7 @@ const positions = ['나의 마음', '상대의 에너지', '관계의 방향']
       <p class="love-spread-promo__tag">LOVE TAROT</p>
       <h3 class="love-spread-promo__title">러브타로</h3>
       <p class="love-spread-promo__desc">나의 마음, 상대의 에너지, 관계의 방향 - 사랑의 흐름을 세 장으로 읽어봅니다.</p>
-      <button class="love-spread-promo__btn" @click="router.push('/reading/love')">
+      <button class="love-spread-promo__btn" @click="router.push('/reading/love/')">
         시작하기
       </button>
     </div>
