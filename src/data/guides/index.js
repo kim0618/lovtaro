@@ -10,8 +10,10 @@ import moonLoveMeaning from './moon-love-meaning.js'
 import loversLoveMeaning from './lovers-love-meaning.js'
 import empressLoveMeaning from './empress-love-meaning.js'
 import starLoveMeaning from './star-love-meaning.js'
+import towerLoveMeaning from './tower-love-meaning.js'
 
 const guides = [
+  towerLoveMeaning,
   starLoveMeaning,
   empressLoveMeaning,
   loversLoveMeaning,

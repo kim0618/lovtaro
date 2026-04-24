@@ -557,4 +557,13 @@ curl -sI https://lovtaro.kr | head -3
 - 이 스킬은 **1회 실행 후 자동 삭제하지 않음** (재점검 필요 시 재실행 가능)
 - 신청 승인 후 보관 or 사용자 지시 후 삭제
 
+
+## 완료 후 로그 기록
+
+스킬 실행이 완료되면 반드시 아래 명령으로 `skill-log.json`에 기록한다:
+
+```bash
+python3 -c "import json,datetime; logs=json.load(open('/home/tjd618/skill-log.json')); now=datetime.datetime.now(); logs.insert(0,{'date':now.strftime('%Y-%m-%d'),'time':now.strftime('%H:%M'),'project':'lovtaro','skill':'lovtaro-adsense-check'}); open('/home/tjd618/skill-log.json','w').write(json.dumps(logs,ensure_ascii=False,indent=2))"
+```
+
 $ARGUMENTS

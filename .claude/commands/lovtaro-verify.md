@@ -207,12 +207,13 @@ diff /tmp/lt-files.txt /tmp/lt-sitemap.txt
 ### M. 관련 카드·리딩 링크 실존
 
 ```bash
-# relatedCards[].id가 실제 tarotCards.js + minorArcana.js에 존재하는지
-node -e "
-const guides = require('/home/tjd618/lovtaro/src/data/guides/index.js').default
-const { TAROT_CARDS } = require('/home/tjd618/lovtaro/src/data/tarotCards.js')
-const { MINOR_ARCANA } = require('/home/tjd618/lovtaro/src/data/minorArcana.js')
-const ids = new Set([...TAROT_CARDS.map(c => c.id), ...MINOR_ARCANA.map(c => c.id)])
+# relatedCards[].id가 실제 cardDictionary.js + minorArcana.js에 존재하는지
+# CARD_DICTIONARY, MINOR_ARCANA 둘 다 객체이므로 Object.keys()로 id 추출
+node --input-type=module -e "
+import guides from '/home/tjd618/lovtaro/src/data/guides/index.js'
+import { CARD_DICTIONARY } from '/home/tjd618/lovtaro/src/data/cardDictionary.js'
+import { MINOR_ARCANA } from '/home/tjd618/lovtaro/src/data/minorArcana.js'
+const ids = new Set([...Object.keys(CARD_DICTIONARY), ...Object.keys(MINOR_ARCANA)])
 guides.forEach(g => {
   (g.relatedCards || []).forEach(c => {
     if (!ids.has(c.id)) console.log('MISSING-CARD:', g.slug, '→', c.id)
@@ -221,7 +222,7 @@ guides.forEach(g => {
 "
 ```
 
-(ES Module이면 `node --experimental-vm-modules` 또는 수동 확인)
+(2026-04-24 수정: 이전 버전은 require + .map() 사용했는데 두 데이터가 객체라 TypeError. ESM + Object.keys()로 수정.)
 
 관련 리딩 `path`가 실존 라우트인지 (`/reading/love`, `/reading/mind`, `/reading/reunion`, `/reading/contact`, `/reading/yesno`, `/reading/compatibility`, `/reading/three`, `/today`):
 
@@ -234,13 +235,33 @@ grep -E "path: '/reading|path: '/today" /home/tjd618/lovtaro/src/data/guides/*.j
 
 ### N. FAQ 본문 ↔ prerender.mjs GUIDES[].faq 일치
 
-prerender JSON-LD 생성을 위해 두 배열이 완전히 일치해야 함.
+prerender JSON-LD 생성을 위해 두 배열이 완전히 일치해야 함. 개수뿐 아니라 **question/answer 문자열까지 정확 일치** 검사.
+
+**배경 (2026-04-24 회고)**: 개수만 비교하던 초기 버전에서는 놓친 케이스가 있었음. 가이드 본문 트리밍/수정 시 guide 파일만 고치고 prerender.mjs는 미동기화된 케이스 2건 발견:
+- tower A1: guide 142자, prerender 203자 (본문 초과로 트리밍한 버전이 prerender에 반영 안 됨)
+- lovers A1: guide "이미", prerender "반드시" (단정 표현이 JSON-LD에 잔존, 금지 규칙 위반)
 
 ```bash
-# guide 파일의 faq 개수 vs prerender.mjs GUIDES의 faq 개수 대조
+cd /home/tjd618/lovtaro && node --input-type=module -e "
+import guides from './src/data/guides/index.js'
+import fs from 'fs'
+const pr = fs.readFileSync('./scripts/prerender.mjs','utf8')
+let mm = 0
+for (const g of guides) {
+  const re = new RegExp(\"slug: '\"+g.slug+\"'[\\\\s\\\\S]*?faq: \\\\[([\\\\s\\\\S]*?)\\\\n    \\\\]\", 'm')
+  const m = pr.match(re); if (!m) { console.log('MISSING:', g.slug); continue }
+  const qs = [...m[1].matchAll(/question: '([^']+)'/g)].map(x => x[1])
+  const as = [...m[1].matchAll(/answer: '([^']+)'/g)].map(x => x[1])
+  ;(g.faq||[]).forEach((f,i) => {
+    if (qs[i] !== f.question) { console.log(g.slug,'Q'+(i+1),'불일치'); mm++ }
+    if (as[i] !== f.answer) { console.log(g.slug,'A'+(i+1),'불일치 (guide:',f.answer.length,'prerender:',(as[i]||'').length,'자)'); mm++ }
+  })
+}
+console.log(mm===0 ? '  ✅ 전수 일치' : '  ⚠ '+mm+'건 불일치')
+"
 ```
 
-수동 또는 스크립트로 비교 (초기엔 수동 확인). 불일치 시 prerender.mjs 쪽을 guide 파일 기준으로 맞춘다.
+**불일치 시 처리**: prerender.mjs 쪽을 guide 파일 기준으로 맞춘다 (guide가 단일 소스). Edit 후 `npm run build` 재실행해서 JSON-LD 갱신.
 
 ### O. 얇은 카드 스캔 (2026-04-20 추가)
 

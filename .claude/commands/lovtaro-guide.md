@@ -519,6 +519,36 @@ const GUIDES = [
 
 **FAQ는 본문 faq와 정확히 일치**해야 JSON-LD가 유효.
 
+**⚠ 본문 트리밍·수정 후 재동기화 필수 (2026-04-24 회고)**:
+
+본문이 4,200자 초과로 FAQ answer를 트리밍하거나 단어 한 개라도 수정한 경우, **반드시 prerender.mjs GUIDES[].faq도 동일하게 다시 수정**해야 함. 2026-04-24 재검증에서 두 파일이 어긋난 건 2건 발견됨:
+- tower A1: guide 트리밍 142자, prerender 원본 203자 (동기화 누락)
+- lovers A1: guide "이미", prerender "반드시" (과거 단정 표현 수정 시 prerender 미동기화로 금지 표현이 JSON-LD에 잔존)
+
+**자동 검증 스크립트 (파일 저장 직후 실행)**:
+
+```bash
+cd /home/tjd618/lovtaro && node --input-type=module -e "
+import guides from './src/data/guides/index.js'
+import fs from 'fs'
+const pr = fs.readFileSync('./scripts/prerender.mjs','utf8')
+let mm = 0
+for (const g of guides) {
+  const re = new RegExp(\"slug: '\"+g.slug+\"'[\\\\s\\\\S]*?faq: \\\\[([\\\\s\\\\S]*?)\\\\n    \\\\]\", 'm')
+  const m = pr.match(re); if (!m) continue
+  const qs = [...m[1].matchAll(/question: '([^']+)'/g)].map(x => x[1])
+  const as = [...m[1].matchAll(/answer: '([^']+)'/g)].map(x => x[1])
+  ;(g.faq||[]).forEach((f,i) => {
+    if (qs[i] !== f.question) { console.log(g.slug,'Q'+(i+1),'불일치'); mm++ }
+    if (as[i] !== f.answer) { console.log(g.slug,'A'+(i+1),'불일치 (guide:',f.answer.length,'prerender:',(as[i]||'').length,')'); mm++ }
+  })
+}
+console.log(mm===0 ? '  ✅ 전수 일치' : '  ⚠ '+mm+'건 불일치 - prerender.mjs 동기화 필요')
+"
+```
+
+불일치 감지 시 prerender.mjs 해당 블록을 guide 파일 기준으로 재Edit.
+
 ### 9-4. sitemap.xml URL 추가
 
 ```xml
