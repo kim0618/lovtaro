@@ -44,6 +44,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 - sun (2026-04-22)
 - hermit (2026-04-24)
 - devil (2026-04-24)
+- magician (2026-04-25)
 
 ### Minor Arcana (56장)
 
