@@ -8,7 +8,7 @@ export const MINOR_ARCANA = {
 
   'ace-of-cups': {
     number: 1,
-    name: '컵 에이스',
+    name: '컵의 에이스',
     nameEn: 'Ace of Cups',
     suit: 'cups',
     energy: 'positive',
@@ -28,7 +28,7 @@ export const MINOR_ARCANA = {
 
   'two-of-cups': {
     number: 2,
-    name: '컵 2',
+    name: '컵의 2',
     nameEn: 'Two of Cups',
     suit: 'cups',
     energy: 'positive',
@@ -48,7 +48,7 @@ export const MINOR_ARCANA = {
 
   'three-of-cups': {
     number: 3,
-    name: '컵 3',
+    name: '컵의 3',
     nameEn: 'Three of Cups',
     suit: 'cups',
     energy: 'positive',
@@ -68,7 +68,7 @@ export const MINOR_ARCANA = {
 
   'four-of-cups': {
     number: 4,
-    name: '컵 4',
+    name: '컵의 4',
     nameEn: 'Four of Cups',
     suit: 'cups',
     energy: 'neutral',
@@ -88,7 +88,7 @@ export const MINOR_ARCANA = {
 
   'five-of-cups': {
     number: 5,
-    name: '컵 5',
+    name: '컵의 5',
     nameEn: 'Five of Cups',
     suit: 'cups',
     energy: 'challenging',
@@ -108,7 +108,7 @@ export const MINOR_ARCANA = {
 
   'six-of-cups': {
     number: 6,
-    name: '컵 6',
+    name: '컵의 6',
     nameEn: 'Six of Cups',
     suit: 'cups',
     energy: 'positive',
@@ -128,7 +128,7 @@ export const MINOR_ARCANA = {
 
   'seven-of-cups': {
     number: 7,
-    name: '컵 7',
+    name: '컵의 7',
     nameEn: 'Seven of Cups',
     suit: 'cups',
     energy: 'neutral',
@@ -148,7 +148,7 @@ export const MINOR_ARCANA = {
 
   'eight-of-cups': {
     number: 8,
-    name: '컵 8',
+    name: '컵의 8',
     nameEn: 'Eight of Cups',
     suit: 'cups',
     energy: 'neutral',
@@ -168,7 +168,7 @@ export const MINOR_ARCANA = {
 
   'nine-of-cups': {
     number: 9,
-    name: '컵 9',
+    name: '컵의 9',
     nameEn: 'Nine of Cups',
     suit: 'cups',
     energy: 'positive',
@@ -188,7 +188,7 @@ export const MINOR_ARCANA = {
 
   'ten-of-cups': {
     number: 10,
-    name: '컵 10',
+    name: '컵의 10',
     nameEn: 'Ten of Cups',
     suit: 'cups',
     energy: 'positive',
@@ -208,7 +208,7 @@ export const MINOR_ARCANA = {
 
   'page-of-cups': {
     number: 11,
-    name: '컵 페이지',
+    name: '컵의 페이지',
     nameEn: 'Page of Cups',
     suit: 'cups',
     energy: 'positive',
@@ -228,7 +228,7 @@ export const MINOR_ARCANA = {
 
   'knight-of-cups': {
     number: 12,
-    name: '컵 나이트',
+    name: '컵의 나이트',
     nameEn: 'Knight of Cups',
     suit: 'cups',
     energy: 'positive',
@@ -248,7 +248,7 @@ export const MINOR_ARCANA = {
 
   'queen-of-cups': {
     number: 13,
-    name: '컵 여왕',
+    name: '컵의 여왕',
     nameEn: 'Queen of Cups',
     suit: 'cups',
     energy: 'positive',
@@ -268,7 +268,7 @@ export const MINOR_ARCANA = {
 
   'king-of-cups': {
     number: 14,
-    name: '컵 킹',
+    name: '컵의 킹',
     nameEn: 'King of Cups',
     suit: 'cups',
     energy: 'neutral',
@@ -290,7 +290,7 @@ export const MINOR_ARCANA = {
 
   'ace-of-pentacles': {
     number: 1,
-    name: '펜타클 에이스',
+    name: '펜타클의 에이스',
     nameEn: 'Ace of Pentacles',
     suit: 'pentacles',
     energy: 'positive',
@@ -310,7 +310,7 @@ export const MINOR_ARCANA = {
 
   'two-of-pentacles': {
     number: 2,
-    name: '펜타클 2',
+    name: '펜타클의 2',
     nameEn: 'Two of Pentacles',
     suit: 'pentacles',
     energy: 'neutral',
@@ -330,7 +330,7 @@ export const MINOR_ARCANA = {
 
   'three-of-pentacles': {
     number: 3,
-    name: '펜타클 3',
+    name: '펜타클의 3',
     nameEn: 'Three of Pentacles',
     suit: 'pentacles',
     energy: 'positive',
@@ -350,7 +350,7 @@ export const MINOR_ARCANA = {
 
   'four-of-pentacles': {
     number: 4,
-    name: '펜타클 4',
+    name: '펜타클의 4',
     nameEn: 'Four of Pentacles',
     suit: 'pentacles',
     energy: 'neutral',
@@ -370,7 +370,7 @@ export const MINOR_ARCANA = {
 
   'five-of-pentacles': {
     number: 5,
-    name: '펜타클 5',
+    name: '펜타클의 5',
     nameEn: 'Five of Pentacles',
     suit: 'pentacles',
     energy: 'challenging',
@@ -390,7 +390,7 @@ export const MINOR_ARCANA = {
 
   'six-of-pentacles': {
     number: 6,
-    name: '펜타클 6',
+    name: '펜타클의 6',
     nameEn: 'Six of Pentacles',
     suit: 'pentacles',
     energy: 'positive',
@@ -410,7 +410,7 @@ export const MINOR_ARCANA = {
 
   'seven-of-pentacles': {
     number: 7,
-    name: '펜타클 7',
+    name: '펜타클의 7',
     nameEn: 'Seven of Pentacles',
     suit: 'pentacles',
     energy: 'neutral',
@@ -430,7 +430,7 @@ export const MINOR_ARCANA = {
 
   'eight-of-pentacles': {
     number: 8,
-    name: '펜타클 8',
+    name: '펜타클의 8',
     nameEn: 'Eight of Pentacles',
     suit: 'pentacles',
     energy: 'positive',
@@ -450,7 +450,7 @@ export const MINOR_ARCANA = {
 
   'nine-of-pentacles': {
     number: 9,
-    name: '펜타클 9',
+    name: '펜타클의 9',
     nameEn: 'Nine of Pentacles',
     suit: 'pentacles',
     energy: 'positive',
@@ -470,7 +470,7 @@ export const MINOR_ARCANA = {
 
   'ten-of-pentacles': {
     number: 10,
-    name: '펜타클 10',
+    name: '펜타클의 10',
     nameEn: 'Ten of Pentacles',
     suit: 'pentacles',
     energy: 'positive',
@@ -490,7 +490,7 @@ export const MINOR_ARCANA = {
 
   'page-of-pentacles': {
     number: 11,
-    name: '펜타클 페이지',
+    name: '펜타클의 페이지',
     nameEn: 'Page of Pentacles',
     suit: 'pentacles',
     energy: 'positive',
@@ -510,7 +510,7 @@ export const MINOR_ARCANA = {
 
   'knight-of-pentacles': {
     number: 12,
-    name: '펜타클 나이트',
+    name: '펜타클의 나이트',
     nameEn: 'Knight of Pentacles',
     suit: 'pentacles',
     energy: 'positive',
@@ -530,7 +530,7 @@ export const MINOR_ARCANA = {
 
   'queen-of-pentacles': {
     number: 13,
-    name: '펜타클 여왕',
+    name: '펜타클의 여왕',
     nameEn: 'Queen of Pentacles',
     suit: 'pentacles',
     energy: 'positive',
@@ -550,7 +550,7 @@ export const MINOR_ARCANA = {
 
   'king-of-pentacles': {
     number: 14,
-    name: '펜타클 킹',
+    name: '펜타클의 킹',
     nameEn: 'King of Pentacles',
     suit: 'pentacles',
     energy: 'positive',
@@ -572,7 +572,7 @@ export const MINOR_ARCANA = {
 
   'ace-of-swords': {
     number: 1,
-    name: '소드 에이스',
+    name: '소드의 에이스',
     nameEn: 'Ace of Swords',
     suit: 'swords',
     energy: 'positive',
@@ -592,7 +592,7 @@ export const MINOR_ARCANA = {
 
   'two-of-swords': {
     number: 2,
-    name: '소드 2',
+    name: '소드의 2',
     nameEn: 'Two of Swords',
     suit: 'swords',
     energy: 'neutral',
@@ -612,7 +612,7 @@ export const MINOR_ARCANA = {
 
   'three-of-swords': {
     number: 3,
-    name: '소드 3',
+    name: '소드의 3',
     nameEn: 'Three of Swords',
     suit: 'swords',
     energy: 'challenging',
@@ -632,7 +632,7 @@ export const MINOR_ARCANA = {
 
   'four-of-swords': {
     number: 4,
-    name: '소드 4',
+    name: '소드의 4',
     nameEn: 'Four of Swords',
     suit: 'swords',
     energy: 'neutral',
@@ -652,7 +652,7 @@ export const MINOR_ARCANA = {
 
   'five-of-swords': {
     number: 5,
-    name: '소드 5',
+    name: '소드의 5',
     nameEn: 'Five of Swords',
     suit: 'swords',
     energy: 'challenging',
@@ -672,7 +672,7 @@ export const MINOR_ARCANA = {
 
   'six-of-swords': {
     number: 6,
-    name: '소드 6',
+    name: '소드의 6',
     nameEn: 'Six of Swords',
     suit: 'swords',
     energy: 'positive',
@@ -692,7 +692,7 @@ export const MINOR_ARCANA = {
 
   'seven-of-swords': {
     number: 7,
-    name: '소드 7',
+    name: '소드의 7',
     nameEn: 'Seven of Swords',
     suit: 'swords',
     energy: 'challenging',
@@ -712,7 +712,7 @@ export const MINOR_ARCANA = {
 
   'eight-of-swords': {
     number: 8,
-    name: '소드 8',
+    name: '소드의 8',
     nameEn: 'Eight of Swords',
     suit: 'swords',
     energy: 'challenging',
@@ -732,7 +732,7 @@ export const MINOR_ARCANA = {
 
   'nine-of-swords': {
     number: 9,
-    name: '소드 9',
+    name: '소드의 9',
     nameEn: 'Nine of Swords',
     suit: 'swords',
     energy: 'challenging',
@@ -752,7 +752,7 @@ export const MINOR_ARCANA = {
 
   'ten-of-swords': {
     number: 10,
-    name: '소드 10',
+    name: '소드의 10',
     nameEn: 'Ten of Swords',
     suit: 'swords',
     energy: 'challenging',
@@ -772,7 +772,7 @@ export const MINOR_ARCANA = {
 
   'page-of-swords': {
     number: 11,
-    name: '소드 페이지',
+    name: '소드의 페이지',
     nameEn: 'Page of Swords',
     suit: 'swords',
     energy: 'neutral',
@@ -792,7 +792,7 @@ export const MINOR_ARCANA = {
 
   'knight-of-swords': {
     number: 12,
-    name: '소드 나이트',
+    name: '소드의 나이트',
     nameEn: 'Knight of Swords',
     suit: 'swords',
     energy: 'challenging',
@@ -812,7 +812,7 @@ export const MINOR_ARCANA = {
 
   'queen-of-swords': {
     number: 13,
-    name: '소드 여왕',
+    name: '소드의 여왕',
     nameEn: 'Queen of Swords',
     suit: 'swords',
     energy: 'neutral',
@@ -832,7 +832,7 @@ export const MINOR_ARCANA = {
 
   'king-of-swords': {
     number: 14,
-    name: '소드 킹',
+    name: '소드의 킹',
     nameEn: 'King of Swords',
     suit: 'swords',
     energy: 'neutral',
@@ -854,7 +854,7 @@ export const MINOR_ARCANA = {
 
   'ace-of-wands': {
     number: 1,
-    name: '완드 에이스',
+    name: '완드의 에이스',
     nameEn: 'Ace of Wands',
     suit: 'wands',
     energy: 'positive',
@@ -874,7 +874,7 @@ export const MINOR_ARCANA = {
 
   'two-of-wands': {
     number: 2,
-    name: '완드 2',
+    name: '완드의 2',
     nameEn: 'Two of Wands',
     suit: 'wands',
     energy: 'positive',
@@ -894,7 +894,7 @@ export const MINOR_ARCANA = {
 
   'three-of-wands': {
     number: 3,
-    name: '완드 3',
+    name: '완드의 3',
     nameEn: 'Three of Wands',
     suit: 'wands',
     energy: 'positive',
@@ -914,7 +914,7 @@ export const MINOR_ARCANA = {
 
   'four-of-wands': {
     number: 4,
-    name: '완드 4',
+    name: '완드의 4',
     nameEn: 'Four of Wands',
     suit: 'wands',
     energy: 'positive',
@@ -934,7 +934,7 @@ export const MINOR_ARCANA = {
 
   'five-of-wands': {
     number: 5,
-    name: '완드 5',
+    name: '완드의 5',
     nameEn: 'Five of Wands',
     suit: 'wands',
     energy: 'challenging',
@@ -954,7 +954,7 @@ export const MINOR_ARCANA = {
 
   'six-of-wands': {
     number: 6,
-    name: '완드 6',
+    name: '완드의 6',
     nameEn: 'Six of Wands',
     suit: 'wands',
     energy: 'positive',
@@ -974,7 +974,7 @@ export const MINOR_ARCANA = {
 
   'seven-of-wands': {
     number: 7,
-    name: '완드 7',
+    name: '완드의 7',
     nameEn: 'Seven of Wands',
     suit: 'wands',
     energy: 'neutral',
@@ -994,7 +994,7 @@ export const MINOR_ARCANA = {
 
   'eight-of-wands': {
     number: 8,
-    name: '완드 8',
+    name: '완드의 8',
     nameEn: 'Eight of Wands',
     suit: 'wands',
     energy: 'positive',
@@ -1014,7 +1014,7 @@ export const MINOR_ARCANA = {
 
   'nine-of-wands': {
     number: 9,
-    name: '완드 9',
+    name: '완드의 9',
     nameEn: 'Nine of Wands',
     suit: 'wands',
     energy: 'neutral',
@@ -1034,7 +1034,7 @@ export const MINOR_ARCANA = {
 
   'ten-of-wands': {
     number: 10,
-    name: '완드 10',
+    name: '완드의 10',
     nameEn: 'Ten of Wands',
     suit: 'wands',
     energy: 'challenging',
@@ -1054,7 +1054,7 @@ export const MINOR_ARCANA = {
 
   'page-of-wands': {
     number: 11,
-    name: '완드 페이지',
+    name: '완드의 페이지',
     nameEn: 'Page of Wands',
     suit: 'wands',
     energy: 'positive',
@@ -1074,7 +1074,7 @@ export const MINOR_ARCANA = {
 
   'knight-of-wands': {
     number: 12,
-    name: '완드 나이트',
+    name: '완드의 나이트',
     nameEn: 'Knight of Wands',
     suit: 'wands',
     energy: 'positive',
@@ -1094,7 +1094,7 @@ export const MINOR_ARCANA = {
 
   'queen-of-wands': {
     number: 13,
-    name: '완드 여왕',
+    name: '완드의 여왕',
     nameEn: 'Queen of Wands',
     suit: 'wands',
     energy: 'positive',
@@ -1114,7 +1114,7 @@ export const MINOR_ARCANA = {
 
   'king-of-wands': {
     number: 14,
-    name: '완드 킹',
+    name: '완드의 킹',
     nameEn: 'King of Wands',
     suit: 'wands',
     energy: 'positive',

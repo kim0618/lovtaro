@@ -1,36 +1,26 @@
 /**
- * TEMPLATE: 소개형 마이너 shortform (3컷, 확정안 v2 - 2026-05-01 업데이트)
- * - scene01: **카드 앞면 풀스크린 클로즈업** + 다크 그라디언트 + 한 줄 훅(핵심 단어 골드) + 작은 달
- *            (이전 카드 뒷면 디자인 폐기 - 첫장 시청 유지율 약함)
+ * TEMPLATE: 소개형 마이너 shortform (3컷, 기존 디자인 확정안)
+ * - scene01: 코스믹 배경 + 달 + 훅 + 프레임 카드 뒷면 (cardScale 3.2)
  * - scene02: 큰 프레임 카드(780×1170) + vignette + cardGlow + 프레임 외부 카드명/키워드
  * - scene03: 헤더 + 중간 프레임 카드(440×660) + 해석 3줄 + "무료 타로 리딩 lovtaro.kr" CTA
  *
  * 사용: scripts/templates/shortform-minor.mjs 를 scripts/generate-shortform-{YYYY-MM-DD_day}.mjs 로 복사 후 카드/카피만 교체.
  * 픽셀 수치·레이아웃은 확정안이므로 수정 금지. 수치 변경이 필요하면 이 템플릿 자체를 업데이트.
- *
- * 카드 portrait 원본 경로 처리:
- * - cards-png/*.png 다수가 OG 1200x630 → 풀스크린 cover 시 가로 잘림이 자연스럽게 흡수되지만
- *   인물·컵 위치가 가운데로 모이려면 portrait 원본(mcards/{suit}/{Name}.png 1024x1536)을 권장.
- * - PORTRAIT_OVERRIDE 맵에 {slug: 'public/images/...'} 추가하면 loadCard가 자동 사용.
  */
 import sharp from 'sharp'
 import { writeFileSync, mkdirSync, existsSync } from 'fs'
 import { resolve, dirname } from 'path'
 import { fileURLToPath } from 'url'
+import { siteCardBackSvg, siteCardBackDefs } from './lib/card-back-svg.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const rootDir = resolve(__dirname, '..')
 const cardsDir = resolve(rootDir, 'public/images/cards-png')
-const outputDir = resolve(rootDir, 'content-output/2026-04-18_sat/shortform')
+const outputDir = resolve(rootDir, 'content-output/2026-05-01_fri/shortform')
+// Page of Cups의 cards-png/ 원본은 1200x630 OG 이미지라 780x1170 리사이즈 시 손실 큼.
+// portrait 원본인 mcards/cups/Page of Cups.png(1024x1536)로 직접 로드.
+const portraitCardPath = resolve(rootDir, 'public/images/mcards/cups/Page of Cups.png')
 const W = 1080, H = 1920
-
-// 마이너 카드 portrait 원본 경로 (cards-png/*.png가 OG 1200x630인 카드는 여기 추가)
-// scene01 풀스크린·scene02 프레임 카드 모두 이 맵을 우선 참조.
-const PORTRAIT_OVERRIDE = {
-  'page-of-cups': 'public/images/mcards/cups/Page of Cups.png',
-  'two-of-cups': 'public/images/mcards/cups/Two of Cups.png',
-  // 신규 카드 사용 시 여기 추가
-}
 
 function mulberry32(seed) {
   return function() {
@@ -133,8 +123,8 @@ function drawFrame(x, y, w, h, strong = 1) {
 }
 
 async function loadCard(slug, w, h) {
-  const overrideRel = PORTRAIT_OVERRIDE[slug]
-  const p = overrideRel ? resolve(rootDir, overrideRel) : resolve(cardsDir, `${slug}.png`)
+  // page-of-cups은 portrait 원본 경로로 오버라이드
+  const p = slug === 'page-of-cups' ? portraitCardPath : resolve(cardsDir, `${slug}.png`)
   if (!existsSync(p)) return null
   return sharp(p).resize(w, h, { fit: 'cover' }).toBuffer()
 }
@@ -145,34 +135,23 @@ async function roundImg(buf, w, h, r) {
 }
 
 async function scene01() {
-  // 풀스크린 클로즈업 디자인 (확정안 v2, 2026-05-01)
-  // 카드 앞면을 1080x1920 cover-fit으로 채워 첫 0.5초 시선 잡고, 위쪽 어둠에 한 줄 훅 떠 있는 구조.
-  //
-  // ★ 아래 5개 값은 매주 교체 대상 (placeholder, 고정값 아님):
-  //    cardSlug          : 해당 주 카드 슬러그
-  //    hookLineTop       : 첫째 줄 (평이한 상황 한 줄)
-  //    accentBefore      : 둘째 줄 앞부분 (강조 단어 앞 텍스트)
-  //    accentWord        : 둘째 줄 핵심 단어 (골드 강조)
-  //    accentAfter       : 둘째 줄 뒷부분 (강조 단어 뒤 텍스트)
-  //
-  // 훅 작성 규칙: 첫 장에 카드명 노출 금지. 핵심 감정/행동 한 단어만 골드 처리.
-  // 예) Page of Cups → '답장은 느린데,' / '왜 가끔 진심 같을까?'  (강조: 진심)
-  const cardSlug = 'page-of-cups' // 예시 - 실제 사용 시 교체
-  const hookLineTop = '답장은 느린데,' // 예시 - 실제 사용 시 교체
-  const accentBefore = '왜 가끔 '       // 예시 - 실제 사용 시 교체
-  const accentWord = '진심'             // 예시 - 실제 사용 시 교체
-  const accentAfter = ' 같을까?'        // 예시 - 실제 사용 시 교체
+  // 옵션: Page of Cups 클로즈업으로 화면 가득 채움 + 어두운 오버레이로 무드 잡기.
+  // 첫 0.5초에 "신비로운 카드 비주얼"이 시선 잡고, 위쪽 어둠에 큰 훅이 떠 있는 구조.
+  // 카드 폭이 화면보다 커서 좌우만 살짝 잘림 → 인물 + 컵 + 물고기 다 보이게.
 
+  // 1) 카드 풀스크린 cover (1080x1920)
+  // 2) 약한 블러로 사진 느낌 줄이고 페인터리 무드
+  // 3) 채도/밝기 조정으로 딥네이비 톤에 어울리게
   const portraitW = 1080, portraitH = 1920
-  const cardRaw = await loadCard(cardSlug, portraitW, portraitH)
-  if (!cardRaw) { console.error(`❌ 카드 없음: ${cardSlug}`); return }
-  const cardBg = await sharp(cardRaw)
+  const cardBg = await sharp(portraitCardPath)
+    .resize(portraitW, portraitH, { fit: 'cover', position: 'center' })
     .blur(4)
     .modulate({ saturation: 1.05, brightness: 0.82 })
     .toBuffer()
 
   const overlaySvg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
     <defs>
+      <!-- 위쪽 어둠을 더 진하게: 훅 가독성 우선 -->
       <linearGradient id="topShade" x1="0" y1="0" x2="0" y2="1">
         <stop offset="0%"  stop-color="rgba(6,3,20,0.96)"/>
         <stop offset="38%" stop-color="rgba(6,3,20,0.78)"/>
@@ -192,6 +171,7 @@ async function scene01() {
         <stop offset="55%"  stop-color="rgba(0,0,0,0)"/>
         <stop offset="100%" stop-color="rgba(0,0,0,0.72)"/>
       </radialGradient>
+      <!-- 텍스트 가독성용 강한 외곽선 + 글로우 합성 -->
       <filter id="hookSharpen" x="-30%" y="-30%" width="160%" height="160%">
         <feGaussianBlur stdDeviation="6" in="SourceAlpha" result="shadow"/>
         <feFlood flood-color="rgba(6,3,20,0.85)"/>
@@ -213,13 +193,16 @@ async function scene01() {
     <ellipse cx="540" cy="1100" rx="540" ry="500" fill="url(#centerGlow)"/>
     <rect width="${W}" height="${H}" fill="url(#vignetteSide)"/>
 
+    <!-- 작은 달 (브랜드 시그니처) -->
     <rect x="70" y="150" width="120" height="120" fill="rgba(248,230,185,0.85)" mask="url(#moonMaskMini)"/>
 
+    <!-- 훅 한 줄: 더 짧고 더 선명하게 -->
     <g filter="url(#hookSharpen)">
-      <text x="540" y="335" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="56" fill="#FFFFFF" letter-spacing="0" font-weight="500" paint-order="stroke fill" stroke="rgba(6,3,20,0.5)" stroke-width="2">${hookLineTop}</text>
-      <text x="540" y="420" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="56" fill="#FFFFFF" letter-spacing="0" font-weight="500" paint-order="stroke fill" stroke="rgba(6,3,20,0.5)" stroke-width="2">${accentBefore}<tspan fill="#F0CC78" font-weight="700">${accentWord}</tspan>${accentAfter}</text>
+      <text x="540" y="335" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="56" fill="#FFFFFF" letter-spacing="0" font-weight="500" paint-order="stroke fill" stroke="rgba(6,3,20,0.5)" stroke-width="2">답장은 느린데,</text>
+      <text x="540" y="420" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="56" fill="#FFFFFF" letter-spacing="0" font-weight="500" paint-order="stroke fill" stroke="rgba(6,3,20,0.5)" stroke-width="2">왜 가끔 <tspan fill="#F0CC78" font-weight="700">진심</tspan> 같을까?</text>
     </g>
 
+    <!-- 짧은 골드 디바이더 (훅과 카드 사이) -->
     <g opacity="0.65">
       <circle cx="504" cy="490" r="2.5" fill="#e8d48b"/>
       <line x1="516" y1="490" x2="564" y2="490" stroke="rgba(232,212,139,0.5)" stroke-width="1"/>
@@ -249,7 +232,7 @@ async function scene02() {
   const cardLeft = frameX + framePad
   const cardTop = frameY + framePad
 
-  const cardRaw = await loadCard('moon', cardW, cardH)
+  const cardRaw = await loadCard('page-of-cups', cardW, cardH)
   const cardEnhanced = await sharp(cardRaw)
     .sharpen({ sigma: 0.7, m1: 0.5, m2: 2.2 })
     .modulate({ saturation: 1.12, brightness: 1.03 })
@@ -285,11 +268,11 @@ async function scene02() {
     ${drawFrame(frameX, frameY, frameW, frameH, 1.3)}
 
     <g filter="url(#softGlow)">
-      <text x="540" y="${nameKrY}" text-anchor="middle" font-family="sans-serif" font-size="58" fill="#F4F8FF" font-weight="300" letter-spacing="4">달</text>
-      <text x="540" y="${nameEnY}" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="30" fill="rgba(232,212,139,0.88)" letter-spacing="1">The Moon</text>
+      <text x="540" y="${nameKrY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="58" fill="#F4F8FF" font-weight="300" letter-spacing="4">컵의 페이지</text>
+      <text x="540" y="${nameEnY}" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="30" fill="rgba(232,212,139,0.88)" letter-spacing="1">Page of Cups</text>
     </g>
 
-    <text x="540" y="${kwY}" text-anchor="middle" font-family="sans-serif" font-size="26" fill="rgba(232,212,139,0.72)" letter-spacing="4" font-weight="300">무의식 · 숨겨진 감정 · 그리움</text>
+    <text x="540" y="${kwY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="26" fill="rgba(232,212,139,0.72)" letter-spacing="4" font-weight="300">조심스러운 마음 · 작은 신호 · 진심</text>
 
     <text x="540" y="1860" text-anchor="middle" font-family="sans-serif" font-size="24" fill="rgba(232,212,139,0.45)" letter-spacing="4">@lovtarot_</text>
   </svg>`
@@ -312,7 +295,7 @@ async function scene03() {
   const cardLeft = frameX + framePad
   const cardTop = frameY + framePad
 
-  const cardImg = await loadCard('moon', cardW, cardH)
+  const cardImg = await loadCard('page-of-cups', cardW, cardH)
   const masked = await roundImg(cardImg, cardW, cardH, 6)
 
   const divideY = cardTop + cardH + 20
@@ -329,26 +312,26 @@ async function scene03() {
     ${cosmicBody(true, 53)}
 
     <g filter="url(#softGlow)">
-      <text x="540" y="${headerY}" text-anchor="middle" font-family="sans-serif" font-size="40" fill="#F4F8FF" font-weight="300" letter-spacing="6">놓지 못한 감정</text>
+      <text x="540" y="${headerY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="40" fill="#F4F8FF" font-weight="300" letter-spacing="6">조심스러운 진심</text>
     </g>
 
     ${drawFrame(frameX, frameY, frameW, frameH, 0.95)}
 
     <line x1="${frameX + 34}" y1="${divideY}" x2="${frameX + frameW - 34}" y2="${divideY}" stroke="rgba(201,168,76,0.28)" stroke-width="1"/>
 
-    <text x="540" y="${nameKrY}" text-anchor="middle" font-family="sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="4">달</text>
-    <text x="540" y="${nameEnY}" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="20" fill="rgba(232,212,139,0.8)" letter-spacing="1">The Moon</text>
+    <text x="540" y="${nameKrY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="4">컵의 페이지</text>
+    <text x="540" y="${nameEnY}" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="20" fill="rgba(232,212,139,0.8)" letter-spacing="1">Page of Cups</text>
 
-    <text x="540" y="${kwY}" text-anchor="middle" font-family="sans-serif" font-size="22" fill="rgba(232,212,139,0.6)" letter-spacing="4" font-weight="300">무의식 · 숨겨진 감정 · 그리움</text>
+    <text x="540" y="${kwY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="22" fill="rgba(232,212,139,0.6)" letter-spacing="4" font-weight="300">조심스러움 · 작은 신호 · 진심</text>
 
     <g filter="url(#softGlow)">
-      <text x="540" y="${interpY}" text-anchor="middle" font-family="sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="1">표면 아래에 감정이 남아 있어요.</text>
-      <text x="540" y="${interpY + 58}" text-anchor="middle" font-family="sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="1">아직 완전히 놓지 못한,</text>
-      <text x="540" y="${interpY + 116}" text-anchor="middle" font-family="sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="1">그런 마음이 맞아요.</text>
+      <text x="540" y="${interpY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="1">속도가 느린 게 마음이 없는 게 아니에요.</text>
+      <text x="540" y="${interpY + 58}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="1">조심스러워서 천천히 닿는 결,</text>
+      <text x="540" y="${interpY + 116}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="1">그 안에 진심이 살짝 비쳐요.</text>
     </g>
 
-    <text x="540" y="${ctaY}" text-anchor="middle" font-family="sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="3">당신도 직접 뽑아보세요</text>
-    <text x="540" y="${ctaY + 54}" text-anchor="middle" font-family="sans-serif" font-size="26" fill="rgba(232,212,139,0.78)" letter-spacing="2">무료 타로 리딩 lovtaro.kr</text>
+    <text x="540" y="${ctaY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="3">당신도 직접 뽑아보세요</text>
+    <text x="540" y="${ctaY + 54}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="26" fill="rgba(232,212,139,0.78)" letter-spacing="2">무료 타로 리딩 lovtaro.kr</text>
 
     <text x="540" y="1870" text-anchor="middle" font-family="sans-serif" font-size="22" fill="rgba(232,212,139,0.4)" letter-spacing="4">@lovtarot_</text>
   </svg>`
@@ -360,7 +343,7 @@ async function scene03() {
 }
 
 async function main() {
-  console.log('=== 2026-04-18 토요일 기존형 shortform (코스믹 스타일) ===')
+  console.log('=== 2026-05-01 금 - 소개형 마이너 (Page of Cups) ===')
   mkdirSync(outputDir, { recursive: true })
   await scene01()
   await scene02()

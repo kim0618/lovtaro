@@ -21,7 +21,7 @@ import { colorCardBackSvg, colorCardBackDefs, CARD_WIDTH, CARD_HEIGHT, pickRando
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const rootDir = resolve(__dirname, '..')
 const cardsDir = resolve(rootDir, 'public/images/cards-png')
-const outputDir = resolve(rootDir, 'content-output/2026-04-26_sun/shortform')
+const outputDir = resolve(rootDir, 'content-output/2026-05-03_sun/shortform')
 const W = 1080, H = 1920
 
 const KO_STACK = `'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif`
@@ -29,16 +29,17 @@ const KO_STACK = `'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif`
 // 공개 카드 3장 - 희망/접근/급변 3축. hook은 string(1줄) 또는 [상단, 하단] 2줄 배열.
 // imageSrc: cards-png/*.png 일부(knight-of-cups, ace-of-wands 등)는 1200x630 OG 이미지라 세로 크롭 시 손실 큼.
 //   → portrait 원본(cards/*.webp 600x900 또는 mcards/{suit}/{Name}.png 1024x1536) 명시
+// 매듭/움직임/결단 3축 - World(완성) / Knight of Wands(점화) / Judgement(깨달음)
 const CARDS = [
-  { num: '①', slug: 'star',          imageSrc: 'public/images/cards-png/star.png',
-    nameKr: '별',          nameEn: 'The Star',       keywords: '희망 · 회복 · 이어짐',
-    hook: '주 초반, 놓치기 쉬운 작은 신호가 보여요' },
-  { num: '②', slug: 'knight-of-cups', imageSrc: 'public/images/cards/knight-of-cups.webp',
-    nameKr: '컵의 나이트',   nameEn: 'Knight of Cups', keywords: '다가옴 · 감정 · 접근',
-    hook: ['주 중반,', '감정의 거리가 가까워질 수 있어요'] },
-  { num: '③', slug: 'ace-of-wands',   imageSrc: 'public/images/mcards/wands/Ace of Wands.png',
-    nameKr: '완드의 에이스', nameEn: 'Ace of Wands',   keywords: '점화 · 움직임 · 시작',
-    hook: ['주 후반, 예상 못 한 타이밍에', '흐름이 확 살아날 수 있어요'] },
+  { num: '①', slug: 'world',           imageSrc: 'public/images/cards-png/world.png',
+    nameKr: '세계',         nameEn: 'The World',        keywords: '완성 · 매듭 · 정리',
+    hook: ['주 초반, 끌고 왔던 매듭이', '자연스럽게 풀릴 수 있어요'] },
+  { num: '②', slug: 'knight-of-wands', imageSrc: 'public/images/mcards/wands/Knight of Wands.png',
+    nameKr: '완드의 나이트',    nameEn: 'Knight of Wands',  keywords: '점화 · 움직임 · 속도',
+    hook: ['주 중반,', '멈춰 있던 흐름에 불씨가 붙을 수 있어요'] },
+  { num: '③', slug: 'judgement',       imageSrc: 'public/images/cards-png/judgement.png',
+    nameKr: '심판',         nameEn: 'Judgement',        keywords: '깨달음 · 결단 · 정리',
+    hook: ['주 후반, 흐릿했던 감정이', '또렷한 답으로 다가올 수 있어요'] },
 ]
 
 // scene01/02/03 공통 카드 뒷면 스킴 - 한 번 픽해서 세 씬 모두 동일 색상 유지
@@ -529,19 +530,20 @@ async function scene07() {
 }
 
 async function main() {
-  console.log('=== 2026-04-26 Sunday Tarot Preview (6컷 압축, scene03 정지 유도 제거) ===')
+  console.log('=== 2026-05-03 Sunday Tarot Preview - 6컷 압축 (scene03 정지 유도 제거) ===')
   mkdirSync(outputDir, { recursive: true })
   await scene01()                                  // 훅 도입
-  await scene02()                                  // 카드 선택 유도
-  await revealScene(CARDS[0], 101, 'scene03.png')  // 1번 공개 (The Star)
-  await revealScene(CARDS[1], 202, 'scene04.png')  // 2번 공개 (Knight of Cups)
-  await revealScene(CARDS[2], 303, 'scene05.png')  // 3번 공개 (Ace of Wands)
+  await scene02()                                  // 선택 유도
+  await revealScene(CARDS[0], 101, 'scene03.png')  // 1번 공개 (The World)
+  await revealScene(CARDS[1], 202, 'scene04.png')  // 2번 공개 (Knight of Wands)
+  await revealScene(CARDS[2], 303, 'scene05.png')  // 3번 공개 (Judgement)
+  // scene07() 함수 → scene06.png로 출력 변경. 함수 내부의 writeFileSync 경로를 직접 호출하지 않고 renameSync로 처리.
   await scene07()
-  // scene07.png → scene06.png 로 변경
+  // scene07.png를 scene06.png로 변경
   const { renameSync, existsSync: ex } = await import('fs')
-  const s7 = resolve(outputDir, 'scene07.png')
-  const s6 = resolve(outputDir, 'scene06.png')
-  if (ex(s7)) renameSync(s7, s6)
+  const scene7Path = resolve(outputDir, 'scene07.png')
+  const scene6Path = resolve(outputDir, 'scene06.png')
+  if (ex(scene7Path)) renameSync(scene7Path, scene6Path)
   console.log('완료! (총 6컷: scene01~scene06)')
 }
 

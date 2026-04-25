@@ -15,7 +15,7 @@ import { fileURLToPath } from 'url'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const rootDir = resolve(__dirname, '..')
 const cardsDir = resolve(rootDir, 'public/images/cards-png')
-const outputDir = resolve(rootDir, 'content-output/2026-04-25_sat/carousel')
+const outputDir = resolve(rootDir, 'content-output/2026-04-29_wed/carousel')
 
 const W = 1080, H = 1350
 
@@ -49,7 +49,7 @@ async function slide01() {
   const cW = 750, cH = 940
   const cardTop = 80
   const cardLeft = (W - cW) / 2
-  const img = await loadCard('sun', cW, cH)
+  const img = await loadCard('hermit', cW, cH)
   const masked = img ? await roundImg(img, cW, cH, 20) : null
   const stars = generateStars(10, 50, 1030, 30, 70)
 
@@ -89,9 +89,9 @@ async function slide01() {
       </linearGradient>
     </defs>
     <rect x="0" y="850" width="${W}" height="500" fill="url(#bf)"/>
-    <text x="540" y="1085" font-family="sans-serif" font-size="44" font-weight="300" fill="#F4F8FF" text-anchor="middle">이별 후에도</text>
-    <text x="540" y="1145" font-family="sans-serif" font-size="44" font-weight="300" fill="#F4F8FF" text-anchor="middle">다시 사랑받는 사람의</text>
-    <text x="540" y="1205" font-family="sans-serif" font-size="44" font-weight="300" fill="#F4F8FF" text-anchor="middle">3가지 특징</text>
+    <text x="540" y="1085" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="44" font-weight="300" fill="#F4F8FF" text-anchor="middle">관계가 멈춘 것 같을 때</text>
+    <text x="540" y="1145" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="44" font-weight="300" fill="#F4F8FF" text-anchor="middle">절대 먼저 망치면</text>
+    <text x="540" y="1205" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="44" font-weight="300" fill="#F4F8FF" text-anchor="middle">안 되는 3가지</text>
     <text x="540" y="1310" font-family="sans-serif" font-size="22" fill="rgba(180,170,220,0.45)" text-anchor="middle">스와이프해서 확인하세요 →</text>
     </svg>`
     base = await sharp(base).composite([{ input: Buffer.from(overlay), left: 0, top: 0 }]).png().toBuffer()
@@ -171,7 +171,7 @@ async function slide05() {
   const cW = 500, cH = 670
   const cardTop = 150
   const cardLeft = (W - cW) / 2
-  const img = await loadCard('sun', cW, cH)
+  const img = await loadCard('hermit', cW, cH)
   let masked = null
   if (img) {
     const m = await roundImg(img, cW, cH, 18)
@@ -231,24 +231,24 @@ async function slide05() {
 }
 
 async function main() {
-  console.log('=== 2026-04-25 carousel 이미지 생성 ===')
+  console.log('=== 2026-04-29 wed carousel - 관계 멈춤 X 3가지 (Hermit/2Swords/8Cups/4Cups) ===')
   mkdirSync(outputDir, { recursive: true })
 
   await slide01()
 
-  await contentSlide('queen-of-cups',
-    'Queen of Cups', '감정이 따뜻한 사람',
-    '감정을 누르지 않고\n따뜻하게 받아주는 사람이에요\n\n자기 마음도 상대 마음도\n다정하게 안아줄 줄 알아요\n\n키워드: 공감 · 다정함 · 감정의 깊이',
+  await contentSlide('two-of-swords',
+    'Two of Swords', '바로 결론 내리지 않기',
+    '답답하다고 충동적으로\n끊어내려 하지 마세요\n\n지금 필요한 건 확인이 아니라\n한 박자 늦추는 힘일 수 있어요\n\n키워드: 결정 · 균형 · 보류',
     1, 'slide02.png')
 
-  await contentSlide('ace-of-pentacles',
-    'Ace of Pentacles', '안정감을 주는 사람',
-    '곁에 있으면 마음이 단단해지는 사람\n감정이 튀지 않고 꾸준해요\n\n자극보다 신뢰를 쌓는 관계를\n만들 줄 아는 사람이에요\n\n키워드: 안정 · 신뢰 · 꾸준함',
+  await contentSlide('eight-of-cups',
+    'Eight of Cups', '먼저 등 돌리지 않기',
+    '닿지 않는 마음이 무겁다고\n내가 먼저 떠나버리면\n\n다시 돌아오기 어려워져요\n잠시 거리는 두되, 끝내지는 마세요\n\n키워드: 떠남 · 거리 · 미련',
     2, 'slide03.png')
 
-  await contentSlide('star',
-    'The Star', '희망을 잃지 않는 사람',
-    '상처 속에서도\n자신을 믿는 빛을 잃지 않아요\n\n이 빛은 타인에게도 전해지고\n자연스럽게 사랑을 끌어와요\n\n키워드: 희망 · 자기 믿음 · 회복력',
+  await contentSlide('four-of-cups',
+    'Four of Cups', '마음 닫고 외면하지 않기',
+    '눈앞에 닿는 작은 신호를\n무관심으로 흘려보내지 마세요\n\n지금의 권태감은 끝이 아니라\n다시 들여다볼 타이밍이에요\n\n키워드: 권태 · 외면 · 다시 보기',
     3, 'slide04.png')
 
   await slide05()

@@ -137,6 +137,7 @@ function cardFrameFront(x, y, w, h) {
 
 export function carouselShortformSlide({
   cardSlug,
+  imageSrc, // optional: 절대경로 또는 프로젝트 루트 기준 상대경로. cards-png/*.png가 OG 1200x630이라 portrait 손실 큰 경우 mcards/{suit}/{Name}.png 등 portrait 원본 명시.
   nameEn,
   titleKo,
   subtitleEn,
@@ -159,9 +160,13 @@ export function carouselShortformSlide({
   const bodyFontSize = n <= 3 ? 30 : n <= 5 ? 28 : 25
   const bodyLeading = n <= 3 ? 52 : n <= 5 ? 48 : 42
 
-  const cardPath = resolve(CARDS_DIR, `${cardSlug}.png`)
+  const cardPath = imageSrc
+    ? (imageSrc.startsWith('/') ? imageSrc : resolve(__dirname, '../..', imageSrc))
+    : resolve(CARDS_DIR, `${cardSlug}.png`)
+  const ext = cardPath.toLowerCase().endsWith('.webp') ? 'webp' : 'png'
+  const mime = ext === 'webp' ? 'image/webp' : 'image/png'
   const cardBase64 = readFileSync(cardPath).toString('base64')
-  const cardHref = `data:image/png;base64,${cardBase64}`
+  const cardHref = `data:${mime};base64,${cardBase64}`
 
   const pageNum = String(index).padStart(2, '0')
   const totalStr = String(total).padStart(2, '0')
