@@ -49,6 +49,8 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ### Minor Arcana (56장)
 
 <!-- 보강 완료 카드 아래에 `- {id} ({YYYY-MM-DD})` 추가 -->
+- ace-of-cups (2026-04-26)
+- two-of-cups (2026-04-26)
 
 ### 미완료 카운트
 
