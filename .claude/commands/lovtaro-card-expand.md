@@ -51,6 +51,8 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 <!-- 보강 완료 카드 아래에 `- {id} ({YYYY-MM-DD})` 추가 -->
 - ace-of-cups (2026-04-26)
 - two-of-cups (2026-04-26)
+- three-of-cups (2026-04-27)
+- four-of-cups (2026-04-27)
 
 ### 미완료 카운트
 
