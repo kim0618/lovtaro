@@ -55,6 +55,8 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 - four-of-cups (2026-04-27)
 - five-of-cups (2026-04-28)
 - six-of-cups (2026-04-28)
+- seven-of-cups (2026-04-29)
+- eight-of-cups (2026-04-29)
 
 ### 미완료 카운트
 
