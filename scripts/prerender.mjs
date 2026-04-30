@@ -104,6 +104,7 @@ const ROUTES = [
     path: '/history',
     title: '리딩 기록 | Lovtaro',
     description: '나의 타로 리딩 기록을 확인합니다.',
+    noindex: true,
   },
   {
     path: '/cards',
@@ -750,7 +751,7 @@ function escapeAttr(str) {
   return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 }
 
-function injectMeta(html, { path: urlPath, title, description, ogImage, jsonLd }) {
+function injectMeta(html, { path: urlPath, title, description, ogImage, jsonLd, noindex }) {
   const url = canonicalUrl(urlPath)
   const safeTitle = escapeAttr(title)
   const safeDesc = escapeAttr(description)
@@ -805,6 +806,16 @@ function injectMeta(html, { path: urlPath, title, description, ogImage, jsonLd }
     /(<link rel="alternate"\s+hreflang="ko"\s+href=")[^"]*(")/,
     `$1${safeUrl}$2`,
   )
+
+  // 검색엔진 색인 차단이 필요한 페이지 (예: /history - 사용자 로컬 데이터 의존, 첫 방문자에겐 항상 빈 상태)
+  if (noindex) {
+    const robotsMeta = '<meta name="robots" content="noindex, nofollow" />'
+    if (/<meta name="robots"[^>]*>/.test(html)) {
+      html = html.replace(/<meta name="robots"[^>]*>/, robotsMeta)
+    } else {
+      html = html.replace(/<\/head>/, `  ${robotsMeta}\n  </head>`)
+    }
+  }
 
   // JSON-LD 주입. useHead.js가 동일 id로 클라이언트에서 교체함.
   if (jsonLd) {

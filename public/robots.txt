@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /history/
 
 Sitemap: https://lovtaro.kr/sitemap.xml
