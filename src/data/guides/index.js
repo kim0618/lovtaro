@@ -16,8 +16,10 @@ import hermitLoveMeaning from './hermit-love-meaning.js'
 import foolLoveMeaning from './fool-love-meaning.js'
 import devilLoveMeaning from './devil-love-meaning.js'
 import sunLoveMeaning from './sun-love-meaning.js'
+import wheelLoveMeaning from './wheel-love-meaning.js'
 
 const guides = [
+  wheelLoveMeaning,
   sunLoveMeaning,
   devilLoveMeaning,
   foolLoveMeaning,
