@@ -47,6 +47,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 - magician (2026-04-25)
 - death (2026-05-02)
 - wheel (2026-05-02)
+- hanged (2026-05-03)
 
 ### Minor Arcana (56장)
 
@@ -61,6 +62,9 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 - eight-of-cups (2026-04-29)
 - nine-of-cups (2026-04-30)
 - ten-of-cups (2026-04-30)
+- page-of-cups (등록 누락분, 본문 보강 완료 확인됨 2026-05-03)
+- knight-of-cups (등록 누락분, 본문 보강 완료 확인됨 2026-05-03)
+- queen-of-cups (2026-05-03)
 
 ### 미완료 카운트
 

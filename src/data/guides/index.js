@@ -18,8 +18,10 @@ import devilLoveMeaning from './devil-love-meaning.js'
 import sunLoveMeaning from './sun-love-meaning.js'
 import wheelLoveMeaning from './wheel-love-meaning.js'
 import deathLoveMeaning from './death-love-meaning.js'
+import hangedLoveMeaning from './hanged-love-meaning.js'
 
 const guides = [
+  hangedLoveMeaning,
   deathLoveMeaning,
   wheelLoveMeaning,
   sunLoveMeaning,
