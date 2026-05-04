@@ -65,6 +65,11 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 - page-of-cups (등록 누락분, 본문 보강 완료 확인됨 2026-05-03)
 - knight-of-cups (등록 누락분, 본문 보강 완료 확인됨 2026-05-03)
 - queen-of-cups (2026-05-03)
+- king-of-cups (2026-05-04)
+
+### Major Arcana 추가 완료
+
+- priestess (2026-05-04)
 
 ### 미완료 카운트
 

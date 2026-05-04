@@ -205,8 +205,8 @@ async function scene01() {
     </g>
 
     <g filter="url(#softGlow)">
-      <text x="540" y="420" text-anchor="middle" font-family="${KO_STACK}" font-size="58" fill="#F4F8FF" letter-spacing="2" font-weight="300">다음 주 연애 흐름,</text>
-      <text x="540" y="505" text-anchor="middle" font-family="${KO_STACK}" font-size="58" fill="#F4F8FF" letter-spacing="2" font-weight="300">지금 하나만 골라보세요</text>
+      <text x="540" y="420" text-anchor="middle" font-family="${KO_STACK}" font-size="58" fill="#F4F8FF" letter-spacing="2" font-weight="300">다음 주,</text>
+      <text x="540" y="505" text-anchor="middle" font-family="${KO_STACK}" font-size="58" fill="#F4F8FF" letter-spacing="2" font-weight="300">먼저 다가가도 괜찮을까요?</text>
     </g>
 
     <g opacity="0.85">
