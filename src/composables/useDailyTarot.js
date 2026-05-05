@@ -1,8 +1,17 @@
 import { ref, computed } from 'vue'
-import { TAROT_CARDS, shuffleCards } from '../data/tarotCards.js'
+import { MAJOR_ARCANA_CARDS, shuffleCards } from '../data/tarotCards.js'
+import { MINOR_ARCANA } from '../data/minorArcana.js'
 import { getCardImage } from '../data/cardImages.js'
 import { TODAY_RESULTS } from '../data/readings/today.js'
 import { applyReversedModifier } from '../data/reversedModifiers.js'
+
+// 메이저 22 + today 데이터가 있는 마이너만 포함 (데이터 없는 카드 뽑힘 방지)
+export const FULL_DECK = [
+  ...MAJOR_ARCANA_CARDS,
+  ...Object.entries(MINOR_ARCANA)
+    .filter(([id]) => TODAY_RESULTS[id])
+    .map(([id, c]) => ({ id, name: c.name, nameEn: c.nameEn, keywords: c.keywords, energy: c.energy })),
+]
 import { saveReadingHistory } from './useReadingHistory.js'
 import { useStreak } from './useStreak.js'
 import { trackTodayDraw, trackCardDrawn, trackReadingReveal, trackReadingReset } from './useReadingTracking.js'
@@ -55,7 +64,7 @@ export function useDailyTarot() {
   let revealTimer = null
 
   // Card draw state
-  const deck = ref(shuffleCards(TAROT_CARDS))
+  const deck = ref(shuffleCards(FULL_DECK))
   const selectedIds = ref([])
 
   // Resolved card (from new draw or from saved)
@@ -137,7 +146,7 @@ export function useDailyTarot() {
 
   function reset() {
     selectedIds.value = []
-    deck.value = shuffleCards(TAROT_CARDS)
+    deck.value = shuffleCards(FULL_DECK)
   }
 
   function resetToday() {
@@ -146,7 +155,7 @@ export function useDailyTarot() {
     saved.value = null
     alreadyDrawn.value = false
     selectedIds.value = []
-    deck.value = shuffleCards(TAROT_CARDS)
+    deck.value = shuffleCards(FULL_DECK)
     phase.value = 'draw'
   }
 

@@ -34,7 +34,8 @@ import { useReadingSession } from '../composables/useReadingSession.js'
 import { applyRelationshipModifier } from '../data/relationshipModifiers.js'
 import { useStreak } from '../composables/useStreak.js'
 import { encodeReadingParams, buildShareUrl, decodeReadingParams } from '../utils/shareLink.js'
-import { getCardById, TAROT_CARDS, shuffleCards } from '../data/tarotCards.js'
+import { shuffleCards } from '../data/tarotCards.js'
+import { FULL_DECK } from '../composables/useDailyTarot.js'
 
 const {
   phase,
@@ -78,7 +79,7 @@ const isSharedView = ref(false)
 
 const _shared = decodeReadingParams()
 if (_shared) {
-  const _base = getCardById(_shared.cardId)
+  const _base = FULL_DECK.find(c => c.id === _shared.cardId)
   if (_base) {
     isSharedView.value = true
     selectedIds.value = []
@@ -95,7 +96,7 @@ function startMyReading() {
   url.search = ''
   window.history.replaceState({}, '', url.toString())
   selectedIds.value = []
-  deck.value = shuffleCards(TAROT_CARDS)
+  deck.value = shuffleCards(FULL_DECK)
   relationshipStatus.value = null
   phase.value = 'draw'
 }

@@ -70,6 +70,8 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ### Major Arcana 추가 완료
 
 - priestess (2026-05-04)
+- strength (2026-05-05)
+- temperance (2026-05-05)
 
 ### 미완료 카운트
 

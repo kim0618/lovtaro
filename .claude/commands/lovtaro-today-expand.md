@@ -1,13 +1,13 @@
 ---
-description: lovtaro.kr 오늘의 카드 마이너 아르카나 56장 데이터 추가 (하루 3장, 56장 완료 시 덱 활성화 + 자동 삭제)
+description: lovtaro.kr 오늘의 카드 마이너 아르카나 56장 데이터 추가 (하루 3장, today.js + reversedModifiers.js + relationshipModifiers.js, 56장 완료 시 자동 삭제)
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 
 # 러브타로 오늘의 카드 마이너 확장 스킬
 
-`/today` (오늘의 연애 카드)는 현재 메이저 아르카나 22장만 사용 중. 사용자가 매일 뽑다 보니 한 달 안에 중복이 많이 발생함. 마이너 아르카나 56장을 덱에 추가해 변동성 확보가 목표.
+`/today` (오늘의 연애 카드)에 마이너 아르카나 56장을 단계적으로 추가해 매일 뽑을 때의 변동성을 확보하는 스킬. 메이저 22장 + 데이터가 채워진 마이너만 덱에 자동 포함되는 **동적 덱 구조**로 운영(2026-05-05 전환 완료).
 
-마이너 56장의 `today.js` + `reversedModifiers.js` 데이터를 **하루 3장씩** 채워 넣고, 56장 전수 완료되는 시점에 `useDailyTarot.js`의 덱을 메이저+마이너 합본으로 전환한다.
+마이너 56장의 `today.js` + `reversedModifiers.js` + `relationshipModifiers.js` 세 파일에 **하루 3장씩** 데이터를 채워 넣는다. 데이터를 추가한 그날 빌드/배포부터 해당 카드가 자동으로 `/today` 덱에 포함된다.
 
 ## 실행 일정
 
@@ -15,27 +15,28 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 - **진행 속도**: 사용자 명시 없으면 **하루 3장만**
 - **완료 목표**: 약 19일 (56장 ÷ 3장/일 = 18.7일)
 - **총 대상**: 마이너 56장 (Cups 14 + Wands 14 + Pentacles 14 + Swords 14)
-- 56장 전수 완료 시 덱 활성화 + 이 스킬 파일 **자동 삭제**
+- 56장 전수 완료 시 이 스킬 파일 **자동 삭제** (덱 활성화는 동적 구조라 자동)
 
 ## 편수 원칙 (최우선)
 
 - **사용자가 명시하지 않으면 반드시 3장만 작업한다.**
 - "5장", "1장" 등 명시한 경우에만 그 수를 따른다.
-- 완료 직전 마지막 잔여 1-2장이면 그날 잔여만 처리하고 활성화 단계로 진입.
+- 완료 직전 마지막 잔여 1-2장이면 그날 잔여만 처리하고 종료 단계로 진입.
 
-## 활성화 시점 안내 (중요)
+## 동적 덱 구조 (2026-05-05 전환 완료)
 
-**56장 미완료 상태에서는 절대 `useDailyTarot.js`를 수정하지 않는다.** 미완료 상태에서 덱에 마이너를 추가하면 데이터 없는 카드 뽑힐 시 결과 화면이 빈 상태로 나옴 (`TODAY_RESULTS[id]` undefined → result null).
+`useDailyTarot.js`의 `FULL_DECK`이 `MAJOR_ARCANA_CARDS + (TODAY_RESULTS에 데이터 있는 마이너만)`을 자동으로 합성한다. 데이터 없는 카드는 덱에 포함되지 않으므로 빈 결과 화면 버그가 원천 차단됨.
 
-데이터 채우는 동안 사이트는 **현행 메이저 22장 운영 그대로 유지**. 56장이 완전히 채워진 그날에만 한 번에 덱을 전환한다.
+**작업자가 해야 할 일**: today.js + reversedModifiers.js + relationshipModifiers.js 세 파일에 카드 데이터를 추가하는 것. **`useDailyTarot.js`는 절대 수정하지 않는다.** 카드를 추가하면 다음 빌드부터 자동으로 덱에 포함된다.
 
 ## 프로젝트 경로
 
-- 오늘의 카드 결과 데이터: [src/data/readings/today.js](/home/tjd618/lovtaro/src/data/readings/today.js) (현재 22장, `TODAY_RESULTS` 객체)
-- 역방향 수정자: [src/data/reversedModifiers.js](/home/tjd618/lovtaro/src/data/reversedModifiers.js) (현재 22장 메이저만, `REVERSED_MODIFIERS` 객체)
+- 오늘의 카드 결과 데이터: [src/data/readings/today.js](/home/tjd618/lovtaro/src/data/readings/today.js) (`TODAY_RESULTS` 객체)
+- 역방향 수정자: [src/data/reversedModifiers.js](/home/tjd618/lovtaro/src/data/reversedModifiers.js) (`REVERSED_MODIFIERS` 객체)
+- 연애 상태 수정자: [src/data/relationshipModifiers.js](/home/tjd618/lovtaro/src/data/relationshipModifiers.js) (`RELATIONSHIP_MODIFIERS` 객체, 카드별 4상태 × 2필드)
 - 마이너 카드 데이터: [src/data/minorArcana.js](/home/tjd618/lovtaro/src/data/minorArcana.js) (56장 카드 메타, **객체** 형태 - 키가 id)
-- 덱 구성 composable: [src/composables/useDailyTarot.js](/home/tjd618/lovtaro/src/composables/useDailyTarot.js) (`shuffleCards(TAROT_CARDS)`)
-- 덱 카드 배열: [src/data/tarotCards.js](/home/tjd618/lovtaro/src/data/tarotCards.js) (`TAROT_CARDS = MAJOR_ARCANA_CARDS`, 배열 형태 - 각 카드에 `id` 필드 있음)
+- 덱 구성 composable: [src/composables/useDailyTarot.js](/home/tjd618/lovtaro/src/composables/useDailyTarot.js) (`FULL_DECK` export, 동적 합성)
+- 덱 카드 배열: [src/data/tarotCards.js](/home/tjd618/lovtaro/src/data/tarotCards.js) (`MAJOR_ARCANA_CARDS`, 배열 형태)
 
 ### 자료 구조 주의
 
@@ -47,10 +48,13 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 
 ### Cups (14장) - 우선순위 1 (감정·연애 직결)
 
-<!-- 완료 카드 아래에 `- {id} ({YYYY-MM-DD})` 추가 -->
-- ace-of-cups (2026-05-04)
-- two-of-cups (2026-05-04)
-- three-of-cups (2026-05-04)
+<!-- 완료 카드 아래에 `- {id} ({YYYY-MM-DD})` 추가. relationshipModifiers는 2026-05-05에 6장 일괄 보강 완료 -->
+- ace-of-cups (2026-05-04, relationship 보강 2026-05-05)
+- two-of-cups (2026-05-04, relationship 보강 2026-05-05)
+- three-of-cups (2026-05-04, relationship 보강 2026-05-05)
+- four-of-cups (2026-05-05)
+- five-of-cups (2026-05-05)
+- six-of-cups (2026-05-05)
 
 ### Wands (14장) - 우선순위 2 (열정·관계 동력)
 
@@ -63,13 +67,17 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ```bash
 cd /home/tjd618/lovtaro && node --input-type=module -e "
 import { TODAY_RESULTS } from './src/data/readings/today.js'
+import { REVERSED_MODIFIERS } from './src/data/reversedModifiers.js'
+import { RELATIONSHIP_MODIFIERS } from './src/data/relationshipModifiers.js'
 import { MINOR_ARCANA } from './src/data/minorArcana.js'
 const minorIds = Object.keys(MINOR_ARCANA)
-const filled = minorIds.filter(id => TODAY_RESULTS[id])
-const missing = minorIds.filter(id => !TODAY_RESULTS[id])
-console.log('완료:', filled.length, '/ 56')
-console.log('남음:', missing.length)
-console.log('미완료 첫 5장:', missing.slice(0,5).join(', '))
+const fullyDone = minorIds.filter(id => TODAY_RESULTS[id] && REVERSED_MODIFIERS[id] && RELATIONSHIP_MODIFIERS[id])
+const partial = minorIds.filter(id => (TODAY_RESULTS[id] || REVERSED_MODIFIERS[id] || RELATIONSHIP_MODIFIERS[id]) && !fullyDone.includes(id))
+const missing = minorIds.filter(id => !TODAY_RESULTS[id] && !REVERSED_MODIFIERS[id] && !RELATIONSHIP_MODIFIERS[id])
+console.log('전 파일 완료:', fullyDone.length, '/ 56')
+console.log('부분 완료(보강 필요):', partial.length, partial.length ? '→ '+partial.join(',') : '')
+console.log('미착수:', missing.length, '장')
+console.log('미착수 첫 5장:', missing.slice(0,5).join(', '))
 "
 ```
 
@@ -113,6 +121,37 @@ console.log('미완료 첫 5장:', missing.slice(0,5).join(', '))
 },
 ```
 
+### `relationshipModifiers.js` 신규 엔트리 (카드당 약 480-650자)
+
+연애 상태 4가지(`single`, `situationship`, `dating`, `breakup`) × `lens` + `advice` 2필드 = **8개 항목**.
+
+```javascript
+'ace-of-cups': {
+  single: {
+    lens: '...',           // 50-100자, 솔로 상태에서 이 카드의 시그널 (emotionFlow 끝에 추가됨)
+    advice: '...',         // 50-100자, 솔로 상태별 구체 행동 (advice 마지막 항목 대체)
+  },
+  situationship: {
+    lens: '...',           // 50-100자, 썸 상태에서의 신호
+    advice: '...',
+  },
+  dating: {
+    lens: '...',           // 50-100자, 연애 중일 때의 신호
+    advice: '...',
+  },
+  breakup: {
+    lens: '...',           // 50-100자, 이별/재회 고민 중인 상태의 신호
+    advice: '...',
+  },
+},
+```
+
+**작성 원칙**:
+- 각 상태에서 카드의 의미가 어떻게 다르게 적용되는지 구체화. "솔로에게는 이 신호이지만, 연애 중에게는 다른 신호" 식으로.
+- `lens`는 emotionFlow 끝에 자연스럽게 이어지는 톤 (관찰자/조언자 어조 유지)
+- `advice`는 그 상태에서 오늘 할 수 있는 구체적인 행동 1개 + 짧은 마음가짐 1개 (한 문장에 합쳐도 OK)
+- 메이저 22장 기존 엔트리(예: `magician`, `priestess`)를 참고해 톤·길이 일관성 유지
+
 ## 작업 순서
 
 ### 1) 대상 선정
@@ -122,9 +161,11 @@ console.log('미완료 첫 5장:', missing.slice(0,5).join(', '))
 각 슈트 내 순서: ace → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9 → 10 → page → knight → queen → king
 
 ```bash
-# 미완료 첫 3장 자동 선정
+# 미완료 첫 3장 자동 선정 (세 파일 중 하나라도 없으면 작업 대상)
 cd /home/tjd618/lovtaro && node --input-type=module -e "
 import { TODAY_RESULTS } from './src/data/readings/today.js'
+import { REVERSED_MODIFIERS } from './src/data/reversedModifiers.js'
+import { RELATIONSHIP_MODIFIERS } from './src/data/relationshipModifiers.js'
 import { MINOR_ARCANA } from './src/data/minorArcana.js'
 const SUIT_ORDER = ['cups','wands','pentacles','swords']
 const RANK_ORDER = ['ace','two','three','four','five','six','seven','eight','nine','ten','page','knight','queen','king']
@@ -136,8 +177,15 @@ entries.sort((a,b) => {
   const rb = RANK_ORDER.indexOf(b.id.split('-of-')[0])
   return ra - rb
 })
-const targets = entries.filter(c => !TODAY_RESULTS[c.id]).slice(0, 3)
-console.log('오늘 작업:', targets.map(c => c.id).join(', '))
+const incomplete = entries.filter(c => !TODAY_RESULTS[c.id] || !REVERSED_MODIFIERS[c.id] || !RELATIONSHIP_MODIFIERS[c.id])
+const targets = incomplete.slice(0, 3)
+console.log('오늘 작업:', targets.map(c => {
+  const missing = []
+  if (!TODAY_RESULTS[c.id]) missing.push('today')
+  if (!REVERSED_MODIFIERS[c.id]) missing.push('reversed')
+  if (!RELATIONSHIP_MODIFIERS[c.id]) missing.push('relationship')
+  return c.id+'['+missing.join(',')+']'
+}).join(', '))
 "
 ```
 
@@ -205,6 +253,21 @@ console.log(JSON.stringify(c, null, 2))
 - `emotionTags`: 그림자 키워드 4개
 - `prefix`: "역방향의 ~ 카드는 ~한 결이에요/경고예요" (40-60자)
 
+#### 연애 상태 (`relationshipModifiers.js`)
+
+각 카드에 4상태 × 2필드 = 8개 항목 작성. 카드 의미와 4상태의 교차점을 짧고 구체적으로 표현.
+
+- `single`: 솔로 - 이 카드가 새 인연 가능성·자기 점검에 어떻게 작용하는지
+- `situationship`: 썸 - 모호한 관계의 다음 흐름·균형 점검
+- `dating`: 연애 중 - 현재 관계의 호흡·온도·다음 단계
+- `breakup`: 이별/재회 고민 - 회복 단계·미련 처리·다음 인연 준비
+
+각 상태별:
+- `lens`: 50-100자, 그 상태에서 보이는 신호. emotionFlow 끝에 자연스럽게 이어지는 한 문단 톤.
+- `advice`: 50-100자, 오늘 할 수 있는 구체 행동 + 마음가짐. 결과 화면 advice 마지막 항목을 대체.
+
+**참고**: 기존 메이저 22장 엔트리(예: `magician`, `priestess`, `empress`) 직접 읽어보고 톤·길이 맞추기.
+
 ### 4) 파일 수정
 
 #### today.js 수정
@@ -225,7 +288,31 @@ Edit /home/tjd618/lovtaro/src/data/reversedModifiers.js
 
 `REVERSED_MODIFIERS` **객체** 닫는 `}` 직전에 신규 엔트리 추가.
 
-**주의**: 파일 끝이 아님. 객체 닫는 `}`은 약 line 141에 있고 그 뒤에는 `applyReversedModifier` 함수가 있음. 파일 끝(line 163)에 추가하면 함수 안쪽에 들어가서 문법 오류 발생. 마지막 메이저 카드(`judgement`) 엔트리 뒤, 객체 닫는 `}` 앞에 삽입한다.
+**주의**: 파일에는 `REVERSED_MODIFIERS` 객체 외에 `applyReversedModifier` 함수도 export됨. 객체 닫는 `}`을 정확히 잡아야 함수 안에 잘못 들어가지 않음. **마지막에 추가된 엔트리** 뒤, 객체 닫는 `}` 앞에 삽입한다 (이미 마이너 카드들이 추가되어 있을 수 있으므로 "메이저 마지막"이 아닐 수 있음).
+
+위치 찾기 (객체 시작 + 종료 라인을 한번에 확인):
+```bash
+grep -nE "^export const REVERSED_MODIFIERS|^\}$" /home/tjd618/lovtaro/src/data/reversedModifiers.js | head -2
+```
+
+첫 줄이 객체 시작, 두 번째 줄이 객체 닫는 `}`. 그 사이의 마지막 엔트리 뒤에 새 엔트리를 삽입.
+
+#### relationshipModifiers.js 수정
+
+```
+Edit /home/tjd618/lovtaro/src/data/relationshipModifiers.js
+```
+
+`RELATIONSHIP_MODIFIERS` **객체** 닫는 `}` 직전에 신규 엔트리 추가.
+
+**주의**: 파일에는 `RELATIONSHIP_MODIFIERS` 객체 외에도 `OVERALL_RELATIONSHIP_LENS`, `applyRelationshipModifier`, `applyRelationshipModifierToOverall`, `RELATIONSHIP_LABELS` 등 여러 export가 있음. 같은 `^}$` 패턴이 4-5번 나타날 수 있으므로 꼭 첫 번째(`RELATIONSHIP_MODIFIERS`의 닫는 `}`)에만 삽입.
+
+위치 찾기:
+```bash
+grep -nE "^export const RELATIONSHIP_MODIFIERS|^\}$" /home/tjd618/lovtaro/src/data/relationshipModifiers.js | head -2
+```
+
+첫 줄(`export const RELATIONSHIP_MODIFIERS = {`)과 그 다음에 처음 나오는 `^}$` 사이가 작업 범위. 그 닫는 `}` 직전에 새 엔트리를 삽입.
 
 ### 5) 빌드 검증
 
@@ -245,10 +332,12 @@ cd /home/tjd618/lovtaro && npm run build 2>&1 | tail -10
 cd /home/tjd618/lovtaro && node --input-type=module -e "
 import { TODAY_RESULTS } from './src/data/readings/today.js'
 import { REVERSED_MODIFIERS } from './src/data/reversedModifiers.js'
+import { RELATIONSHIP_MODIFIERS } from './src/data/relationshipModifiers.js'
 const FIELD = {
   summary:[35,70], emotionHook:[20,45],
   emotionFlow:[210,320], advice:[95,160], caution:[85,135],
 }
+const STATUSES = ['single','situationship','dating','breakup']
 for (const id of ['{id1}','{id2}','{id3}']) {
   const r = TODAY_RESULTS[id]
   if (!r) { console.log(id, '✗ today.js 누락'); continue }
@@ -274,6 +363,17 @@ for (const id of ['{id1}','{id2}','{id3}']) {
     if (hl < 20 || hl > 45) issues.push('rev.emotionHook 분량('+hl+'/20-45)')
     if ((m.emotionTags?.length ?? 0) !== 4) issues.push('rev.emotionTags 4개 아님')
   }
+  const rm = RELATIONSHIP_MODIFIERS[id]
+  if (!rm) issues.push('relationshipModifier 누락')
+  else {
+    for (const s of STATUSES) {
+      if (!rm[s]) { issues.push('rel.'+s+' 누락'); continue }
+      if (!rm[s].lens || !rm[s].advice) { issues.push('rel.'+s+' lens/advice 누락'); continue }
+      const ll = rm[s].lens.length, al = rm[s].advice.length
+      if (ll < 40 || ll > 110) issues.push('rel.'+s+'.lens 분량('+ll+'/40-110)')
+      if (al < 40 || al > 110) issues.push('rel.'+s+'.advice 분량('+al+'/40-110)')
+    }
+  }
   console.log(id+':', issues.length ? '✗ '+issues.join(', ') : '✓ OK')
 }
 "
@@ -290,15 +390,15 @@ for (const id of ['{id1}','{id2}','{id3}']) {
 ```
 ## 오늘의 카드 마이너 보강 결과 ({YYYY-MM-DD})
 
-| 카드 id | 슈트 | today.js | reversed |
-|---------|------|----------|----------|
-| ace-of-cups | Cups | 820자 | 230자 |
-| two-of-cups | Cups | 790자 | 220자 |
-| three-of-cups | Cups | 850자 | 240자 |
+| 카드 id | 슈트 | today.js | reversed | relationship |
+|---------|------|----------|----------|--------------|
+| ace-of-cups | Cups | ✓ OK | ✓ OK | ✓ OK (4상태) |
+| two-of-cups | Cups | ✓ OK | ✓ OK | ✓ OK (4상태) |
+| three-of-cups | Cups | ✓ OK | ✓ OK | ✓ OK (4상태) |
 
 **진행 현황: N / 56장 (X%)**
 **남은 장수: (56-N)장 (하루 3장 기준 D일 소요)**
-**활성화 예정일: 56장 완료일**
+**FULL_DECK 자동 반영**: 다음 빌드/배포부터 새 카드들이 /today 덱에 포함됨
 ```
 
 ## 톤·문체 규칙 (전 프로젝트 공통)
@@ -313,95 +413,22 @@ for (const id of ['{id1}','{id2}','{id3}']) {
 
 ## 절대 변경하지 않는 것
 
-- 기존 메이저 22장의 today.js 엔트리
-- 기존 reversedModifiers 22장(메이저) 엔트리
+- 기존 메이저 22장의 today.js / reversedModifiers / relationshipModifiers 엔트리
 - 마이너 카드 id, name, suit, keywords (`minorArcana.js`)
-- `useDailyTarot.js` (56장 전수 완료 전까지 절대 수정 금지)
+- `useDailyTarot.js` (`FULL_DECK` 동적 합성 로직)
+- `TodayPage.vue` (이미 FULL_DECK/getAnyCardById 적용 완료)
 
-## 56장 전수 완료 시 (활성화 단계)
+## 56장 전수 완료 시 (스킬 종료 단계)
 
-이 단계는 56장 전부 채워진 그날 한 번만 실행한다.
+동적 덱 구조(2026-05-05 적용)로 인해 별도의 활성화 코드 변경은 필요 없다. 56장이 모두 채워지면 다음 빌드/배포 시점에 자동으로 78장 덱이 운영된다.
 
-### 1) `useDailyTarot.js` 덱 전환
-
-**중요**: `MINOR_ARCANA`는 객체이고 카드 객체에 `id` 필드가 없음 (키가 id 역할). `shuffleCards`는 배열을 받고 `card.id`를 사용하므로 변환 필수.
-
-권장 방식: 별도 파일 `src/data/fullDeck.js`를 만들어 변환 로직 격리. (useDailyTarot.js 안에 두면 매 마운트마다 객체→배열 변환이 일어남)
-
-```js
-// 신규 파일: src/data/fullDeck.js
-import { MAJOR_ARCANA_CARDS } from './tarotCards.js'
-import { MINOR_ARCANA } from './minorArcana.js'
-
-const MINOR_DECK = Object.entries(MINOR_ARCANA).map(([id, card]) => ({
-  id,
-  name: card.name,
-  nameEn: card.nameEn,
-  keywords: card.keywords,
-  energy: card.energy,
-}))
-
-export const FULL_DECK = [...MAJOR_ARCANA_CARDS, ...MINOR_DECK]
-
-export function getAnyCardById(id) {
-  return FULL_DECK.find(c => c.id === id) ?? null
-}
-```
-
-`useDailyTarot.js` 수정:
-
-```js
-// 변경 전
-import { TAROT_CARDS, shuffleCards } from '../data/tarotCards.js'
-const deck = ref(shuffleCards(TAROT_CARDS))
-
-// 변경 후
-import { shuffleCards } from '../data/tarotCards.js'
-import { FULL_DECK } from '../data/fullDeck.js'
-const deck = ref(shuffleCards(FULL_DECK))
-```
-
-`reset()`, `resetToday()` 함수 안의 `shuffleCards(TAROT_CARDS)` 호출도 `shuffleCards(FULL_DECK)`로 변경.
-
-`TodayPage.vue` 수정 (검증 완료된 패치):
-
-```js
-// 변경 전 (line 37)
-import { getCardById, TAROT_CARDS, shuffleCards } from '../data/tarotCards.js'
-
-// 변경 후
-import { shuffleCards } from '../data/tarotCards.js'
-import { FULL_DECK, getAnyCardById } from '../data/fullDeck.js'
-```
-
-```js
-// 변경 전 (line 81): shared view에서 마이너 카드 조회 안 됨
-const _base = getCardById(_shared.cardId)
-
-// 변경 후
-const _base = getAnyCardById(_shared.cardId)
-```
-
-```js
-// 변경 전 (line 98): startMyReading 안 덱 재구성
-deck.value = shuffleCards(TAROT_CARDS)
-
-// 변경 후
-deck.value = shuffleCards(FULL_DECK)
-```
-
-확인:
-```bash
-grep -n "TAROT_CARDS\|getCardById" /home/tjd618/lovtaro/src/pages/TodayPage.vue
-# 출력 0줄이어야 함 (모두 FULL_DECK / getAnyCardById로 교체됨)
-```
-
-### 1-1) 활성화 직전 사전 점검
+### 1) 전수 완료 사전 점검
 
 ```bash
 cd /home/tjd618/lovtaro && node --input-type=module -e "
 import { TODAY_RESULTS } from './src/data/readings/today.js'
 import { REVERSED_MODIFIERS } from './src/data/reversedModifiers.js'
+import { RELATIONSHIP_MODIFIERS } from './src/data/relationshipModifiers.js'
 import { MINOR_ARCANA } from './src/data/minorArcana.js'
 import { getCardImage } from './src/data/cardImages.js'
 const minorIds = Object.keys(MINOR_ARCANA)
@@ -410,6 +437,7 @@ for (const id of minorIds) {
   const issues = []
   if (!TODAY_RESULTS[id]) issues.push('today')
   if (!REVERSED_MODIFIERS[id]) issues.push('reversed')
+  if (!RELATIONSHIP_MODIFIERS[id]) issues.push('relationship')
   if (!getCardImage(id)) issues.push('image')
   if (issues.length) fail.push(id+'('+issues.join(',')+')')
   else ok++
@@ -419,21 +447,22 @@ if (fail.length) console.log('미완:', fail.join(', '))
 "
 ```
 
-`완전: 56 / 56` 나오면 활성화 진행.
+`완전: 56 / 56` 나오면 종료 단계 진행.
 
-### 2) 빌드·점검
+### 2) 빌드·수동 테스트
 
 ```bash
-cd /home/tjd618/lovtaro && npm run build 2>&1 | tail -15
+cd /home/tjd618/lovtaro && npm run build 2>&1 | tail -10
 ```
 
-수동 테스트 (`npm run preview` 후 `/today` 진입, 마이너 카드 1장 뽑힐 때까지 새로고침 → 결과 화면 정상 출력 확인).
+`npm run preview` 후 `/today` 진입, 마이너 카드 1-2장 뽑힐 때까지 새로고침 → 결과 화면 + 연애 상태별 렌즈 정상 출력 확인.
 
 ### 3) 사용자 안내
 
 ```
 오늘의 카드 마이너 56장 데이터 완료. /today 덱이 78장으로 전환됨.
-이제 매일 같은 카드 나올 확률이 1/22 → 1/78로 낮아졌어요.
+이제 매일 같은 카드 나올 확률이 1/22 → 1/78로 낮아졌고,
+4가지 연애 상태별 해석도 마이너 카드까지 모두 반영됩니다.
 이 스킬(/lovtaro-today-expand)을 삭제합니다.
 ```
 
@@ -447,11 +476,12 @@ rm /home/tjd618/.claude/commands/lovtaro-today-expand.md
 
 ## 금지
 
-- 56장 미완료 상태에서 `useDailyTarot.js` 수정
+- `useDailyTarot.js` `FULL_DECK` 합성 로직 수정
 - 하루 4장 이상 작업 (사용자 명시 없이)
-- 기존 메이저 today.js / reversedModifiers 엔트리 수정
+- 기존 메이저 today.js / reversedModifiers / relationshipModifiers 엔트리 수정
 - minorArcana.js의 카드 id/name/keywords 변경
-- 카드 메타와 모순되는 의미 작성 (예: 5/5 of Cups를 "행복한 만남"으로)
+- 카드 메타와 모순되는 의미 작성 (예: 5 of Cups를 "행복한 만남"으로)
+- 세 파일 중 하나만 작성 (today.js + reversedModifiers + relationshipModifiers는 한 묶음)
 
 ## 완료 후 로그 기록
 
