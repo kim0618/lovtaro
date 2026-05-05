@@ -1,25 +1,24 @@
 /**
- * 2026-05-02 토요일 carousel용 릴스 (하이브리드 스타일)
- * - scene01: 코스믹 - 큰 프레임 카드 (Hanged Man, 720x1080) + 하단 훅
- * - scene02~04: editorial - carouselShortformSlide() 템플릿
- *   2: Six of Cups / 3: Knight of Pentacles / 4: Ten of Cups
- * - scene05: 코스믹 - CTA (Hanged Man, 360x540)
+ * TEMPLATE: 참여형 shortform (2컷, 코스믹 스타일)
+ * - scene01: 라이트 코스믹 배경 + 작은 달 + 3장 컬러 카드 뒷면(7개 풀에서 랜덤 3픽) + 번호
+ * - scene02: 풀 코스믹 (성운 + 달 + 별) + 고정 CTA 템플릿
  *
- * 실행: node scripts/generate-shortform-2026-05-02_sat.mjs
+ * 사용: 이 파일을 scripts/generate-shortform-{YYYY-MM-DD_day}.mjs 로 복사.
+ * 교체 대상: outputDir 날짜, 훅 텍스트(y=380/455), starSeed.
+ * 카드 스킴은 pickRandomSchemes(3)으로 매번 랜덤 · scene02 CTA는 수정 금지.
+ * reply_templates.txt 연동 필수.
  */
 import sharp from 'sharp'
-import { writeFileSync, mkdirSync, existsSync } from 'fs'
+import { writeFileSync, mkdirSync } from 'fs'
 import { resolve, dirname } from 'path'
 import { fileURLToPath } from 'url'
-import { carouselShortformSlide } from './lib/carousel-shortform-template.mjs'
+import { siteCardBackSvg, siteCardBackDefs } from './lib/card-back-svg.mjs'
+import { colorCardBackSvg, colorCardBackDefs, CARD_WIDTH, CARD_HEIGHT, pickRandomSchemes, getSchemeAccent } from './lib/color-card-back-svg.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const rootDir = resolve(__dirname, '..')
-const cardsDir = resolve(rootDir, 'public/images/cards-png')
 const outputDir = resolve(rootDir, 'content-output/2026-05-09_sat/shortform')
-
 const W = 1080, H = 1920
-const KO_STACK = `'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif`
 
 function mulberry32(seed) {
   return function() {
@@ -72,26 +71,42 @@ function cosmicDefs() {
       <stop offset="0%" stop-color="rgba(255,235,180,0.18)"/>
       <stop offset="100%" stop-color="rgba(255,235,180,0)"/>
     </radialGradient>
-    <mask id="moonMask">
+    <mask id="moonMaskBig">
       <rect x="0" y="0" width="${W}" height="${H}" fill="black"/>
       <circle cx="125" cy="225" r="52" fill="white"/>
       <circle cx="158" cy="215" r="52" fill="black"/>
+    </mask>
+    <mask id="moonMaskSmall">
+      <rect x="0" y="0" width="${W}" height="${H}" fill="black"/>
+      <circle cx="115" cy="200" r="34" fill="white"/>
+      <circle cx="138" cy="192" r="34" fill="black"/>
     </mask>
     <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
       <feGaussianBlur stdDeviation="2" result="blur"/>
       <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
+    <filter id="numGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="cardShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="15" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+    <radialGradient id="cardAreaGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#c9a84c" stop-opacity="0.12"/>
+      <stop offset="50%" stop-color="#8b6fb0" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="transparent" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="glowBlur" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="60"/>
+    </filter>
   `
 }
 
-function cosmicBody(withMoon = true, starSeed = 1) {
+function fullCosmicBody(starSeed = 1) {
   const stars1 = genStars(320, starSeed, 0, W, 0, H, false)
   const stars2 = genStars(120, starSeed + 11, 0, W, 0, H, true)
   const stars3 = genStars(60, starSeed + 23, 0, W, 0, H, true)
-  const moon = withMoon ? `
-    <circle cx="140" cy="220" r="120" fill="url(#moonGlow)"/>
-    <rect x="50" y="150" width="180" height="180" fill="rgba(248,230,185,0.95)" mask="url(#moonMask)"/>
-  ` : ''
   return `
     <rect width="${W}" height="${H}" fill="url(#cosmicBg)"/>
     <ellipse cx="120" cy="720" rx="520" ry="420" fill="url(#neb1)"/>
@@ -101,201 +116,131 @@ function cosmicBody(withMoon = true, starSeed = 1) {
     ${stars1}
     ${stars2}
     ${stars3}
-    ${moon}
+    <circle cx="140" cy="220" r="120" fill="url(#moonGlow)"/>
+    <rect x="50" y="150" width="180" height="180" fill="rgba(248,230,185,0.95)" mask="url(#moonMaskBig)"/>
   `
 }
 
-function drawFrame(x, y, w, h, strong = 1) {
-  const gap = 10
-  const cornerSize = 32
-  const c1 = `rgba(201,168,76,${0.75 * strong})`
-  const c2 = `rgba(201,168,76,${0.38 * strong})`
-  const c3 = `rgba(232,212,139,${0.7 * strong})`
+// 참여형 scene01 전용: 어두운 밤하늘 (카드 가독성 위해 성운 최소화)
+function participationBody(starSeed = 1) {
+  const stars1 = genStars(260, starSeed, 0, W, 0, H, false)
+  const stars2 = genStars(70, starSeed + 11, 0, W, 0, H, true)
   return `
-    <rect x="${x}" y="${y}" width="${w}" height="${h}" fill="none" stroke="${c1}" stroke-width="2.5"/>
-    <rect x="${x + gap}" y="${y + gap}" width="${w - 2 * gap}" height="${h - 2 * gap}" fill="none" stroke="${c2}" stroke-width="1"/>
-    <path d="M ${x + cornerSize} ${y + gap / 2} L ${x + gap / 2} ${y + gap / 2} L ${x + gap / 2} ${y + cornerSize}" fill="none" stroke="${c3}" stroke-width="1.5"/>
-    <path d="M ${x + w - cornerSize} ${y + gap / 2} L ${x + w - gap / 2} ${y + gap / 2} L ${x + w - gap / 2} ${y + cornerSize}" fill="none" stroke="${c3}" stroke-width="1.5"/>
-    <path d="M ${x + cornerSize} ${y + h - gap / 2} L ${x + gap / 2} ${y + h - gap / 2} L ${x + gap / 2} ${y + h - cornerSize}" fill="none" stroke="${c3}" stroke-width="1.5"/>
-    <path d="M ${x + w - cornerSize} ${y + h - gap / 2} L ${x + w - gap / 2} ${y + h - gap / 2} L ${x + w - gap / 2} ${y + h - cornerSize}" fill="none" stroke="${c3}" stroke-width="1.5"/>
+    <rect width="${W}" height="${H}" fill="url(#cosmicBg)"/>
+    <ellipse cx="900" cy="1700" rx="500" ry="350" fill="url(#neb3)"/>
+    <ellipse cx="180" cy="1550" rx="400" ry="300" fill="url(#neb2)"/>
+    ${stars1}
+    ${stars2}
+    <circle cx="125" cy="205" r="80" fill="url(#moonGlow)"/>
+    <rect x="70" y="150" width="120" height="120" fill="rgba(248,230,185,0.9)" mask="url(#moonMaskSmall)"/>
   `
 }
 
-async function loadCard(slug, w, h) {
-  const p = resolve(cardsDir, `${slug}.png`)
-  if (!existsSync(p)) { console.error(`카드 없음: ${p}`); return null }
-  return sharp(p).resize(w, h, { fit: 'cover' }).toBuffer()
-}
+async function generateScene01() {
+  const cardScale = 2.5
+  const cardPixelW = CARD_WIDTH * cardScale
+  const cardPixelH = CARD_HEIGHT * cardScale
+  const cardGap = 50
+  const totalWidth = cardPixelW * 3 + cardGap * 2
+  const startCX = (W - totalWidth) / 2 + cardPixelW / 2
+  const cardY = 980
+  const numberY = cardY + cardPixelH / 2 + 55
 
-async function roundImg(buf, w, h, r) {
-  const m = `<svg width="${w}" height="${h}"><rect width="${w}" height="${h}" rx="${r}" ry="${r}" fill="white"/></svg>`
-  return sharp(buf).composite([{ input: Buffer.from(m), blend: 'dest-in' }]).png().toBuffer()
-}
+  const cx1 = startCX
+  const cx2 = startCX + cardPixelW + cardGap
+  const cx3 = startCX + (cardPixelW + cardGap) * 2
 
-async function scene01() {
-  const cardW = 720, cardH = 1080
-  const framePad = 28
-  const frameW = cardW + 2 * framePad
-  const frameH = cardH + 2 * framePad
-  const frameX = (W - frameW) / 2
-  const frameY = 120
-  const cardLeft = frameX + framePad
-  const cardTop = frameY + framePad
-
-  const img = await loadCard('high-priestess', cardW, cardH)
-  const masked = img ? await roundImg(img, cardW, cardH, 8) : null
+  // 7개 스킴 풀(navy/indigo/plum/teal/rose/emerald/amber)에서 랜덤 3개 픽
+  const [s1, s2, s3] = pickRandomSchemes(3)
+  console.log(`🎴 schemes: ${s1} / ${s2} / ${s3}`)
 
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
     <defs>
       ${cosmicDefs()}
+      ${colorCardBackDefs()}
     </defs>
-    ${cosmicBody(true, 419)}
+    ${participationBody(3)}
 
-    ${drawFrame(frameX, frameY, frameW, frameH)}
+    <!-- Card area subtle glow -->
+    <ellipse cx="540" cy="${cardY}" rx="500" ry="380" fill="url(#cardAreaGlow)" filter="url(#glowBlur)"/>
 
     <g filter="url(#softGlow)">
-      <text x="540" y="1530" text-anchor="middle" font-family="${KO_STACK}" font-size="48" font-weight="300" fill="#F4F8FF" letter-spacing="3">마음이 자꾸 흔들린다면</text>
-      <text x="540" y="1600" text-anchor="middle" font-family="${KO_STACK}" font-size="48" font-weight="300" fill="#F4F8FF" letter-spacing="3">지금 보이고 있는 3가지 신호</text>
+      <text x="540" y="380" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="48" fill="#F4F8FF" letter-spacing="3" font-weight="300">다가오는 결일까,</text>
+      <text x="540" y="455" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="48" fill="#F4F8FF" letter-spacing="3" font-weight="300">멈춰 있는 결일까?</text>
     </g>
-    <text x="540" y="1730" text-anchor="middle" font-family="${KO_STACK}" font-size="24" fill="rgba(180,170,220,0.55)" letter-spacing="3">스와이프해서 확인하세요 →</text>
 
-    <text x="540" y="1870" text-anchor="middle" font-family="${KO_STACK}" font-size="22" fill="rgba(232,212,139,0.4)" letter-spacing="4">@lovtarot_</text>
+    <!-- 카드별 배경 글로우 (랜덤 픽된 scheme) -->
+    <ellipse cx="${cx1}" cy="${cardY}" rx="${cardPixelW * 0.8}" ry="${cardPixelH * 0.55}" fill="url(#colorCardGlow_${s1})" filter="url(#glowBlur)"/>
+    <ellipse cx="${cx2}" cy="${cardY}" rx="${cardPixelW * 0.8}" ry="${cardPixelH * 0.55}" fill="url(#colorCardGlow_${s2})" filter="url(#glowBlur)"/>
+    <ellipse cx="${cx3}" cy="${cardY}" rx="${cardPixelW * 0.8}" ry="${cardPixelH * 0.55}" fill="url(#colorCardGlow_${s3})" filter="url(#glowBlur)"/>
+
+    <!-- 3장 컬러 카드 뒷면 (랜덤 픽) -->
+    <g filter="url(#cardShadow)">
+      ${colorCardBackSvg(cx1, cardY, cardScale, s1)}
+      ${colorCardBackSvg(cx2, cardY, cardScale, s2)}
+      ${colorCardBackSvg(cx3, cardY, cardScale, s3)}
+    </g>
+
+    <g filter="url(#numGlow)">
+      <text x="${cx1}" y="${numberY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="42" fill="${getSchemeAccent(s1)}" font-weight="600">1번</text>
+      <text x="${cx2}" y="${numberY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="42" fill="${getSchemeAccent(s2)}" font-weight="600">2번</text>
+      <text x="${cx3}" y="${numberY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="42" fill="${getSchemeAccent(s3)}" font-weight="600">3번</text>
+    </g>
+
+    <text x="540" y="1640" text-anchor="middle" font-family="sans-serif" font-size="30" fill="rgba(244,248,255,0.6)" letter-spacing="5" font-weight="300">직감으로 골라보세요</text>
+
+    <text x="540" y="1860" text-anchor="middle" font-family="sans-serif" font-size="24" fill="rgba(232,212,139,0.45)" letter-spacing="4">@lovtarot_</text>
   </svg>`
 
-  let base = await sharp(Buffer.from(svg)).png().toBuffer()
-  if (masked) {
-    base = await sharp(base).composite([{ input: masked, left: cardLeft, top: cardTop }]).png({ quality: 90 }).toBuffer()
-  }
-  writeFileSync(resolve(outputDir, 'scene01.png'), base)
-  console.log(`✅ scene01.png (${(base.length / 1024).toFixed(0)} KB)`)
-}
-
-async function bodyScene(props, filename) {
-  const svg = carouselShortformSlide(props)
   const buf = await sharp(Buffer.from(svg)).png({ quality: 90 }).toBuffer()
-  writeFileSync(resolve(outputDir, filename), buf)
-  console.log(`✅ ${filename} (${(buf.length / 1024).toFixed(0)} KB) - ${props.nameEn}`)
+  mkdirSync(outputDir, { recursive: true })
+  writeFileSync(resolve(outputDir, 'scene01.png'), buf)
+  console.log(`✅ scene01.png (${(buf.length / 1024).toFixed(0)} KB)`)
 }
 
-async function scene05() {
-  const cardW = 360, cardH = 540
-  const framePad = 22
-  const nameArea = 130
-  const frameW = cardW + 2 * framePad
-  const frameH = cardH + 2 * framePad + nameArea
-  const frameX = (W - frameW) / 2
-  const frameY = 240
-  const cardLeft = frameX + framePad
-  const cardTop = frameY + framePad
-
-  const img = await loadCard('high-priestess', cardW, cardH)
-  const masked = img ? await roundImg(img, cardW, cardH, 7) : null
-
-  const divideY = cardTop + cardH + 18
-  const nameKrY = divideY + 50
-  const nameEnY = nameKrY + 36
-
-  const saveIcon = `<g transform="translate(420, 1120)">
-    <path d="M14 0 L72 0 Q86 0 86 14 L86 105 L43 78 L0 105 L0 14 Q0 0 14 0 Z" fill="none" stroke="rgba(232,212,139,0.7)" stroke-width="2.5"/>
-  </g>`
-  const shareIcon = `<g transform="translate(560, 1120)">
-    <path d="M58 0 L86 30 L58 60" fill="none" stroke="rgba(232,212,139,0.7)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M86 30 L14 30 L14 86" fill="none" stroke="rgba(232,212,139,0.7)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-  </g>`
-
+async function generateScene02() {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
     <defs>
       ${cosmicDefs()}
+      <linearGradient id="goldDivider" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#c9a84c" stop-opacity="0"/>
+        <stop offset="30%" stop-color="#e8d48b" stop-opacity="0.95"/>
+        <stop offset="70%" stop-color="#e8d48b" stop-opacity="0.95"/>
+        <stop offset="100%" stop-color="#c9a84c" stop-opacity="0"/>
+      </linearGradient>
     </defs>
-    ${cosmicBody(true, 421)}
+    ${fullCosmicBody(7)}
 
-    ${drawFrame(frameX, frameY, frameW, frameH, 0.9)}
-
-    <line x1="${frameX + 30}" y1="${divideY}" x2="${frameX + frameW - 30}" y2="${divideY}" stroke="rgba(201,168,76,0.28)" stroke-width="1"/>
-
-    <text x="540" y="${nameKrY}" text-anchor="middle" font-family="${KO_STACK}" font-size="38" fill="#F4F8FF" font-weight="300" letter-spacing="5">여사제</text>
-    <text x="540" y="${nameEnY}" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="22" fill="rgba(232,212,139,0.78)">The High Priestess</text>
-
-    ${saveIcon}
-    ${shareIcon}
+    <!-- Decorative divider lines -->
+    <line x1="240" y1="820" x2="840" y2="820" stroke="#e8d48b" stroke-width="2" opacity="0.8"/>
+    <line x1="240" y1="1150" x2="840" y2="1150" stroke="#e8d48b" stroke-width="2" opacity="0.8"/>
 
     <g filter="url(#softGlow)">
-      <text x="540" y="1380" text-anchor="middle" font-family="${KO_STACK}" font-size="38" font-weight="300" fill="#F4F8FF" letter-spacing="3">저장해두고</text>
-      <text x="540" y="1435" text-anchor="middle" font-family="${KO_STACK}" font-size="26" fill="rgba(232,212,139,0.78)" letter-spacing="2">마음이 흔들릴 때 다시 꺼내보세요</text>
+      <text x="540" y="910" text-anchor="middle" font-family="sans-serif" font-size="48" fill="#F4F8FF" letter-spacing="3" font-weight="300">직감으로 고른 번호를</text>
+      <text x="540" y="985" text-anchor="middle" font-family="sans-serif" font-size="48" fill="#F4F8FF" letter-spacing="3" font-weight="300">댓글에 적어주세요</text>
+      <text x="540" y="1100" text-anchor="middle" font-family="sans-serif" font-size="34" fill="rgba(232,212,139,0.85)" letter-spacing="4" font-weight="300">해석을 댓글로 달아드릴게요</text>
     </g>
-    <line x1="380" y1="1485" x2="700" y2="1485" stroke="rgba(201,168,76,0.25)" stroke-width="1"/>
-    <text x="540" y="1535" text-anchor="middle" font-family="${KO_STACK}" font-size="24" fill="rgba(200,190,240,0.55)">비슷한 결로 흔들리는 친구가 있다면</text>
-    <text x="540" y="1572" text-anchor="middle" font-family="${KO_STACK}" font-size="24" fill="rgba(200,190,240,0.55)">조용히 공유해보세요</text>
 
-    <text x="540" y="1870" text-anchor="middle" font-family="${KO_STACK}" font-size="22" fill="rgba(232,212,139,0.4)" letter-spacing="4">@lovtarot_</text>
+    <!-- Small card hint decoration -->
+    <g opacity="0.85" filter="url(#softGlow)">
+      <circle cx="480" cy="1300" r="5" fill="#e8d48b"/>
+      <circle cx="540" cy="1300" r="5" fill="#e8d48b"/>
+      <circle cx="600" cy="1300" r="5" fill="#e8d48b"/>
+    </g>
+
+    <text x="540" y="1860" text-anchor="middle" font-family="sans-serif" font-size="24" fill="rgba(232,212,139,0.45)" letter-spacing="4">@lovtarot_</text>
   </svg>`
 
-  let base = await sharp(Buffer.from(svg)).png().toBuffer()
-  if (masked) {
-    base = await sharp(base).composite([{ input: masked, left: cardLeft, top: cardTop }]).png({ quality: 90 }).toBuffer()
-  }
-  writeFileSync(resolve(outputDir, 'scene05.png'), base)
-  console.log(`✅ scene05.png (${(base.length / 1024).toFixed(0)} KB)`)
+  const buf = await sharp(Buffer.from(svg)).png({ quality: 90 }).toBuffer()
+  mkdirSync(outputDir, { recursive: true })
+  writeFileSync(resolve(outputDir, 'scene02.png'), buf)
+  console.log(`✅ scene02.png (${(buf.length / 1024).toFixed(0)} KB)`)
 }
 
 async function main() {
-  console.log('=== 2026-05-09 sat carousel용 릴스 (하이브리드) ===')
-  mkdirSync(outputDir, { recursive: true })
-
-  await scene01()
-
-  await bodyScene({
-    cardSlug: 'nine-of-swords',
-    imageSrc: 'public/images/mcards/swords/Nine of Swords.png',
-    nameEn: 'NINE OF SWORDS',
-    titleKo: ['혼자 있을 때', '자꾸 떠올라요'],
-    subtitleEn: 'midnight whispers of the heart',
-    bodyLines: [
-      '낮에는 잘 지내는 척하다가도',
-      '밤이 되면 떠오르는 사람이 있어요',
-      '그 떠오름은 무의식이 보내는 결,',
-      '마음 어딘가 아직 닿아 있다는 신호예요',
-    ],
-    keywords: ['미련', '밤의 결', '신호'],
-    index: 2,
-    total: 5,
-  }, 'scene02.png')
-
-  await bodyScene({
-    cardSlug: 'seven-of-cups',
-    imageSrc: 'public/images/mcards/cups/Seven of Cups.png',
-    nameEn: 'SEVEN OF CUPS',
-    titleKo: ['여러 갈래로', '흔들려요'],
-    subtitleEn: 'so many cups, all unsure',
-    bodyLines: [
-      '어떤 날은 끝내야 할 것 같다가',
-      '다른 날은 다시 닿고 싶어져요',
-      '흩어지는 마음 자체가',
-      '결정을 미루고 싶은 무의식의 결이에요',
-    ],
-    keywords: ['혼란', '망설임', '갈래'],
-    index: 3,
-    total: 5,
-  }, 'scene03.png')
-
-  await bodyScene({
-    cardSlug: 'four-of-swords',
-    imageSrc: 'public/images/mcards/swords/Four of Swords.png',
-    nameEn: 'FOUR OF SWORDS',
-    titleKo: ['잠시 멈춤이', '필요해요'],
-    subtitleEn: 'quiet, before the answer',
-    bodyLines: [
-      '답을 강제로 정하지 않아도 돼요',
-      '카드는 잠시 쉬어가라고 말해요',
-      '멈춤 안에서 결이 정리되면',
-      '그때 진짜 답이 천천히 떠올라요',
-    ],
-    keywords: ['휴식', '정리', '회복'],
-    index: 4,
-    total: 5,
-  }, 'scene04.png')
-
-  await scene05()
+  console.log('=== 2026-04-21 참여형 shortform 이미지 생성 (코스믹 감성) ===')
+  await generateScene01()
+  await generateScene02()
   console.log('완료!')
 }
 
