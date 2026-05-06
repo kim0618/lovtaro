@@ -66,12 +66,18 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 - knight-of-cups (등록 누락분, 본문 보강 완료 확인됨 2026-05-03)
 - queen-of-cups (2026-05-03)
 - king-of-cups (2026-05-04)
+- ace-of-swords (2026-05-06)
 
 ### Major Arcana 추가 완료
 
 - priestess (2026-05-04)
 - strength (2026-05-05)
 - temperance (2026-05-05)
+- chariot (2026-05-06)
+- justice (2026-05-06)
+- hierophant (2026-05-06)
+- judgement (2026-05-06)
+- world (2026-05-06)
 
 ### 미완료 카운트
 
