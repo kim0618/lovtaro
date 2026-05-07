@@ -22,8 +22,10 @@ import hangedLoveMeaning from './hanged-love-meaning.js'
 import aceOfCupsLoveMeaning from './ace-of-cups-love-meaning.js'
 import priestessLoveMeaning from './priestess-love-meaning.js'
 import twoOfCupsLoveMeaning from './two-of-cups-love-meaning.js'
+import strengthLoveMeaning from './strength-love-meaning.js'
 
 const guides = [
+  strengthLoveMeaning,
   twoOfCupsLoveMeaning,
   priestessLoveMeaning,
   aceOfCupsLoveMeaning,
