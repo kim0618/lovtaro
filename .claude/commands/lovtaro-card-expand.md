@@ -71,6 +71,8 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 - three-of-swords (2026-05-07)
 - four-of-swords (2026-05-07)
 - five-of-swords (2026-05-07)
+- six-of-swords (2026-05-08)
+- seven-of-swords (2026-05-08)
 
 ### Major Arcana 추가 완료
 
