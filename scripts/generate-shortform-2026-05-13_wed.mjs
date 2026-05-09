@@ -16,9 +16,9 @@ import { siteCardBackSvg, siteCardBackDefs } from './lib/card-back-svg.mjs'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const rootDir = resolve(__dirname, '..')
 const cardsDir = resolve(rootDir, 'public/images/cards-png')
-const outputDir = resolve(rootDir, 'content-output/2026-05-08_fri/shortform')
-// King of Cups portrait 원본
-const portraitCardPath = resolve(rootDir, 'public/images/mcards/cups/King of Cups.png')
+const outputDir = resolve(rootDir, 'content-output/2026-05-13_wed/shortform')
+// Ace of Swords portrait 원본
+const portraitCardPath = resolve(rootDir, 'public/images/mcards/swords/Ace of Swords.png')
 const W = 1080, H = 1920
 
 function mulberry32(seed) {
@@ -122,8 +122,8 @@ function drawFrame(x, y, w, h, strong = 1) {
 }
 
 async function loadCard(slug, w, h) {
-  // king-of-cups은 portrait 원본 경로로 오버라이드
-  const p = slug === 'king-of-cups' ? portraitCardPath : resolve(cardsDir, `${slug}.png`)
+  // ace-of-swords은 portrait 원본 경로로 오버라이드
+  const p = slug === 'ace-of-swords' ? portraitCardPath : resolve(cardsDir, `${slug}.png`)
   if (!existsSync(p)) return null
   return sharp(p).resize(w, h, { fit: 'cover' }).toBuffer()
 }
@@ -197,8 +197,8 @@ async function scene01() {
 
     <!-- 훅 한 줄: 더 짧고 더 선명하게 -->
     <g filter="url(#hookSharpen)">
-      <text x="540" y="335" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="56" fill="#FFFFFF" letter-spacing="0" font-weight="500" paint-order="stroke fill" stroke="rgba(6,3,20,0.5)" stroke-width="2">표현은 차분한데,</text>
-      <text x="540" y="420" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="56" fill="#FFFFFF" letter-spacing="0" font-weight="500" paint-order="stroke fill" stroke="rgba(6,3,20,0.5)" stroke-width="2">왜 매번 <tspan fill="#F0CC78" font-weight="700">진심</tspan>처럼 닿을까?</text>
+      <text x="540" y="335" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="54" fill="#FFFFFF" letter-spacing="0" font-weight="500" paint-order="stroke fill" stroke="rgba(6,3,20,0.5)" stroke-width="2">흐릿하던 답이,</text>
+      <text x="540" y="420" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="52" fill="#FFFFFF" letter-spacing="0" font-weight="500" paint-order="stroke fill" stroke="rgba(6,3,20,0.5)" stroke-width="2">왜 갑자기 <tspan fill="#F0CC78" font-weight="700">또렷</tspan>해질까?</text>
     </g>
 
     <!-- 짧은 골드 디바이더 (훅과 카드 사이) -->
@@ -231,7 +231,7 @@ async function scene02() {
   const cardLeft = frameX + framePad
   const cardTop = frameY + framePad
 
-  const cardRaw = await loadCard('king-of-cups', cardW, cardH)
+  const cardRaw = await loadCard('ace-of-swords', cardW, cardH)
   const cardEnhanced = await sharp(cardRaw)
     .sharpen({ sigma: 0.7, m1: 0.5, m2: 2.2 })
     .modulate({ saturation: 1.12, brightness: 1.03 })
@@ -267,11 +267,11 @@ async function scene02() {
     ${drawFrame(frameX, frameY, frameW, frameH, 1.3)}
 
     <g filter="url(#softGlow)">
-      <text x="540" y="${nameKrY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="58" fill="#F4F8FF" font-weight="300" letter-spacing="4">컵의 킹</text>
-      <text x="540" y="${nameEnY}" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="30" fill="rgba(232,212,139,0.88)" letter-spacing="1">King of Cups</text>
+      <text x="540" y="${nameKrY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="58" fill="#F4F8FF" font-weight="300" letter-spacing="4">소드의 에이스</text>
+      <text x="540" y="${nameEnY}" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="30" fill="rgba(232,212,139,0.88)" letter-spacing="1">Ace of Swords</text>
     </g>
 
-    <text x="540" y="${kwY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="26" fill="rgba(232,212,139,0.72)" letter-spacing="4" font-weight="300">감정 성숙 · 안정 · 깊은 다정함</text>
+    <text x="540" y="${kwY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="26" fill="rgba(232,212,139,0.72)" letter-spacing="4" font-weight="300">명료함 · 진실 · 결단</text>
 
     <text x="540" y="1860" text-anchor="middle" font-family="sans-serif" font-size="24" fill="rgba(232,212,139,0.45)" letter-spacing="4">@lovtarot_</text>
   </svg>`
@@ -294,7 +294,7 @@ async function scene03() {
   const cardLeft = frameX + framePad
   const cardTop = frameY + framePad
 
-  const cardImg = await loadCard('king-of-cups', cardW, cardH)
+  const cardImg = await loadCard('ace-of-swords', cardW, cardH)
   const masked = await roundImg(cardImg, cardW, cardH, 6)
 
   const divideY = cardTop + cardH + 20
@@ -311,22 +311,22 @@ async function scene03() {
     ${cosmicBody(true, 53)}
 
     <g filter="url(#softGlow)">
-      <text x="540" y="${headerY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="40" fill="#F4F8FF" font-weight="300" letter-spacing="6">안정된 다정함</text>
+      <text x="540" y="${headerY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="40" fill="#F4F8FF" font-weight="300" letter-spacing="6">또렷해지는 결</text>
     </g>
 
     ${drawFrame(frameX, frameY, frameW, frameH, 0.95)}
 
     <line x1="${frameX + 34}" y1="${divideY}" x2="${frameX + frameW - 34}" y2="${divideY}" stroke="rgba(201,168,76,0.28)" stroke-width="1"/>
 
-    <text x="540" y="${nameKrY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="4">컵의 킹</text>
-    <text x="540" y="${nameEnY}" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="20" fill="rgba(232,212,139,0.8)" letter-spacing="1">King of Cups</text>
+    <text x="540" y="${nameKrY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="4">소드의 에이스</text>
+    <text x="540" y="${nameEnY}" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="20" fill="rgba(232,212,139,0.8)" letter-spacing="1">Ace of Swords</text>
 
-    <text x="540" y="${kwY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="22" fill="rgba(232,212,139,0.6)" letter-spacing="4" font-weight="300">감정 성숙 · 안정 · 깊은 다정함</text>
+    <text x="540" y="${kwY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="22" fill="rgba(232,212,139,0.6)" letter-spacing="4" font-weight="300">명료함 · 진실 · 결단</text>
 
     <g filter="url(#softGlow)">
-      <text x="540" y="${interpY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="1">표현이 차분한 사람일수록,</text>
+      <text x="540" y="${interpY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="1">흐릿하던 답이 또렷해질 때는,</text>
       <text x="540" y="${interpY + 58}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="1">그 안의 결은 더 깊을 수 있어요.</text>
-      <text x="540" y="${interpY + 116}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="1">잔잔함 자체가 마음의 무게예요.</text>
+      <text x="540" y="${interpY + 116}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="1">한 줄로 정리되는 결의 신호예요.</text>
     </g>
 
     <text x="540" y="${ctaY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="3">당신도 직접 뽑아보세요</text>
@@ -342,7 +342,7 @@ async function scene03() {
 }
 
 async function main() {
-  console.log('=== 2026-05-08 금 - 소개형 마이너 (King of Cups) ===')
+  console.log('=== 2026-05-13 수 - 소개형 마이너 (Ace of Swords) ===')
   mkdirSync(outputDir, { recursive: true })
   await scene01()
   await scene02()

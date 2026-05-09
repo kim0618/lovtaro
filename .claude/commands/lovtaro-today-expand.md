@@ -58,6 +58,9 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 - seven-of-cups (2026-05-08)
 - eight-of-cups (2026-05-08)
 - nine-of-cups (2026-05-08)
+- ten-of-cups (2026-05-09)
+- page-of-cups (2026-05-09)
+- knight-of-cups (2026-05-09)
 
 ### Wands (14장) - 우선순위 2 (열정·관계 동력)
 

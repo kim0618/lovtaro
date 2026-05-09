@@ -165,8 +165,8 @@ async function generateScene01() {
     <ellipse cx="540" cy="${cardY}" rx="500" ry="380" fill="url(#cardAreaGlow)" filter="url(#glowBlur)"/>
 
     <g filter="url(#softGlow)">
-      <text x="540" y="380" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="48" fill="#F4F8FF" letter-spacing="3" font-weight="300">다가오는 결일까,</text>
-      <text x="540" y="455" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="48" fill="#F4F8FF" letter-spacing="3" font-weight="300">멈춰 있는 결일까?</text>
+      <text x="540" y="380" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="56" fill="#F4F8FF" letter-spacing="3" font-weight="300">기다림일까,</text>
+      <text x="540" y="460" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="56" fill="#F4F8FF" letter-spacing="3" font-weight="300">포기일까?</text>
     </g>
 
     <!-- 카드별 배경 글로우 (랜덤 픽된 scheme) -->

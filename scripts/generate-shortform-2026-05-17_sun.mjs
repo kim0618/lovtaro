@@ -21,7 +21,7 @@ import { colorCardBackSvg, colorCardBackDefs, CARD_WIDTH, CARD_HEIGHT, pickRando
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const rootDir = resolve(__dirname, '..')
 const cardsDir = resolve(rootDir, 'public/images/cards-png')
-const outputDir = resolve(rootDir, 'content-output/2026-05-10_sun/shortform')
+const outputDir = resolve(rootDir, 'content-output/2026-05-17_sun/shortform')
 const W = 1080, H = 1920
 
 const KO_STACK = `'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif`
@@ -29,17 +29,17 @@ const KO_STACK = `'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif`
 // 공개 카드 3장 - 희망/접근/급변 3축. hook은 string(1줄) 또는 [상단, 하단] 2줄 배열.
 // imageSrc: cards-png/*.png 일부(knight-of-cups, ace-of-wands 등)는 1200x630 OG 이미지라 세로 크롭 시 손실 큼.
 //   → portrait 원본(cards/*.webp 600x900 또는 mcards/{suit}/{Name}.png 1024x1536) 명시
-// 매듭/움직임/결단 3축 - World(완성) / Knight of Wands(점화) / Judgement(깨달음)
+// 회복/이동/끈기 3축 - 6 of Cups(추억의 결) / 3 of Wands(흐름 재개) / 9 of Wands(끈기)
 const CARDS = [
-  { num: '①', slug: 'magician',        imageSrc: 'public/images/cards-png/magician.png',
-    nameKr: '마법사',         nameEn: 'The Magician',     keywords: '의지 · 시작 · 실현',
-    hook: ['주 초반, 내가 먼저 움직이면', '흐름이 새로 열릴 수 있어요'] },
-  { num: '②', slug: 'eight-of-wands',  imageSrc: 'public/images/mcards/wands/Eight of Wands.png',
-    nameKr: '완드의 8',         nameEn: 'Eight of Wands',   keywords: '빠른 진전 · 메시지 · 속도',
-    hook: ['수~목 사이,', '갑작스러운 연락이 다가올 수 있어요'] },
-  { num: '③', slug: 'king-of-swords',  imageSrc: 'public/images/mcards/swords/King of Swords.png',
-    nameKr: '소드의 킹',         nameEn: 'King of Swords',   keywords: '명확함 · 판단 · 결단',
-    hook: ['주 후반, 흐릿하던 답이', '또렷한 결로 다가올 수 있어요'] },
+  { num: '①', slug: 'six-of-cups',     imageSrc: 'public/images/mcards/cups/Six of Cups.png',
+    nameKr: '컵의 6',          nameEn: 'Six of Cups',      keywords: '추억 · 회복 · 익숙한 결',
+    hook: ['주 초반, 익숙한 결이', '다시 다가올 수 있어요'] },
+  { num: '②', slug: 'three-of-wands', imageSrc: 'public/images/mcards/wands/Three of Wands.png',
+    nameKr: '완드의 3',         nameEn: 'Three of Wands',   keywords: '확장 · 흐름 재개 · 기다림 끝',
+    hook: ['수~목 사이, 멈춰 있던 흐름이', '새로 움직일 수 있어요'] },
+  { num: '③', slug: 'nine-of-wands',  imageSrc: 'public/images/mcards/wands/Nine of Wands.png',
+    nameKr: '완드의 9',         nameEn: 'Nine of Wands',    keywords: '끈기 · 마지막 한 발 · 단단함',
+    hook: ['주 후반, 끝까지 버틴 마음이', '또렷한 결로 자리잡을 수 있어요'] },
 ]
 
 // scene01/02/03 공통 카드 뒷면 스킴 - 한 번 픽해서 세 씬 모두 동일 색상 유지
@@ -206,7 +206,7 @@ async function scene01() {
 
     <g filter="url(#softGlow)">
       <text x="540" y="420" text-anchor="middle" font-family="${KO_STACK}" font-size="58" fill="#F4F8FF" letter-spacing="2" font-weight="300">다음 주,</text>
-      <text x="540" y="505" text-anchor="middle" font-family="${KO_STACK}" font-size="58" fill="#F4F8FF" letter-spacing="2" font-weight="300">두 사람 사이가 가까워질까요?</text>
+      <text x="540" y="505" text-anchor="middle" font-family="${KO_STACK}" font-size="50" fill="#F4F8FF" letter-spacing="2" font-weight="300">흐름이 다시 움직이기 시작할까요?</text>
     </g>
 
     <g opacity="0.85">
@@ -530,7 +530,7 @@ async function scene07() {
 }
 
 async function main() {
-  console.log('=== 2026-05-10 Sunday Tarot Preview - Magician/8 of Wands/King of Swords ===')
+  console.log('=== 2026-05-17 Sunday Tarot Preview - 6 of Cups/3 of Wands/9 of Wands ===')
   mkdirSync(outputDir, { recursive: true })
   await scene01()                                  // 훅 도입
   await scene02()                                  // 선택 유도
