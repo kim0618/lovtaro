@@ -61,8 +61,12 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 - ten-of-cups (2026-05-09)
 - page-of-cups (2026-05-09)
 - knight-of-cups (2026-05-09)
+- queen-of-cups (2026-05-10)
+- king-of-cups (2026-05-10)
 
 ### Wands (14장) - 우선순위 2 (열정·관계 동력)
+
+- ace-of-wands (2026-05-10)
 
 ### Pentacles (14장) - 우선순위 3 (안정·현실)
 
