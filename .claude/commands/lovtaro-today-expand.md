@@ -67,6 +67,9 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ### Wands (14장) - 우선순위 2 (열정·관계 동력)
 
 - ace-of-wands (2026-05-10)
+- two-of-wands (2026-05-11)
+- three-of-wands (2026-05-11)
+- four-of-wands (2026-05-11)
 
 ### Pentacles (14장) - 우선순위 3 (안정·현실)
 

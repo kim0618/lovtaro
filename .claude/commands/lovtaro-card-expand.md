@@ -77,6 +77,8 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 - nine-of-swords (2026-05-09)
 - ten-of-swords (2026-05-10)
 - page-of-swords (2026-05-10)
+- knight-of-swords (2026-05-11)
+- queen-of-swords (2026-05-11)
 
 ### Major Arcana 추가 완료
 
