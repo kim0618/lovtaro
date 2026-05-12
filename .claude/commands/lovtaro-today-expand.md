@@ -70,6 +70,9 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 - two-of-wands (2026-05-11)
 - three-of-wands (2026-05-11)
 - four-of-wands (2026-05-11)
+- five-of-wands (2026-05-12)
+- six-of-wands (2026-05-12)
+- seven-of-wands (2026-05-12)
 
 ### Pentacles (14장) - 우선순위 3 (안정·현실)
 
