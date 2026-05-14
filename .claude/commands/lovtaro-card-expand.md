@@ -83,6 +83,8 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 - ace-of-wands (2026-05-12)
 - two-of-wands (2026-05-13)
 - three-of-wands (2026-05-13)
+- four-of-wands (2026-05-14)
+- five-of-wands (2026-05-14)
 
 ### Major Arcana 추가 완료
 
