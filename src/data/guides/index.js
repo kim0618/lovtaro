@@ -27,11 +27,13 @@ import chariotsLoveMeaning from './chariot-love-meaning.js'
 import threeOfCupsLoveMeaning from './three-of-cups-love-meaning.js'
 import fourOfCupsLoveMeaning from './four-of-cups-love-meaning.js'
 import fiveOfCupsLoveMeaning from './five-of-cups-love-meaning.js'
+import sixOfCupsLoveMeaning from './six-of-cups-love-meaning.js'
 import magicianLoveMeaning from './magician-love-meaning.js'
 import judgementLoveMeaning from './judgement-love-meaning.js'
 import worldLoveMeaning from './world-love-meaning.js'
 
 const guides = [
+  sixOfCupsLoveMeaning,
   fiveOfCupsLoveMeaning,
   worldLoveMeaning,
   magicianLoveMeaning,

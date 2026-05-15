@@ -79,8 +79,12 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 - page-of-wands (2026-05-14)
 - knight-of-wands (2026-05-14)
 - queen-of-wands (2026-05-14)
+- king-of-wands (2026-05-15)
 
 ### Pentacles (14장) - 우선순위 3 (안정·현실)
+
+- ace-of-pentacles (2026-05-15)
+- two-of-pentacles (2026-05-15)
 
 ### Swords (14장) - 우선순위 4 (생각·갈등)
 
