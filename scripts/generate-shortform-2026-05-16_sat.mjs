@@ -165,8 +165,8 @@ async function generateScene01() {
     <ellipse cx="540" cy="${cardY}" rx="500" ry="380" fill="url(#cardAreaGlow)" filter="url(#glowBlur)"/>
 
     <g filter="url(#softGlow)">
-      <text x="540" y="380" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="62" fill="#F4F8FF" letter-spacing="3" font-weight="300">호감일까,</text>
-      <text x="540" y="465" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="62" fill="#F4F8FF" letter-spacing="3" font-weight="300">습관일까?</text>
+      <text x="540" y="380" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="46" fill="#F4F8FF" letter-spacing="2" font-weight="300">자꾸 떠오르는 그 사람 기준으로,</text>
+      <text x="540" y="460" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="44" fill="rgba(232,212,139,0.85)" letter-spacing="3" font-weight="300">하나만 골라보세요</text>
     </g>
 
     <!-- 카드별 배경 글로우 (랜덤 픽된 scheme) -->
@@ -238,7 +238,7 @@ async function generateScene02() {
 }
 
 async function main() {
-  console.log('=== 2026-05-16 토 참여형 #4 (호감일까 습관일까) ===')
+  console.log('=== 2026-05-16 토 참여형 #4 (자꾸 떠오르는 그 사람) ===')
   await generateScene01()
   await generateScene02()
   console.log('완료!')

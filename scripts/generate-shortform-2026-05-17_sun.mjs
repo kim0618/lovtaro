@@ -36,7 +36,7 @@ const CARDS = [
     hook: ['주 초반, 익숙한 결이', '다시 다가올 수 있어요'] },
   { num: '②', slug: 'three-of-wands', imageSrc: 'public/images/mcards/wands/Three of Wands.png',
     nameKr: '완드의 3',         nameEn: 'Three of Wands',   keywords: '확장 · 흐름 재개 · 기다림 끝',
-    hook: ['수~목 사이, 멈춰 있던 흐름이', '새로 움직일 수 있어요'] },
+    hook: ['수~목 사이, 멈춰 있던 흐름이', '새로 열릴 수 있어요'] },
   { num: '③', slug: 'nine-of-wands',  imageSrc: 'public/images/mcards/wands/Nine of Wands.png',
     nameKr: '완드의 9',         nameEn: 'Nine of Wands',    keywords: '끈기 · 마지막 한 발 · 단단함',
     hook: ['주 후반, 끝까지 버틴 마음이', '또렷한 결로 자리잡을 수 있어요'] },
@@ -206,7 +206,7 @@ async function scene01() {
 
     <g filter="url(#softGlow)">
       <text x="540" y="420" text-anchor="middle" font-family="${KO_STACK}" font-size="58" fill="#F4F8FF" letter-spacing="2" font-weight="300">다음 주,</text>
-      <text x="540" y="505" text-anchor="middle" font-family="${KO_STACK}" font-size="50" fill="#F4F8FF" letter-spacing="2" font-weight="300">흐름이 다시 움직이기 시작할까요?</text>
+      <text x="540" y="505" text-anchor="middle" font-family="${KO_STACK}" font-size="56" fill="#F4F8FF" letter-spacing="2" font-weight="300">그 사람 마음이 새로 움직일까요?</text>
     </g>
 
     <g opacity="0.85">
