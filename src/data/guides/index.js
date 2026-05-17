@@ -32,8 +32,10 @@ import magicianLoveMeaning from './magician-love-meaning.js'
 import judgementLoveMeaning from './judgement-love-meaning.js'
 import worldLoveMeaning from './world-love-meaning.js'
 import sevenOfCupsLoveMeaning from './seven-of-cups-love-meaning.js'
+import eightOfCupsLoveMeaning from './eight-of-cups-love-meaning.js'
 
 const guides = [
+  eightOfCupsLoveMeaning,
   sevenOfCupsLoveMeaning,
   sixOfCupsLoveMeaning,
   fiveOfCupsLoveMeaning,
