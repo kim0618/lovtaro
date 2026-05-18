@@ -91,6 +91,9 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 - six-of-pentacles (2026-05-17)
 - seven-of-pentacles (2026-05-17)
 - eight-of-pentacles (2026-05-17)
+- nine-of-pentacles (2026-05-18)
+- ten-of-pentacles (2026-05-18)
+- page-of-pentacles (2026-05-18)
 
 ### Swords (14장) - 우선순위 4 (생각·갈등)
 
