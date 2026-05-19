@@ -34,8 +34,10 @@ import worldLoveMeaning from './world-love-meaning.js'
 import sevenOfCupsLoveMeaning from './seven-of-cups-love-meaning.js'
 import eightOfCupsLoveMeaning from './eight-of-cups-love-meaning.js'
 import temperanceLoveMeaning from './temperance-love-meaning.js'
+import hierophantLoveMeaning from './hierophant-love-meaning.js'
 
 const guides = [
+  hierophantLoveMeaning,
   temperanceLoveMeaning,
   eightOfCupsLoveMeaning,
   sevenOfCupsLoveMeaning,

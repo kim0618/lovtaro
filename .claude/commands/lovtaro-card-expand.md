@@ -93,6 +93,11 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 - page-of-wands (2026-05-17)
 - knight-of-wands (2026-05-18)
 - queen-of-wands (2026-05-18)
+- king-of-wands (2026-05-19)
+
+### Pentacles
+
+- ace-of-pentacles (2026-05-19)
 
 ### Major Arcana 추가 완료
 
