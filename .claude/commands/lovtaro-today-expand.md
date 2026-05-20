@@ -100,6 +100,10 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 
 ### Swords (14장) - 우선순위 4 (생각·갈등)
 
+- ace-of-swords (2026-05-20)
+- two-of-swords (2026-05-20)
+- three-of-swords (2026-05-20)
+
 ### 미완료 카운트
 
 ```bash
