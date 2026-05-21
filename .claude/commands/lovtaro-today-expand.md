@@ -103,6 +103,9 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 - ace-of-swords (2026-05-20)
 - two-of-swords (2026-05-20)
 - three-of-swords (2026-05-20)
+- four-of-swords (2026-05-21)
+- five-of-swords (2026-05-21)
+- six-of-swords (2026-05-21)
 
 ### 미완료 카운트
 

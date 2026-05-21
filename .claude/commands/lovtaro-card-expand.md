@@ -100,6 +100,8 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 - ace-of-pentacles (2026-05-19)
 - two-of-pentacles (2026-05-20)
 - three-of-pentacles (2026-05-20)
+- four-of-pentacles (2026-05-21)
+- five-of-pentacles (2026-05-21)
 
 ### Major Arcana 추가 완료
 
