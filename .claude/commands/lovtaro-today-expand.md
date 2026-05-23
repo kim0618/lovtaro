@@ -109,6 +109,9 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 - seven-of-swords (2026-05-22)
 - eight-of-swords (2026-05-22)
 - nine-of-swords (2026-05-22)
+- ten-of-swords (2026-05-23)
+- page-of-swords (2026-05-23)
+- knight-of-swords (2026-05-23)
 
 ### 미완료 카운트
 
