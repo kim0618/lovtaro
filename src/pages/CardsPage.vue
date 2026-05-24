@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue'
-import { useHead } from '../composables/useHead.js'
+import { useHead, SITE_URL } from '../composables/useHead.js'
 import AppShell from '../components/common/AppShell.vue'
 import PageContainer from '../components/ui/PageContainer.vue'
 import SectionBlock from '../components/ui/SectionBlock.vue'
@@ -23,7 +23,7 @@ useHead({
       '@type': 'ListItem',
       position: i + 1,
       name: `${card.name} (${card.nameEn})`,
-      url: `https://lovtaro.kr/cards/${card.id}/`,
+      url: `${SITE_URL}/cards/${card.id}/`,
     })),
   },
 })

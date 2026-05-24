@@ -1,5 +1,5 @@
 <script setup>
-import { useHead } from '../composables/useHead.js'
+import { useHead, SITE_URL } from '../composables/useHead.js'
 import AppShell from '../components/common/AppShell.vue'
 import PageContainer from '../components/ui/PageContainer.vue'
 
@@ -11,9 +11,9 @@ useHead({
     '@type': 'AboutPage',
     name: 'Lovtaro 소개',
     description: 'Lovtaro 무료 연애 타로 리딩 서비스 소개',
-    url: 'https://lovtaro.kr/about/',
+    url: `${SITE_URL}/about/`,
     inLanguage: 'ko',
-    isPartOf: { '@id': 'https://lovtaro.kr#website' },
+    isPartOf: { '@id': `${SITE_URL}#website` },
   },
 })
 </script>

@@ -1,5 +1,5 @@
 <script setup>
-import { useHead } from '../composables/useHead.js'
+import { useHead, SITE_URL } from '../composables/useHead.js'
 import AppShell from '../components/common/AppShell.vue'
 
 useHead({
@@ -10,7 +10,7 @@ useHead({
     '@type': 'WebApplication',
     name: 'Lovtaro',
     alternateName: '러브타로',
-    url: 'https://lovtaro.kr/',
+    url: `${SITE_URL}/`,
     description: '무료 연애 타로 리딩. 상대방 속마음, 재회 가능성, 연락 올까 타로, 러브타로 스프레드까지.',
     applicationCategory: 'EntertainmentApplication',
     operatingSystem: 'All',

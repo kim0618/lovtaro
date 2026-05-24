@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { useHead } from '../composables/useHead.js'
+import { useHead, SITE_URL } from '../composables/useHead.js'
 import AppShell from '../components/common/AppShell.vue'
 import PageContainer from '../components/ui/PageContainer.vue'
 import SectionBlock from '../components/ui/SectionBlock.vue'
@@ -17,13 +17,13 @@ const cardImage = computed(() => card.value ? getCardImage(card.value.id) : null
 useHead({
   title: () => card.value ? `${card.value.name}(${card.value.nameEn}) 타로 카드 의미 - 정방향 역방향 연애 해석 | Lovtaro` : '카드 상세 | Lovtaro',
   description: () => card.value ? `${card.value.name}(${card.value.nameEn}) 타로 카드 정방향·역방향 의미와 연애 해석. 키워드: ${card.value.keywords.join(', ')}. 무료 타로 카드 의미 사전.` : '',
-  ogImage: () => cardImage.value ? `https://lovtaro.kr${cardImage.value.replace('.webp', '.png').replace('/cards/', '/cards-png/')}` : null,
+  ogImage: () => cardImage.value ? `${SITE_URL}${cardImage.value.replace('.webp', '.png').replace('/cards/', '/cards-png/')}` : null,
   jsonLd: () => card.value ? {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: `${card.value.name}(${card.value.nameEn}) 타로 카드 의미`,
     description: `${card.value.name} 타로 카드의 정방향, 역방향 의미와 연애 해석`,
-    image: cardImage.value ? `https://lovtaro.kr${cardImage.value}` : undefined,
+    image: cardImage.value ? `${SITE_URL}${cardImage.value}` : undefined,
     author: { '@type': 'Organization', name: 'Lovtaro' },
     publisher: { '@type': 'Organization', name: 'Lovtaro' },
     inLanguage: 'ko',

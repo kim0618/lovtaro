@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useHead } from '../composables/useHead.js'
+import { useHead, SITE_URL } from '../composables/useHead.js'
 import AppShell from '../components/common/AppShell.vue'
 import PageContainer from '../components/ui/PageContainer.vue'
 import { getAllGuides, GUIDE_CATEGORIES } from '../data/guides/index.js'
@@ -14,7 +14,7 @@ useHead({
     '@type': 'CollectionPage',
     name: '연애 타로 가이드',
     description: '연애 타로 카드 해석 가이드 모음',
-    url: 'https://lovtaro.kr/guide/',
+    url: `${SITE_URL}/guide/`,
     inLanguage: 'ko',
   },
 })

@@ -39,8 +39,10 @@ import justiceLoveMeaning from './justice-love-meaning.js'
 import nineOfCupsLoveMeaning from './nine-of-cups-love-meaning.js'
 import tenOfCupsLoveMeaning from './ten-of-cups-love-meaning.js'
 import pageOfCupsLoveMeaning from './page-of-cups-love-meaning.js'
+import knightOfCupsLoveMeaning from './knight-of-cups-love-meaning.js'
 
 const guides = [
+  knightOfCupsLoveMeaning,
   pageOfCupsLoveMeaning,
   tenOfCupsLoveMeaning,
   nineOfCupsLoveMeaning,
