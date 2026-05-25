@@ -40,8 +40,10 @@ import nineOfCupsLoveMeaning from './nine-of-cups-love-meaning.js'
 import tenOfCupsLoveMeaning from './ten-of-cups-love-meaning.js'
 import pageOfCupsLoveMeaning from './page-of-cups-love-meaning.js'
 import knightOfCupsLoveMeaning from './knight-of-cups-love-meaning.js'
+import queenOfCupsLoveMeaning from './queen-of-cups-love-meaning.js'
 
 const guides = [
+  queenOfCupsLoveMeaning,
   knightOfCupsLoveMeaning,
   pageOfCupsLoveMeaning,
   tenOfCupsLoveMeaning,

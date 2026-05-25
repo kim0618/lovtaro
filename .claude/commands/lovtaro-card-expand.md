@@ -108,6 +108,8 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 - nine-of-pentacles (2026-05-23)
 - ten-of-pentacles (2026-05-24)
 - page-of-pentacles (2026-05-24)
+- knight-of-pentacles (2026-05-25)
+- queen-of-pentacles (2026-05-25)
 
 ### Major Arcana 추가 완료
 
