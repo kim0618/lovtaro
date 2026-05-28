@@ -43,8 +43,10 @@ import knightOfCupsLoveMeaning from './knight-of-cups-love-meaning.js'
 import queenOfCupsLoveMeaning from './queen-of-cups-love-meaning.js'
 import kingOfCupsLoveMeaning from './king-of-cups-love-meaning.js'
 import crushMindTarot from './crush-mind-tarot.js'
+import reunionTarotCards from './reunion-tarot-cards.js'
 
 const guides = [
+  reunionTarotCards,
   crushMindTarot,
   kingOfCupsLoveMeaning,
   queenOfCupsLoveMeaning,
