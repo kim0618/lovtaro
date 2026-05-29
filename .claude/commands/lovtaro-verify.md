@@ -310,13 +310,39 @@ cd /home/tjd618/lovtaro && node scripts/verify/guide-card-overlap.mjs star
 
 **수정 후 동기화**: 가이드 파일을 수정하면 `scripts/prerender.mjs`의 GUIDES[].faq도 동일하게 수정해야 JSON-LD 일치 유지.
 
+### Q. 가이드 본문 정적 주입 전수 확인 (2026-05-29 추가)
+
+prerender.mjs가 가이드 본문(sections)을 `<div id="app">`에 정적 주입한다. 크롤러/AdSense 봇이 JS 렌더링 없이 본문을 읽도록 하는 장치. 빌드 후 전수에서 본문이 실제로 들어갔는지 확인한다.
+
+**배경 (2026-05-29)**: 이전엔 가이드 본문이 Vue SPA 클라이언트 렌더만 돼서 정적 HTML에도 JSON-LD에도 없었음 (크롤러는 description + FAQ만 봄). prerender.mjs가 `#app`에 본문을 정적 주입하도록 개선. 본문은 `src/data/guides`가 단일 소스이며, prerender 내부 `GUIDES` 미러 배열엔 sections가 없으므로 `run()`이 src를 직접 import해 주입한다.
+
+```bash
+cd /home/tjd618/lovtaro && node --input-type=module -e "
+import fs from 'fs'
+import guides from './src/data/guides/index.js'
+let ok=0, bad=[]
+for (const g of guides) {
+  const p = 'dist/guide/'+g.slug+'/index.html'
+  if (!fs.existsSync(p)) { bad.push(g.slug+'(파일없음)'); continue }
+  const h = fs.readFileSync(p,'utf8')
+  const s = h.indexOf('<div id=\"app\">')
+  const seg = h.slice(s, h.indexOf('</article>', s))
+  const n = (seg.match(/guide-detail__section\"/g)||[]).length
+  if (n>=1) ok++; else bad.push(g.slug+'(본문미주입)')
+}
+console.log(bad.length ? '⚠ '+bad.join(', ') : '✅ 전수 본문 주입 ('+ok+'편)')
+"
+```
+
+**미주입 감지 시**: `npm run build`를 안 했거나 prerender.mjs 손상. 재빌드 후 재확인. 빌드는 했는데도 미주입이면 `buildGuideBodyHtml`/`injectMeta`의 `#app` 치환 정규식 또는 src import가 깨진 것.
+
 ## 실행 순서
 
 1. **대상 범위 확인**
    - 인자로 파일 지정되면 해당 파일만 (`/lovtaro-verify moon-love-meaning`)
    - 인자 없으면 전수 스캔
 
-2. **A~P 순서대로 실행**
+2. **A~Q 순서대로 실행**
 
 3. **자동 수정 가능한 건 즉시 Edit**
    - em dash → 하이픈 (문맥 판단)

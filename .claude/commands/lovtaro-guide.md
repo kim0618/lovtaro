@@ -579,10 +579,28 @@ ls /home/tjd618/lovtaro/dist/guide/{slug}/index.html
 grep -c 'application/ld+json' /home/tjd618/lovtaro/dist/guide/{slug}/index.html
 # 기대: 1 이상
 
-# 3. 실질 본문 분량
-sed 's/<[^>]*>//g' /home/tjd618/lovtaro/dist/guide/{slug}/index.html \
-  | tr -s ' \n' | wc -c
+# 3. 실질 본문 분량 (소스 sections 기준 - 2026-05-29 정확화)
+#   이전엔 dist HTML 전체를 sed로 셌으나, 당시 본문이 dist에 없어 JSON-LD/메타만 세던 허수였음.
+#   이제 prerender가 본문을 #app에 정적 주입하므로, 분량은 소스 sections에서 직접 측정한다.
+cd /home/tjd618/lovtaro && node --input-type=module -e "
+import g from './src/data/guides/{slug}.js'
+const body = (g.sections||[]).map(s => s.content.replace(/<[^>]*>/g,'')).join('')
+console.log(body.replace(/\s+/g,'').length, '자 (sections 본문)')
+"
 # 기대: 2,800-4,200자
+
+# 3b. 본문 정적 주입 확인 (2026-05-29 추가)
+#   prerender.mjs가 #app에 가이드 본문을 정적 주입 → 크롤러/AdSense 봇이 JS 렌더링 없이 본문을 읽음.
+#   본문은 src/data/guides가 단일 소스 (prerender 내부 GUIDES 미러엔 sections 없음).
+node --input-type=module -e "
+import fs from 'fs'
+const h = fs.readFileSync('/home/tjd618/lovtaro/dist/guide/{slug}/index.html','utf8')
+const s = h.indexOf('<div id=\"app\">')
+const seg = h.slice(s, h.indexOf('</article>', s))
+const n = (seg.match(/guide-detail__section\"/g)||[]).length
+console.log(n>=1 ? '✅ 본문 '+n+'섹션 정적 주입됨' : '⚠️ 본문 미주입 - 재빌드 필요')
+"
+# 기대: ✅ 본문 정적 주입됨
 
 # 4. em dash 0건
 grep -c '—' /home/tjd618/lovtaro/src/data/guides/{slug}.js

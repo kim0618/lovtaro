@@ -152,6 +152,35 @@ const ROUTES = [
 // { slug, title, description, createdAt, ogImage? }
 const GUIDES = [
   {
+    slug: 'breakup-healing-tarot',
+    title: '이별 후 타로 - 마음 정리가 안 될 때 카드가 말하는 것',
+    description: '이별 후 리딩에서 자주 등장하는 카드 여섯 장과 아직 끝나지 않은 감정을 가리키는 조합, 흘려보내는 방향과 붙잡는 방향을 읽는 흐름까지 담았어요.',
+    createdAt: '2026-05-29',
+    updatedAt: '2026-05-29',
+    faq: [
+      {
+        question: '이별 후 타로 결과가 좋지 않게 나왔어요. 포기해야 한다는 뜻인가요?',
+        answer: '포기를 권하는 것이 아니라 지금 두 사람 사이의 에너지 방향이 어느 쪽에 있는지를 보여주는 것이에요. 어떤 방향이든 그것이 이쪽이 취해야 할 행동을 정해주지는 않아요. 결과를 받고 나서 내 안의 감각이 그 방향과 같은 곳을 가리키는지를 먼저 살피는 것이 맞는 순서예요.',
+      },
+      {
+        question: '컵의 8이 이별 자리에 나왔어요. 어떻게 해석해야 하나요?',
+        answer: '컵의 8이 이별 후 나왔을 때 이쪽이 이미 그 자리를 떠날 준비를 하고 있는 내면의 흐름을 담는 경우가 많아요. 억지로 가는 것이 아니라 자연스럽게 발이 떼어지기 시작하는 시기예요. 역방향이라면 아직 그 흐름이 완성되지 않은 상태, 떠나야 한다는 감각은 있는데 발이 쉽게 움직이지 않는 자리예요.',
+      },
+      {
+        question: '죽음 카드가 나왔어요. 이 관계가 완전히 끝난 건가요?',
+        answer: '죽음 카드는 두렵게 들리지만 하나의 챕터가 마무리되는 에너지를 담는 카드예요. 이 관계가 영원히 닫혔다는 단정이 아니에요. 지금 이 흐름 자체가 마무리를 향하고 있다는 신호에 가까워요. 역방향으로 나왔다면 마무리가 아직 완성되지 않은 상태, 이쪽 또는 상대 쪽에서 저항이 있는 자리예요.',
+      },
+      {
+        question: '이별 후 같은 카드가 반복해서 나와요. 무슨 뜻인가요?',
+        answer: '같은 카드가 반복해서 올라오는 건 그 카드가 가리키는 에너지가 아직 해소되지 않았다는 신호인 경우가 많아요. 컵의 5가 계속 나온다면 상실감이 아직 충분히 받아들여지지 않은 자리예요. 달이 반복된다면 감정이 아직 정착하지 않은 시기라는 것이에요. 반복되는 카드는 "지금 이것을 먼저 보라"는 신호로 읽는 것이 맞아요.',
+      },
+      {
+        question: '역방향 연인 카드가 나왔어요. 아직 가능성이 있는 건가요?',
+        answer: '역방향 연인이 나왔다는 건 두 사람 사이의 선택이 아직 완전히 닫히지 않은 에너지가 있다는 신호예요. 다만 그것이 곧 재회를 의미하는 것과는 달라요. 먼저 살펴봐야 할 건 그 열린 선택이 어느 쪽에서 오는 건지예요. 이쪽의 마음인지 상대의 에너지인지를 다른 카드와 함께 읽는 것이 더 정확해요.',
+      },
+    ],
+  },
+  {
     slug: 'reunion-tarot-cards',
     title: '재회 타로 - 자주 나오는 카드와 돌아올 신호 읽는 법',
     description: '재회를 묻는 타로 리딩에서 반복적으로 올라오는 카드 5장, 함께 나왔을 때 신호가 구체화되는 조합, 결과를 지금 상황에 가져가는 흐름까지 담았어요.',
@@ -1548,6 +1577,26 @@ function buildGuideFAQ(guide) {
   }
 }
 
+// 가이드 본문을 #app에 정적으로 주입할 HTML로 생성.
+// 크롤러/AdSense 봇이 JS 렌더링 없이 본문을 읽도록 함.
+// createApp().mount('#app')는 마운트 시 컨테이너를 비우고 다시 그리므로
+// JS 활성 환경에서는 Vue가 즉시 이 정적 본문을 교체한다 (hydration 아님).
+function buildGuideBodyHtml(guide) {
+  const sections = (guide.sections || []).map(s => {
+    const heading = s.heading ? `<h2 class="guide-detail__section-heading">${escapeHtml(s.heading)}</h2>` : ''
+    // content는 우리가 작성한 신뢰된 정적 HTML (<p>, <ul> 등). 그대로 삽입.
+    return `<section class="guide-detail__section">${heading}<div class="guide-detail__section-content">${s.content}</div></section>`
+  }).join('')
+
+  const faq = (guide.faq && guide.faq.length)
+    ? `<div class="guide-detail__faq"><h2 class="guide-detail__faq-title">자주 묻는 질문</h2><dl class="guide-detail__faq-list">${
+        guide.faq.map(f => `<div class="guide-detail__faq-item"><dt class="guide-detail__faq-q">${escapeHtml(f.question)}</dt><dd class="guide-detail__faq-a">${escapeHtml(f.answer)}</dd></div>`).join('')
+      }</dl></div>`
+    : ''
+
+  return `<div class="guide-detail"><article><header class="guide-detail__header"><h1 class="guide-detail__title">${escapeHtml(guide.title)}</h1><p class="guide-detail__desc">${escapeHtml(guide.description)}</p></header><div class="guide-detail__body">${sections}</div>${faq}</article></div>`
+}
+
 function buildReadingMain(route) {
   return {
     '@type': 'WebPage',
@@ -1608,7 +1657,12 @@ function escapeAttr(str) {
   return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 }
 
-function injectMeta(html, { path: urlPath, title, description, ogImage, jsonLd, noindex }) {
+// 텍스트 노드용 (따옴표는 변환 불필요)
+function escapeHtml(str) {
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+}
+
+function injectMeta(html, { path: urlPath, title, description, ogImage, jsonLd, noindex, _guide }) {
   const url = canonicalUrl(urlPath)
   const safeTitle = escapeAttr(title)
   const safeDesc = escapeAttr(description)
@@ -1686,6 +1740,12 @@ function injectMeta(html, { path: urlPath, title, description, ogImage, jsonLd, 
     }
   }
 
+  // 가이드 본문을 #app에 정적 주입 (크롤러가 JS 없이 본문을 읽도록)
+  if (_guide) {
+    const bodyHtml = buildGuideBodyHtml(_guide)
+    html = html.replace(/<div id="app">\s*<\/div>/, `<div id="app">${bodyHtml}</div>`)
+  }
+
   return html
 }
 
@@ -1701,12 +1761,18 @@ async function run() {
   const { ALL_CARDS } = await import('../src/data/cardDictionary.js')
   const allCardsList = [...CARDS, ...MINOR_CARDS]
 
+  // 가이드 본문(sections)은 단일 소스에서 로드. prerender 내부 GUIDES 미러는
+  // FAQ JSON-LD용이라 sections가 없으므로, 본문 정적 주입은 src 데이터를 사용.
+  const { default: SRC_GUIDES } = await import('../src/data/guides/index.js')
+  const srcGuideMap = new Map(SRC_GUIDES.map(g => [g.slug, g]))
+
   const baseHtml = fs.readFileSync(indexPath, 'utf8')
   let success = 0
 
   for (const route of ROUTES) {
     const jsonLd = buildGraph(route, { allCards: allCardsList, cardDetailMap: ALL_CARDS })
-    const html = injectMeta(baseHtml, { ...route, jsonLd })
+    const guideForBody = route._guide ? (srcGuideMap.get(route._guide.slug) || route._guide) : null
+    const html = injectMeta(baseHtml, { ...route, jsonLd, _guide: guideForBody })
 
     if (route.path === '/') {
       fs.writeFileSync(indexPath, html, 'utf8')
