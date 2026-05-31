@@ -67,6 +67,13 @@ const readingItems = [
     tag: '',
     featured: false,
   },
+  {
+    title: '1:1 정밀 리딩',
+    description: '사연을 카드 3장으로 풀어 편지로 · 19,900원',
+    to: '/premium/',
+    tag: '프리미엄',
+    premium: true,
+  },
 ]
 </script>
 

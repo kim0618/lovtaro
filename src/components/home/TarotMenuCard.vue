@@ -7,6 +7,7 @@ const props = defineProps({
   to: { type: String, required: true },
   tag: { type: String, default: '' },
   featured: { type: Boolean, default: false },
+  premium: { type: Boolean, default: false },
   hero: { type: Boolean, default: false },
 })
 
@@ -44,7 +45,7 @@ const router = useRouter()
   <button
     v-else
     class="tarot-menu-card"
-    :class="{ 'tarot-menu-card--featured': featured }"
+    :class="{ 'tarot-menu-card--featured': featured, 'tarot-menu-card--premium': premium }"
     @click="router.push(props.to)"
   >
     <div class="tarot-menu-card__body">
@@ -95,6 +96,34 @@ const router = useRouter()
 
 .tarot-menu-card--featured .tarot-menu-card__title {
   color: var(--lt-text-strong);
+}
+
+.tarot-menu-card--premium {
+  position: relative;
+}
+
+.tarot-menu-card--premium::before {
+  content: '';
+  position: absolute;
+  left: -16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 28px;
+  background: linear-gradient(to bottom, #C8A96E, transparent);
+  opacity: 0.7;
+}
+
+.tarot-menu-card--premium .tarot-menu-card__title {
+  color: var(--lt-text-strong);
+}
+
+.tarot-menu-card--premium .tarot-menu-card__tag {
+  color: rgba(200, 169, 110, 0.85);
+}
+
+.tarot-menu-card--premium:hover .tarot-menu-card__arrow {
+  color: rgba(200, 169, 110, 0.9);
 }
 
 .tarot-menu-card__body {

@@ -11,6 +11,7 @@ useHead({
 const router = useRouter()
 
 const links = [
+  { label: '1:1 정밀 리딩', desc: '사연을 카드 3장으로 풀어 편지로 · 19,900원', to: '/premium/', premium: true },
   { label: '상대방 속마음 타로', desc: '그 사람의 진짜 마음 읽기', to: '/reading/mind/', hot: true },
   { label: 'Yes/No 타로', desc: '지금 궁금한 것, 카드가 답합니다', to: '/reading/yesno/', tag: 'NEW' },
   { label: '궁합 타로', desc: '두 사람의 케미와 궁합 점수 확인', to: '/reading/compatibility/', tag: 'NEW' },
@@ -42,14 +43,15 @@ function go(link) {
         v-for="link in links"
         :key="link.to"
         class="link-page__item"
-        :class="{ 'link-page__item--hot': link.hot }"
+        :class="{ 'link-page__item--hot': link.hot, 'link-page__item--premium': link.premium }"
         @click="go(link)"
       >
         <div class="link-page__text">
           <span class="link-page__label">{{ link.label }}</span>
           <span class="link-page__desc">{{ link.desc }}</span>
         </div>
-        <span v-if="link.hot" class="link-page__hot">HOT</span>
+        <span v-if="link.premium" class="link-page__premium">프리미엄</span>
+        <span v-else-if="link.hot" class="link-page__hot">HOT</span>
         <span v-else-if="link.tag" class="link-page__tag">{{ link.tag }}</span>
         <span class="link-page__arrow">&#8594;</span>
       </button>
@@ -167,6 +169,33 @@ function go(link) {
 .link-page__item--hot {
   border-color: rgba(77, 163, 255, 0.25);
   background: linear-gradient(135deg, var(--lt-panel) 0%, rgba(45, 108, 223, 0.06) 100%);
+}
+
+.link-page__item--premium {
+  border-color: rgba(200, 169, 110, 0.4);
+  border-left-color: rgba(200, 169, 110, 0.4);
+  background: linear-gradient(180deg, #0A1020 0%, #05070D 100%);
+}
+
+.link-page__item--premium:hover {
+  border-color: rgba(200, 169, 110, 0.6);
+  border-left-color: rgba(200, 169, 110, 0.6);
+  box-shadow: 0 4px 24px rgba(200, 169, 110, 0.14), inset 0 0 20px rgba(200, 169, 110, 0.04);
+}
+
+.link-page__item--premium:hover .link-page__arrow {
+  color: rgba(212, 169, 94, 1);
+}
+
+.link-page__premium {
+  font-size: 0.52rem;
+  font-weight: 600;
+  color: #0A1020;
+  background: linear-gradient(135deg, #E8D09A 0%, #C8A96E 100%);
+  letter-spacing: 0.06em;
+  padding: 2px 7px;
+  border-radius: 999px;
+  flex-shrink: 0;
 }
 
 .link-page__hot {

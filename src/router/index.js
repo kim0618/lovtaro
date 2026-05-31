@@ -102,6 +102,11 @@ const routes = [
     component: () => import('../pages/GuideDetailPage.vue'),
   },
   {
+    path: '/premium',
+    name: 'premium',
+    component: () => import('../pages/PremiumPage.vue'),
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'not-found',
     component: () => import('../pages/NotFoundPage.vue'),
