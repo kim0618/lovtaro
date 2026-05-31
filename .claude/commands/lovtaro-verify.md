@@ -336,13 +336,80 @@ console.log(bad.length ? '⚠ '+bad.join(', ') : '✅ 전수 본문 주입 ('+ok
 
 **미주입 감지 시**: `npm run build`를 안 했거나 prerender.mjs 손상. 재빌드 후 재확인. 빌드는 했는데도 미주입이면 `buildGuideBodyHtml`/`injectMeta`의 `#app` 치환 정규식 또는 src import가 깨진 것.
 
+### R. FAQ ↔ 본문 자체 중복 검사 (2026-05-31 추가)
+
+FAQ answer가 같은 글의 `sections` 본문 문장을 거의 그대로 복붙한 경우를 잡는다. FAQ는 본문을 **심화·보완**해야지 반복하면 안 된다. 본문을 읽은 독자가 FAQ에서 같은 문장을 또 보면 "복붙"으로 느끼고, JSON-LD FAQPage와 본문이 겹치면 thin/duplicate 신호로 SEO에 불리하다.
+
+**배경 (2026-05-31 회고)**: contact-timing-tarot 작성 시 lovtaro-guide의 자체 검증(질문 1~3)과 verify의 A~Q를 모두 통과했는데, 심층 분석에서 FAQ2가 본문과 25자, FAQ5가 28자 연속 겹침이 발견됨. FAQ를 쓸 때 본문 결론 문장을 무의식적으로 재사용하는 패턴이 있어 객관적 측정이 필요. P(가이드-카드 중복)는 외부 데이터와의 겹침만 보고 글 **내부** 자체중복은 못 잡는 사각지대였음.
+
+```bash
+cd /home/tjd618/lovtaro && node --input-type=module -e "
+import guides from './src/data/guides/index.js'
+const norm = s => s.replace(/<[^>]*>/g,'').replace(/\s+/g,'')
+let total = 0
+for (const g of guides) {
+  const sec = norm((g.sections||[]).map(s=>s.content).join(''))
+  ;(g.faq||[]).forEach((f,fi)=>{
+    const a = norm(f.answer); const W = 20; const seen = new Set()
+    for (let i=0;i+W<=a.length;i++){
+      const sub = a.slice(i,i+W)
+      if (sec.includes(sub) && !seen.has(sub)) {
+        let len=W; while(i+len<a.length && sec.includes(a.slice(i,i+len+1))) len++
+        seen.add(a.slice(i,i+len)); console.log(g.slug,'FAQ'+(fi+1),len+'자:',a.slice(i,i+len)); total++
+      }
+    }
+  })
+}
+console.log(total===0 ? '  ✅ FAQ-본문 20자 이상 자체중복 없음' : '  ⚠ '+total+'건 (해당 FAQ를 다른 각도로 재작성)')
+"
+```
+
+**판정**: 연속 **20자 이상** 겹침이면 해당 FAQ를 본문과 다른 각도로 재작성. 카드 해석 글뿐 아니라 **상황·방법·FAQ 글 전체**에 적용. 정형 표현이 아니라 본문 결론을 그대로 옮긴 것이면 무조건 수정.
+
+**수정 후**: guide 파일과 `scripts/prerender.mjs`의 GUIDES[].faq를 함께 갱신(N 검사로 재확인).
+
+### S. 상황 글 ↔ 리딩 데이터 겹침 검사 (2026-05-31 추가)
+
+상황 글(category: situation)이 다루는 카드 해석이 해당 리딩의 결과 데이터(`src/data/readings/*.js`)와 연속 겹치는지 본다. P 검사는 `cardDictionary.js`/`minorArcana.js`만 비교하므로 리딩 데이터는 **사각지대**다. 독자가 실제 리딩을 본 뒤(`/reading/contact` 등) 같은 주제의 가이드를 읽는 동선이라, 리딩 결과 문구와 겹치면 카드 사전 겹침보다 체감도가 더 높다.
+
+**배경 (2026-05-31 회고)**: contact-timing-tarot의 본문/FAQ가 `readings/contact.js`의 emotionFlow·advice와 moon 18자, chariot 16자 겹침. P 스크립트가 SKIP(상황 글이라 카드 매핑 없음)하고 지나가 발견되지 않았음.
+
+**리딩 데이터 export 형태** (주제별로 다름): `contact.js` → `CONTACT_RESULTS`, 그 외 `mind.js`/`reunion.js` 등은 파일을 열어 export 이름과 구조(`summary`/`emotionFlow`/`advice`/`caution` 또는 유사 필드)를 먼저 확인한 뒤 아래 스크립트의 import·필드명을 맞춘다.
+
+```bash
+# 예시: contact 주제 상황 글 검사 (다른 주제는 import/필드 교체)
+cd /home/tjd618/lovtaro && node --input-type=module -e "
+import g from './src/data/guides/contact-timing-tarot.js'
+import { CONTACT_RESULTS } from './src/data/readings/contact.js'
+const norm = s => s.replace(/<[^>]*>/g,'').replace(/\s+/g,'')
+const body = norm(g.sections.map(s=>s.content).join('') + g.faq.map(f=>f.question+f.answer).join(''))
+const cards = (g.relatedCards||[]).map(c=>c.id)  // 또는 본문에서 다룬 카드 id 목록
+let hits=0
+for (const id of cards) {
+  const r = CONTACT_RESULTS[id]; if(!r) continue
+  const src = norm([r.summary, ...(r.emotionFlow||[]), ...(r.advice||[]), ...(r.caution||[])].join(''))
+  const W=15; const seen=new Set()
+  for(let i=0;i+W<=src.length;i++){
+    const sub=src.slice(i,i+W)
+    if(body.includes(sub)&&!seen.has(sub)){
+      let len=W; while(i+len<src.length && body.includes(src.slice(i,i+len+1))) len++
+      seen.add(src.slice(i,i+len)); console.log('['+id+'] '+len+'자:', src.slice(i,i+len)); hits++
+    }
+  }
+}
+console.log(hits===0?'  ✅ 리딩 데이터와 15자 이상 겹침 없음':'  ⚠ '+hits+'건 (해당 문단 재서술)')
+"
+```
+
+**판정**: 연속 **15자 이상** 겹침이면 문맥 확인 후 재서술. 짧은 정형 표현은 허용. **카드 해석 글에는 적용하지 않는다**(리딩 데이터는 상황 글 주제와만 직접 연결됨). 주제↔리딩 매핑: 재회→`reunion.js`, 썸·짝사랑·속마음→`mind.js`, 연락→`contact.js`, 이별→해당 없음(reunion/mind 보조 참고).
+
 ## 실행 순서
 
 1. **대상 범위 확인**
    - 인자로 파일 지정되면 해당 파일만 (`/lovtaro-verify moon-love-meaning`)
    - 인자 없으면 전수 스캔
 
-2. **A~Q 순서대로 실행**
+2. **A~S 순서대로 실행** (R = FAQ-본문 자체중복, S = 상황 글-리딩 데이터 겹침)
 
 3. **자동 수정 가능한 건 즉시 Edit**
    - em dash → 하이픈 (문맥 판단)

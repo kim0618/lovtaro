@@ -462,6 +462,25 @@ cd /home/tjd618/lovtaro && node scripts/verify/guide-card-overlap.mjs {slug}
 
 **배경 (2026-04-22 회고)**: star 가이드 작성 시 AI 자가진단으로는 "심화했다"고 판단했으나 실제로 32자 연속 겹침(FAQ)이 있었음. cardDictionary.js의 love/core 문장을 무의식적으로 재서술하는 AI 패턴이 있어 객관적 측정이 유일한 방어선.
 
+**추가 측정 (2026-05-31 회고, 모든 카테고리 공통)**: `guide-card-overlap.mjs`는 (1) 외부 데이터(cardDictionary)와의 겹침만 보고, (2) 상황 글은 SKIP한다. 그래서 아래 두 사각지대를 작성 직후 함께 측정한다. contact-timing-tarot에서 이 둘을 놓쳐 발행 후 심층 분석에서야 FAQ-본문 25/28자 복붙, 리딩 데이터 18자 겹침이 잡혔음.
+
+- **FAQ ↔ 본문 자체중복** (전 카테고리): FAQ가 본문 결론 문장을 복붙하지 않았는지. 20자 이상 연속 겹침이면 해당 FAQ를 다른 각도로 재작성. (verify 스킬 R 항목 스크립트)
+- **상황 글 ↔ 리딩 데이터 겹침** (situation 한정): 본문/FAQ가 `src/data/readings/{주제}.js`의 결과 문구와 15자 이상 겹치는지. 연락→`contact.js`, 재회→`reunion.js`, 속마음·썸→`mind.js`. (verify 스킬 S 항목 스크립트)
+
+```bash
+# FAQ-본문 자체중복 (해당 slug만)
+cd /home/tjd618/lovtaro && node --input-type=module -e "
+import g from './src/data/guides/{slug}.js'
+const norm=s=>s.replace(/<[^>]*>/g,'').replace(/\s+/g,'')
+const sec=norm((g.sections||[]).map(s=>s.content).join(''))
+let n=0
+;(g.faq||[]).forEach((f,fi)=>{const a=norm(f.answer);const W=20;const seen=new Set()
+  for(let i=0;i+W<=a.length;i++){const sub=a.slice(i,i+W)
+    if(sec.includes(sub)&&!seen.has(sub)){let len=W;while(i+len<a.length&&sec.includes(a.slice(i,i+len+1)))len++;seen.add(a.slice(i,i+len));console.log('FAQ'+(fi+1),len+'자:',a.slice(i,i+len));n++}}})
+console.log(n===0?'  ✅ FAQ-본문 자체중복 없음':'  ⚠ '+n+'건 재작성')
+"
+```
+
 **수정 후**: 가이드 파일과 prerender.mjs의 GUIDES[].faq를 함께 업데이트. 스크립트 재실행해서 0건 또는 정형만 남는지 확인.
 
 ### 질문 3. 독자 감정 테스트

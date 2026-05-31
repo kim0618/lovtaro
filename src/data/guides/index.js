@@ -45,8 +45,10 @@ import kingOfCupsLoveMeaning from './king-of-cups-love-meaning.js'
 import crushMindTarot from './crush-mind-tarot.js'
 import reunionTarotCards from './reunion-tarot-cards.js'
 import breakupHealingTarot from './breakup-healing-tarot.js'
+import contactTimingTarot from './contact-timing-tarot.js'
 
 const guides = [
+  contactTimingTarot,
   breakupHealingTarot,
   reunionTarotCards,
   crushMindTarot,
