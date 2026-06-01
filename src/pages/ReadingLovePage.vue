@@ -19,6 +19,7 @@ import AdviceSection from '../components/result/AdviceSection.vue'
 import ShareSaveSection from '../components/result/ShareSaveSection.vue'
 import CoreInsightBlock from '../components/result/CoreInsightBlock.vue'
 import ReadingClosingBlock from '../components/result/ReadingClosingBlock.vue'
+import PremiumResultCta from '../components/result/PremiumResultCta.vue'
 import DisclaimerBlock from '../components/result/DisclaimerBlock.vue'
 import OtherReadingsNav from '../components/common/OtherReadingsNav.vue'
 import MiniShareBar from '../components/result/MiniShareBar.vue'
@@ -337,6 +338,10 @@ const drawInstruction = computed(() => DRAW_INSTRUCTIONS[Math.min(selectedCount.
 
       <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-5">
         <ReadingClosingBlock message="세 장의 카드가 비춘 흐름이 마음에 조용히 남기를 바랍니다." />
+      </SectionBlock>
+
+      <SectionBlock spacing="md">
+        <PremiumResultCta reading-type="러브타로" />
       </SectionBlock>
 
       <SectionBlock spacing="md">

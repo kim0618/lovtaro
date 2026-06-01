@@ -26,6 +26,13 @@ import TrustNoticeBlock from '../components/home/TrustNoticeBlock.vue'
 
 const readingItems = [
   {
+    title: '1:1 정밀 리딩',
+    description: '사연을 카드 3장으로 풀어 편지로 · 19,900원',
+    to: '/premium/',
+    tag: '프리미엄',
+    premium: true,
+  },
+  {
     title: '상대방 속마음 타로',
     description: '그 사람의 마음이 어디에 머물고 있는지 읽어봅니다.',
     to: '/reading/mind/',
@@ -66,13 +73,6 @@ const readingItems = [
     to: '/reading/contact/',
     tag: '',
     featured: false,
-  },
-  {
-    title: '1:1 정밀 리딩',
-    description: '사연을 카드 3장으로 풀어 편지로 · 19,900원',
-    to: '/premium/',
-    tag: '프리미엄',
-    premium: true,
   },
 ]
 </script>

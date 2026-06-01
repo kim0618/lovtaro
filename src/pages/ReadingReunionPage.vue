@@ -26,6 +26,7 @@ import AdviceSection from '../components/result/AdviceSection.vue'
 import CautionSection from '../components/result/CautionSection.vue'
 import ShareSaveSection from '../components/result/ShareSaveSection.vue'
 import ReadingClosingBlock from '../components/result/ReadingClosingBlock.vue'
+import PremiumResultCta from '../components/result/PremiumResultCta.vue'
 import DisclaimerBlock from '../components/result/DisclaimerBlock.vue'
 import OtherReadingsNav from '../components/common/OtherReadingsNav.vue'
 import CardRevealTransition from '../components/result/CardRevealTransition.vue'
@@ -249,6 +250,10 @@ onUnmounted(() => { if (revealTimer) clearTimeout(revealTimer) })
 
       <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-5">
         <ReadingClosingBlock />
+      </SectionBlock>
+
+      <SectionBlock spacing="md">
+        <PremiumResultCta reading-type="재회 가능성" />
       </SectionBlock>
 
       <SectionBlock spacing="md">

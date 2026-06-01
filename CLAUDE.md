@@ -5,7 +5,7 @@
 - **계정**: @lovtarot_
 - **타깃**: 연애 고민 20~30대 여성
 - **무드**: 딥네이비/퍼플/골드, 몽환적 감성, 따뜻한 톤
-- **AdSense**: 2026-06-12 신청 목표 (진행 중)
+- **수익화**: 프리미엄 1:1 리딩(편지/카드) 중심. **AdSense 보류** (디스플레이 광고 대신 상품 수익화, 2026-06-01 재확인). `/lovtaro-adsense-check` 스킬은 보류 상태로 보존(재개 시 사용)
 
 ## 스택
 
@@ -72,7 +72,7 @@ cd /home/tjd618/lovtaro && npm run build && npx wrangler pages deploy dist --pro
 
 **주 1회**: `/insta` - 인스타 1주일치 콘텐츠
 
-**신청 전 1회**: `/lovtaro-adsense-check` - 2026-06-11 전수 점검
+~~**신청 전 1회**: `/lovtaro-adsense-check` - 2026-06-11 전수 점검~~ (AdSense 보류로 미실행)
 
 원칙: verify 통과 전 commit·배포 금지. 배포는 하루 1회. 편수 상한 절대 초과 금지.
 

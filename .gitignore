@@ -27,5 +27,5 @@ dist-ssr
 # Instagram assets
 insta/
 
-# Premium reading pipeline (별도 repo)
-premium/
+# Premium reading pipeline (별도 repo) - 루트 운영 폴더만 제외 (public/images/premium 등 웹 자산은 포함)
+/premium/
