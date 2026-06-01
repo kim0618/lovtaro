@@ -46,8 +46,10 @@ import crushMindTarot from './crush-mind-tarot.js'
 import reunionTarotCards from './reunion-tarot-cards.js'
 import breakupHealingTarot from './breakup-healing-tarot.js'
 import contactTimingTarot from './contact-timing-tarot.js'
+import confessionTimingTarot from './confession-timing-tarot.js'
 
 const guides = [
+  confessionTimingTarot,
   contactTimingTarot,
   breakupHealingTarot,
   reunionTarotCards,
