@@ -9,14 +9,16 @@ import OtherReadingsNav from '../components/common/OtherReadingsNav.vue'
 import CardSymbol from '../components/cards/CardSymbol.vue'
 import { getCardDetail } from '../data/cardDictionary.js'
 import { getCardImage } from '../data/cardImages.js'
+import { getCardSeoOverride } from '../data/cardSeoOverrides.js'
 
 const route = useRoute()
 const card = computed(() => getCardDetail(route.params.id))
 const cardImage = computed(() => card.value ? getCardImage(card.value.id) : null)
+const seoOverride = computed(() => card.value ? getCardSeoOverride(card.value.id) : null)
 
 useHead({
-  title: () => card.value ? `${card.value.name}(${card.value.nameEn}) 타로 카드 의미 - 정방향 역방향 연애 해석 | Lovtaro` : '카드 상세 | Lovtaro',
-  description: () => card.value ? `${card.value.name}(${card.value.nameEn}) 타로 카드 정방향·역방향 의미와 연애 해석. 키워드: ${card.value.keywords.join(', ')}. 무료 타로 카드 의미 사전.` : '',
+  title: () => card.value ? (seoOverride.value?.title || `${card.value.name}(${card.value.nameEn}) 타로 카드 의미 - 정방향 역방향 연애 해석 | Lovtaro`) : '카드 상세 | Lovtaro',
+  description: () => card.value ? (seoOverride.value?.description || `${card.value.name}(${card.value.nameEn}) 타로 카드 정방향·역방향 의미와 연애 해석. 키워드: ${card.value.keywords.join(', ')}. 무료 타로 카드 의미 사전.`) : '',
   ogImage: () => cardImage.value ? `${SITE_URL}${cardImage.value.replace('.webp', '.png').replace('/cards/', '/cards-png/')}` : null,
   jsonLd: () => card.value ? {
     '@context': 'https://schema.org',
@@ -100,11 +102,12 @@ const energyLabel = { positive: '긍정적 에너지', neutral: '중립적 에�
       <!-- 리딩 CTA -->
       <SectionBlock spacing="md">
         <div class="card-detail__cta">
-          <p class="card-detail__cta-text">이 카드로 리딩을 받아보세요</p>
+          <p class="card-detail__cta-text">이 카드가 지금 내 연애에선 어떤 의미일까요?</p>
           <div class="card-detail__cta-links">
-            <router-link to="/reading/mind/" class="card-detail__cta-btn">상대방 속마음</router-link>
             <router-link to="/reading/love/" class="card-detail__cta-btn">러브타로</router-link>
-            <router-link to="/today/" class="card-detail__cta-btn">오늘의 카드</router-link>
+            <router-link to="/reading/mind/" class="card-detail__cta-btn">상대방 속마음</router-link>
+            <router-link to="/reading/contact/" class="card-detail__cta-btn">연락 올까</router-link>
+            <router-link to="/reading/reunion/" class="card-detail__cta-btn">재회 가능성</router-link>
           </div>
         </div>
       </SectionBlock>

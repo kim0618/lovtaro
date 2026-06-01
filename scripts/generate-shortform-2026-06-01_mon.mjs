@@ -1,6 +1,6 @@
 /**
  * 참여형 shortform 2026-06-01_mon (은둔자 / Nine of Cups / 세계)
- * 훅: 밤마다 자꾸 생각나는 사람 기준으로, / 하나만 골라보세요
+ * 훅: 요즘 자꾸 마음 쓰이는 사람이 있다면, / 6월(골드)이 끝날 땐, 어디쯤 가 있을까요?
  */
 import sharp from 'sharp'
 import { writeFileSync, mkdirSync } from 'fs'
@@ -155,8 +155,8 @@ async function generateScene01() {
     <ellipse cx="540" cy="${cardY}" rx="500" ry="380" fill="url(#cardAreaGlow)" filter="url(#glowBlur)"/>
 
     <g filter="url(#softGlow)">
-      <text x="540" y="380" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="46" fill="#F4F8FF" letter-spacing="3" font-weight="300">밤마다 자꾸 생각나는 사람 기준으로,</text>
-      <text x="540" y="455" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="46" fill="#F4F8FF" letter-spacing="3" font-weight="300">하나만 골라보세요</text>
+      <text x="540" y="380" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="46" fill="#F4F8FF" letter-spacing="3" font-weight="300">요즘 자꾸 마음 쓰이는 사람이 있다면,</text>
+      <text x="540" y="455" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="46" fill="#F4F8FF" letter-spacing="3" font-weight="300"><tspan fill="#F0CC78" font-weight="600">6월</tspan>이 끝날 땐, 어디쯤 가 있을까요?</text>
     </g>
 
     <ellipse cx="${cx1}" cy="${cardY}" rx="${cardPixelW * 0.8}" ry="${cardPixelH * 0.55}" fill="url(#colorCardGlow_${s1})" filter="url(#glowBlur)"/>

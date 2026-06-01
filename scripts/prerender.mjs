@@ -14,6 +14,7 @@
 import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import { getCardSeoOverride } from '../src/data/cardSeoOverrides.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const DIST = path.resolve(__dirname, '../dist')
@@ -1451,10 +1452,11 @@ const OG_SLUG_MAP = {
 // Generate card detail routes from card data
 for (const card of [...CARDS, ...MINOR_CARDS]) {
   const ogSlug = OG_SLUG_MAP[card.id] || card.id
+  const seo = getCardSeoOverride(card.id)
   ROUTES.push({
     path: `/cards/${card.id}`,
-    title: `${card.name}(${card.nameEn}) 타로 카드 의미 - 정방향 역방향 연애 해석 | Lovtaro`,
-    description: `${card.name}(${card.nameEn}) 타로 카드 정방향·역방향 의미와 연애 해석. 키워드: ${card.keywords.join(', ')}. 무료 타로 카드 의미 사전.`,
+    title: seo?.title || `${card.name}(${card.nameEn}) 타로 카드 의미 - 정방향 역방향 연애 해석 | Lovtaro`,
+    description: seo?.description || `${card.name}(${card.nameEn}) 타로 카드 정방향·역방향 의미와 연애 해석. 키워드: ${card.keywords.join(', ')}. 무료 타로 카드 의미 사전.`,
     ogImage: `${SITE_URL}/images/cards-png/${ogSlug}.png`,
   })
 }
@@ -1660,6 +1662,40 @@ function buildGuideBodyHtml(guide) {
   return `<div class="guide-detail"><article><header class="guide-detail__header"><h1 class="guide-detail__title">${escapeHtml(guide.title)}</h1><p class="guide-detail__desc">${escapeHtml(guide.description)}</p></header><div class="guide-detail__body">${sections}</div>${faq}</article></div>`
 }
 
+// 카드 상세 본문을 #app에 정적으로 주입할 HTML로 생성.
+// CardDetailPage.vue 템플릿 구조/클래스를 미러링하며, 크롤러(특히 JS 렌더가
+// 약한 네이버)가 정방향·역방향 본문 전체를 JS 없이 읽도록 한다.
+// JS 활성 환경에서는 Vue가 마운트 시 이 정적 본문을 즉시 교체한다.
+const CARD_ENERGY_LABEL = { positive: '긍정적 에너지', neutral: '중립적 에너지', challenging: '도전적 에너지' }
+
+function cardParagraphs(text, cls) {
+  const klass = cls ? ` class="${cls}"` : ''
+  return String(text || '')
+    .split(/\n+/)
+    .map(t => t.trim())
+    .filter(Boolean)
+    .map(t => `<p${klass}>${escapeHtml(t)}</p>`)
+    .join('')
+}
+
+function buildCardBodyHtml(card) {
+  const keywords = (card.keywords || [])
+    .map(kw => `<span class="card-detail__keyword">${escapeHtml(kw)}</span>`)
+    .join('')
+  const hero = `<div class="card-detail__hero"><div class="card-detail__hero-content"><h1 class="card-detail__name">${escapeHtml(card.name)}</h1><p class="card-detail__name-en">${escapeHtml(card.nameEn)}</p><div class="card-detail__tags"><span class="card-detail__energy">${CARD_ENERGY_LABEL[card.energy] || ''}</span><span class="card-detail__element">${escapeHtml(card.element || '')}</span></div><div class="card-detail__keywords">${keywords}</div></div></div>`
+
+  const block = (title, text) => `<div class="card-detail__block"><h2 class="card-detail__block-title">${title}</h2>${cardParagraphs(text, 'card-detail__block-text')}</div>`
+  const advice = (text) => `<div class="card-detail__advice">${cardParagraphs(text)}</div>`
+
+  const section = (label, dirClass, data) =>
+    `<div class="card-detail__section"><div class="card-detail__section-header"><span class="card-detail__direction card-detail__direction--${dirClass}">${label}</span></div>${block('핵심 의미', data.core)}${block('연애 해석', data.love)}${advice(data.advice)}</div>`
+
+  // CardDetailPage.vue의 리딩 CTA와 동일 - 크롤러가 카드→무료리딩 내부 링크를 보도록
+  const cta = `<div class="card-detail__cta"><p class="card-detail__cta-text">이 카드가 지금 내 연애에선 어떤 의미일까요?</p><div class="card-detail__cta-links"><a href="/reading/love/" class="card-detail__cta-btn">러브타로</a><a href="/reading/mind/" class="card-detail__cta-btn">상대방 속마음</a><a href="/reading/contact/" class="card-detail__cta-btn">연락 올까</a><a href="/reading/reunion/" class="card-detail__cta-btn">재회 가능성</a></div></div>`
+
+  return `<div class="card-detail">${hero}${section('정방향', 'upright', card.upright)}${section('역방향', 'reversed', card.reversed)}${cta}</div>`
+}
+
 function buildReadingMain(route) {
   return {
     '@type': 'WebPage',
@@ -1725,7 +1761,7 @@ function escapeHtml(str) {
   return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 }
 
-function injectMeta(html, { path: urlPath, title, description, ogImage, jsonLd, noindex, _guide }) {
+function injectMeta(html, { path: urlPath, title, description, ogImage, jsonLd, noindex, _guide, _card }) {
   const url = canonicalUrl(urlPath)
   const safeTitle = escapeAttr(title)
   const safeDesc = escapeAttr(description)
@@ -1809,6 +1845,12 @@ function injectMeta(html, { path: urlPath, title, description, ogImage, jsonLd, 
     html = html.replace(/<div id="app">\s*<\/div>/, `<div id="app">${bodyHtml}</div>`)
   }
 
+  // 카드 상세 본문을 #app에 정적 주입 (네이버 등 JS 약한 크롤러 대응)
+  if (_card) {
+    const bodyHtml = buildCardBodyHtml(_card)
+    html = html.replace(/<div id="app">\s*<\/div>/, `<div id="app">${bodyHtml}</div>`)
+  }
+
   return html
 }
 
@@ -1835,7 +1877,9 @@ async function run() {
   for (const route of ROUTES) {
     const jsonLd = buildGraph(route, { allCards: allCardsList, cardDetailMap: ALL_CARDS })
     const guideForBody = route._guide ? (srcGuideMap.get(route._guide.slug) || route._guide) : null
-    const html = injectMeta(baseHtml, { ...route, jsonLd, _guide: guideForBody })
+    const cardMatch = route.path.match(/^\/cards\/(.+)$/)
+    const cardForBody = cardMatch ? ALL_CARDS[cardMatch[1]] : null
+    const html = injectMeta(baseHtml, { ...route, jsonLd, _guide: guideForBody, _card: cardForBody })
 
     if (route.path === '/') {
       fs.writeFileSync(indexPath, html, 'utf8')
