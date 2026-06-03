@@ -48,8 +48,10 @@ import breakupHealingTarot from './breakup-healing-tarot.js'
 import contactTimingTarot from './contact-timing-tarot.js'
 import confessionTimingTarot from './confession-timing-tarot.js'
 import kingOfPentaclesLoveMeaning from './king-of-pentacles-love-meaning.js'
+import fourOfPentaclesLoveMeaning from './four-of-pentacles-love-meaning.js'
 
 const guides = [
+  fourOfPentaclesLoveMeaning,
   kingOfPentaclesLoveMeaning,
   confessionTimingTarot,
   contactTimingTarot,

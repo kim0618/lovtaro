@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import { useHead } from '../composables/useHead.js'
+import { useHead, SITE_URL } from '../composables/useHead.js'
 import AppShell from '../components/common/AppShell.vue'
 import PageContainer from '../components/ui/PageContainer.vue'
 import SectionBlock from '../components/ui/SectionBlock.vue'
@@ -18,7 +18,7 @@ useHead({
     '@type': 'Service',
     name: 'Lovtaro 1:1 정밀 리딩',
     description: '연애 사연을 카드 3장으로 풀어 A4 5페이지 편지로 회신하는 1:1 타로 리딩 서비스',
-    provider: { '@type': 'Organization', name: 'Lovtaro', url: 'https://lovtaro.kr/' },
+    provider: { '@type': 'Organization', name: 'Lovtaro', url: `${SITE_URL}/` },
     offers: {
       '@type': 'Offer',
       price: '19900',
@@ -26,7 +26,7 @@ useHead({
       availability: 'https://schema.org/InStock',
     },
     inLanguage: 'ko',
-    url: 'https://lovtaro.kr/premium/',
+    url: `${SITE_URL}/premium/`,
   },
 })
 
