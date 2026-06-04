@@ -28,7 +28,7 @@
   - 핵심: 안전 추구·집착·통제. 마음을 쉽게 열지 못하는 상태
   - 관련 카드: four-of-pentacles, devil, king-of-pentacles, two-of-swords
 
-- [ ] **소드 8 연애 해석 - 갇힌 느낌에서 벗어나기** | `eight-of-swords-love-meaning` | 카드 해석
+- [x] **소드 8 연애 해석 - 갇힌 느낌에서 벗어나기** | `eight-of-swords-love-meaning` | 카드 해석 | 2026-06-04
   - 근거: 네이버 노출 391 ("eight of swords" 클릭 5/CTR 17.9%, 검색어 1위)
   - 핵심: 스스로 만든 제약, 빠져나올 길이 보이지 않는 관계 심리
   - 관련 카드: eight-of-swords, moon, two-of-swords, devil

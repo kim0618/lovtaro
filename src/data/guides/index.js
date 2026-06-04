@@ -49,8 +49,10 @@ import contactTimingTarot from './contact-timing-tarot.js'
 import confessionTimingTarot from './confession-timing-tarot.js'
 import kingOfPentaclesLoveMeaning from './king-of-pentacles-love-meaning.js'
 import fourOfPentaclesLoveMeaning from './four-of-pentacles-love-meaning.js'
+import eightOfSwordsLoveMeaning from './eight-of-swords-love-meaning.js'
 
 const guides = [
+  eightOfSwordsLoveMeaning,
   fourOfPentaclesLoveMeaning,
   kingOfPentaclesLoveMeaning,
   confessionTimingTarot,
