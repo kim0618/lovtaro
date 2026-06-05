@@ -33,7 +33,7 @@
   - 핵심: 스스로 만든 제약, 빠져나올 길이 보이지 않는 관계 심리
   - 관련 카드: eight-of-swords, moon, two-of-swords, devil
 
-- [ ] **완드 6 연애·재회 해석 - 관계의 인정과 자신감** | `six-of-wands-love-meaning` | 카드 해석
+- [x] **완드 6 연애·재회 해석 - 관계의 인정과 자신감** | `six-of-wands-love-meaning` | 카드 해석 | 2026-06-05
   - 근거: 네이버 노출 388 ("완드6" 78노출)
   - 핵심: 승리·인정·자신감. 재회 흐름의 긍정 신호 각도 포함
   - 관련 카드: six-of-wands, sun, ten-of-wands, chariot

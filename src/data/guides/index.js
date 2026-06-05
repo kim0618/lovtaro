@@ -50,8 +50,10 @@ import confessionTimingTarot from './confession-timing-tarot.js'
 import kingOfPentaclesLoveMeaning from './king-of-pentacles-love-meaning.js'
 import fourOfPentaclesLoveMeaning from './four-of-pentacles-love-meaning.js'
 import eightOfSwordsLoveMeaning from './eight-of-swords-love-meaning.js'
+import sixOfWandsLoveMeaning from './six-of-wands-love-meaning.js'
 
 const guides = [
+  sixOfWandsLoveMeaning,
   eightOfSwordsLoveMeaning,
   fourOfPentaclesLoveMeaning,
   kingOfPentaclesLoveMeaning,
