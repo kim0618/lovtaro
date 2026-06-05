@@ -112,6 +112,16 @@ const routes = [
     component: () => import('../pages/GuideDetailPage.vue'),
   },
   {
+    path: '/dream',
+    name: 'dream',
+    component: () => import('../pages/DreamIndexPage.vue'),
+  },
+  {
+    path: '/dream/:slug',
+    name: 'dream-detail',
+    component: () => import('../pages/DreamDetailPage.vue'),
+  },
+  {
     path: '/premium',
     name: 'premium',
     component: () => import('../pages/PremiumPage.vue'),

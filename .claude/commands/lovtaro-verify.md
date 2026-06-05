@@ -18,12 +18,13 @@ allowed-tools: Read, Edit, Glob, Grep, Bash
 
 - **검출 + 자동 수정**: 규칙 기반 치환 가능한 건 즉시 Edit 실행
 - **판단 필요**: 단정 표현 등 문맥 필요한 건 리포트만 하고 사용자 확인
-- **대상 파일**: `src/data/guides/*.js`, `src/data/cardDictionary.js`, `src/data/minorArcana.js`
+- **대상 파일**: `src/data/guides/*.js`, `src/data/dreams/*.js`, `src/data/cardDictionary.js`, `src/data/minorArcana.js`
 
 ## 검사 대상 경로
 
 ```bash
 GUIDE_DIR=/home/tjd618/lovtaro/src/data/guides
+DREAM_DIR=/home/tjd618/lovtaro/src/data/dreams
 CARD_MAJOR=/home/tjd618/lovtaro/src/data/cardDictionary.js
 CARD_MINOR=/home/tjd618/lovtaro/src/data/minorArcana.js
 ```
@@ -37,6 +38,7 @@ CARD_MINOR=/home/tjd618/lovtaro/src/data/minorArcana.js
 ```bash
 # 발견 위치 파악
 grep -rn '—' /home/tjd618/lovtaro/src/data/guides/ \
+  /home/tjd618/lovtaro/src/data/dreams/ \
   /home/tjd618/lovtaro/src/data/cardDictionary.js \
   /home/tjd618/lovtaro/src/data/minorArcana.js \
   /home/tjd618/lovtaro/src/pages/ \
@@ -56,6 +58,7 @@ grep -rn '—' /home/tjd618/lovtaro/src/data/guides/ \
 ```bash
 grep -rnE '안녕하세요|정리합니다|알아보겠습니다|살펴보겠습니다|완벽 가이드|한눈에 정리|소개해드리겠습니다|말씀드리면|결론적으로' \
   /home/tjd618/lovtaro/src/data/guides/ \
+  /home/tjd618/lovtaro/src/data/dreams/ \
   /home/tjd618/lovtaro/src/data/cardDictionary.js \
   /home/tjd618/lovtaro/src/data/minorArcana.js
 ```
@@ -78,6 +81,7 @@ grep -rnE '안녕하세요|정리합니다|알아보겠습니다|살펴보겠습
 ```bash
 grep -rnE '반드시|100%|절대|무조건|확실히|분명히|틀림없이|보장|완벽하게' \
   /home/tjd618/lovtaro/src/data/guides/ \
+  /home/tjd618/lovtaro/src/data/dreams/ \
   /home/tjd618/lovtaro/src/data/cardDictionary.js \
   /home/tjd618/lovtaro/src/data/minorArcana.js
 ```
@@ -100,6 +104,7 @@ grep -rnE '반드시|100%|절대|무조건|확실히|분명히|틀림없이|보�
 ```bash
 grep -rnE '큰일|망합니다|망해요|끔찍|재앙|저주|불행|파탄|비참' \
   /home/tjd618/lovtaro/src/data/guides/ \
+  /home/tjd618/lovtaro/src/data/dreams/ \
   /home/tjd618/lovtaro/src/data/cardDictionary.js \
   /home/tjd618/lovtaro/src/data/minorArcana.js
 ```
@@ -111,6 +116,7 @@ grep -rnE '큰일|망합니다|망해요|끔찍|재앙|저주|불행|파탄|비�
 ```bash
 grep -rnE '죠\?|잖아요|거든요|더라구요|ㅋ|ㅎ|ㅠ' \
   /home/tjd618/lovtaro/src/data/guides/ \
+  /home/tjd618/lovtaro/src/data/dreams/ \
   /home/tjd618/lovtaro/src/data/cardDictionary.js \
   /home/tjd618/lovtaro/src/data/minorArcana.js
 ```
@@ -122,6 +128,7 @@ Lovtaro는 **조용한 조언자** 톤. 발견 시 담백한 어미로 수정.
 ```bash
 grep -rnE '타로는 미신|정확하지 않|맞지 않을 수도|재미로' \
   /home/tjd618/lovtaro/src/data/guides/ \
+  /home/tjd618/lovtaro/src/data/dreams/ \
   /home/tjd618/lovtaro/src/data/cardDictionary.js \
   /home/tjd618/lovtaro/src/data/minorArcana.js
 ```
@@ -133,6 +140,7 @@ grep -rnE '타로는 미신|정확하지 않|맞지 않을 수도|재미로' \
 ```bash
 grep -rnE "https://lovtaro\.kr" \
   /home/tjd618/lovtaro/src/data/guides/ \
+  /home/tjd618/lovtaro/src/data/dreams/ \
   /home/tjd618/lovtaro/src/pages/ \
   /home/tjd618/lovtaro/src/composables/
 ```

@@ -1639,6 +1639,7 @@ function decodeLabel(seg) {
     'editorial-policy': '편집 방침',
     disclaimer: '면책 조항',
     guide: '연애 타로 가이드',
+    dream: '꿈해몽 사전',
     test: '연애 심리테스트',
   }
   return labels[seg] || seg
@@ -1794,6 +1795,71 @@ function buildGuideBodyHtml(guide) {
   return `<div class="guide-detail"><article><header class="guide-detail__header"><h1 class="guide-detail__title">${escapeHtml(guide.title)}</h1><p class="guide-detail__desc">${escapeHtml(guide.description)}</p></header><div class="guide-detail__body">${sections}</div>${faq}</article></div>`
 }
 
+// ── 꿈해몽 사전 (가이드와 동일 스키마: sections/faq) ──────────────────────
+function buildDreamMain(dream) {
+  return {
+    '@type': 'Article',
+    headline: dream.title,
+    description: dream.description,
+    url: canonicalUrl(`/dream/${dream.slug}`),
+    datePublished: dream.createdAt,
+    dateModified: dream.updatedAt || dream.createdAt,
+    author: { '@id': `${SITE_URL}#organization` },
+    publisher: { '@id': `${SITE_URL}#organization` },
+    inLanguage: 'ko',
+    image: dream.ogImage || `${SITE_URL}/og-image.png`,
+  }
+}
+
+function buildDreamFAQ(dream) {
+  if (!dream.faq || !dream.faq.length) return null
+  return {
+    '@type': 'FAQPage',
+    mainEntity: dream.faq.map(item => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: { '@type': 'Answer', text: item.answer },
+    })),
+  }
+}
+
+// 꿈해몽 본문을 #app에 정적 주입 (크롤러가 JS 없이 본문을 읽도록). 클래스는
+// DreamDetailPage.vue와 동일하게 dream-detail 프리픽스를 사용한다.
+function buildDreamBodyHtml(dream) {
+  const summary = dream.summary
+    ? `<div class="dream-detail__summary"><p class="dream-detail__summary-text">${escapeHtml(dream.summary)}</p></div>`
+    : ''
+
+  const sections = (dream.sections || []).map(s => {
+    const heading = s.heading ? `<h2 class="dream-detail__section-heading">${escapeHtml(s.heading)}</h2>` : ''
+    return `<section class="dream-detail__section">${heading}<div class="dream-detail__section-content">${s.content}</div></section>`
+  }).join('')
+
+  const faq = (dream.faq && dream.faq.length)
+    ? `<div class="dream-detail__faq"><h2 class="dream-detail__faq-title">자주 묻는 질문</h2><dl class="dream-detail__faq-list">${
+        dream.faq.map(f => `<div class="dream-detail__faq-item"><dt class="dream-detail__faq-q">${escapeHtml(f.question)}</dt><dd class="dream-detail__faq-a">${escapeHtml(f.answer)}</dd></div>`).join('')
+      }</dl></div>`
+    : ''
+
+  // 관련 꿈은 실제 <a href>로 주입 - 크롤러가 꿈↔꿈 내부링크(토픽 클러스터)를 보도록
+  const related = (dream.relatedDreams && dream.relatedDreams.length)
+    ? `<div class="dream-detail__related"><p class="dream-detail__related-label">관련 꿈</p><div class="dream-detail__related-list">${
+        dream.relatedDreams.map(d => `<a class="dream-detail__related-card" href="/dream/${d.slug}/">${escapeHtml(d.label)}</a>`).join('')
+      }</div></div>`
+    : ''
+
+  return `<div class="dream-detail"><article><header class="dream-detail__header"><h1 class="dream-detail__title">${escapeHtml(dream.title)}</h1><p class="dream-detail__desc">${escapeHtml(dream.description)}</p></header>${summary}<div class="dream-detail__body">${sections}</div>${faq}${related}</article></div>`
+}
+
+// 꿈해몽 허브(/dream) 본문을 정적 주입 - 크롤러/AI가 인트로 텍스트 + 전체 꿈 내부링크를 읽도록
+function buildDreamHubBodyHtml(dreams) {
+  const intro = `<p class="dream-index__intro">꿈은 일어날 일을 예고하기보다 지금 내 마음을 비추는 거울에 가까워요. 러브타로 꿈해몽 사전은 전통적인 해석 위에 연애와 관계의 신호를 더해, 전 애인 꿈부터 좋아하는 사람 꿈, 키스하는 꿈까지 마음의 결을 함께 읽어드려요. 단정이 아닌 가능성의 언어로 풀어요.</p>`
+  const items = (dreams || []).map(d =>
+    `<li class="dream-index__item"><h2 class="dream-index__item-title"><a href="/dream/${d.slug}/">${escapeHtml(d.title)}</a></h2><p class="dream-index__item-desc">${escapeHtml(d.description)}</p></li>`
+  ).join('')
+  return `<div class="dream-index"><div class="dream-index__header"><h1 class="dream-index__title">꿈해몽 사전</h1><p class="dream-index__desc">연애 관점으로 풀어보는 꿈 해석</p></div>${intro}<ul class="dream-index__list">${items}</ul></div>`
+}
+
 // 카드 상세 본문을 #app에 정적으로 주입할 HTML로 생성.
 // CardDetailPage.vue 템플릿 구조/클래스를 미러링하며, 크롤러(특히 JS 렌더가
 // 약한 네이버)가 정방향·역방향 본문 전체를 JS 없이 읽도록 한다.
@@ -1848,6 +1914,8 @@ function buildGraph(route, { allCards, cardDetailMap } = {}) {
   const isReading = route.path.startsWith('/reading/') || route.path === '/today'
   const isGuideIndex = route.path === '/guide'
   const isGuideDetail = route.path.startsWith('/guide/') && route._guide
+  const isDreamIndex = route.path === '/dream'
+  const isDreamDetail = route.path.startsWith('/dream/') && route._dream
 
   if (isHome) {
     graph.push(buildOrganization(), buildWebSite(), buildHomeMain())
@@ -1865,6 +1933,19 @@ function buildGraph(route, { allCards, cardDetailMap } = {}) {
   } else if (isGuideDetail) {
     graph.push(buildGuideMain(route._guide))
     const faq = buildGuideFAQ(route._guide)
+    if (faq) graph.push(faq)
+  } else if (isDreamIndex) {
+    graph.push({
+      '@type': 'CollectionPage',
+      name: '꿈해몽 사전',
+      description: '연애 관점으로 풀어보는 꿈 해석 모음',
+      url: canonicalUrl('/dream'),
+      inLanguage: 'ko',
+      isPartOf: { '@id': `${SITE_URL}#website` },
+    })
+  } else if (isDreamDetail) {
+    graph.push(buildDreamMain(route._dream))
+    const faq = buildDreamFAQ(route._dream)
     if (faq) graph.push(faq)
   } else if (cardDetailMatch) {
     const cardId = cardDetailMatch[1]
@@ -1893,7 +1974,7 @@ function escapeHtml(str) {
   return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 }
 
-function injectMeta(html, { path: urlPath, title, description, ogImage, jsonLd, noindex, _guide, _card }) {
+function injectMeta(html, { path: urlPath, title, description, ogImage, jsonLd, noindex, _guide, _dream, _dreamHub, _card }) {
   const url = canonicalUrl(urlPath)
   const safeTitle = escapeAttr(title)
   const safeDesc = escapeAttr(description)
@@ -1977,6 +2058,18 @@ function injectMeta(html, { path: urlPath, title, description, ogImage, jsonLd, 
     html = html.replace(/<div id="app">\s*<\/div>/, `<div id="app">${bodyHtml}</div>`)
   }
 
+  // 꿈해몽 본문을 #app에 정적 주입
+  if (_dream) {
+    const bodyHtml = buildDreamBodyHtml(_dream)
+    html = html.replace(/<div id="app">\s*<\/div>/, `<div id="app">${bodyHtml}</div>`)
+  }
+
+  // 꿈해몽 허브(/dream) 인트로+목록을 #app에 정적 주입
+  if (_dreamHub) {
+    const bodyHtml = buildDreamHubBodyHtml(_dreamHub)
+    html = html.replace(/<div id="app">\s*<\/div>/, `<div id="app">${bodyHtml}</div>`)
+  }
+
   // 카드 상세 본문을 #app에 정적 주입 (네이버 등 JS 약한 크롤러 대응)
   if (_card) {
     const bodyHtml = buildCardBodyHtml(_card)
@@ -2002,6 +2095,26 @@ async function run() {
   // FAQ JSON-LD용이라 sections가 없으므로, 본문 정적 주입은 src 데이터를 사용.
   const { default: SRC_GUIDES } = await import('../src/data/guides/index.js')
   const srcGuideMap = new Map(SRC_GUIDES.map(g => [g.slug, g]))
+
+  // 꿈해몽: 단일 소스(src/data/dreams)를 직접 import해 라우트 생성.
+  // 가이드와 달리 prerender 내부 미러 없이 src 객체를 그대로 _dream에 실어
+  // JSON-LD(Main/FAQ)와 본문 주입을 모두 같은 데이터로 처리한다 (이중 관리 없음).
+  const { default: SRC_DREAMS } = await import('../src/data/dreams/index.js')
+  ROUTES.push({
+    path: '/dream',
+    title: '꿈해몽 사전 - 연애 관점으로 풀어보는 꿈 해석 | Lovtaro',
+    description: '전 애인 꿈, 좋아하는 사람 꿈, 키스하는 꿈까지. 연애 관점으로 풀어보는 꿈해몽 사전. 전통 해몽 위에 마음의 신호를 더해 읽는 Lovtaro 꿈해몽.',
+    _dreamHub: SRC_DREAMS,
+  })
+  for (const dream of SRC_DREAMS) {
+    ROUTES.push({
+      path: `/dream/${dream.slug}`,
+      title: `${dream.title} | Lovtaro`,
+      description: dream.description,
+      ogImage: dream.ogImage || null,
+      _dream: dream,
+    })
+  }
 
   const baseHtml = fs.readFileSync(indexPath, 'utf8')
   let success = 0

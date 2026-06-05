@@ -24,10 +24,10 @@ const tabs = [
     icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="10" height="14" rx="1.5"/><rect x="7" y="6" width="10" height="14" rx="1.5"/><line x1="9" y1="9" x2="14" y2="9"/><line x1="9" y1="12" x2="14" y2="12"/></svg>`,
   },
   {
-    label: '기록',
-    to: '/history/',
-    match: (path) => path === '/history' || path === '/history/',
-    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 12"/></svg>`,
+    label: '꿈해몽',
+    to: '/dream/',
+    match: (path) => path === '/dream' || path === '/dream/' || path.startsWith('/dream/'),
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg>`,
   },
   {
     label: '가이드',

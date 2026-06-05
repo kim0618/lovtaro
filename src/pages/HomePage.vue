@@ -22,6 +22,7 @@ import PageContainer from '../components/ui/PageContainer.vue'
 import SectionBlock from '../components/ui/SectionBlock.vue'
 import HeroSection from '../components/home/HeroSection.vue'
 import TarotMenuGrid from '../components/home/TarotMenuGrid.vue'
+import BottomNavSection from '../components/home/BottomNavSection.vue'
 import TrustNoticeBlock from '../components/home/TrustNoticeBlock.vue'
 
 const readingItems = [
@@ -91,6 +92,10 @@ const readingItems = [
 
       <SectionBlock spacing="md">
         <TarotMenuGrid :items="readingItems" />
+      </SectionBlock>
+
+      <SectionBlock spacing="md">
+        <BottomNavSection />
       </SectionBlock>
 
       <SectionBlock spacing="md">

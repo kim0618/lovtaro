@@ -1,0 +1,46 @@
+/**
+ * 꿈해몽 사전 데이터 배열 - 단일 소스
+ * 새 글 추가 시: 1) 개별 파일 src/data/dreams/{slug}.js 생성 (가이드와 동일 스키마)
+ *               2) 이 배열에 import + 등록
+ *               3) public/sitemap.xml에 /dream/{slug}/ URL 추가
+ * prerender.mjs는 이 배열을 직접 import해 /dream/{slug} 라우트를 자동 생성한다.
+ *
+ * 포지셔닝: 범용 꿈해몽이 아니라 "연애+꿈 롱테일" 니치.
+ * 전통 해몽(근거) 위에 러브타로의 연애 각도(브랜드)를 얹고, 가능성의 언어로 쓴다.
+ */
+
+import exLover from './ex-lover.js'
+import crush from './crush.js'
+import kiss from './kiss.js'
+
+const dreams = [
+  exLover,
+  crush,
+  kiss,
+]
+
+export default dreams
+
+export function getDream(slug) {
+  return dreams.find(d => d.slug === slug) || null
+}
+
+export function getDreamsByCategory(category) {
+  return dreams.filter(d => d.category === category)
+}
+
+export function getAllDreams() {
+  return dreams
+}
+
+/**
+ * 카테고리 정의
+ * person: 인물 꿈 (전 애인, 좋아하는 사람, 옛 친구 등)
+ * situation: 상황·행동 꿈 (키스, 결혼, 이별, 우는 꿈 등)
+ * symbol: 상징 꿈 (뱀, 물, 이빨 등 - 연애 각도로 풀이)
+ */
+export const DREAM_CATEGORIES = [
+  { key: 'person', label: '인물' },
+  { key: 'situation', label: '상황·행동' },
+  { key: 'symbol', label: '상징' },
+]
