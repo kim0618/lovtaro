@@ -54,13 +54,23 @@ trackEvent('reading_complete', {
 | `mini_copy_link` | `reading_type` | MiniShareBar |
 | `streak_badge_save` | `streak` | [StreakBadge.vue](../../src/components/result/StreakBadge.vue) |
 | `link_page_click` | `label`, `to` | [LinkPage.vue](../../src/pages/LinkPage.vue) |
+| `cta_click` | `cta_id`, `destination`, `reading_type?` | 주요 CTA. `cta_id`: `premium_result`(무료리딩→프리미엄), `test_to_reading`(테스트 결과→무료리딩) |
+
+### 심리테스트 (TestPage.vue)
+
+| 이벤트 | 파라미터 | 발생 시점 |
+|---|---|---|
+| `test_start` | `reading_type` (= 테스트 shareLabel) | 테스트 시작(intro → quiz) |
+| `test_complete` | `reading_type`, `result_type` (결과 라벨) | 마지막 답변 후 결과 도출 |
+
+- 테스트 결과 화면의 공유/저장은 기존 `share`/`copy_link`/`image_save`를 그대로 사용(`reading_type` = 테스트 shareLabel, 예: `이상형 타로`)
+- `reading_type` 값에 테스트 shareLabel 추가됨: `연애 스타일`, `MBTI 연애`, `이상형 타로`, `전생 연애`, `짝사랑`
 
 ## 권장 확장 이벤트 (아직 미구현)
 
 | 이벤트 | 파라미터 | 발생 시점 |
 |---|---|---|
 | `scroll_depth` | `page`, `depth` (25/50/75/100) | 결과 페이지 스크롤 |
-| `cta_click` | `cta_id`, `destination` | 주요 CTA (홈 메뉴 진입 등) |
 
 이벤트 추가 시:
 - 이 표를 업데이트 (문서와 코드가 같이 업데이트돼야 함)

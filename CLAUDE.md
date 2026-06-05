@@ -47,6 +47,8 @@ cd /home/tjd618/lovtaro && npm run build && npx wrangler pages deploy dist --pro
 | `/reading/three` | 3장 리딩 |
 | `/cards` | 카드 목록 (78장) |
 | `/cards/:id` | 카드 상세 (Major 22 + Minor 56) |
+| `/test` | 연애 심리테스트 허브 |
+| `/test/:slug` | 심리테스트 엔진 (질문→결과 카드, 데이터 구동) |
 | `/guide` | 가이드 인덱스 (AdSense 콘텐츠 섹션, Phase 2 진행 중) |
 | `/guide/:slug` | 가이드 상세 |
 | `/about` | 서비스 소개 |
@@ -60,6 +62,7 @@ cd /home/tjd618/lovtaro && npm run build && npx wrangler pages deploy dist --pro
 - 라우트 추가 시 **3군데 동시 수정**: `src/router/index.js` + `scripts/prerender.mjs`의 `ROUTES` + `public/sitemap.xml`
 - 카드 데이터는 `src/data/tarotCards.js`, `minorArcana.js`, `cardDictionary.js`가 단일 소스. 카드 배열 수정 시 `prerender.mjs`의 `CARDS`/`MINOR_CARDS`도 동기화
 - 78장 카드 상세 페이지(`/cards/:id`)는 prerender가 카드 배열로 자동 생성
+- 심리테스트 추가: `src/data/tests/{slug}.js`(love-style.js 스키마) + `src/data/tests/index.js`의 `TESTS` 배열 등록 + `public/sitemap.xml` **3군데**. prerender는 `TESTS`를 루프해 `/test/{slug}` intro를 자동 생성(엔진 `TestPage.vue` 1개가 모든 테스트 구동, 결과는 메이저 아르카나 카드에 매핑)
 - 가이드 글은 `src/data/guides/{slug}.js` + `src/data/guides/index.js` 배열 등록 + `prerender.mjs`의 `GUIDES` 배열 + `public/sitemap.xml` **4군데 동시 수정** (스킬이 자동 처리)
 - JSON-LD: prerender가 정적 주입 (Organization/WebSite/Article/FAQPage/CollectionPage/BreadcrumbList). Vue `useHead`는 SPA 네비 후 단일 스키마 덮어쓰기 (덜 풍부). 후속 과제: 공용 빌더 `scripts/seo/jsonld.mjs` 추출
 

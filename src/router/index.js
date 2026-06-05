@@ -47,6 +47,16 @@ const routes = [
     component: () => import('../pages/ReadingLovePage.vue'),
   },
   {
+    path: '/test',
+    name: 'test-hub',
+    component: () => import('../pages/TestHubPage.vue'),
+  },
+  {
+    path: '/test/:slug',
+    name: 'test',
+    component: () => import('../pages/TestPage.vue'),
+  },
+  {
     path: '/history',
     name: 'history',
     component: () => import('../pages/HistoryPage.vue'),

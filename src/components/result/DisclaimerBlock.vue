@@ -1,10 +1,24 @@
+<script setup>
+defineProps({
+  variant: { type: String, default: 'reading' }, // 'reading' | 'test'
+})
+</script>
+
 <template>
   <div class="disclaimer-block" role="contentinfo">
-    <p class="disclaimer-block__text">
+    <p v-if="variant === 'test'" class="disclaimer-block__text">
+      이 결과는 재미로 보는 콘텐츠예요.<br>
+      오늘 하루, 가볍게 즐겨주세요.
+    </p>
+    <p v-else class="disclaimer-block__text">
       이 리딩은 지금의 감정을 비추는 거울입니다.<br>
       카드는 흐름을 살필 뿐, 관계를 단정하지는 않습니다.
     </p>
-    <p class="disclaimer-block__legal">
+    <p v-if="variant === 'test'" class="disclaimer-block__legal">
+      Lovtaro의 심리테스트는 오락 및 자기 이해 목적으로 제공되며,
+      전문적인 심리 상담이나 진단을 대체하지 않습니다.
+    </p>
+    <p v-else class="disclaimer-block__legal">
       Lovtaro의 타로 리딩은 오락 및 자기 성찰 목적으로만 제공되며,
       전문적인 심리 상담, 의료 조언, 법률 자문을 대체하지 않습니다.
       리딩 결과에 기반한 의사결정은 전적으로 이용자 본인의 책임입니다.

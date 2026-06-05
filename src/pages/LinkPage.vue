@@ -12,10 +12,11 @@ const router = useRouter()
 
 const links = [
   { label: '1:1 정밀 리딩', desc: '사연을 카드 3장으로 풀어 편지로 · 19,900원', to: '/premium/', premium: true },
-  { label: '상대방 속마음 타로', desc: '그 사람의 진짜 마음 읽기', to: '/reading/mind/', hot: true },
-  { label: 'Yes/No 타로', desc: '지금 궁금한 것, 카드가 답합니다', to: '/reading/yesno/', tag: 'NEW' },
-  { label: '궁합 타로', desc: '두 사람의 케미와 궁합 점수 확인', to: '/reading/compatibility/', tag: 'NEW' },
-  { label: '러브타로 스프레드', desc: '나의 마음 · 상대의 에너지 · 관계의 방향', to: '/reading/love/' },
+  { label: '연애 심리테스트', desc: '이상형 · 전생 · 짝사랑 타로 테스트', to: '/test/', tag: 'NEW', featured: true },
+  { label: '상대방 속마음 타로', desc: '그 사람의 진짜 마음 읽기', to: '/reading/mind/', hot: true, featured: true },
+  { label: '러브타로 스프레드', desc: '나의 마음 · 상대의 에너지 · 관계의 방향', to: '/reading/love/', featured: true },
+  { label: '궁합 타로', desc: '두 사람의 케미와 궁합 점수 확인', to: '/reading/compatibility/' },
+  { label: 'Yes/No 타로', desc: '지금 궁금한 것, 카드가 답합니다', to: '/reading/yesno/' },
   { label: '오늘의 연애 카드', desc: '매일 한 장, 오늘의 연애 에너지', to: '/today/' },
   { label: '재회 가능성 타로', desc: '다시 만날 수 있을까?', to: '/reading/reunion/' },
   { label: '연락 올까 타로', desc: '연락의 기류가 있는지 확인', to: '/reading/contact/' },
@@ -43,7 +44,7 @@ function go(link) {
         v-for="link in links"
         :key="link.to"
         class="link-page__item"
-        :class="{ 'link-page__item--hot': link.hot, 'link-page__item--premium': link.premium }"
+        :class="{ 'link-page__item--hot': link.featured, 'link-page__item--premium': link.premium }"
         @click="go(link)"
       >
         <div class="link-page__text">

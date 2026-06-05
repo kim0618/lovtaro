@@ -15,6 +15,7 @@ import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { getCardSeoOverride } from '../src/data/cardSeoOverrides.js'
+import { TESTS } from '../src/data/tests/index.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const DIST = path.resolve(__dirname, '../dist')
@@ -1548,6 +1549,20 @@ for (const card of [...CARDS, ...MINOR_CARDS]) {
   })
 }
 
+// ── 심리테스트 라우트 (허브 + 테스트별 intro) ──────────────────────────────
+ROUTES.push({
+  path: '/test',
+  title: '연애 심리테스트 - 나를 닮은 연애 타로 유형 찾기 | Lovtaro',
+  description: '질문에 답하고 나를 닮은 연애 타로 유형을 찾아보세요. 연애 스타일, 연애 성향을 알아보는 무료 연애 심리테스트 모음, Lovtaro.',
+})
+for (const test of TESTS) {
+  ROUTES.push({
+    path: `/test/${test.slug}`,
+    title: test.metaTitle,
+    description: test.metaDescription,
+  })
+}
+
 // ── JSON-LD builders ──────────────────────────────────────────────────────
 // JSON.stringify 결과에 섞이면 </script> 블록을 조기 종료시키므로 이스케이프
 function escapeJsonLd(jsonStr) {
@@ -1595,6 +1610,7 @@ function decodeLabel(seg) {
     'editorial-policy': '편집 방침',
     disclaimer: '면책 조항',
     guide: '연애 타로 가이드',
+    test: '연애 심리테스트',
   }
   return labels[seg] || seg
 }

@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue'
-import { generateSingleCardShareImage, generateThreeCardShareImage, generateCompatibilityShareImage, downloadImage } from '../../composables/useShareCard.js'
+import { generateSingleCardShareImage, generateThreeCardShareImage, generateCompatibilityShareImage, generateTestShareImage, downloadImage } from '../../composables/useShareCard.js'
 import { trackEvent } from '../../utils/gtag.js'
 
 const props = defineProps({
@@ -24,6 +24,9 @@ const props = defineProps({
   card2Reversed: { type: Boolean, default: false },
   score: { type: Number, default: 0 },
   scoreLabel: { type: String, default: '' },
+  typeCode: { type: String, default: '' },
+  typeName: { type: String, default: '' },
+  matchLabel: { type: String, default: '' },
 })
 
 const generating = ref(false)
@@ -46,6 +49,20 @@ const copyUrl = computed(() => withUtm(resolvedUrl.value, 'link', 'copy'))
 const instaState = ref('idle')
 
 async function generateImage(format = 'story') {
+  if (props.mode === 'test') {
+    return generateTestShareImage({
+      testLabel: props.readingType,
+      typeCode: props.typeCode,
+      typeName: props.typeName,
+      tagline: props.summary,
+      emotionTags: props.emotionTags,
+      cardName: props.cardName,
+      cardNameEn: props.cardNameEn,
+      cardImage: props.cardImage,
+      matchLabel: props.matchLabel,
+      format,
+    })
+  }
   if (props.mode === 'compatibility') {
     return generateCompatibilityShareImage({
       card1Name: props.cardName.split(' + ')[0] || props.cardName,
@@ -192,7 +209,7 @@ async function handleCopyLink() {
 
 <template>
   <div class="share-save-section">
-    <p class="share-save-section__heading">이 리딩을 간직하거나 공유하세요</p>
+    <p class="share-save-section__heading">{{ mode === 'test' ? '이 결과를 간직하거나 공유하세요' : '이 리딩을 간직하거나 공유하세요' }}</p>
     <div class="share-save-section__grid">
       <button
         class="share-save-section__btn share-save-section__btn--insta"
@@ -231,7 +248,7 @@ async function handleCopyLink() {
       </button>
     </div>
     <p v-if="generating" class="share-save-section__progress">이미지를 만들고 있어요</p>
-    <p class="share-save-section__nudge">스토리에 올리면 친구들도 뽑아볼 수 있어요</p>
+    <p class="share-save-section__nudge">{{ mode === 'test' ? '스토리에 올리면 친구들도 해볼 수 있어요' : '스토리에 올리면 친구들도 뽑아볼 수 있어요' }}</p>
   </div>
 </template>
 

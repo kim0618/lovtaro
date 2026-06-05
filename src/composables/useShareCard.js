@@ -50,6 +50,23 @@ function wrapText(ctx, text, maxWidth) {
   return lines
 }
 
+// 라벨을 최대 폭에 맞게 폰트 크기를 줄여 한 줄로 맞춘다.
+// 한글이 섞인 라벨은 Noto Sans KR로(Cinzel은 한글이 깨짐), 영문만이면 Cinzel 유지.
+function setFittedLabelFont(ctx, text, startSize, minSize, maxWidth, refText) {
+  // 한글 포함 여부는 라벨 전체(refText) 기준 - 피드에서 영문 줄과 한글 줄이 다른 서체로 갈리지 않게 통일.
+  const ko = /[가-힣]/.test(refText != null ? refText : text)
+  const build = ko
+    ? (s) => `300 ${s}px "Noto Sans KR", sans-serif` // 얇고 우아하게 (브랜드 몽환 톤)
+    : (s) => `400 ${s}px "Cinzel", Georgia, serif`
+  let size = startSize
+  ctx.font = build(size)
+  while (size > minSize && ctx.measureText(text).width > maxWidth) {
+    size -= 2
+    ctx.font = build(size)
+  }
+  return size
+}
+
 /**
  * Generate share card for single-card reading
  * @param {Object} options
@@ -134,10 +151,14 @@ export async function generateSingleCardShareImage({ readingType, cardName, card
     let feedTextOffset = 0
     if (answerLabel) {
       const answerColors = { Yes: '#D4B87A', No: 'rgba(167, 183, 214, 0.8)', Maybe: '#B8A0D4' }
-      ctx.font = '400 52px "Cinzel", Georgia, serif'
       ctx.fillStyle = answerColors[answerLabel] || answerColors.Yes
-      ctx.fillText(answerLabel, textX, cardY + 100)
-      feedTextOffset = 70
+      // 긴 라벨(예: "INFP · 이상주의 몽상가")은 가운뎃점 기준 두 줄로, 폭에 맞춰 축소
+      const labelParts = answerLabel.includes(' · ') ? answerLabel.split(' · ') : [answerLabel]
+      labelParts.forEach((part, i) => {
+        setFittedLabelFont(ctx, part, 52, 28, textW, answerLabel)
+        ctx.fillText(part, textX, cardY + 92 + i * 50)
+      })
+      feedTextOffset = 70 + (labelParts.length > 1 ? 50 : 0)
     }
 
     // 카드 이름 - 크게 (64→76px)
@@ -229,7 +250,8 @@ export async function generateSingleCardShareImage({ readingType, cardName, card
       ctx.fillStyle = answerGlow
       ctx.fillRect(0, 220, W, 200)
 
-      ctx.font = '400 120px "Cinzel", Georgia, serif'
+      // 긴 한글 라벨이 넘치지 않도록 폭에 맞춰 폰트 축소 (Yes/No 등 짧은 영문은 기존대로 큼)
+      setFittedLabelFont(ctx, answerLabel, 120, 46, W - 240)
       ctx.fillStyle = color.text
       ctx.fillText(answerLabel, W / 2, 360)
 
@@ -336,6 +358,210 @@ export async function generateSingleCardShareImage({ readingType, cardName, card
 /**
  * Generate share card for compatibility reading (2 cards + score)
  */
+/**
+ * 심리테스트 결과 전용 공유 이미지.
+ * 카드 리딩과 달리 "결과 유형(정체성)"을 주인공으로, 공감 카피를 크게, 카드는 보조 비주얼로.
+ */
+export async function generateTestShareImage({ testLabel = '', typeCode = '', typeName = '', tagline = '', emotionTags = [], cardName = '', cardNameEn = '', cardImage = '', matchLabel = '', format = 'story' }) {
+  const W = format === 'square' ? SQUARE_WIDTH : format === 'feed' ? FEED_WIDTH : STORY_WIDTH
+  const H = format === 'square' ? SQUARE_HEIGHT : format === 'feed' ? FEED_HEIGHT : STORY_HEIGHT
+
+  const img = cardImage
+    ? await new Promise((resolve) => {
+        const i = new Image()
+        i.crossOrigin = 'anonymous'
+        i.onload = () => resolve(i)
+        i.onerror = () => resolve(null)
+        i.src = cardImage
+      })
+    : null
+
+  const canvas = document.createElement('canvas')
+  canvas.width = W * DPR
+  canvas.height = H * DPR
+  const ctx = canvas.getContext('2d')
+  ctx.scale(DPR, DPR)
+
+  // 배경 (딥네이비 + 퍼플 글로우)
+  const bgGrad = ctx.createLinearGradient(0, 0, 0, H)
+  bgGrad.addColorStop(0, '#05070D')
+  bgGrad.addColorStop(0.4, '#0A1020')
+  bgGrad.addColorStop(1, '#05070D')
+  ctx.fillStyle = bgGrad
+  ctx.fillRect(0, 0, W, H)
+
+  const glowGrad = ctx.createRadialGradient(W / 2, H * 0.3, 0, W / 2, H * 0.3, 480)
+  glowGrad.addColorStop(0, 'rgba(120, 90, 200, 0.10)')
+  glowGrad.addColorStop(0.5, 'rgba(77, 163, 255, 0.04)')
+  glowGrad.addColorStop(1, 'transparent')
+  ctx.fillStyle = glowGrad
+  ctx.fillRect(0, 0, W, H)
+
+  ctx.strokeStyle = 'rgba(199, 215, 248, 0.08)'
+  ctx.lineWidth = 1
+  roundRect(ctx, 60, 60, W - 120, H - 120, 20)
+  ctx.stroke()
+
+  const drawTags = (x, yy, align) => {
+    if (!emotionTags.length) return
+    ctx.textAlign = align
+    ctx.font = '300 26px "Noto Sans KR", sans-serif'
+    ctx.fillStyle = 'rgba(167, 183, 214, 0.65)'
+    ctx.fillText(emotionTags.join('   ·   '), x, yy)
+  }
+
+  if (format === 'story') {
+    const cx = W / 2
+    ctx.textAlign = 'center'
+
+    let y = 215
+    ctx.font = '300 28px "Noto Sans KR", sans-serif'
+    ctx.fillStyle = 'rgba(77, 163, 255, 0.7)'
+    ctx.fillText(testLabel, cx, y)
+
+    y += 36
+    const lg = ctx.createLinearGradient(220, 0, W - 220, 0)
+    lg.addColorStop(0, 'transparent')
+    lg.addColorStop(0.5, 'rgba(200, 169, 110, 0.35)')
+    lg.addColorStop(1, 'transparent')
+    ctx.strokeStyle = lg
+    ctx.lineWidth = 1
+    ctx.beginPath(); ctx.moveTo(220, y); ctx.lineTo(W - 220, y); ctx.stroke()
+
+    y += 96
+    if (typeCode) {
+      ctx.font = '400 46px "Cinzel", Georgia, serif'
+      ctx.fillStyle = 'rgba(200, 169, 110, 0.9)'
+      ctx.fillText(typeCode, cx, y)
+      y += 116
+    }
+    // 결과 유형명 (주인공)
+    setFittedLabelFont(ctx, typeName, 86, 50, W - 200)
+    ctx.fillStyle = '#F4F8FF'
+    ctx.fillText(typeName, cx, y)
+
+    y += 100
+    // 공감 카피 (공유 욕구를 만드는 한 줄) - 골드, 크게
+    ctx.font = '400 40px "Noto Sans KR", sans-serif'
+    ctx.fillStyle = 'rgba(200, 169, 110, 0.95)'
+    const tlLines = wrapText(ctx, tagline, W - 240).slice(0, 2)
+    tlLines.forEach((ln, i) => ctx.fillText(ln, cx, y + i * 56))
+    y += tlLines.length * 56 + 28
+
+    drawTags(cx, y, 'center')
+    ctx.textAlign = 'center'
+    y += 78
+
+    // 타로 카드 (보조 비주얼)
+    const cardW = 312, cardH = 520
+    const cardX = (W - cardW) / 2
+    const cardY = y
+    _drawCardFrame(ctx, img, cardX, cardY, cardW, cardH, false)
+    y = cardY + cardH + 54
+
+    ctx.font = '300 36px "Noto Sans KR", sans-serif'
+    ctx.fillStyle = 'rgba(220, 232, 255, 0.7)'
+    ctx.fillText(cardName, cx, y)
+    if (cardNameEn) {
+      y += 40
+      ctx.font = 'italic 300 26px "Cormorant Garamond", Georgia, serif'
+      ctx.fillStyle = 'rgba(126, 138, 168, 0.7)'
+      ctx.fillText(cardNameEn, cx, y)
+    }
+
+    if (matchLabel) {
+      y += 76
+      ctx.font = '300 24px "Noto Sans KR", sans-serif'
+      ctx.fillStyle = 'rgba(143, 211, 255, 0.6)'
+      ctx.fillText('나랑 잘 맞는 유형', cx, y)
+      y += 48
+      setFittedLabelFont(ctx, matchLabel, 32, 22, W - 280)
+      ctx.fillStyle = 'rgba(200, 169, 110, 0.9)'
+      ctx.fillText(matchLabel, cx, y)
+    }
+
+    // CTA (하단 - IG 스토리 안전 영역 위)
+    ctx.font = '400 30px "Noto Sans KR", sans-serif'
+    ctx.fillStyle = 'rgba(143, 211, 255, 0.7)'
+    ctx.fillText('나도 해보기', cx, H - 320)
+    ctx.font = '300 24px "Noto Sans KR", sans-serif'
+    ctx.fillStyle = 'rgba(167, 183, 214, 0.5)'
+    ctx.fillText('lovtaro.kr', cx, H - 282)
+    ctx.font = '300 22px "Noto Sans KR", sans-serif'
+    ctx.fillStyle = 'rgba(143, 211, 255, 0.45)'
+    ctx.fillText('@lovtarot_', cx, H - 250)
+  } else {
+    // 피드/스퀘어: 좌측 카드 + 우측 텍스트
+    const isSquare = format === 'square'
+    const cardW = isSquare ? 300 : 340
+    const cardH = isSquare ? 500 : 567
+    const cardX = isSquare ? 70 : 90
+    const cardY = (H - cardH) / 2
+    _drawCardFrame(ctx, img, cardX, cardY, cardW, cardH, false)
+
+    const textX = cardX + cardW + 60
+    const textW = W - textX - 80
+    const fit = (text, start, min) => {
+      const build = (s) => `300 ${s}px "Noto Sans KR", sans-serif`
+      let size = start
+      ctx.font = build(size)
+      while (size > min && ctx.measureText(text).width > textW) { size -= 2; ctx.font = build(size) }
+      return size
+    }
+    ctx.textAlign = 'left'
+
+    let y = cardY + 20
+    ctx.font = '300 24px "Noto Sans KR", sans-serif'
+    ctx.fillStyle = 'rgba(77, 163, 255, 0.7)'
+    ctx.fillText(testLabel, textX, y)
+
+    y += 66
+    if (typeCode) {
+      ctx.font = '400 40px "Cinzel", Georgia, serif'
+      ctx.fillStyle = 'rgba(200, 169, 110, 0.9)'
+      ctx.fillText(typeCode, textX, y)
+      y += 82
+    }
+    const nameSize = fit(typeName, 64, 38)
+    ctx.fillStyle = '#F4F8FF'
+    ctx.fillText(typeName, textX, y)
+    y += nameSize + 28
+
+    ctx.font = '400 30px "Noto Sans KR", sans-serif'
+    ctx.fillStyle = 'rgba(200, 169, 110, 0.95)'
+    const tlLines = wrapText(ctx, tagline, textW).slice(0, 3)
+    tlLines.forEach((ln, i) => ctx.fillText(ln, textX, y + i * 44))
+    y += tlLines.length * 44 + 18
+
+    drawTags(textX, y, 'left')
+    ctx.textAlign = 'left'
+    y += 60
+
+    if (matchLabel) {
+      ctx.font = '300 22px "Noto Sans KR", sans-serif'
+      ctx.fillStyle = 'rgba(143, 211, 255, 0.6)'
+      ctx.fillText('나랑 잘 맞는 유형', textX, y)
+      y += 40
+      const ms = fit(matchLabel, 28, 18)
+      ctx.fillStyle = 'rgba(200, 169, 110, 0.9)'
+      ctx.fillText(matchLabel, textX, y)
+      void ms
+    }
+
+    ctx.font = '400 26px "Noto Sans KR", sans-serif'
+    ctx.fillStyle = 'rgba(143, 211, 255, 0.7)'
+    ctx.fillText('나도 해보기', textX, cardY + cardH - 64)
+    ctx.font = '300 20px "Noto Sans KR", sans-serif'
+    ctx.fillStyle = 'rgba(167, 183, 214, 0.5)'
+    ctx.fillText('lovtaro.kr', textX, cardY + cardH - 32)
+    ctx.font = '300 18px "Noto Sans KR", sans-serif'
+    ctx.fillStyle = 'rgba(143, 211, 255, 0.45)'
+    ctx.fillText('@lovtarot_', textX, cardY + cardH - 4)
+  }
+
+  return canvas.toDataURL('image/png')
+}
+
 export async function generateCompatibilityShareImage({ card1Name, card1NameEn, card1Image, card1Reversed, card2Name, card2NameEn, card2Image, card2Reversed, score, scoreLabel, summary, format = 'story' }) {
   const W = format === 'square' ? SQUARE_WIDTH : format === 'feed' ? FEED_WIDTH : STORY_WIDTH
   const H = format === 'square' ? SQUARE_HEIGHT : format === 'feed' ? FEED_HEIGHT : STORY_HEIGHT

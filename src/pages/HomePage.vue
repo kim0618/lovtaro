@@ -33,6 +33,13 @@ const readingItems = [
     premium: true,
   },
   {
+    title: '연애 심리테스트',
+    description: '연애 스타일, MBTI 연애, 이상형까지. 나를 닮은 타로 유형을 찾아봐요.',
+    to: '/test/',
+    tag: 'NEW',
+    featured: true,
+  },
+  {
     title: '상대방 속마음 타로',
     description: '그 사람의 마음이 어디에 머물고 있는지 읽어봅니다.',
     to: '/reading/mind/',
@@ -43,14 +50,14 @@ const readingItems = [
     title: 'Yes/No 타로',
     description: '지금 궁금한 것에 대해 카드가 답을 건넵니다.',
     to: '/reading/yesno/',
-    tag: 'NEW',
+    tag: '',
     featured: true,
   },
   {
     title: '궁합 타로',
     description: '두 사람의 에너지가 만들어내는 케미를 읽어봅니다.',
     to: '/reading/compatibility/',
-    tag: 'NEW',
+    tag: '',
     featured: true,
   },
   {
