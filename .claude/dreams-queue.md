@@ -20,12 +20,8 @@
 - [x] **전 애인 꿈** | `ex-lover` | person | 2026-06-05 (시드)
 - [x] **좋아하는 사람 꿈** | `crush` | person | 2026-06-05 (시드)
 - [x] **키스하는 꿈** | `kiss` | situation | 2026-06-05 (시드)
-- [ ] **결혼하는 꿈** | `wedding` | situation
-  - 각도: 관계 단계·약속·새 출발에 대한 마음. 미혼/기혼/솔로별 결 분기
-  - 관련 카드: lovers, ten-of-cups, hierophant, four-of-wands
-- [ ] **임신 꿈 / 태몽** | `pregnancy` | symbol
-  - 각도: 새 인연·관계의 변화·무언가 자라남. 전통 태몽 통념 베이스 + 연애 신호
-  - 관련 카드: empress, ace-of-cups, ace-of-pentacles, sun
+- [x] **결혼하는 꿈** | `wedding` | situation | 2026-06-06
+- [x] **임신 꿈 / 태몽** | `pregnancy` | symbol | 2026-06-06
 - [ ] **헤어지는 꿈** | `breakup` | situation
   - 각도: 변화·역설(불안의 반영) 신호. 연인 있는 경우/없는 경우 분기
   - 관련 카드: death, three-of-swords, eight-of-cups, tower
@@ -64,4 +60,5 @@
 <!-- 예시:
 - [x] 2026-06-05 `ex-lover` (인물, 4섹션+FAQ4)
 -->
+- [x] 2026-06-06 `wedding` `pregnancy` (4섹션+FAQ4, 1군 소진)
 - [x] 2026-06-05 `ex-lover` `crush` `kiss` (시드 3편, 인프라 구축과 함께 작성)

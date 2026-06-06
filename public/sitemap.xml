@@ -287,6 +287,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://lovtaro.kr/guide/page-of-swords-love-meaning/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://lovtaro.kr/guide/six-of-wands-love-meaning/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -529,6 +534,16 @@
   </url>
   <url>
     <loc>https://lovtaro.kr/dream/kiss/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://lovtaro.kr/dream/wedding/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://lovtaro.kr/dream/pregnancy/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
