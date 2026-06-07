@@ -22,13 +22,13 @@
 - [x] **키스하는 꿈** | `kiss` | situation | 2026-06-05 (시드)
 - [x] **결혼하는 꿈** | `wedding` | situation | 2026-06-06
 - [x] **임신 꿈 / 태몽** | `pregnancy` | symbol | 2026-06-06
-- [ ] **헤어지는 꿈** | `breakup` | situation
+- [x] **헤어지는 꿈** | `breakup` | situation | 2026-06-07
   - 각도: 변화·역설(불안의 반영) 신호. 연인 있는 경우/없는 경우 분기
   - 관련 카드: death, three-of-swords, eight-of-cups, tower
 
 ### 2군 - 연애 각도가 자연스러운 상징·상황
 
-- [ ] **우는 꿈** | `crying` | situation
+- [x] **우는 꿈** | `crying` | situation | 2026-06-07
   - 각도: 감정 해소·억눌린 마음. 관계 속 못 푼 감정
   - 관련 카드: three-of-swords, five-of-cups, star, moon
 - [ ] **죽는 꿈** | `death-dream` | situation
@@ -60,5 +60,6 @@
 <!-- 예시:
 - [x] 2026-06-05 `ex-lover` (인물, 4섹션+FAQ4)
 -->
+- [x] 2026-06-07 `breakup` `crying` (4섹션+FAQ4, 1군 마지막+2군 첫 번째)
 - [x] 2026-06-06 `wedding` `pregnancy` (4섹션+FAQ4, 1군 소진)
 - [x] 2026-06-05 `ex-lover` `crush` `kiss` (시드 3편, 인프라 구축과 함께 작성)

@@ -74,7 +74,8 @@ export default {
     { id: 'moon', name: '달' },
   ],
   relatedDreams: [
+    { slug: 'breakup', label: '헤어지는 꿈' },
+    { slug: 'crying', label: '우는 꿈' },
     { slug: 'crush', label: '좋아하는 사람 꿈' },
-    { slug: 'kiss', label: '키스하는 꿈' },
   ],
 }

@@ -38,12 +38,12 @@
   - 핵심: 승리·인정·자신감. 재회 흐름의 긍정 신호 각도 포함
   - 관련 카드: six-of-wands, sun, ten-of-wands, chariot
 
-- [ ] **페이지 소드 연애 해석 - 연락과 메시지의 신호** | `page-of-swords-love-meaning` | 카드 해석
+- [x] **페이지 소드 연애 해석 - 연락과 메시지의 신호** | `page-of-swords-love-meaning` | 카드 해석 | 2026-06-06
   - 근거: 네이버 노출 365 ("page of swords 연락", "page of swords 역방향 연락운" 100% CTR)
   - 핵심: 소식·연락·메시지. 연락운 각도를 정/역방향으로 분기
   - 관련 카드: page-of-swords, knight-of-swords, page-of-cups, ace-of-swords
 
-- [ ] **펜타클 나이트 연애 해석 - 느리지만 진심인 사람** | `knight-of-pentacles-love-meaning` | 카드 해석
+- [x] **펜타클 나이트 연애 해석 - 느리지만 진심인 사람** | `knight-of-pentacles-love-meaning` | 카드 해석 | 2026-06-07
   - 근거: 네이버 노출 312
   - 핵심: 꾸준함·성실·느린 속도. 답답함과 안정감의 양면
   - 관련 카드: knight-of-pentacles, king-of-pentacles, hermit, nine-of-pentacles
