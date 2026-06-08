@@ -31,10 +31,10 @@
 - [x] **우는 꿈** | `crying` | situation | 2026-06-07
   - 각도: 감정 해소·억눌린 마음. 관계 속 못 푼 감정
   - 관련 카드: three-of-swords, five-of-cups, star, moon
-- [ ] **죽는 꿈** | `death-dream` | situation
+- [x] **죽는 꿈** | `death-dream` | situation | 2026-06-08
   - 각도: 끝이 아니라 전환·재생. 관계의 변화 신호로 풀이
   - 관련 카드: death, judgement, tower, sun
-- [ ] **옛 친구 꿈** | `old-friend` | person
+- [x] **옛 친구 꿈** | `old-friend` | person | 2026-06-08
   - 각도: 과거 인연·그리움. 다시 떠오른 관계의 의미
   - 관련 카드: six-of-cups, the-hermit, wheel
 - [ ] **연예인 꿈** | `celebrity` | person

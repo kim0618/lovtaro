@@ -77,5 +77,6 @@ export default {
     { slug: 'kiss', label: '키스하는 꿈' },
     { slug: 'ex-lover', label: '전 애인 꿈' },
     { slug: 'pregnancy', label: '임신 꿈' },
+    { slug: 'old-friend', label: '옛 친구 꿈' },
   ],
 }

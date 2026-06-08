@@ -48,7 +48,7 @@
   - 핵심: 꾸준함·성실·느린 속도. 답답함과 안정감의 양면
   - 관련 카드: knight-of-pentacles, king-of-pentacles, hermit, nine-of-pentacles
 
-- [ ] **완드 킹 연애 해석 - 주도적인 상대의 마음** | `king-of-wands-love-meaning` | 카드 해석
+- [x] **완드 킹 연애 해석 - 주도적인 상대의 마음** | `king-of-wands-love-meaning` | 카드 해석 | 2026-06-08
   - 근거: 네이버 노출 294
   - 핵심: 리더십·열정·자기중심. 끌림과 부담의 경계
   - 관련 카드: king-of-wands, emperor, queen-of-wands, knight-of-wands

@@ -287,6 +287,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://lovtaro.kr/guide/king-of-wands-love-meaning/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://lovtaro.kr/guide/knight-of-pentacles-love-meaning/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -524,6 +529,16 @@
   <!-- Dream section (글 추가 시 아래에 /dream/{slug}/ URL 추가) -->
   <url>
     <loc>https://lovtaro.kr/dream/breakup/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://lovtaro.kr/dream/death-dream/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://lovtaro.kr/dream/old-friend/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>

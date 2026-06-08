@@ -350,31 +350,68 @@ FAQ answer가 같은 글의 `sections` 본문 문장을 거의 그대로 복붙�
 
 **배경 (2026-05-31 회고)**: contact-timing-tarot 작성 시 lovtaro-guide의 자체 검증(질문 1~3)과 verify의 A~Q를 모두 통과했는데, 심층 분석에서 FAQ2가 본문과 25자, FAQ5가 28자 연속 겹침이 발견됨. FAQ를 쓸 때 본문 결론 문장을 무의식적으로 재사용하는 패턴이 있어 객관적 측정이 필요. P(가이드-카드 중복)는 외부 데이터와의 겹침만 보고 글 **내부** 자체중복은 못 잡는 사각지대였음.
 
+**배경 (2026-06-08 회고)**: 이 검사가 `guides`만 돌고 `dreams`는 검사하지 않는 사각지대가 있었음. death-dream FAQ1↔본문 28자, breakup FAQ2↔본문 24자 복붙이 발행 후 심층 분석에서야 발견됨. 또 FAQ-본문뿐 아니라 **섹션↔섹션 본문 자체중복**도 사각지대였음(old-friend S2↔S4 22자 "그 감각이 부족하다는 걸 마음이 알아챈 거예요"). 아래 스크립트를 ① dreams까지 확장 ② 섹션 간 본문 중복(15자+)까지 검사하도록 보강.
+
+**R-1. FAQ ↔ 본문 자체중복 (guides + dreams 전수)**:
+
 ```bash
 cd /home/tjd618/lovtaro && node --input-type=module -e "
 import guides from './src/data/guides/index.js'
+import dreams from './src/data/dreams/index.js'
 const norm = s => s.replace(/<[^>]*>/g,'').replace(/\s+/g,'')
 let total = 0
-for (const g of guides) {
-  const sec = norm((g.sections||[]).map(s=>s.content).join(''))
-  ;(g.faq||[]).forEach((f,fi)=>{
-    const a = norm(f.answer); const W = 20; const seen = new Set()
-    for (let i=0;i+W<=a.length;i++){
-      const sub = a.slice(i,i+W)
-      if (sec.includes(sub) && !seen.has(sub)) {
-        let len=W; while(i+len<a.length && sec.includes(a.slice(i,i+len+1))) len++
-        seen.add(a.slice(i,i+len)); console.log(g.slug,'FAQ'+(fi+1),len+'자:',a.slice(i,i+len)); total++
+for (const [kind, list] of [['guide', guides], ['dream', dreams]]) {
+  for (const g of list) {
+    const sec = norm((g.sections||[]).map(s=>s.content).join(''))
+    ;(g.faq||[]).forEach((f,fi)=>{
+      const a = norm(f.answer); const W = 20; const seen = new Set()
+      for (let i=0;i+W<=a.length;i++){
+        const sub = a.slice(i,i+W)
+        if (sec.includes(sub) && !seen.has(sub)) {
+          let len=W; while(i+len<a.length && sec.includes(a.slice(i,i+len+1))) len++
+          seen.add(a.slice(i,i+len)); console.log('['+kind+'] '+g.slug,'FAQ'+(fi+1),len+'자:',a.slice(i,i+len)); total++
+        }
       }
-    }
-  })
+    })
+  }
 }
 console.log(total===0 ? '  ✅ FAQ-본문 20자 이상 자체중복 없음' : '  ⚠ '+total+'건 (해당 FAQ를 다른 각도로 재작성)')
 "
 ```
 
-**판정**: 연속 **20자 이상** 겹침이면 해당 FAQ를 본문과 다른 각도로 재작성. 카드 해석 글뿐 아니라 **상황·방법·FAQ 글 전체**에 적용. 정형 표현이 아니라 본문 결론을 그대로 옮긴 것이면 무조건 수정.
+**R-2. 섹션 ↔ 섹션 본문 자체중복 (guides + dreams 전수)**:
 
-**수정 후**: guide 파일과 `scripts/prerender.mjs`의 GUIDES[].faq를 함께 갱신(N 검사로 재확인).
+```bash
+cd /home/tjd618/lovtaro && node --input-type=module -e "
+import guides from './src/data/guides/index.js'
+import dreams from './src/data/dreams/index.js'
+const norm = s => s.replace(/<[^>]*>/g,'').replace(/\s+/g,'')
+let total = 0
+for (const [kind, list] of [['guide', guides], ['dream', dreams]]) {
+  for (const g of list) {
+    const secs = (g.sections||[]).map(s=>norm(s.content))
+    for (let a=0;a<secs.length;a++) for (let b=a+1;b<secs.length;b++){
+      const A=secs[a], B=secs[b], W=15, seen=new Set()
+      for(let i=0;i+W<=A.length;i++){
+        const sub=A.slice(i,i+W)
+        if(B.includes(sub)&&!seen.has(sub)){
+          let len=W; while(i+len<A.length&&B.includes(A.slice(i,i+len+1)))len++
+          seen.add(A.slice(i,i+len)); console.log('['+kind+'] '+g.slug,'S'+(a+1)+'<->S'+(b+1),len+'자:',A.slice(i,i+len)); total++
+        }
+      }
+    }
+  }
+}
+console.log(total===0 ? '  ✅ 섹션 간 15자 이상 자체중복 없음' : '  ⚠ '+total+'건 (반복 문단을 다른 각도로 재작성)')
+"
+```
+
+**판정**:
+- R-1(FAQ-본문) 연속 **20자 이상** → 해당 FAQ를 본문과 다른 각도로 재작성.
+- R-2(섹션-섹션) 연속 **15자 이상** → 문맥 확인. 정형 표현("~경우가 많아요")이면 허용, 같은 메시지 재서술이면 한쪽 재작성. 같은 의미를 어휘만 바꿔 두 번 쓴 것(N-gram은 통과해도 의미상 반복)은 정독으로 잡아 한쪽 삭제·통합.
+- 카드 해석 글뿐 아니라 **상황·방법·FAQ 글 + 꿈해몽 전체**에 적용. 정형 표현이 아니라 본문 결론을 그대로 옮긴 것이면 무조건 수정.
+
+**수정 후**: guide 파일이면 `scripts/prerender.mjs`의 GUIDES[].faq도 함께 갱신(N 검사로 재확인). **dream 파일은 prerender 동기화 불필요**(prerender가 dreams/index.js를 직접 import).
 
 ### S. 상황 글 ↔ 리딩 데이터 겹침 검사 (2026-05-31 추가)
 
