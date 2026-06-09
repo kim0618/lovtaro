@@ -77,5 +77,6 @@ export default {
   relatedDreams: [
     { slug: 'kiss', label: '키스하는 꿈' },
     { slug: 'pregnancy', label: '임신 꿈' },
+    { slug: 'celebrity', label: '연예인 꿈' },
   ],
 }

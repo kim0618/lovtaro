@@ -9,6 +9,8 @@
  * 전통 해몽(근거) 위에 러브타로의 연애 각도(브랜드)를 얹고, 가능성의 언어로 쓴다.
  */
 
+import celebrity from './celebrity.js'
+import snake from './snake.js'
 import deathDream from './death-dream.js'
 import oldFriend from './old-friend.js'
 import breakup from './breakup.js'
@@ -20,6 +22,8 @@ import crush from './crush.js'
 import kiss from './kiss.js'
 
 const dreams = [
+  celebrity,
+  snake,
   deathDream,
   oldFriend,
   breakup,

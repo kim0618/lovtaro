@@ -37,10 +37,10 @@
 - [x] **옛 친구 꿈** | `old-friend` | person | 2026-06-08
   - 각도: 과거 인연·그리움. 다시 떠오른 관계의 의미
   - 관련 카드: six-of-cups, the-hermit, wheel
-- [ ] **연예인 꿈** | `celebrity` | person
+- [x] **연예인 꿈** | `celebrity` | person | 2026-06-09
   - 각도: 이상형·동경·채워지지 않은 설렘. 현실 관계와의 거리
   - 관련 카드: the-star, seven-of-cups, page-of-cups
-- [ ] **뱀 꿈** | `snake` | symbol
+- [x] **뱀 꿈** | `snake` | symbol | 2026-06-09
   - 각도: 전통적으로 재물·이성운. 연애에서는 강한 끌림·집착·예기치 못한 인연. 통념 베이스 깔고 연애 각도
   - 관련 카드: the-devil, the-magician, king-of-pentacles
 
@@ -60,6 +60,8 @@
 <!-- 예시:
 - [x] 2026-06-05 `ex-lover` (인물, 4섹션+FAQ4)
 -->
+- [x] 2026-06-09 `celebrity` `snake` (4섹션+FAQ4, 2군 완료)
+- [x] 2026-06-08 `death-dream` `old-friend` (4섹션+FAQ4, 2군)
 - [x] 2026-06-07 `breakup` `crying` (4섹션+FAQ4, 1군 마지막+2군 첫 번째)
 - [x] 2026-06-06 `wedding` `pregnancy` (4섹션+FAQ4, 1군 소진)
 - [x] 2026-06-05 `ex-lover` `crush` `kiss` (시드 3편, 인프라 구축과 함께 작성)

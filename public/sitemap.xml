@@ -287,6 +287,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://lovtaro.kr/guide/three-of-swords-love-meaning/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://lovtaro.kr/guide/king-of-wands-love-meaning/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -574,6 +579,16 @@
   </url>
   <url>
     <loc>https://lovtaro.kr/dream/pregnancy/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://lovtaro.kr/dream/celebrity/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://lovtaro.kr/dream/snake/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
