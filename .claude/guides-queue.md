@@ -53,7 +53,7 @@
   - 핵심: 리더십·열정·자기중심. 끌림과 부담의 경계
   - 관련 카드: king-of-wands, emperor, queen-of-wands, knight-of-wands
 
-- [ ] **완드 9 연애 해석 - 지친 마음과 경계심** | `nine-of-wands-love-meaning` | 카드 해석
+- [x] **완드 9 연애 해석 - 지친 마음과 경계심** | `nine-of-wands-love-meaning` | 카드 해석 | 2026-06-10
   - 근거: 네이버 노출 266
   - 핵심: 방어·경계·소진 직전. 상처 후 다시 마음 여는 문제
   - 관련 카드: nine-of-wands, seven-of-wands, ten-of-wands, nine-of-swords
