@@ -9,6 +9,8 @@
  * 전통 해몽(근거) 위에 러브타로의 연애 각도(브랜드)를 얹고, 가능성의 언어로 쓴다.
  */
 
+import cheatingDream from './cheating-dream.js'
+import water from './water.js'
 import teethFalling from './teeth-falling.js'
 import feces from './feces.js'
 import celebrity from './celebrity.js'
@@ -24,6 +26,8 @@ import crush from './crush.js'
 import kiss from './kiss.js'
 
 const dreams = [
+  cheatingDream,
+  water,
   teethFalling,
   feces,
   celebrity,

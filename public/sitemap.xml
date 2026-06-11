@@ -287,6 +287,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://lovtaro.kr/guide/two-of-swords-love-meaning/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://lovtaro.kr/guide/nine-of-wands-love-meaning/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -537,6 +542,16 @@
     <priority>0.7</priority>
   </url>
   <!-- Dream section (글 추가 시 아래에 /dream/{slug}/ URL 추가) -->
+  <url>
+    <loc>https://lovtaro.kr/dream/cheating-dream/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://lovtaro.kr/dream/water/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
   <url>
     <loc>https://lovtaro.kr/dream/breakup/</loc>
     <changefreq>monthly</changefreq>
