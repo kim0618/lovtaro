@@ -58,7 +58,7 @@
   - 핵심: 방어·경계·소진 직전. 상처 후 다시 마음 여는 문제
   - 관련 카드: nine-of-wands, seven-of-wands, ten-of-wands, nine-of-swords
 
-- [ ] **소드 9 연애 해석 - 불안과 걱정의 밤** | `nine-of-swords-love-meaning` | 카드 해석
+- [x] **소드 9 연애 해석 - 불안과 걱정의 밤** | `nine-of-swords-love-meaning` | 카드 해석 | 2026-06-12
   - 근거: 네이버 노출 253
   - 핵심: 불안·과한 걱정·잠 못 드는 마음. 현실과 상상 구분
   - 관련 카드: nine-of-swords, moon, eight-of-swords, ten-of-swords

@@ -55,15 +55,27 @@
 
 ---
 
+## 신규 큐 (월말 네이버 데이터 갱신 전 진행, 연애 직결 우선)
+
+- [x] **재회하는 꿈** | `reunion-dream` | situation | 2026-06-12
+- [x] **싸우는 꿈** | `fight-dream` | situation | 2026-06-12
+- [ ] **포옹하는 꿈** | `hug-dream` | situation | 1군급 - 따뜻함·연결감·관계 회복 신호
+- [ ] **고백하는 꿈** | `confession-dream` | situation | 1군급 - 감정 표현 욕구·억눌린 마음
+- [ ] **모르는 이성 꿈** | `stranger-dream` | person | 2군 - 이상형·새 인연 에너지
+- [ ] **손 잡는 꿈** | `holding-hands-dream` | situation | 2군 - 유대감·연결 욕구
+- [ ] **이사하는 꿈** | `moving-dream` | situation | 2군 - 관계 변화·새 시작 에너지
+
+---
+
 ## 발행 후 기록 (최근 7편만 유지, 그 이상은 삭제)
 
 <!-- 예시:
 - [x] 2026-06-05 `ex-lover` (인물, 4섹션+FAQ4)
 -->
+- [x] 2026-06-12 `reunion-dream` `fight-dream` (4섹션+FAQ4, 신규 큐 1차 - 연애 직결 상황 2편)
 - [x] 2026-06-11 `water` `cheating-dream` (4섹션+FAQ4, 큐 외 신규 추가 - cheating-dream은 연애 직결 1군급)
-- [x] 2026-06-10 `teeth-falling` `feces` (4섹션+FAQ4, 후순위 범용 2편, 큐 소진 - 네이버 데이터 요청 필요)
+- [x] 2026-06-10 `teeth-falling` `feces` (4섹션+FAQ4, 후순위 범용 2편, 큐 소진)
 - [x] 2026-06-09 `celebrity` `snake` (4섹션+FAQ4, 2군 완료)
 - [x] 2026-06-08 `death-dream` `old-friend` (4섹션+FAQ4, 2군)
 - [x] 2026-06-07 `breakup` `crying` (4섹션+FAQ4, 1군 마지막+2군 첫 번째)
 - [x] 2026-06-06 `wedding` `pregnancy` (4섹션+FAQ4, 1군 소진)
-- [x] 2026-06-05 `ex-lover` `crush` `kiss` (시드 3편, 인프라 구축과 함께 작성)
