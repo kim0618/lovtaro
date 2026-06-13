@@ -59,8 +59,8 @@
 
 - [x] **재회하는 꿈** | `reunion-dream` | situation | 2026-06-12
 - [x] **싸우는 꿈** | `fight-dream` | situation | 2026-06-12
-- [ ] **포옹하는 꿈** | `hug-dream` | situation | 1군급 - 따뜻함·연결감·관계 회복 신호
-- [ ] **고백하는 꿈** | `confession-dream` | situation | 1군급 - 감정 표현 욕구·억눌린 마음
+- [x] **포옹하는 꿈** | `hug-dream` | situation | 2026-06-13
+- [x] **고백하는 꿈** | `confession-dream` | situation | 2026-06-13
 - [ ] **모르는 이성 꿈** | `stranger-dream` | person | 2군 - 이상형·새 인연 에너지
 - [ ] **손 잡는 꿈** | `holding-hands-dream` | situation | 2군 - 유대감·연결 욕구
 - [ ] **이사하는 꿈** | `moving-dream` | situation | 2군 - 관계 변화·새 시작 에너지

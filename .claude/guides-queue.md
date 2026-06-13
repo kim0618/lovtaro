@@ -63,7 +63,7 @@
   - 핵심: 불안·과한 걱정·잠 못 드는 마음. 현실과 상상 구분
   - 관련 카드: nine-of-swords, moon, eight-of-swords, ten-of-swords
 
-- [ ] **펜타클 3 연애 해석 - 함께 쌓아가는 관계** | `three-of-pentacles-love-meaning` | 카드 해석
+- [x] **펜타클 3 연애 해석 - 함께 쌓아가는 관계** | `three-of-pentacles-love-meaning` | 카드 해석 | 2026-06-13
   - 근거: 네이버 노출 232
   - 핵심: 협력·기반 다지기·역할 분담. 현실적으로 자라는 관계
   - 관련 카드: three-of-pentacles, hierophant, ten-of-pentacles, emperor
