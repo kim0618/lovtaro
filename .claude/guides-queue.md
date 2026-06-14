@@ -68,7 +68,7 @@
   - 핵심: 협력·기반 다지기·역할 분담. 현실적으로 자라는 관계
   - 관련 카드: three-of-pentacles, hierophant, ten-of-pentacles, emperor
 
-- [ ] **완드 퀸 연애 해석 - 당당한 매력의 사람** | `queen-of-wands-love-meaning` | 카드 해석
+- [x] **완드 퀸 연애 해석 - 당당한 매력의 사람** | `queen-of-wands-love-meaning` | 카드 해석 | 2026-06-14
   - 근거: 네이버 노출 229 ("queen of wands 타로")
   - 핵심: 자신감·생기·매력. 끌어당기는 에너지와 독립성
   - 관련 카드: queen-of-wands, king-of-wands, sun, strength
