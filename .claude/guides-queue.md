@@ -73,7 +73,7 @@
   - 핵심: 자신감·생기·매력. 끌어당기는 에너지와 독립성
   - 관련 카드: queen-of-wands, king-of-wands, sun, strength
 
-- [ ] **펜타클 퀸 연애 해석 - 챙겨주는 따뜻한 상대** | `queen-of-pentacles-love-meaning` | 카드 해석
+- [x] **펜타클 퀸 연애 해석 - 챙겨주는 따뜻한 상대** | `queen-of-pentacles-love-meaning` | 카드 해석 | 2026-06-15
   - 근거: 네이버 노출 216
   - 핵심: 돌봄·안정·현실 감각. 묵묵히 챙기는 애정 표현
   - 관련 카드: queen-of-pentacles, empress, king-of-pentacles, ten-of-pentacles

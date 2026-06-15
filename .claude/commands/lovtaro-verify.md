@@ -217,20 +217,27 @@ diff /tmp/lt-files.txt /tmp/lt-sitemap.txt
 ```bash
 # relatedCards[].id가 실제 cardDictionary.js + minorArcana.js에 존재하는지
 # CARD_DICTIONARY, MINOR_ARCANA 둘 다 객체이므로 Object.keys()로 id 추출
+# guides + dreams 둘 다 검사 (2026-06-15 dreams 누락 사각지대 보강)
 node --input-type=module -e "
 import guides from '/home/tjd618/lovtaro/src/data/guides/index.js'
+import dreams from '/home/tjd618/lovtaro/src/data/dreams/index.js'
 import { CARD_DICTIONARY } from '/home/tjd618/lovtaro/src/data/cardDictionary.js'
 import { MINOR_ARCANA } from '/home/tjd618/lovtaro/src/data/minorArcana.js'
 const ids = new Set([...Object.keys(CARD_DICTIONARY), ...Object.keys(MINOR_ARCANA)])
-guides.forEach(g => {
-  (g.relatedCards || []).forEach(c => {
-    if (!ids.has(c.id)) console.log('MISSING-CARD:', g.slug, '→', c.id)
+let n = 0
+for (const [kind, list] of [['guide', guides], ['dream', dreams]]) {
+  list.forEach(g => {
+    (g.relatedCards || []).forEach(c => {
+      if (!ids.has(c.id)) { console.log('MISSING-CARD:', '['+kind+']', g.slug, '→', c.id); n++ }
+    })
   })
-})
+}
+console.log(n===0 ? '  ✅ relatedCards 전수 실존 (guides+dreams)' : '  ⚠ '+n+'건 죽은 카드 링크')
 "
 ```
 
 (2026-04-24 수정: 이전 버전은 require + .map() 사용했는데 두 데이터가 객체라 TypeError. ESM + Object.keys()로 수정.)
+(2026-06-15 보강: M이 guides만 검사하던 사각지대로 moving-dream의 `wheel-of-fortune`(실제 id는 `wheel`) 죽은 링크가 통과됨. dreams까지 확장. 메이저 카드 id는 cardDictionary 키에 있음 - `wheel`/`high-priestess`/`hanged`/`wheel` 등 슬러그 불일치 주의.)
 
 관련 리딩 `path`가 실존 라우트인지 (`/reading/love`, `/reading/mind`, `/reading/reunion`, `/reading/contact`, `/reading/yesno`, `/reading/compatibility`, `/reading/three`, `/today`):
 

@@ -63,15 +63,20 @@
 - [x] **고백하는 꿈** | `confession-dream` | situation | 2026-06-13
 - [x] **모르는 이성 꿈** | `stranger-dream` | person | 2026-06-14
 - [x] **손 잡는 꿈** | `holding-hands-dream` | situation | 2026-06-14
-- [ ] **이사하는 꿈** | `moving-dream` | situation | 2군 - 관계 변화·새 시작 에너지
+- [x] **이사하는 꿈** | `moving-dream` | situation | 2026-06-15
+- [x] **연락 오는 꿈** | `message-dream` | situation | 2026-06-15 (신규 추가)
 
 ---
 
 ## 발행 후 기록 (최근 7편만 유지, 그 이상은 삭제)
 
-<!-- 예시:
-- [x] 2026-06-05 `ex-lover` (인물, 4섹션+FAQ4)
--->
+- [x] 2026-06-15 `moving-dream` `message-dream` (4섹션+FAQ4, 큐 소진+신규 연애직결)
+- [x] 2026-06-14 `stranger-dream` `holding-hands-dream` (4섹션+FAQ4)
+- [x] 2026-06-13 `hug-dream` `confession-dream` (4섹션+FAQ4)
+- [x] 2026-06-12 `reunion-dream` `fight-dream` (4섹션+FAQ4, 신규 큐 1차 - 연애 직결 상황 2편)
+- [x] 2026-06-11 `water` `cheating-dream` (4섹션+FAQ4, 큐 외 신규 추가)
+- [x] 2026-06-10 `teeth-falling` `feces` (4섹션+FAQ4, 후순위 범용 2편)
+- [x] 2026-06-09 `celebrity` `snake` (4섹션+FAQ4, 2군 완료)
 - [x] 2026-06-14 `stranger-dream` `holding-hands-dream` (4섹션+FAQ4, 2군 - 연애 직결 상황)
 - [x] 2026-06-13 `hug-dream` `confession-dream` (4섹션+FAQ4, 신규 큐 2차)
 - [x] 2026-06-12 `reunion-dream` `fight-dream` (4섹션+FAQ4, 신규 큐 1차 - 연애 직결 상황 2편)
