@@ -224,12 +224,12 @@ onUnmounted(() => { clearRevealTimer() })
         />
       </SectionBlock>
 
-      <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-5">
-        <ReadingClosingBlock message="오늘 카드가 전한 에너지가 하루를 조용히 비추기를 바랍니다." />
-      </SectionBlock>
-
       <SectionBlock spacing="md">
         <PremiumResultCta reading-type="오늘의 연애 카드" />
+      </SectionBlock>
+
+      <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-5">
+        <ReadingClosingBlock message="오늘 카드가 전한 에너지가 하루를 조용히 비추기를 바랍니다." />
       </SectionBlock>
 
       <SectionBlock v-if="!isSharedView" spacing="sm" class="lt-appear lt-appear--delay-5">

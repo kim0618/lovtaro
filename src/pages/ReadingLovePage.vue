@@ -336,12 +336,12 @@ const drawInstruction = computed(() => DRAW_INSTRUCTIONS[Math.min(selectedCount.
         <EmotionFlowSection title="카드가 함께 말하는 것" :lines="overall.spreadNarrative" />
       </SectionBlock>
 
-      <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-5">
-        <ReadingClosingBlock message="세 장의 카드가 비춘 흐름이 마음에 조용히 남기를 바랍니다." />
-      </SectionBlock>
-
       <SectionBlock spacing="md">
         <PremiumResultCta reading-type="러브타로" />
+      </SectionBlock>
+
+      <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-5">
+        <ReadingClosingBlock message="세 장의 카드가 비춘 흐름이 마음에 조용히 남기를 바랍니다." />
       </SectionBlock>
 
       <SectionBlock spacing="md">

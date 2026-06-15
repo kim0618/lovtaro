@@ -248,12 +248,12 @@ onUnmounted(() => { if (revealTimer) clearTimeout(revealTimer) })
         <CautionSection title="조심할 점" :lines="result.caution" />
       </SectionBlock>
 
-      <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-5">
-        <ReadingClosingBlock />
-      </SectionBlock>
-
       <SectionBlock spacing="md">
         <PremiumResultCta reading-type="재회 가능성" />
+      </SectionBlock>
+
+      <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-5">
+        <ReadingClosingBlock />
       </SectionBlock>
 
       <SectionBlock spacing="md">

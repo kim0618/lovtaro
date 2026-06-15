@@ -20,16 +20,11 @@ function goPremium() {
 
 <template>
   <button class="premium-cta" @click="goPremium">
-    <span class="premium-cta__label">프리미엄</span>
-    <span class="premium-cta__title">마음이 더 깊게 얽혀 있다면</span>
-    <p class="premium-cta__desc">
-      무료 리딩은 한 장면을 비춰드려요. 풀리지 않는 사연이라면, 카드 3장으로 더 깊이 읽어 한 통의 편지로 담아드릴게요.
-    </p>
-    <span class="premium-cta__action">
-      1:1 정밀 리딩 보기
+    <span class="premium-cta__label">프리미엄 · 1:1 정밀 리딩</span>
+    <span class="premium-cta__title">
+      마음이 더 깊게 얽혀 있다면
       <span class="premium-cta__arrow" aria-hidden="true">&#8594;</span>
     </span>
-    <span class="premium-cta__meta">사연 기반 · 5페이지 편지 · 19,900원</span>
   </button>
 </template>
 
@@ -42,7 +37,7 @@ function goPremium() {
   width: 100%;
   text-align: left;
   cursor: pointer;
-  padding: var(--lt-space-md) var(--lt-space-lg);
+  padding: var(--lt-space-sm) var(--lt-space-lg);
   border-radius: var(--lt-radius-lg);
   border: 1px solid rgba(200, 169, 110, 0.22);
   background: linear-gradient(170deg, rgba(40, 33, 20, 0.45) 0%, rgba(16, 22, 41, 0.55) 100%);

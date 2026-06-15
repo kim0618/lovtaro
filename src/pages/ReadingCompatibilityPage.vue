@@ -347,12 +347,12 @@ onUnmounted(() => { if (revealTimer) clearTimeout(revealTimer) })
         <EmotionFlowSection title="두 카드가 함께 말하는 것" :lines="[result.spreadNarrative]" />
       </SectionBlock>
 
-      <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-5">
-        <ReadingClosingBlock />
-      </SectionBlock>
-
       <SectionBlock spacing="md">
         <PremiumResultCta reading-type="궁합 타로" />
+      </SectionBlock>
+
+      <SectionBlock spacing="sm" class="lt-appear lt-appear--delay-5">
+        <ReadingClosingBlock />
       </SectionBlock>
 
       <SectionBlock spacing="md">
