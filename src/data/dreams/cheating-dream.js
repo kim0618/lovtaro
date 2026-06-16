@@ -81,6 +81,7 @@ export default {
     { id: 'three-of-swords', name: '소드의 3' },
   ],
   relatedDreams: [
+    { slug: 'jealousy-dream', label: '질투하는 꿈' },
     { slug: 'ex-lover', label: '전 애인 꿈' },
     { slug: 'water', label: '물 꿈' },
   ],

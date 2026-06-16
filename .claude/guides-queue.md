@@ -78,7 +78,7 @@
   - 핵심: 돌봄·안정·현실 감각. 묵묵히 챙기는 애정 표현
   - 관련 카드: queen-of-pentacles, empress, king-of-pentacles, ten-of-pentacles
 
-- [ ] **소드 10 연애 해석 - 끝과 바닥, 그리고 회복** | `ten-of-swords-love-meaning` | 카드 해석
+- [x] **소드 10 연애 해석 - 가장 아픈 끝이 회복의 시작인 이유** | `ten-of-swords-love-meaning` | 카드 해석 | 2026-06-16
   - 근거: 네이버 노출 203 ("ten of swords" 클릭 3/CTR 30%)
   - 핵심: 확실한 끝·바닥 통과. 회복의 시작이라는 반전 각도
   - 관련 카드: ten-of-swords, death, nine-of-swords, sun

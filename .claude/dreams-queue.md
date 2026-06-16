@@ -68,8 +68,16 @@
 
 ---
 
+## 신규 큐 (2026-06-16 추가, 1군 연애 직결)
+
+- [x] **선물 받는/주는 꿈** | `gift-dream` | situation | 2026-06-16
+- [x] **질투하는 꿈 / 좋아하는 사람 다른 사람과 있는 꿈** | `jealousy-dream` | situation | 2026-06-16
+
+---
+
 ## 발행 후 기록 (최근 7편만 유지, 그 이상은 삭제)
 
+- [x] 2026-06-16 `gift-dream` `jealousy-dream` (4섹션+FAQ4, 큐 소진 후 신규 연애직결 2편)
 - [x] 2026-06-15 `moving-dream` `message-dream` (4섹션+FAQ4, 큐 소진+신규 연애직결)
 - [x] 2026-06-14 `stranger-dream` `holding-hands-dream` (4섹션+FAQ4)
 - [x] 2026-06-13 `hug-dream` `confession-dream` (4섹션+FAQ4)
