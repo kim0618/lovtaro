@@ -15,23 +15,24 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, AskUserQuestion, Todo
 폴더명은 `YYYY-MM-DD_day` 형식 (예: `2026-04-20_mon`).
 
 ### 1. 사전 확인
+- **누적 데이터 위치 (2026-06-16 이전: 개인 메모리 → repo로 이전)**: `hook_history`·`card_usage`는 `.claude/insta-data/` (git 추적, PC 간 동기화됨). 시작 전 `git pull`로 최신 누적 확보, 생성 후 두 파일 갱신은 사용자가 commit하면 다른 PC에 반영됨. ⚠️ `content-output/`은 gitignore라 동기화 안 됨 - 누적 추적은 반드시 `.claude/insta-data/`에만.
 - `content-output/` 기존 폴더 확인 (중복 방지)
 - `public/images/cards-png/` 메이저 아르카나 목록 확인
 - `public/images/mcards/` 마이너 아르카나 목록 확인
 - **사용자 인사이트 스크린샷 확인 → 훅 메모리 갱신 (필수 선행 단계)**
-  - 사용자가 직전 주 콘텐츠의 인스타 인사이트(조회수) 스크린샷을 첨부했으면 `project_lovtaro_hook_history.md`의 해당 행 도달 수치를 즉시 갱신
+  - 사용자가 직전 주 콘텐츠의 인스타 인사이트(조회수) 스크린샷을 첨부했으면 `.claude/insta-data/hook_history.md`의 해당 행 도달 수치를 즉시 갱신
   - 도달 등급 변동 시 🥇(1,000+) / 🥈(500-999) / 🥉(<500) 섹션 간 재배치
   - 스크린샷이 없으면 사용자에게 "직전 주 인사이트 스크린샷 있어?"라고 한 번 묻고 진행 (없으면 그대로 진행)
-- **메모리 `project_lovtaro_card_usage.md` 반드시 Read** — 누적 사용 카드 목록 확인 후 미사용 카드 풀에서 배정
-- **갱신된 `project_lovtaro_hook_history.md` 다시 Read** — 검증된 강한 훅(1,000회 이상) 변형 베이스로 활용 + 4주 내 동일·유사 훅 회피 + 약한 패턴 회피
+- **메모리 `.claude/insta-data/card_usage.md` 반드시 Read** — 누적 사용 카드 목록 확인 후 미사용 카드 풀에서 배정
+- **갱신된 `.claude/insta-data/hook_history.md` 다시 Read** — 검증된 강한 훅(1,000회 이상) 변형 베이스로 활용 + 4주 내 동일·유사 훅 회피 + 약한 패턴 회피
 - 최근 1~2주 콘텐츠에서 사용한 카드/훅 추가 확인 (중복 방지)
 
 ### 2. 주간 전략 수립 후 즉시 진행
 아래를 정리해서 보여주되 **승인 대기 없이 바로 파일 생성을 시작**해라:
 - 날짜별 포맷 배치 (shortform/carousel)
 - shortform 유형 배치 (참여형/소개형 메이저/소개형 마이너) — 고정 주간 배치표 준수
-- 날짜별 카드 배정 (메모리 `project_lovtaro_card_usage.md` 기반 미사용 카드 우선)
-- 날짜별 주제/훅 (메모리 `project_lovtaro_hook_history.md` 기반 강한 패턴 변형 + 4주 내 중복 회피)
+- 날짜별 카드 배정 (메모리 `.claude/insta-data/card_usage.md` 기반 미사용 카드 우선)
+- 날짜별 주제/훅 (메모리 `.claude/insta-data/hook_history.md` 기반 강한 패턴 변형 + 4주 내 중복 회피)
 
 ### 3. 파일 생성 순서
 아래 순서로 **TodoWrite로 진행상황 추적하면서** 실행:
@@ -48,8 +49,8 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, AskUserQuestion, Todo
    - 프레임·카드·텍스트 간격이 레퍼런스와 일치하는지
    - 코스믹 배경·달·별·프레임이 의도대로 그려졌는지
    - 문제 발견 시 스크립트 수정 후 재생성. 문제없어야 8번으로 진행
-8. **`project_lovtaro_card_usage.md` 메모리 업데이트** — 이번 주에 사용한 메이저/마이너 카드(커버+본문+참여 전부) 추가 기록
-9. **`project_lovtaro_hook_history.md` 메모리 업데이트** — 이번 주에 사용한 모든 훅 추가 기록 (훅 텍스트 + 슬롯 + 카드 + 날짜). 도달 수치는 "미기록"으로 두고 **다음 주 스킬 실행 시 사용자가 보여줄 인사이트로 갱신** (위 1단계 워크플로)
+8. **`.claude/insta-data/card_usage.md` 메모리 업데이트** — 이번 주에 사용한 메이저/마이너 카드(커버+본문+참여 전부) 추가 기록
+9. **`.claude/insta-data/hook_history.md` 메모리 업데이트** — 이번 주에 사용한 모든 훅 추가 기록 (훅 텍스트 + 슬롯 + 카드 + 날짜). 도달 수치는 "미기록"으로 두고 **다음 주 스킬 실행 시 사용자가 보여줄 인사이트로 갱신** (위 1단계 워크플로)
 
 ---
 
@@ -245,7 +246,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, AskUserQuestion, Todo
 - 3장은 주의 리듬을 각각 다른 축으로 보여줌:
   - **희망/접근/급변**: The Star / Knight of Cups / Ace of Wands (2026-04-26 레퍼런스)
   - 매주 새로운 3축 조합 권장 (예: 안정/변동/결단, 회복/재회/전환 등)
-- 메이저·마이너 혼합 가능. 단 `project_lovtaro_card_usage.md`와 대조해 중복 배정 금지
+- 메이저·마이너 혼합 가능. 단 `.claude/insta-data/card_usage.md`와 대조해 중복 배정 금지
 - 각 카드 훅은 "주 초반/수~목 사이/주 후반 + 가능성 언어" 포맷 엄수. "반드시/100%/무조건" 금지
 
 **색상 일관성 (필수)**:
@@ -378,7 +379,7 @@ const svg = carouselShortformSlide({
 
 ### 카운트 분리 (2026-05-05 개편)
 
-같은 카드라도 **용도가 다르면 카운트 별도**. 메모리 `project_lovtaro_card_usage.md`는 아래 카테고리별로 분리해 추적한다:
+같은 카드라도 **용도가 다르면 카운트 별도**. 메모리 `.claude/insta-data/card_usage.md`는 아래 카테고리별로 분리해 추적한다:
 
 **활성 슬롯**
 - **1·2·3 참여형 메이저 메인** (월·화·목·토릴스 합산) — 메이저 22장 사이클 별도. 매회 메이저 1~3장 사용
@@ -397,7 +398,7 @@ const svg = carouselShortformSlide({
 
 **How to apply:** 새 콘텐츠 카드 배정 시 해당 슬롯의 카운트만 확인. 예: 월요일 1·2·3 참여형 배정 시 "1·2·3 참여형 메이저 메인" + "1·2·3 참여형 마이너 메인" 두 섹션만 보고 미사용 카드 선택.
 
-- **카드 기록 대상 (`project_lovtaro_card_usage.md`, 생성 후 반드시 업데이트, 슬롯별로)**:
+- **카드 기록 대상 (`.claude/insta-data/card_usage.md`, 생성 후 반드시 업데이트, 슬롯별로)**:
   - 1·2·3 참여형 scene01 공개 카드 3장 (뒷면이지만 reply에서 공개되므로 메이저·마이너 모두 기록)
   - 수·금 소개형 마이너 scene02 메인 카드 (각각 표기)
   - 캐러셀 커버 (slide01) 메이저
@@ -405,7 +406,7 @@ const svg = carouselShortformSlide({
   - Sunday Preview 3장
   - story 마이너
 
-- **훅 기록 대상 (`project_lovtaro_hook_history.md`, 생성 후 반드시 업데이트)**:
+- **훅 기록 대상 (`.claude/insta-data/hook_history.md`, 생성 후 반드시 업데이트)**:
   - 1·2·3 참여형 scene01 훅 (참여형 4회분 전부)
   - 수·금 소개형 마이너 scene01 훅
   - Sunday Preview scene01 훅
@@ -516,6 +517,21 @@ const svg = carouselShortformSlide({
   - 인스타 후보: `팔로우하면 매일 리딩 ✨`, `매일 연애 타로 → @lovtarot_ 팔로우`, `다음 리딩 놓치지 마세요 @lovtarot_`
   - 틱톡 후보: `팔로우하면 매일 리딩 ✨`, `매일 연애 타로 → @lovtaro_ 팔로우`, `다음 리딩 놓치지 마세요 @lovtaro_`
   - 유튜브 후보: `매일 연애 타로 업로드 - 구독 🔔`, `구독하면 매일 리딩 알림`, `다음 리딩 보고싶다면 구독 🔔`
+
+#### 심리테스트(/test) 유입 통합 (2026-06-16 추가, 매주 적용)
+
+인스타의 역할은 **심리테스트(/test) 유입 엔진**. 무료·바이럴·공유 가능하고, 사이트가 이미 `심리테스트 → 무료 리딩 → 프리미엄`(PremiumResultCta) 사다리로 설계돼 있어 입구만 채우면 자동 전환됨. **프리미엄은 인스타에서 직접 언급 금지** (사다리 건너뛰기 + 온사이트 CTA와 중복).
+
+- **통합 위치 (매주 3곳)**: 참여형 **2회**(월·화·목 중 2개, 해당 요일 없으면 그 주 참여형 중 2개) + **토 캐러셀**의 `[인스타 첫 댓글]`
+- **추가 아닌 교체**: 기존 첫 댓글의 "무료 리딩" CTA 줄을 **심리테스트 안내로 교체** (게시물당 외부 CTA 1개 유지). 나머지 게시물(소개형 수·금, 토릴스 등)은 무료 리딩 유지 → 주간 테스트:리딩 ≈ 3:3 믹스 (광고 느낌 회피)
+- **문구 형식**: `내 {테스트 소구점}이 궁금하면 프로필 링크에서 심리테스트도 해볼 수 있어요` (bio LinkPage에 "연애 심리테스트" featured/NEW로 노출됨). 광고 아닌 안내 톤, em dash 금지
+- **테스트-주제 매칭** (그날 콘텐츠 주제에 맞춰 5종에서 선택):
+  - `crush`(짝사랑할 때 나는?) → 짝사랑·자꾸 생각나는 사람 주제
+  - `love-style`(내 연애 스타일은?) → 연애 패턴·이별/미련 성찰 주제
+  - `ideal-type`(내 운명의 상대는?) → 이상형·운명·진심/새 인연 주제
+  - `mbti-love`(MBTI 연애 테스트) → 성향·궁합 주제
+  - `past-life`(전생에 나는?) → 운명·인연·전생 주제
+- 측정: bio/IG 링크에 UTM(`utm_source=instagram`) 부착 시 `test_start`·`test_to_reading` 이벤트로 인스타→테스트→리딩 전환 추적 가능
 
 ### carousel/copy.txt
 ```
@@ -638,9 +654,9 @@ const svg = carouselShortformSlide({
 | ☐ 답변이 yes/no로 끝나는가? | **no여야 함** (yes/no는 스토리 끊김. "아직 생각하고 있을까?" → 약함) |
 | ☐ "운명·인연·사랑" 같은 **추상 단어**로 시작하는가? | no 권장 (구체 행동·상황 우선) |
 | ☐ **상황 한정**(연락 기다리는 / 답장 느린 / 다시 만나려는 등)이 있는가? | yes 권장 (사용자 self-identification 트리거) |
-| ☐ `project_lovtaro_hook_history.md`에서 **4주 내 동일·유사 훅** 있는가? | **no여야 함** (단어 70% 이상 일치 또는 같은 한정 조건+같은 동사 조합 = 변형 필수) |
+| ☐ `.claude/insta-data/hook_history.md`에서 **4주 내 동일·유사 훅** 있는가? | **no여야 함** (단어 70% 이상 일치 또는 같은 한정 조건+같은 동사 조합 = 변형 필수) |
 
-**검증된 강한 훅 vs 약한 훅 (2026-05-16 갱신, 풀 데이터는 `project_lovtaro_hook_history.md` 참고)**
+**검증된 강한 훅 vs 약한 훅 (2026-05-16 갱신, 풀 데이터는 `.claude/insta-data/hook_history.md` 참고)**
 
 | 도달 | 훅 | 패턴 분석 |
 |---|---|---|
@@ -716,7 +732,7 @@ const svg = carouselShortformSlide({
 - [ ] 소개형 shortform은 3장 구조인가
 - [ ] carousel 커버는 메이저 아르카나인가
 - [ ] Sunday Preview는 7컷 구조 + 시리즈명 "Sunday Tarot Preview" 포함되었는가
-- [ ] `project_lovtaro_card_usage.md` 슬롯별로 업데이트했는가 (특히 슬롯 5 메이저 + 5b 마이너)
+- [ ] `.claude/insta-data/card_usage.md` 슬롯별로 업데이트했는가 (특히 슬롯 5 메이저 + 5b 마이너)
 
 ### 비주얼 스타일
 - [ ] **릴스/숏폼 전부 코스믹 스타일인가** (cosmicDefs + cosmicBody + drawFrame 사용)
@@ -753,6 +769,8 @@ const svg = carouselShortformSlide({
 - [ ] 답변이 yes/no로 끝나지 않는가 (예: "아직 생각하고 있을까?" 금지)
 - [ ] 인스타 릴스 캡션에 **저장 또는 댓글 유도 1줄**이 포함되었는가
 - [ ] 모든 캡션·첫 댓글의 단락 사이 빈 줄이 `⠀`(U+2800) 한 글자만 있는 줄로 처리되어 복붙 시 줄바꿈이 살아남는가 (일반 빈 줄 금지)
+- [ ] CTA(팔로우·구독)와 해시태그 줄 사이에 `⠀`/빈 줄 없이 **글루**되었는가 (CTA→해시태그 연속 라인)
+- [ ] 심리테스트(/test) 유입을 **참여형 2회 + 토 캐러셀 첫 댓글**에 통합했는가 (무료 리딩 줄 교체, 게시물당 외부 CTA 1개, 주제 매칭, 프리미엄 언급 없음)
 - [ ] 유튜브 쇼츠 제목이 **검색 키워드 + 궁금증 조합**(`OO 타로｜질문 #shorts`) 구조인가
 - [ ] 틱톡 캡션이 인스타와 다른 **짧고 직접적인 톤**(반말 허용)으로 작성되었는가
 
