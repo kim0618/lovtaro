@@ -83,7 +83,7 @@
   - 핵심: 확실한 끝·바닥 통과. 회복의 시작이라는 반전 각도
   - 관련 카드: ten-of-swords, death, nine-of-swords, sun
 
-- [ ] **완드 10 연애·재회 해석 - 혼자 짊어진 무게** | `ten-of-wands-love-meaning` | 카드 해석
+- [x] **완드 10 연애·재회 해석 - 혼자 짊어진 무게** | `ten-of-wands-love-meaning` | 카드 해석 | 2026-06-17
   - 근거: 네이버 노출 84 ("10 of wands 재회")
   - 핵심: 부담·책임 과중. 재회 맥락에서 내려놓음의 의미
   - 관련 카드: ten-of-wands, nine-of-wands, six-of-wands, hanged

@@ -9,6 +9,8 @@
  * 전통 해몽(근거) 위에 러브타로의 연애 각도(브랜드)를 얹고, 가능성의 언어로 쓴다.
  */
 
+import proposalDream from './proposal-dream.js'
+import dateDream from './date-dream.js'
 import giftDream from './gift-dream.js'
 import jealousyDream from './jealousy-dream.js'
 import messageDream from './message-dream.js'
@@ -36,6 +38,8 @@ import crush from './crush.js'
 import kiss from './kiss.js'
 
 const dreams = [
+  proposalDream,
+  dateDream,
   giftDream,
   jealousyDream,
   messageDream,
