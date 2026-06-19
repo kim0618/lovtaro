@@ -88,7 +88,7 @@
   - 핵심: 부담·책임 과중. 재회 맥락에서 내려놓음의 의미
   - 관련 카드: ten-of-wands, nine-of-wands, six-of-wands, hanged
 
-- [ ] **소드 5 연애 해석 - 다툼 뒤에 남은 것** | `five-of-swords-love-meaning` | 카드 해석
+- [x] **소드 5 연애 해석 - 다툼 뒤에 남은 것** | `five-of-swords-love-meaning` | 카드 해석 | 2026-06-19
   - 근거: 네이버 노출 66 ("5 of swords 뜻")
   - 핵심: 갈등·이김의 공허함·자존심. 이겨도 잃는 관계 패턴
   - 관련 카드: five-of-swords, seven-of-swords, tower, four-of-swords

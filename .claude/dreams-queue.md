@@ -78,14 +78,19 @@
 - [x] **데이트하는 꿈** | `date-dream` | situation | 2026-06-17
 - [x] **프러포즈 꿈** | `proposal-dream` | situation | 2026-06-17
 
+## 신규 큐 (2026-06-19 추가)
+
+- [x] **하늘을 나는 꿈** | `flying-dream` | situation | 2026-06-19
+- [x] **강아지·개 꿈** | `dog-dream` | symbol | 2026-06-19
+
 ---
 
 ## 발행 후 기록 (최근 7편만 유지, 그 이상은 삭제)
 
+- [x] 2026-06-19 `flying-dream` `dog-dream` (4섹션+FAQ4, 2406자/2417자, 나는꿈+강아지)
 - [x] 2026-06-17 `date-dream` `proposal-dream` (4섹션+FAQ4, 연애직결 1군 신규 2편)
 - [x] 2026-06-16 `gift-dream` `jealousy-dream` (4섹션+FAQ4, 큐 소진 후 신규 연애직결 2편)
 - [x] 2026-06-15 `moving-dream` `message-dream` (4섹션+FAQ4, 큐 소진+신규 연애직결)
 - [x] 2026-06-14 `stranger-dream` `holding-hands-dream` (4섹션+FAQ4)
 - [x] 2026-06-13 `hug-dream` `confession-dream` (4섹션+FAQ4)
 - [x] 2026-06-12 `reunion-dream` `fight-dream` (4섹션+FAQ4, 신규 큐 1차)
-- [x] 2026-06-11 `water` `cheating-dream` (4섹션+FAQ4)

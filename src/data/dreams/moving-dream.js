@@ -84,5 +84,6 @@ export default {
   relatedDreams: [
     { slug: 'reunion-dream', label: '재회하는 꿈' },
     { slug: 'stranger-dream', label: '모르는 이성 꿈' },
+    { slug: 'flying-dream', label: '하늘을 나는 꿈' },
   ],
 }
