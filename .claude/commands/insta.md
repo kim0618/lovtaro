@@ -49,8 +49,9 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, AskUserQuestion, Todo
    - 프레임·카드·텍스트 간격이 레퍼런스와 일치하는지
    - 코스믹 배경·달·별·프레임이 의도대로 그려졌는지
    - 문제 발견 시 스크립트 수정 후 재생성. 문제없어야 8번으로 진행
-8. **`.claude/insta-data/card_usage.md` 메모리 업데이트** — 이번 주에 사용한 메이저/마이너 카드(커버+본문+참여 전부) 추가 기록
-9. **`.claude/insta-data/hook_history.md` 메모리 업데이트** — 이번 주에 사용한 모든 훅 추가 기록 (훅 텍스트 + 슬롯 + 카드 + 날짜). 도달 수치는 "미기록"으로 두고 **다음 주 스킬 실행 시 사용자가 보여줄 인사이트로 갱신** (위 1단계 워크플로)
+8. **심리테스트 스토리 5개 생성 (평일 월~금, 자동)** — `node scripts/generate-story-tests.mjs week <그 주 월요일 YYYY-MM-DD>` 실행. 5개 심리테스트를 월~금에 랜덤 배치해 각 날짜 폴더에 `story01.png` + `story.txt`(질문·링크URL·카드) 생성. 질문 중복은 `story_questions.md`, 카드 78장 no-dup 순환은 `story_cards.json`이 자동 관리. **생성 후 각 story01.png도 Read로 시각 검증** (자소/오버플로우). 상세는 아래 "심리테스트 스토리" 섹션 참고
+9. **`.claude/insta-data/card_usage.md` 메모리 업데이트** — 이번 주에 사용한 메이저/마이너 카드(커버+본문+참여 전부) 추가 기록
+10. **`.claude/insta-data/hook_history.md` 메모리 업데이트** — 이번 주에 사용한 모든 훅 추가 기록 (훅 텍스트 + 슬롯 + 카드 + 날짜). 도달 수치는 "미기록"으로 두고 **다음 주 스킬 실행 시 사용자가 보여줄 인사이트로 갱신** (위 1단계 워크플로)
 
 ---
 
@@ -100,6 +101,20 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, AskUserQuestion, Todo
 - **일요일 Sunday Preview**는 참여형/소개형과 다른 전용 포맷. **6컷 구조** (2026-05-05 7컷 → 6컷 단축, 시청 retention 우선) + 주간 시리즈명 고정("Sunday Tarot Preview"). 참여형과 구조적 차별화 필수: ① 타임라인 축(주 초반/중반/후반) ② 마지막 저장 CTA 씬(scene06)
 - **답글 부담**: 1·2·3 참여형 4회 × 3개 + Sunday 3개 = 15개/주
 - **폐기 항목**: 소개형 메이저 NEW 디자인 (152~177회 검증 실패), 캐러셀용 릴스 하이브리드 (유튜브 도달 부진). 두 항목 모두 비활성·보존 (스크립트·템플릿 유지하되 주간 배치 제외)
+
+---
+
+## 심리테스트 스토리 (평일 5개, /test 유입 엔진)
+
+피드(릴스/캐러셀)와 **별개로 매주 평일(월~금) 인스타 스토리 5개**를 자동 생성한다. 심리테스트(/test) 유입 전용. 릴스 카드 뒷면과 겹치므로 **반드시 카드 앞면** 사용.
+
+- **생성**: `node scripts/generate-story-tests.mjs week <그 주 월요일 YYYY-MM-DD>` (파일 생성 순서 8번). 출력은 각 평일 날짜 폴더에 `story01.png` + `story.txt`.
+- **배치**: 5개 심리테스트(이상형·전생·MBTI·짝사랑·연애스타일)를 **매주 랜덤 셔플해 월~금에 1개씩** (한 주에 테스트별 1회).
+- **디자인 (확정, 변경 금지)**: 딥퍼플 코스믹 배경 + "연애 심리테스트" 골드 헤더 + 질문 2줄(60px) + **카드 앞면 2장(겹침, 앞 +5°·뒤 -7°)** + 앰비언트 둥근 빛(warmBloom) + 옅은 그림자 + **가장자리 페더(마스크 블러로 배경에 녹아듦, 하드보더·사각 글로우 금지)** + 미들라인(**심리테스트 이름을 골드 텍스트 + 위아래 골드 디바이더 선**, 예: "짝사랑 유형 테스트") + @lovtarot_. **CTA/링크 문구는 이미지에 넣지 않음** (사용자가 IG 링크 스티커로 직접 연결, URL은 story.txt에 기록).
+- **질문 중복 방지**: `.claude/insta-data/story_questions.md`. 테스트별 질문 5개 풀, 뽑으면 `[x](날짜)` 표시, 5개 다 쓰면 자동 미사용 리셋. 질문 추가는 이 파일에 줄 추가.
+- **카드 78장 no-dup 순환**: `.claude/insta-data/story_cards.json`. 78장 전부 한 번씩 쓰기 전엔 중복 없음, 한 바퀴 돌면 리셋. minor는 mcards 세로 원본, major는 cards-png. 매 스토리 2장. **같은 슈트 minor 2장은 회피**(그림 비슷해 뭉개짐, major끼리는 허용).
+- **링크 (story.txt)**: `https://lovtaro.kr/test/{slug}?utm_source=instagram&utm_medium=story` (UTM으로 인스타→테스트 전환 GA 추적).
+- 두 트래커(`story_questions.md`·`story_cards.json`)는 git 추적 → 생성 후 사용자가 commit하면 PC 간 동기화.
 
 ---
 
@@ -733,6 +748,8 @@ const svg = carouselShortformSlide({
 - [ ] carousel 커버는 메이저 아르카나인가
 - [ ] Sunday Preview는 7컷 구조 + 시리즈명 "Sunday Tarot Preview" 포함되었는가
 - [ ] `.claude/insta-data/card_usage.md` 슬롯별로 업데이트했는가 (특히 슬롯 5 메이저 + 5b 마이너)
+- [ ] **심리테스트 스토리 5개**를 평일(월~금)에 생성했는가 (`generate-story-tests.mjs week <월요일>`), 각 폴더에 story01.png + story.txt 있고 카드 앞면·앰비언트 빛 디자인 유지, story01.png 시각 검증했는가
+- [ ] 스토리 질문 중복 없는가(`story_questions.md` 테스트별 [x] 1개씩) + 카드 78장 no-dup 순환되는가(`story_cards.json`)
 
 ### 비주얼 스타일
 - [ ] **릴스/숏폼 전부 코스믹 스타일인가** (cosmicDefs + cosmicBody + drawFrame 사용)
