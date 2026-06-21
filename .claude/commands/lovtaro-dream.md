@@ -1,11 +1,11 @@
 ---
-description: lovtaro.kr 꿈해몽 사전 글 2편 자동 작성 + 파일 생성 + index/sitemap 동기화 (연애+꿈 롱테일 SEO 엔진)
+description: lovtaro.kr 꿈해몽 사전 글 1편 자동 작성 + 파일 생성 + index/sitemap 동기화 (연애+꿈 롱테일 SEO 엔진)
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, WebSearch
 ---
 
 # 러브타로 꿈해몽 사전 작성 스킬
 
-`lovtaro` 프로젝트의 `/dream` 섹션에 **퀄리티가 브랜드를 결정하는** 꿈해몽 글 2편을 작성한다. 얇거나 AI스러운 글, 멋대로 지어낸 해몽은 절대 발행하지 않는다. 기준 미달이면 기준까지 다시 쓴다.
+`lovtaro` 프로젝트의 `/dream` 섹션에 **퀄리티가 브랜드를 결정하는** 꿈해몽 글 1편을 작성한다. 얇거나 AI스러운 글, 멋대로 지어낸 해몽은 절대 발행하지 않는다. 기준 미달이면 기준까지 다시 쓴다.
 
 ## 존재 이유 / 포지셔닝
 
@@ -13,8 +13,8 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash, WebSearch
 
 ## 편수 원칙 (절대)
 
-- 사용자가 명시하지 않으면 **하루 2편.** 3편 이상 금지.
-- 기준 미달이면 리라이트 허용. 편수 채우려고 얇게 발행하지 않는다. 2편 중 1편만 나와도 OK.
+- 사용자가 명시하지 않으면 **하루 1편.** 2편 이상 금지.
+- 기준 미달이면 리라이트 허용. 편수 채우려고 얇게 발행하지 않는다. 기준 미달이면 발행을 미뤄도 OK.
 - verify 통과 전 commit·배포 금지. 배포는 사용자가 직접(빌드까지만).
 
 ## 핵심 작성 원칙: 근거 위 재해석 (3겹)
@@ -46,7 +46,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash, WebSearch
 
 ## 1단계. 주제 선정
 
-큐 [.claude/dreams-queue.md](/home/tjd618/lovtaro/.claude/dreams-queue.md) **맨 위 미발행(`- [ ]`)에서 2개**를 꺼낸다.
+큐 [.claude/dreams-queue.md](/home/tjd618/lovtaro/.claude/dreams-queue.md) **맨 위 미발행(`- [ ]`)에서 1개**를 꺼낸다.
 
 - 큐 소진 임박(남은 미발행 4개 이하)이면 먼저 사용자에게 알리고, 네이버 서치어드바이저 노출 화면을 요청해 다음 큐를 짠다(데이터 쌓인 후 역산 전환).
 - 큐의 "후순위(범용 대형)" 주제는 연애 각도가 억지면 스킵하고 1·2군에서 당겨온다.
