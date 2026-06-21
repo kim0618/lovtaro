@@ -111,7 +111,8 @@ Week 1~3 날짜별 큐로 메이저 22장 + 컵 14장 + 상황/방법 글(crush-
 
 위 "2026-06 네이버 노출 역산" 15장을 먼저 소진. 그 뒤 아래 27장을 발행. 다음 큐 보충 시 네이버 서치어드바이저 노출을 재확인해 노출 뜨는 카드부터 끌어올린다. 슬러그는 `{card-id}-love-meaning`.
 
-- **Swords 나머지 9**: ace-of-swords, two-of-swords, three-of-swords, four-of-swords, six-of-swords, seven-of-swords, knight-of-swords, queen-of-swords, king-of-swords
+- ~~ace-of-swords~~ **발행완료 2026-06-21** `ace-of-swords-love-meaning`
+- **Swords 나머지 9**: two-of-swords(완료), three-of-swords(완료), four-of-swords, six-of-swords, seven-of-swords, knight-of-swords, queen-of-swords, king-of-swords
 - **Wands 나머지 9**: ace-of-wands, two-of-wands, three-of-wands, four-of-wands, five-of-wands, seven-of-wands, eight-of-wands, page-of-wands, knight-of-wands
 - **Pentacles 나머지 9**: ace-of-pentacles, two-of-pentacles, five-of-pentacles, six-of-pentacles, seven-of-pentacles, eight-of-pentacles, nine-of-pentacles, ten-of-pentacles, page-of-pentacles
 

@@ -83,5 +83,6 @@ export default {
     { slug: 'breakup', label: '헤어지는 꿈' },
     { slug: 'ex-lover', label: '전 애인 꿈' },
     { slug: 'water', label: '물 꿈' },
+    { slug: 'rain-dream', label: '비 오는 꿈' },
   ],
 }
