@@ -88,14 +88,22 @@
 - [x] **고양이 꿈** | `cat-dream` | symbol | 2026-06-21
 - [x] **비 오는 꿈** | `rain-dream` | situation | 2026-06-21
 
+## 신규 큐 (2026-06-22 추가)
+
+- [x] **거절당하는 꿈** | `rejection-dream` | situation | 2026-06-22
+
+## 미추적 발행분 (큐에 없던 파일 사후 기록)
+
+- [x] **바람피우는 꿈** | `cheating-dream` | situation | 2026-06-11 (파일 존재 확인, 큐 누락이었음)
+
 ---
 
 ## 발행 후 기록 (최근 7편만 유지, 그 이상은 삭제)
 
+- [x] 2026-06-22 `rejection-dream` (4섹션+FAQ4, 2403자, 거절당하는 꿈)
 - [x] 2026-06-21 `cat-dream` `rain-dream` (4섹션+FAQ4, 2403자/2400자, 고양이+비)
 - [x] 2026-06-19 `flying-dream` `dog-dream` (4섹션+FAQ4, 2406자/2417자, 나는꿈+강아지)
 - [x] 2026-06-17 `date-dream` `proposal-dream` (4섹션+FAQ4, 연애직결 1군 신규 2편)
 - [x] 2026-06-16 `gift-dream` `jealousy-dream` (4섹션+FAQ4, 큐 소진 후 신규 연애직결 2편)
 - [x] 2026-06-15 `moving-dream` `message-dream` (4섹션+FAQ4, 큐 소진+신규 연애직결)
 - [x] 2026-06-14 `stranger-dream` `holding-hands-dream` (4섹션+FAQ4)
-- [x] 2026-06-13 `hug-dream` `confession-dream` (4섹션+FAQ4)

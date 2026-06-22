@@ -54,7 +54,7 @@ trackEvent('reading_complete', {
 | `mini_copy_link` | `reading_type` | MiniShareBar |
 | `streak_badge_save` | `streak` | [StreakBadge.vue](../../src/components/result/StreakBadge.vue) |
 | `link_page_click` | `label`, `to` | [LinkPage.vue](../../src/pages/LinkPage.vue) |
-| `cta_click` | `cta_id`, `destination`, `reading_type?` | 주요 CTA. `cta_id`: `premium_result`(무료리딩→프리미엄), `test_to_reading`(테스트 결과→무료리딩) |
+| `cta_click` | `cta_id`, `destination`, `reading_type?`, `location?` | 주요 CTA. `cta_id`: `premium_result`(무료리딩→프리미엄), `test_to_reading`(테스트 결과→무료리딩), `premium_kakao`(프리미엄→오픈채팅 신청, `location`=`hero`/`final`), `premium_copy_template`(신청양식 복사) |
 
 ### 심리테스트 (TestPage.vue)
 

@@ -18,11 +18,42 @@
 
 | 갱신일 | 출처 캡처 | 큐 변경 요약 |
 |---|---|---|
+| 2026-06-22 | 검색 키워드 TOP30 + 웹문서 TOP30 (최근30일 클릭 790·노출 3.9만·CTR 2%, 전월比 노출 +717%·클릭 +908% 색인 폭발 지속) | 6/1 우선순위 15장 전부 발행 완료→아카이브. 신규 우선순위 큐를 가이드 없는 카드(갭 24장) 노출 역산으로 재구축: king-of-swords(웹문서623·"킹오브소드 해석" 검색어 1위 8클릭) 압도적 1순위, queen-of-swords(561)·ten-of-pentacles(567)·ace-of-pentacles(394·"속마음")·six-of-swords 순. 역방향 검색 뜨는 기존 가이드(empress·world·hermit·judgement·lovers·wheel·devil)는 본문 역방향 각도 보강 대상으로 분리 기재. 꿈해몽은 신호 미약("전애인 꿈" 1건·이미 발행)이라 dreams-queue 변동 없음 |
 | 2026-06-01 | 검색 키워드 TOP30 + 웹문서 TOP30 | 소드·완드·펜타클 42장 노출 역산 큐 구축 (기준 베이스라인) |
 
 ---
 
-## 2026-06 네이버 노출 역산 우선순위 큐 (★ 여기부터 소진)
+## 2026-06-22 네이버 노출 역산 우선순위 큐 (★ 여기부터 소진)
+
+근거: 6/1 우선순위 15장 전부 발행 완료. 6/22 캡처 기준 **가이드가 아직 없는 카드(갭 24장)** 중 노출 큰 순으로 재정렬. 카드 사전 페이지(`/cards/:id`)는 노출이 큰데 가이드 레이어가 없어 롱테일·결과지향(속마음·역방향·해석) 검색을 못 먹는 중. 슬러그는 `{card-id}-love-meaning`. 메이저 22 + 컵 14 + 6/1큐 15장은 발행 완료라 중복 금지.
+
+- [x] **소드 킹 연애 해석 - 차가운 사람의 마음 읽는 법** | `king-of-swords-love-meaning` | 2026-06-22 발행
+- [ ] **소드 퀸 연애 해석 - 선을 긋는 마음 읽기** | `queen-of-swords-love-meaning` | 카드 해석
+  - 근거: 웹문서 561노출 CTR2.0. 소드 코트 수요 동반 상승
+  - 핵심: 독립·경계·상처 후 방어. 쉽게 곁을 안 주는 이유. 솔로/연인 분기
+  - 관련 카드: queen-of-swords, king-of-swords, nine-of-swords, eight-of-swords
+- [ ] **펜타클 10 연애 해석 - 안정된 미래를 보는 카드** | `ten-of-pentacles-love-meaning` | 카드 해석
+  - 근거: 웹문서 567노출 CTR1.8. 펜타클 코트 강세 연장
+  - 핵심: 장기·가족·결혼으로 이어지는 안정. 현실 조건과 지속성
+  - 관련 카드: ten-of-pentacles, king-of-pentacles, hierophant, world
+- [ ] **에이스 펜타클 연애 해석 - 새 인연의 현실적 시작과 속마음** | `ace-of-pentacles-love-meaning` | 카드 해석
+  - 근거: 웹문서 394노출 CTR5.1 + 검색어 "에이스펜타클" 5클릭, "에이스펜타클 속마음" 3클릭/CTR27.3 (가이드 의도 강함)
+  - 핵심: 현실 기반의 새 시작, 안정적 호감. "속마음" 각도를 상대방 자리 해석에 녹이기
+  - 관련 카드: ace-of-pentacles, king-of-pentacles, two-of-pentacles, ace-of-cups
+- [ ] **소드 6 연애 해석 - 떠나보내고 나아가는 시기** | `six-of-swords-love-meaning` | 카드 해석
+  - 근거: 검색어 "소드 6 역방향" 3클릭/25노출/CTR12. 역방향 의도 동반
+  - 핵심: 전환·거리두기·회복으로의 이동. 역방향=떠나지 못함·미련. 재회 각도 분기
+  - 관련 카드: six-of-swords, eight-of-cups, five-of-cups, three-of-swords
+
+> 위 5장 소진 후: 아래 "중장기 주제 풀"의 남은 갭 카드 19장(seven-of-swords, knight-of-swords, ace/eight/page-of-wands, six/seven/nine-of-pentacles 등)을 다음 캡처 노출 재확인해 끌어올린다.
+
+### 🔁 기존 가이드 역방향 보강 대상 (신규 발행 아님 - 본문에 역방향 각도 강화)
+6월 역방향·연애운 검색이 뜨는데 가이드는 이미 있는 카드들. /lovtaro-guide 신규 대신, 해당 가이드 본문의 역방향 섹션을 보강:
+- empress(여황제 역방향 6클릭/13), world(세계 역방향 4클릭), seven-of-cups(컵7 역방향 4클릭), devil(악마 연애운 4클릭/CTR66.7), hermit(은둔자 역방향 3클릭/62노출), judgement(심판 역방향 3클릭/42), lovers(연인 역방향 3클릭), wheel(수레바퀴 역방향 2클릭/79), three-of-swords(소드3 역방향 2클릭)
+
+---
+
+## 2026-06-01 네이버 노출 역산 큐 (전부 발행 완료 - 아카이브)
 
 근거: 네이버 서치어드바이저 노출 상위 카드 중 **전용 가이드가 없는 소드·완드·펜타클 42장이 통째로 비어있음.** 카드 사전 페이지(`/cards/:id`)만 있고 가이드 레이어가 없어 롱테일을 못 먹는 중. 노출 큰 순으로 발행해 색인 폭발 구간(노출 +34000%)에 올라탄다. 메이저 22 + 컵 14는 발행 완료라 중복 금지. 결과지향 키워드(연락운·재회·연애운)가 뜨는 카드는 그 각도를 본문에 녹인다.
 
@@ -115,14 +146,13 @@ Week 1~3 날짜별 큐로 메이저 22장 + 컵 14장 + 상황/방법 글(crush-
 
 - **Major 22장 전부 완료**, **Minor Cups 14장 전부 완료**. 신규 발행 금지.
 
-### 카드 해석 (소드·완드·펜타클 나머지 - 위 우선순위 큐 15장 소진 후)
+### 카드 해석 (가이드 없는 갭 카드 - 위 2026-06-22 우선순위 큐 5장 소진 후)
 
-위 "2026-06 네이버 노출 역산" 15장을 먼저 소진. 그 뒤 아래 27장을 발행. 다음 큐 보충 시 네이버 서치어드바이저 노출을 재확인해 노출 뜨는 카드부터 끌어올린다. 슬러그는 `{card-id}-love-meaning`.
+위 "2026-06-22 네이버 노출 역산" 5장(king-of-swords·queen-of-swords·ten-of-pentacles·ace-of-pentacles·six-of-swords)을 먼저 소진. 그 뒤 아래 남은 갭 카드를 발행. 다음 큐 보충 시 네이버 서치어드바이저 노출을 재확인해 노출 뜨는 카드부터 끌어올린다. 슬러그는 `{card-id}-love-meaning`.
 
-- ~~ace-of-swords~~ **발행완료 2026-06-21** `ace-of-swords-love-meaning`
-- **Swords 나머지 9**: two-of-swords(완료), three-of-swords(완료), four-of-swords, six-of-swords, seven-of-swords, knight-of-swords, queen-of-swords, king-of-swords
-- **Wands 나머지 9**: ace-of-wands, two-of-wands, three-of-wands, four-of-wands, five-of-wands, seven-of-wands, eight-of-wands, page-of-wands, knight-of-wands
-- **Pentacles 나머지 9**: ace-of-pentacles, two-of-pentacles, five-of-pentacles, six-of-pentacles, seven-of-pentacles, eight-of-pentacles, nine-of-pentacles, ten-of-pentacles, page-of-pentacles
+- **Swords 나머지 (갭)**: four-of-swords, seven-of-swords, knight-of-swords  *(six-of-swords·queen-of-swords·king-of-swords는 6/22 우선순위 큐로 이동)*
+- **Wands 나머지 9 (전부 갭)**: ace-of-wands, two-of-wands, three-of-wands, four-of-wands, five-of-wands, seven-of-wands, eight-of-wands, page-of-wands, knight-of-wands
+- **Pentacles 나머지 (갭)**: two-of-pentacles, five-of-pentacles, six-of-pentacles, seven-of-pentacles, eight-of-pentacles, nine-of-pentacles, page-of-pentacles  *(ace-of-pentacles·ten-of-pentacles는 6/22 우선순위 큐로 이동)*
 
 ### 상황별 가이드
 

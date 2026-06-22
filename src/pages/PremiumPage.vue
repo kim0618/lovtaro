@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useHead, SITE_URL } from '../composables/useHead.js'
+import { trackEvent } from '../utils/gtag.js'
 import AppShell from '../components/common/AppShell.vue'
 import PageContainer from '../components/ui/PageContainer.vue'
 import SectionBlock from '../components/ui/SectionBlock.vue'
@@ -105,12 +106,21 @@ async function copyTemplate() {
     await navigator.clipboard.writeText(applyTemplate)
     copied.value = true
     setTimeout(() => { copied.value = false }, 1800)
+    trackEvent('cta_click', {
+      cta_id: 'premium_copy_template',
+      destination: 'clipboard',
+    })
   } catch {
     // 클립보드 권한 거부 시 무시
   }
 }
 
-function openKakao() {
+function openKakao(location) {
+  trackEvent('cta_click', {
+    cta_id: 'premium_kakao',
+    destination: 'kakao_openchat',
+    location: location || 'unknown',
+  })
   window.open(KAKAO_OPENCHAT_URL, '_blank', 'noopener')
 }
 </script>
@@ -142,7 +152,7 @@ function openKakao() {
 
         <div class="premium-hero__divider" aria-hidden="true" />
 
-        <button class="premium-hero__cta" type="button" @click="openKakao">
+        <button class="premium-hero__cta" type="button" @click="openKakao('hero')">
           오픈채팅으로 신청하기
         </button>
 
@@ -235,7 +245,7 @@ function openKakao() {
           <p class="final-cta__eyebrow">READY?</p>
           <h2 class="final-cta__title">사연을 들려주세요</h2>
           <p class="final-cta__body">결제는 사연을 받은 뒤 안내해 드려요.<br>부담 없이 들러주셔도 괜찮습니다.</p>
-          <button class="final-cta__btn" type="button" @click="openKakao">
+          <button class="final-cta__btn" type="button" @click="openKakao('final')">
             오픈채팅으로 신청하기
           </button>
         </div>
