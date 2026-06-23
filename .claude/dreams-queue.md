@@ -107,3 +107,7 @@
 - [x] 2026-06-16 `gift-dream` `jealousy-dream` (4섹션+FAQ4, 큐 소진 후 신규 연애직결 2편)
 - [x] 2026-06-15 `moving-dream` `message-dream` (4섹션+FAQ4, 큐 소진+신규 연애직결)
 - [x] 2026-06-14 `stranger-dream` `holding-hands-dream` (4섹션+FAQ4)
+
+## 신규 큐 (2026-06-23 추가)
+
+- [x] **쫓기는 꿈** | `chase-dream` | situation | 2026-06-23 발행

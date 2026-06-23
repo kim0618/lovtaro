@@ -80,6 +80,7 @@ export default {
   ],
   relatedDreams: [
     { slug: 'confession-dream', label: '고백하는 꿈' },
+    { slug: 'chase-dream', label: '쫓기는 꿈' },
     { slug: 'crush', label: '좋아하는 사람 꿈' },
   ],
 }
