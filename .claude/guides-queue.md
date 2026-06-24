@@ -32,7 +32,7 @@
   - 근거: 웹문서 561노출 CTR2.0. 소드 코트 수요 동반 상승
   - 핵심: 독립·경계·상처 후 방어. 쉽게 곁을 안 주는 이유. 솔로/연인 분기
   - 관련 카드: queen-of-swords, king-of-swords, nine-of-swords, eight-of-swords
-- [ ] **펜타클 10 연애 해석 - 안정된 미래를 보는 카드** | `ten-of-pentacles-love-meaning` | 카드 해석
+- [x] **펜타클 10 연애 해석 - 안정된 미래를 보는 카드** | `ten-of-pentacles-love-meaning` | 카드 해석 | 2026-06-24 발행
   - 근거: 웹문서 567노출 CTR1.8. 펜타클 코트 강세 연장
   - 핵심: 장기·가족·결혼으로 이어지는 안정. 현실 조건과 지속성
   - 관련 카드: ten-of-pentacles, king-of-pentacles, hierophant, world

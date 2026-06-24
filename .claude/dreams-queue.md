@@ -100,14 +100,18 @@
 
 ## 발행 후 기록 (최근 7편만 유지, 그 이상은 삭제)
 
+- [x] 2026-06-24 `reconcile-dream` (4섹션+FAQ4, 2402자, 화해하는 꿈)
+- [x] 2026-06-23 `chase-dream` (4섹션+FAQ4, 쫓기는 꿈)
 - [x] 2026-06-22 `rejection-dream` (4섹션+FAQ4, 2403자, 거절당하는 꿈)
 - [x] 2026-06-21 `cat-dream` `rain-dream` (4섹션+FAQ4, 2403자/2400자, 고양이+비)
 - [x] 2026-06-19 `flying-dream` `dog-dream` (4섹션+FAQ4, 2406자/2417자, 나는꿈+강아지)
 - [x] 2026-06-17 `date-dream` `proposal-dream` (4섹션+FAQ4, 연애직결 1군 신규 2편)
 - [x] 2026-06-16 `gift-dream` `jealousy-dream` (4섹션+FAQ4, 큐 소진 후 신규 연애직결 2편)
-- [x] 2026-06-15 `moving-dream` `message-dream` (4섹션+FAQ4, 큐 소진+신규 연애직결)
-- [x] 2026-06-14 `stranger-dream` `holding-hands-dream` (4섹션+FAQ4)
 
 ## 신규 큐 (2026-06-23 추가)
 
 - [x] **쫓기는 꿈** | `chase-dream` | situation | 2026-06-23 발행
+
+## 신규 큐 (2026-06-24 추가)
+
+- [x] **화해하는 꿈** | `reconcile-dream` | situation | 2026-06-24 발행

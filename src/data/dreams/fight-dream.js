@@ -80,7 +80,7 @@ export default {
     { id: 'star', name: '별' },
   ],
   relatedDreams: [
-    { slug: 'cheating-dream', label: '바람 피우는 꿈' },
+    { slug: 'reconcile-dream', label: '화해하는 꿈' },
     { slug: 'reunion-dream', label: '재회하는 꿈' },
     { slug: 'breakup', label: '헤어지는 꿈' },
   ],
