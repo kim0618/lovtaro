@@ -36,7 +36,7 @@
   - 근거: 웹문서 567노출 CTR1.8. 펜타클 코트 강세 연장
   - 핵심: 장기·가족·결혼으로 이어지는 안정. 현실 조건과 지속성
   - 관련 카드: ten-of-pentacles, king-of-pentacles, hierophant, world
-- [ ] **에이스 펜타클 연애 해석 - 새 인연의 현실적 시작과 속마음** | `ace-of-pentacles-love-meaning` | 카드 해석
+- [x] **에이스 펜타클 연애 해석 - 새 인연의 속마음과 현실적 시작** | `ace-of-pentacles-love-meaning` | 카드 해석 | 2026-06-25 발행
   - 근거: 웹문서 394노출 CTR5.1 + 검색어 "에이스펜타클" 5클릭, "에이스펜타클 속마음" 3클릭/CTR27.3 (가이드 의도 강함)
   - 핵심: 현실 기반의 새 시작, 안정적 호감. "속마음" 각도를 상대방 자리 해석에 녹이기
   - 관련 카드: ace-of-pentacles, king-of-pentacles, two-of-pentacles, ace-of-cups
