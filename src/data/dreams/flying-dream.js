@@ -81,6 +81,7 @@ export default {
     { id: 'wheel', name: '운명의 수레바퀴' },
   ],
   relatedDreams: [
+    { slug: 'travel-dream', label: '여행하는 꿈' },
     { slug: 'moving-dream', label: '이사하는 꿈' },
     { slug: 'breakup', label: '헤어지는 꿈' },
     { slug: 'rain-dream', label: '비 오는 꿈' },

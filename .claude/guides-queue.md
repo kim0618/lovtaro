@@ -40,7 +40,7 @@
   - 근거: 웹문서 394노출 CTR5.1 + 검색어 "에이스펜타클" 5클릭, "에이스펜타클 속마음" 3클릭/CTR27.3 (가이드 의도 강함)
   - 핵심: 현실 기반의 새 시작, 안정적 호감. "속마음" 각도를 상대방 자리 해석에 녹이기
   - 관련 카드: ace-of-pentacles, king-of-pentacles, two-of-pentacles, ace-of-cups
-- [ ] **소드 6 연애 해석 - 떠나보내고 나아가는 시기** | `six-of-swords-love-meaning` | 카드 해석
+- [x] **소드 6 연애 해석 - 상처를 안고 앞으로 가는 시기** | `six-of-swords-love-meaning` | 카드 해석 | 2026-06-26 발행
   - 근거: 검색어 "소드 6 역방향" 3클릭/25노출/CTR12. 역방향 의도 동반
   - 핵심: 전환·거리두기·회복으로의 이동. 역방향=떠나지 못함·미련. 재회 각도 분기
   - 관련 카드: six-of-swords, eight-of-cups, five-of-cups, three-of-swords
