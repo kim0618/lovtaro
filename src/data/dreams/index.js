@@ -46,8 +46,10 @@ import pregnancy from './pregnancy.js'
 import exLover from './ex-lover.js'
 import crush from './crush.js'
 import kiss from './kiss.js'
+import moonDream from './moon-dream.js'
 
 const dreams = [
+  moonDream,
   fireDream,
   travelDream,
   houseDream,

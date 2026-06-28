@@ -45,7 +45,10 @@
   - 핵심: 전환·거리두기·회복으로의 이동. 역방향=떠나지 못함·미련. 재회 각도 분기
   - 관련 카드: six-of-swords, eight-of-cups, five-of-cups, three-of-swords
 
-> 위 5장 소진 후: 아래 "중장기 주제 풀"의 남은 갭 카드 19장(seven-of-swords, knight-of-swords, ace/eight/page-of-wands, six/seven/nine-of-pentacles 등)을 다음 캡처 노출 재확인해 끌어올린다.
+- [x] **소드의 7 연애 해석 - 숨겨진 것이 있을 때 관계를 읽는 법** | `seven-of-swords-love-meaning` | 카드 해석 | 2026-06-27 발행
+- [x] **소드의 나이트 연애 해석 - 빠른 마음을 다루는 법** | `knight-of-swords-love-meaning` | 카드 해석 | 2026-06-28 발행
+
+> 위 5장 + 추가 2장 소진: 아래 "중장기 주제 풀"의 남은 갭 카드 17장(ace/eight/page-of-wands, six/seven/nine-of-pentacles, four-of-swords 등)을 다음 캡처 노출 재확인해 끌어올린다.
 
 ### 🔁 기존 가이드 역방향 보강 대상 (신규 발행 아님 - 본문에 역방향 각도 강화)
 6월 역방향·연애운 검색이 뜨는데 가이드는 이미 있는 카드들. /lovtaro-guide 신규 대신, 해당 가이드 본문의 역방향 섹션을 보강:

@@ -567,6 +567,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://lovtaro.kr/guide/knight-of-swords-love-meaning/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://lovtaro.kr/guide/six-of-swords-love-meaning/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -612,6 +617,11 @@
     <priority>0.7</priority>
   </url>
   <!-- Dream section (글 추가 시 아래에 /dream/{slug}/ URL 추가) -->
+  <url>
+    <loc>https://lovtaro.kr/dream/moon-dream/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
   <url>
     <loc>https://lovtaro.kr/dream/fire-dream/</loc>
     <changefreq>monthly</changefreq>
