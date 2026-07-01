@@ -1,6 +1,6 @@
 /**
- * 소개형 마이너 shortform 2026-07-03_fri (Page of Pentacles)
- * 훅: 무뚝뚝한 줄 알았는데, / 왜 자꾸 챙겨줄까?
+ * 소개형 마이너 shortform 2026-07-03_fri (Four of Cups)
+ * 훅: 좋은 사람이 곁에 있는데, / 왜 마음이 시들할까?
  */
 import sharp from 'sharp'
 import { writeFileSync, mkdirSync, existsSync } from 'fs'
@@ -14,7 +14,7 @@ const outputDir = resolve(rootDir, 'content-output/2026-07-03_fri/shortform')
 const W = 1080, H = 1920
 
 const PORTRAIT_OVERRIDE = {
-  'page-of-pentacles': 'public/images/mcards/pentacles/Page of Pentacles.png',
+  'four-of-cups': 'public/images/mcards/cups/Four of Cups.png',
 }
 
 function mulberry32(seed) {
@@ -130,10 +130,10 @@ async function roundImg(buf, w, h, r) {
 }
 
 async function scene01() {
-  const cardSlug = 'page-of-pentacles'
-  const hookLineTop = '무뚝뚝한 줄 알았는데,'
-  const accentBefore = '왜 자꾸 '
-  const accentWord = '챙겨줄까'
+  const cardSlug = 'four-of-cups'
+  const hookLineTop = '좋은 사람이 곁에 있는데,'
+  const accentBefore = '왜 '
+  const accentWord = '마음이 시들할까'
   const accentAfter = '?'
 
   const portraitW = 1080, portraitH = 1920
@@ -222,7 +222,7 @@ async function scene02() {
   const cardLeft = frameX + framePad
   const cardTop = frameY + framePad
 
-  const cardRaw = await loadCard('page-of-pentacles', cardW, cardH)
+  const cardRaw = await loadCard('four-of-cups', cardW, cardH)
   const cardEnhanced = await sharp(cardRaw)
     .sharpen({ sigma: 0.7, m1: 0.5, m2: 2.2 })
     .modulate({ saturation: 1.12, brightness: 1.03 })
@@ -258,11 +258,11 @@ async function scene02() {
     ${drawFrame(frameX, frameY, frameW, frameH, 1.3)}
 
     <g filter="url(#softGlow)">
-      <text x="540" y="${nameKrY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="58" fill="#F4F8FF" font-weight="300" letter-spacing="4">펜타클의 페이지</text>
-      <text x="540" y="${nameEnY}" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="30" fill="rgba(232,212,139,0.88)" letter-spacing="1">Page of Pentacles</text>
+      <text x="540" y="${nameKrY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="58" fill="#F4F8FF" font-weight="300" letter-spacing="4">컵의 4</text>
+      <text x="540" y="${nameEnY}" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="30" fill="rgba(232,212,139,0.88)" letter-spacing="1">Four of Cups</text>
     </g>
 
-    <text x="540" y="${kwY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="26" fill="rgba(232,212,139,0.72)" letter-spacing="4" font-weight="300">묵묵함 · 진심 · 챙김</text>
+    <text x="540" y="${kwY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="26" fill="rgba(232,212,139,0.72)" letter-spacing="4" font-weight="300">권태 · 성찰 · 새로운 관점</text>
 
     <text x="540" y="1860" text-anchor="middle" font-family="sans-serif" font-size="24" fill="rgba(232,212,139,0.45)" letter-spacing="4">@lovtarot_</text>
   </svg>`
@@ -285,7 +285,7 @@ async function scene03() {
   const cardLeft = frameX + framePad
   const cardTop = frameY + framePad
 
-  const cardImg = await loadCard('page-of-pentacles', cardW, cardH)
+  const cardImg = await loadCard('four-of-cups', cardW, cardH)
   const masked = await roundImg(cardImg, cardW, cardH, 6)
 
   const divideY = cardTop + cardH + 20
@@ -302,22 +302,22 @@ async function scene03() {
     ${cosmicBody(true, 95)}
 
     <g filter="url(#softGlow)">
-      <text x="${W / 2}" y="${headerY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="40" fill="#F4F8FF" font-weight="300" letter-spacing="6">표현은 적어도, 챙기는 건 빠뜨리지 않는 사람</text>
+      <text x="${W / 2}" y="${headerY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="40" fill="#F4F8FF" font-weight="300" letter-spacing="6">설렘이 사라진 자리, 그 마음을 들여다보면</text>
     </g>
 
     ${drawFrame(frameX, frameY, frameW, frameH, 0.95)}
 
     <line x1="${frameX + 34}" y1="${divideY}" x2="${frameX + frameW - 34}" y2="${divideY}" stroke="rgba(201,168,76,0.28)" stroke-width="1"/>
 
-    <text x="${W / 2}" y="${nameKrY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="4">펜타클의 페이지</text>
-    <text x="${W / 2}" y="${nameEnY}" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="20" fill="rgba(232,212,139,0.8)" letter-spacing="1">Page of Pentacles</text>
+    <text x="${W / 2}" y="${nameKrY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="4">컵의 4</text>
+    <text x="${W / 2}" y="${nameEnY}" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="20" fill="rgba(232,212,139,0.8)" letter-spacing="1">Four of Cups</text>
 
-    <text x="${W / 2}" y="${kwY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="22" fill="rgba(232,212,139,0.6)" letter-spacing="4" font-weight="300">묵묵함 · 진심 · 챙김</text>
+    <text x="${W / 2}" y="${kwY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="22" fill="rgba(232,212,139,0.6)" letter-spacing="4" font-weight="300">권태 · 성찰 · 새로운 관점</text>
 
     <g filter="url(#softGlow)">
-      <text x="${W / 2}" y="${interpY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="1">달콤한 말은 잘 못하는 사람이에요.</text>
-      <text x="${W / 2}" y="${interpY + 58}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="1">대신 필요한 걸 조용히 먼저 챙겨주죠.</text>
-      <text x="${W / 2}" y="${interpY + 116}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="1">그 작은 행동들이 이 사람의 진심이에요.</text>
+      <text x="${W / 2}" y="${interpY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="1">좋은 사람이 있고 관계도 괜찮은데 활기가 없는 시기예요.</text>
+      <text x="${W / 2}" y="${interpY + 58}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="1">관계가 나빠진 게 아니라, 익숙함에 온 고요한 권태일 수 있어요.</text>
+      <text x="${W / 2}" y="${interpY + 116}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="1">상대가 내밀고 있는 손을 다시 알아채는 것이 먼저예요.</text>
     </g>
 
     <text x="${W / 2}" y="${ctaY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="3">당신도 직접 뽑아보세요</text>
@@ -333,7 +333,7 @@ async function scene03() {
 }
 
 async function main() {
-  console.log('=== 6/26 금 소개형 마이너 (Page of Pentacles) ===')
+  console.log('=== 7/3 금 소개형 마이너 (Four of Cups) ===')
   mkdirSync(outputDir, { recursive: true })
   await scene01()
   await scene02()
