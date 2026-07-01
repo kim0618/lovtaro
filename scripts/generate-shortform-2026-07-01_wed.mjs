@@ -1,6 +1,6 @@
 /**
- * 소개형 마이너 shortform 2026-07-01_wed (Knight of Wands)
- * 훅: 곁에 있을 땐 다정한데, / 왜 떨어지면 연락이 뜸해질까?
+ * 소개형 마이너 shortform 2026-07-01_wed (Two of Swords)
+ * 훅: 다가가야 할지 물러서야 할지, / 왜 마음을 정하지 못할까?
  */
 import sharp from 'sharp'
 import { writeFileSync, mkdirSync, existsSync } from 'fs'
@@ -14,7 +14,7 @@ const outputDir = resolve(rootDir, 'content-output/2026-07-01_wed/shortform')
 const W = 1080, H = 1920
 
 const PORTRAIT_OVERRIDE = {
-  'knight-of-wands': 'public/images/mcards/wands/Knight of Wands.png',
+  'two-of-swords': 'public/images/mcards/swords/Two of Swords.png',
 }
 
 function mulberry32(seed) {
@@ -130,11 +130,11 @@ async function roundImg(buf, w, h, r) {
 }
 
 async function scene01() {
-  const cardSlug = 'knight-of-wands'
-  const hookLineTop = '곁에 있을 땐 다정한데,'
-  const accentBefore = '왜 떨어지면 '
-  const accentWord = '연락이 뜸해질까'
-  const accentAfter = '?'
+  const cardSlug = 'two-of-swords'
+  const hookLineTop = '다가가야 할지 물러서야 할지,'
+  const accentBefore = '왜 '
+  const accentWord = '마음을 정하지'
+  const accentAfter = ' 못할까?'
 
   const portraitW = 1080, portraitH = 1920
   const cardRaw = await loadCard(cardSlug, portraitW, portraitH)
@@ -222,7 +222,7 @@ async function scene02() {
   const cardLeft = frameX + framePad
   const cardTop = frameY + framePad
 
-  const cardRaw = await loadCard('knight-of-wands', cardW, cardH)
+  const cardRaw = await loadCard('two-of-swords', cardW, cardH)
   const cardEnhanced = await sharp(cardRaw)
     .sharpen({ sigma: 0.7, m1: 0.5, m2: 2.2 })
     .modulate({ saturation: 1.12, brightness: 1.03 })
@@ -250,7 +250,7 @@ async function scene02() {
         <stop offset="100%" stop-color="rgba(0,0,0,0.55)"/>
       </radialGradient>
     </defs>
-    ${cosmicBody(false, 65)}
+    ${cosmicBody(false, 42)}
 
     <rect width="${W}" height="${H}" fill="url(#vignette)"/>
     <ellipse cx="${glowCX}" cy="${glowCY}" rx="${frameW * 0.82}" ry="${frameH * 0.65}" fill="url(#cardGlow)"/>
@@ -258,11 +258,11 @@ async function scene02() {
     ${drawFrame(frameX, frameY, frameW, frameH, 1.3)}
 
     <g filter="url(#softGlow)">
-      <text x="540" y="${nameKrY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="58" fill="#F4F8FF" font-weight="300" letter-spacing="4">완드의 나이트</text>
-      <text x="540" y="${nameEnY}" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="30" fill="rgba(232,212,139,0.88)" letter-spacing="1">Knight of Wands</text>
+      <text x="540" y="${nameKrY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="58" fill="#F4F8FF" font-weight="300" letter-spacing="4">소드의 2</text>
+      <text x="540" y="${nameEnY}" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="30" fill="rgba(232,212,139,0.88)" letter-spacing="1">Two of Swords</text>
     </g>
 
-    <text x="540" y="${kwY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="26" fill="rgba(232,212,139,0.72)" letter-spacing="4" font-weight="300">열정 · 자유 · 거리감</text>
+    <text x="540" y="${kwY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="26" fill="rgba(232,212,139,0.72)" letter-spacing="4" font-weight="300">결정 회피 · 균형 · 긴장</text>
 
     <text x="540" y="1860" text-anchor="middle" font-family="sans-serif" font-size="24" fill="rgba(232,212,139,0.45)" letter-spacing="4">@lovtarot_</text>
   </svg>`
@@ -285,7 +285,7 @@ async function scene03() {
   const cardLeft = frameX + framePad
   const cardTop = frameY + framePad
 
-  const cardImg = await loadCard('knight-of-wands', cardW, cardH)
+  const cardImg = await loadCard('two-of-swords', cardW, cardH)
   const masked = await roundImg(cardImg, cardW, cardH, 6)
 
   const divideY = cardTop + cardH + 20
@@ -299,25 +299,25 @@ async function scene03() {
     <defs>
       ${cosmicDefs()}
     </defs>
-    ${cosmicBody(true, 95)}
+    ${cosmicBody(true, 118)}
 
     <g filter="url(#softGlow)">
-      <text x="${W / 2}" y="${headerY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="40" fill="#F4F8FF" font-weight="300" letter-spacing="6">다가올 땐 뜨겁고, 멀어질 땐 빠른 사람</text>
+      <text x="${W / 2}" y="${headerY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="40" fill="#F4F8FF" font-weight="300" letter-spacing="6">결정을 미루는 마음, 그 안을 들여다보면</text>
     </g>
 
     ${drawFrame(frameX, frameY, frameW, frameH, 0.95)}
 
     <line x1="${frameX + 34}" y1="${divideY}" x2="${frameX + frameW - 34}" y2="${divideY}" stroke="rgba(201,168,76,0.28)" stroke-width="1"/>
 
-    <text x="${W / 2}" y="${nameKrY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="4">완드의 나이트</text>
-    <text x="${W / 2}" y="${nameEnY}" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="20" fill="rgba(232,212,139,0.8)" letter-spacing="1">Knight of Wands</text>
+    <text x="${W / 2}" y="${nameKrY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="4">소드의 2</text>
+    <text x="${W / 2}" y="${nameEnY}" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="20" fill="rgba(232,212,139,0.8)" letter-spacing="1">Two of Swords</text>
 
-    <text x="${W / 2}" y="${kwY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="22" fill="rgba(232,212,139,0.6)" letter-spacing="4" font-weight="300">열정 · 자유 · 거리감</text>
+    <text x="${W / 2}" y="${kwY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="22" fill="rgba(232,212,139,0.6)" letter-spacing="4" font-weight="300">결정 회피 · 균형 · 긴장</text>
 
     <g filter="url(#softGlow)">
-      <text x="${W / 2}" y="${interpY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="1">곁에 있을 땐 누구보다 다정하게 다가와요.</text>
-      <text x="${W / 2}" y="${interpY + 58}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="1">떨어지면 금세 다른 곳으로 마음이 향하기도 해요.</text>
-      <text x="${W / 2}" y="${interpY + 116}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="1">식은 게 아니라, 곁에 있을 때 더 진심인 사람이에요.</text>
+      <text x="${W / 2}" y="${interpY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="1">마음은 있는데 표현할지 말지, 결론이 자꾸 미뤄져요.</text>
+      <text x="${W / 2}" y="${interpY + 58}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="1">신호를 더 기다려도 답이 나오지 않는 시기일 수 있어요.</text>
+      <text x="${W / 2}" y="${interpY + 116}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="1">필요한 건 정보가 아니라, 이미 아는 마음을 인정하는 거예요.</text>
     </g>
 
     <text x="${W / 2}" y="${ctaY}" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="3">당신도 직접 뽑아보세요</text>
@@ -333,7 +333,7 @@ async function scene03() {
 }
 
 async function main() {
-  console.log('=== 6/26 금 소개형 마이너 (Knight of Wands) ===')
+  console.log('=== 7/1 수 소개형 마이너 (Two of Swords) ===')
   mkdirSync(outputDir, { recursive: true })
   await scene01()
   await scene02()
