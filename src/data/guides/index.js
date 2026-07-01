@@ -74,8 +74,10 @@ import sevenOfSwordsLoveMeaning from './seven-of-swords-love-meaning.js'
 import knightOfSwordsLoveMeaning from './knight-of-swords-love-meaning.js'
 import eightOfWandsLoveMeaning from './eight-of-wands-love-meaning.js'
 import fourOfSwordsLoveMeaning from './four-of-swords-love-meaning.js'
+import aceOfWandsLoveMeaning from './ace-of-wands-love-meaning.js'
 
 const guides = [
+  aceOfWandsLoveMeaning,
   fourOfSwordsLoveMeaning,
   eightOfWandsLoveMeaning,
   knightOfSwordsLoveMeaning,

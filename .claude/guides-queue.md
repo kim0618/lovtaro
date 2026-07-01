@@ -53,6 +53,9 @@
 > 위 5장 + 추가 3장 소진: 아래 "중장기 주제 풀"의 남은 갭 카드 16장(ace/page-of-wands, six/seven/nine-of-pentacles, four-of-swords 등)을 다음 캡처 노출 재확인해 끌어올린다. **큐 미발행 0개 상태 - 다음 발행 전 네이버 서치어드바이저 캡처로 재정렬 권장.**
 
 - [x] **소드의 4 연애 해석 - 쉬는 것이 포기가 아닌 이유** | `four-of-swords-love-meaning` | 카드 해석 | 2026-06-30 발행 (네이버 캡처 없이 백로그 풀 순서대로, 소드 갭 카드 중 첫 번째)
+- [x] **완드 에이스 연애 해석 - 갑자기 끌리는 마음을 읽는 법** | `ace-of-wands-love-meaning` | 카드 해석 | 2026-07-01 발행 (네이버 캡처 없이 백로그 풀 순서대로, Wands 갭 카드 중 첫 번째)
+
+> **운영 결정 (2026-07-01)**: 네이버 서치어드바이저는 월 1회 정도 갱신되는 주기라, 큐 소진 시마다 캡처를 요청하며 멈추지 않는다. 앞으로는 캡처가 없으면 자동으로 "중장기 주제 풀"의 갭 카드 순서대로 진행한다. 캡처 재정렬은 사용자가 먼저 제공할 때만 반영.
 
 ### 🔁 기존 가이드 역방향 보강 대상 (신규 발행 아님 - 본문에 역방향 각도 강화)
 6월 역방향·연애운 검색이 뜨는데 가이드는 이미 있는 카드들. /lovtaro-guide 신규 대신, 해당 가이드 본문의 역방향 섹션을 보강:
@@ -158,7 +161,7 @@ Week 1~3 날짜별 큐로 메이저 22장 + 컵 14장 + 상황/방법 글(crush-
 위 "2026-06-22 네이버 노출 역산" 5장(king-of-swords·queen-of-swords·ten-of-pentacles·ace-of-pentacles·six-of-swords)을 먼저 소진. 그 뒤 아래 남은 갭 카드를 발행. 다음 큐 보충 시 네이버 서치어드바이저 노출을 재확인해 노출 뜨는 카드부터 끌어올린다. 슬러그는 `{card-id}-love-meaning`.
 
 - **Swords 나머지 (갭)**: four-of-swords, seven-of-swords, knight-of-swords  *(six-of-swords·queen-of-swords·king-of-swords는 6/22 우선순위 큐로 이동)*
-- **Wands 나머지 9 (전부 갭)**: ace-of-wands, two-of-wands, three-of-wands, four-of-wands, five-of-wands, seven-of-wands, eight-of-wands, page-of-wands, knight-of-wands
+- **Wands 나머지 8 (갭)**: two-of-wands, three-of-wands, four-of-wands, five-of-wands, seven-of-wands, page-of-wands, knight-of-wands  *(ace-of-wands·eight-of-wands는 발행 완료)*
 - **Pentacles 나머지 (갭)**: two-of-pentacles, five-of-pentacles, six-of-pentacles, seven-of-pentacles, eight-of-pentacles, nine-of-pentacles, page-of-pentacles  *(ace-of-pentacles·ten-of-pentacles는 6/22 우선순위 큐로 이동)*
 
 ### 상황별 가이드
