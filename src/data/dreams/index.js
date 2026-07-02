@@ -50,8 +50,10 @@ import exLover from './ex-lover.js'
 import crush from './crush.js'
 import kiss from './kiss.js'
 import moonDream from './moon-dream.js'
+import ringDream from './ring-dream.js'
 
 const dreams = [
+  ringDream,
   haircutDream,
   seaDream,
   flowerDream,

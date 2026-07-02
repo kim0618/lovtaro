@@ -84,5 +84,6 @@ export default {
   relatedDreams: [
     { slug: 'wedding', label: '결혼하는 꿈' },
     { slug: 'confession-dream', label: '고백하는 꿈' },
+    { slug: 'ring-dream', label: '반지 꿈' },
   ],
 }

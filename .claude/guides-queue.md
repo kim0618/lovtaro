@@ -160,8 +160,8 @@ Week 1~3 날짜별 큐로 메이저 22장 + 컵 14장 + 상황/방법 글(crush-
 
 위 "2026-06-22 네이버 노출 역산" 5장(king-of-swords·queen-of-swords·ten-of-pentacles·ace-of-pentacles·six-of-swords)을 먼저 소진. 그 뒤 아래 남은 갭 카드를 발행. 다음 큐 보충 시 네이버 서치어드바이저 노출을 재확인해 노출 뜨는 카드부터 끌어올린다. 슬러그는 `{card-id}-love-meaning`.
 
-- **Swords 나머지 (갭)**: four-of-swords, seven-of-swords, knight-of-swords  *(six-of-swords·queen-of-swords·king-of-swords는 6/22 우선순위 큐로 이동)*
-- **Wands 나머지 8 (갭)**: two-of-wands, three-of-wands, four-of-wands, five-of-wands, seven-of-wands, page-of-wands, knight-of-wands  *(ace-of-wands·eight-of-wands는 발행 완료)*
+- **Swords 14장 전부 발행 완료** (2026-06-30 four-of-swords로 마감)
+- **Wands 나머지 6 (갭)**: three-of-wands, four-of-wands, five-of-wands, seven-of-wands, page-of-wands, knight-of-wands  *(ace-of-wands·eight-of-wands·two-of-wands는 발행 완료)*
 - **Pentacles 나머지 (갭)**: two-of-pentacles, five-of-pentacles, six-of-pentacles, seven-of-pentacles, eight-of-pentacles, nine-of-pentacles, page-of-pentacles  *(ace-of-pentacles·ten-of-pentacles는 6/22 우선순위 큐로 이동)*
 
 ### 상황별 가이드
@@ -199,6 +199,10 @@ Week 1~3 날짜별 큐로 메이저 22장 + 컵 14장 + 상황/방법 글(crush-
 
 ## 발행 후 기록 (최근 7편만 유지, 그 이상은 삭제)
 
-<!-- 예시:
-- [x] 2026-04-19 `moon-love-meaning` (3,210자, 카드 해석)
--->
+- [x] 2026-07-02 `two-of-wands-love-meaning` (2,907자, 카드 해석, 중장기 주제 풀 Wands 갭 순서대로)
+- [x] 2026-07-01 `ace-of-wands-love-meaning` (카드 해석, 백로그 풀)
+- [x] 2026-06-30 `four-of-swords-love-meaning` (카드 해석, 백로그 풀, Swords 14장 완주)
+- [x] 2026-06-29 `eight-of-wands-love-meaning` (카드 해석)
+- [x] 2026-06-28 `knight-of-swords-love-meaning` (카드 해석)
+- [x] 2026-06-27 `seven-of-swords-love-meaning` (카드 해석)
+- [x] 2026-06-26 `six-of-swords-love-meaning` (카드 해석)
