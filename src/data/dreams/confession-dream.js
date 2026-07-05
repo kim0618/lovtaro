@@ -83,6 +83,6 @@ export default {
     { slug: 'rejection-dream', label: '거절당하는 꿈' },
     { slug: 'crush', label: '좋아하는 사람 꿈' },
     { slug: 'kiss', label: '키스하는 꿈' },
-    { slug: 'hug-dream', label: '포옹하는 꿈' },
+    { slug: 'letter-dream', label: '편지 꿈' },
   ],
 }

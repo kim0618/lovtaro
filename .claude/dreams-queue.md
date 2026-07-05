@@ -100,13 +100,13 @@
 
 ## 발행 후 기록 (최근 7편만 유지, 그 이상은 삭제)
 
+- [x] 2026-07-05 `letter-dream` (4섹션+FAQ4, 2618자, 편지 꿈 - 큐 소진 후 자체 선정, symbol. 전통 해몽 근거(소식·기별, 밝은 편지=길조/찢어지거나 젖은 편지=근심) WebSearch로 확인 후 작성. message-dream(문자·전화 등 즉각적 연락)과 겹치지 않게 "시간 들여 정리한 진심을 전하는 매개체" 각도에 집중. message-dream·confession-dream에 양방향 relatedDreams 추가)
 - [x] 2026-07-03 `first-love-dream` (4섹션+FAQ4, 2432자, 첫사랑 꿈 - 큐 소진 후 자체 선정, person. ex-lover(전 애인 전반)·old-friend(과거 친구 전반)와 겹치지 않게 "그 사람보다 그 시절 순수한 감정에 대한 그리움/현재 연애 비교" 각도에 집중. ex-lover·old-friend에 양방향 relatedDreams 추가)
 - [x] 2026-07-02 `ring-dream` (4섹션+FAQ4, 2424자, 반지 꿈 - 큐 소진 후 자체 선정, symbol. 전통 해몽 근거(귀인·길조·인연, 잃어버리면 약속 변화) WebSearch로 확인 후 작성. proposal-dream과 겹치지 않게 반지 자체의 상징(받다/잃다/깨지다/맞지 않다)에 집중. proposal-dream·wedding에 양방향 relatedDreams 추가)
 - [x] 2026-07-01 `haircut-dream` (4섹션+FAQ4, 2464자, 머리카락 자르는 꿈 - 큐 소진 후 자체 선정, situation. "머리 자르면 헤어진다" 미신과 꿈 해석을 분리해서 다룸)
 - [x] 2026-06-30 `sea-dream` (4섹션+FAQ4, 2481자, 바다 꿈 - 큐 소진 후 자체 선정, symbol)
 - [x] 2026-06-29 `flower-dream` (4섹션+FAQ4, 2456자, 꽃 꿈 - 큐 소진 후 자체 선정)
 - [x] 2026-06-28 `moon-dream` (4섹션+FAQ4, 2415자, 달 꿈 - 큐 소진 후 자체 선정)
-- [x] 2026-06-27 `fire-dream` (4섹션+FAQ4, 2423자, 불 꿈 - 큐 소진 후 자체 선정)
 
 ## 신규 큐 (2026-06-23 추가)
 
@@ -123,5 +123,6 @@
 ---
 
 - [x] **꽃 꿈** | `flower-dream` | symbol | 2026-06-29 발행 (큐 소진 후 자체 선정, 연애+꿈 롱테일 니치)
+- [x] **편지 꿈** | `letter-dream` | symbol | 2026-07-05 발행 (큐 소진 후 자체 선정, message-dream과 차별화한 "정성껏 정리해 전하는 진심" 각도)
 
-> ⚠️ **큐 소진**: 미발행 주제 0개. **운영 결정 (2026-07-01, guides-queue.md와 공통)**: 네이버 캡처는 월 1회 정도 주기라 큐 소진 때마다 요청하며 멈추지 않는다. 캡처가 없으면 연애+꿈 롱테일 니치에 맞는 주제를 자체 선정해 계속 진행한다(최근 haircut-dream·sea-dream·flower-dream·moon-dream 등도 이 방식). 캡처 재정렬은 사용자가 먼저 제공할 때만 반영.
+> ⚠️ **큐 소진**: 미발행 주제 0개. **운영 결정 (2026-07-01, guides-queue.md와 공통)**: 네이버 캡처는 월 1회 정도 주기라 큐 소진 때마다 요청하며 멈추지 않는다. 캡처가 없으면 연애+꿈 롱테일 니치에 맞는 주제를 자체 선정해 계속 진행한다(최근 haircut-dream·sea-dream·flower-dream·moon-dream·letter-dream 등도 이 방식). 캡처 재정렬은 사용자가 먼저 제공할 때만 반영.

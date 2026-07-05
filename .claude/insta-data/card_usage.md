@@ -50,6 +50,16 @@
 - **Sunday Preview 3장 (혼합)**: 별, 소드의 에이스, 컵의 2
 - **story 마이너/메이저** (story_cards.json 자동순환, 카드 20/78): seven-of-wands·magician(월), hanged-man·strength(화), fool·five-of-wands(수), eight-of-wands·nine-of-swords(목), two-of-cups·temperance(금)
 
+### 2026-07-06~12
+- **1·2·3 참여형 메이저 메인**: 정의·여황제(월), 죽음(화), 연인·달(목), 태양(토릴)
+- **1·2·3 참여형 마이너 메인**: 완드의 4(월), 펜타클의 6·소드의 2(화), 컵의 7(목), 완드의 6·소드의 5(토릴)
+- **수·금 소개형 마이너 메인**: 소드의 3(수 7/8), 완드의 페이지(금 7/10)
+- **토 캐러셀 커버 (메이저)**: 악마(The Devil)
+- **토 캐러셀 본문 (마이너)**: 소드의 9, 펜타클의 4, 소드의 7
+- **Sunday Preview 3장 (혼합)**: 은둔자, 완드의 9, 펜타클의 2
+- **story 마이너/메이저** (story_cards.json 30/78, 이번 주 릴스 카드 21장 전부 차단 후 픽 → 릴스와 0중복): ten-of-pentacles·chariot(월), two-of-wands·judgement(화), nine-of-pentacles·knight-of-cups(수), page-of-cups·three-of-pentacles(목), king-of-pentacles·king-of-swords(금)
+- ⚠️ 중복회피 메모: 메이저는 지난주(6/29~7/5) 사용분 전부 회피, 신선(정의·죽음·악마)+2주텀만. 마이너 13장·캐러셀 커버·본문 전부 최근 2주 미사용. 초기 story 자동픽에서 page-of-wands(금 소개형)·nine-of-wands(일 Sunday) 겹쳐 → 릴스 카드 차단 재생성으로 해소
+
 ## 기록 규칙 (스킬 동일)
 - 같은 카드라도 용도(슬롯) 다르면 카운트 별도. 메이저 22장은 슬롯별 분리 안 하면 한 달 내 고갈.
 - 같은 주 내 동일 카드 2회 메인 사용 금지.

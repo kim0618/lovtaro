@@ -54,6 +54,9 @@
 
 - [x] **소드의 4 연애 해석 - 쉬는 것이 포기가 아닌 이유** | `four-of-swords-love-meaning` | 카드 해석 | 2026-06-30 발행 (네이버 캡처 없이 백로그 풀 순서대로, 소드 갭 카드 중 첫 번째)
 - [x] **완드 에이스 연애 해석 - 갑자기 끌리는 마음을 읽는 법** | `ace-of-wands-love-meaning` | 카드 해석 | 2026-07-01 발행 (네이버 캡처 없이 백로그 풀 순서대로, Wands 갭 카드 중 첫 번째)
+- [x] **완드의 2 연애 해석 - 지금 좋아도 더 멀리 보게 되는 마음** | `two-of-wands-love-meaning` | 카드 해석 | 2026-07-02 발행 (백로그 풀 순서대로)
+- [x] **완드의 3 연애 해석 - 이미 보낸 마음이 돌아오는 시간** | `three-of-wands-love-meaning` | 카드 해석 | 2026-07-03 발행 (백로그 풀 순서대로)
+- [x] **완드의 4 연애 해석 - 함께 만든 이정표를 소리 내어 기뻐하는 시간** | `four-of-wands-love-meaning` | 카드 해석 | 2026-07-05 발행 (백로그 풀 순서대로, Wands 갭 나머지 4장: five/seven/page/knight-of-wands)
 
 > **운영 결정 (2026-07-01)**: 네이버 서치어드바이저는 월 1회 정도 갱신되는 주기라, 큐 소진 시마다 캡처를 요청하며 멈추지 않는다. 앞으로는 캡처가 없으면 자동으로 "중장기 주제 풀"의 갭 카드 순서대로 진행한다. 캡처 재정렬은 사용자가 먼저 제공할 때만 반영.
 
@@ -161,7 +164,7 @@ Week 1~3 날짜별 큐로 메이저 22장 + 컵 14장 + 상황/방법 글(crush-
 위 "2026-06-22 네이버 노출 역산" 5장(king-of-swords·queen-of-swords·ten-of-pentacles·ace-of-pentacles·six-of-swords)을 먼저 소진. 그 뒤 아래 남은 갭 카드를 발행. 다음 큐 보충 시 네이버 서치어드바이저 노출을 재확인해 노출 뜨는 카드부터 끌어올린다. 슬러그는 `{card-id}-love-meaning`.
 
 - **Swords 14장 전부 발행 완료** (2026-06-30 four-of-swords로 마감)
-- **Wands 나머지 5 (갭)**: four-of-wands, five-of-wands, seven-of-wands, page-of-wands, knight-of-wands  *(ace-of-wands·eight-of-wands·two-of-wands·three-of-wands는 발행 완료)*
+- **Wands 나머지 4 (갭)**: five-of-wands, seven-of-wands, page-of-wands, knight-of-wands  *(ace-of-wands·eight-of-wands·two-of-wands·three-of-wands·four-of-wands는 발행 완료)*
 - **Pentacles 나머지 (갭)**: two-of-pentacles, five-of-pentacles, six-of-pentacles, seven-of-pentacles, eight-of-pentacles, nine-of-pentacles, page-of-pentacles  *(ace-of-pentacles·ten-of-pentacles는 6/22 우선순위 큐로 이동)*
 
 ### 상황별 가이드
@@ -199,10 +202,10 @@ Week 1~3 날짜별 큐로 메이저 22장 + 컵 14장 + 상황/방법 글(crush-
 
 ## 발행 후 기록 (최근 7편만 유지, 그 이상은 삭제)
 
+- [x] 2026-07-05 `four-of-wands-love-meaning` (2,828자, 카드 해석, 중장기 주제 풀 Wands 갭 순서대로)
 - [x] 2026-07-03 `three-of-wands-love-meaning` (2,895자, 카드 해석, 중장기 주제 풀 Wands 갭 순서대로)
 - [x] 2026-07-02 `two-of-wands-love-meaning` (2,907자, 카드 해석, 중장기 주제 풀 Wands 갭 순서대로)
 - [x] 2026-07-01 `ace-of-wands-love-meaning` (카드 해석, 백로그 풀)
 - [x] 2026-06-30 `four-of-swords-love-meaning` (카드 해석, 백로그 풀, Swords 14장 완주)
 - [x] 2026-06-29 `eight-of-wands-love-meaning` (카드 해석)
 - [x] 2026-06-28 `knight-of-swords-love-meaning` (카드 해석)
-- [x] 2026-06-27 `seven-of-swords-love-meaning` (카드 해석)
