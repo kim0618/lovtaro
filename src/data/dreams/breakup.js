@@ -83,5 +83,6 @@ export default {
     { slug: 'ex-lover', label: '전 애인 꿈' },
     { slug: 'crying', label: '우는 꿈' },
     { slug: 'death-dream', label: '죽는 꿈' },
+    { slug: 'divorce-dream', label: '이혼하는 꿈' },
   ],
 }

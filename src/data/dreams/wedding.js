@@ -78,5 +78,6 @@ export default {
     { slug: 'kiss', label: '키스하는 꿈' },
     { slug: 'pregnancy', label: '임신 꿈' },
     { slug: 'ring-dream', label: '반지 꿈' },
+    { slug: 'divorce-dream', label: '이혼하는 꿈' },
   ],
 }

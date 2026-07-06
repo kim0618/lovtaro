@@ -53,8 +53,10 @@ import moonDream from './moon-dream.js'
 import ringDream from './ring-dream.js'
 import firstLoveDream from './first-love-dream.js'
 import letterDream from './letter-dream.js'
+import divorceDream from './divorce-dream.js'
 
 const dreams = [
+  divorceDream,
   letterDream,
   firstLoveDream,
   ringDream,

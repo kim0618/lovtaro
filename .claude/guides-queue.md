@@ -202,10 +202,10 @@ Week 1~3 날짜별 큐로 메이저 22장 + 컵 14장 + 상황/방법 글(crush-
 
 ## 발행 후 기록 (최근 7편만 유지, 그 이상은 삭제)
 
+- [x] 2026-07-06 `five-of-wands-love-meaning` (2,834자, 카드 해석, 중장기 주제 풀 Wands 갭 순서대로)
 - [x] 2026-07-05 `four-of-wands-love-meaning` (2,828자, 카드 해석, 중장기 주제 풀 Wands 갭 순서대로)
 - [x] 2026-07-03 `three-of-wands-love-meaning` (2,895자, 카드 해석, 중장기 주제 풀 Wands 갭 순서대로)
 - [x] 2026-07-02 `two-of-wands-love-meaning` (2,907자, 카드 해석, 중장기 주제 풀 Wands 갭 순서대로)
 - [x] 2026-07-01 `ace-of-wands-love-meaning` (카드 해석, 백로그 풀)
 - [x] 2026-06-30 `four-of-swords-love-meaning` (카드 해석, 백로그 풀, Swords 14장 완주)
 - [x] 2026-06-29 `eight-of-wands-love-meaning` (카드 해석)
-- [x] 2026-06-28 `knight-of-swords-love-meaning` (카드 해석)
