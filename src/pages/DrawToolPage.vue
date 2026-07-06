@@ -49,16 +49,11 @@ for (const [suitSlug, suitKo] of SUITS) {
   }
 }
 const ALL_CARDS = [...MAJOR_CARDS, ...MINOR_CARDS]
-const MINOR_IDS = new Set(MINOR_CARDS.map((c) => c[0]))
-const FILE_SLUG_MAP = { priestess: 'high-priestess', wheel: 'wheel-of-fortune', hanged: 'hanged-man' }
 
-function cardImageUrl(id, nameEn) {
-  if (MINOR_IDS.has(id)) {
-    const suit = id.split('-of-')[1]
-    return encodeURI(`/images/mcards/${suit}/${nameEn}.png`)
-  }
-  const slug = FILE_SLUG_MAP[id] || id
-  return `/images/cards-png/${slug}.png`
+// 도구 전용 경량 썸네일(560x840 JPEG, ~97KB). 원본 cards-png/mcards는 장당 1~2.7MB라 폰에서 느려서
+// scripts로 사전 생성해둔 카드 id 기준 썸네일을 사용 (재생성: gen-draw-thumbs).
+function cardImageUrl(id) {
+  return `/images/cards-draw/${id}.jpg`
 }
 
 // ── 디자인 토큰 (PDF·PNG 동기) ──────────────────────
@@ -76,6 +71,7 @@ const nickname = ref('')
 const cards = ref([]) // [{id, nameKo, nameEn, reversed}]
 const summary = ref('')
 const canvasRef = ref(null)
+const previewUrl = ref('') // 렌더 결과 dataURL (모바일 길게눌러 저장용 <img>)
 const drawing = ref(false)
 
 function drawThree() {
@@ -192,7 +188,7 @@ async function render() {
   const tilts = [-2.8, 1.6, -3.2]
   const yOff = [6, -4, 8]
 
-  const imgs = await Promise.all(cards.value.map((c) => loadImage(cardImageUrl(c.id, c.nameEn))))
+  const imgs = await Promise.all(cards.value.map((c) => loadImage(cardImageUrl(c.id))))
 
   cards.value.forEach((c, i) => {
     const xAnchor = startX + i * (CARD_W + CARD_GAP)
@@ -252,6 +248,7 @@ async function onDraw() {
     // 폰트 로드 후 렌더 (한글 깨짐 방지)
     if (document.fonts && document.fonts.ready) await document.fonts.ready
     await render()
+    previewUrl.value = canvasRef.value.toDataURL('image/png')
   } catch (e) {
     alert('카드 이미지를 불러오지 못했어요. 다시 시도해주세요.\n' + e.message)
   } finally {
@@ -259,14 +256,30 @@ async function onDraw() {
   }
 }
 
+function fileName() {
+  const name = nickname.value.trim()
+  return name ? `[${name}] 카드뽑기.png` : 'card-draw.png'
+}
+
 function onSave() {
   const canvas = canvasRef.value
-  canvas.toBlob((blob) => {
+  canvas.toBlob(async (blob) => {
+    const file = new File([blob], fileName(), { type: 'image/png' })
+    // 1) 모바일: 네이티브 공유 (카톡으로 바로 전송 / 사진 저장)
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({ files: [file], title: '카드 뽑기' })
+        return
+      } catch (e) {
+        if (e.name === 'AbortError') return // 사용자가 공유창 닫음
+        // 그 외 실패 시 아래 다운로드로 폴백
+      }
+    }
+    // 2) 데스크톱/폴백: 파일 다운로드
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
-    const name = nickname.value.trim()
     a.href = url
-    a.download = name ? `[${name}] 카드뽑기.png` : 'card-draw.png'
+    a.download = fileName()
     document.body.appendChild(a)
     a.click()
     document.body.removeChild(a)
@@ -307,13 +320,18 @@ onMounted(() => {
     </div>
 
     <div class="dt-canvas-wrap">
-      <canvas ref="canvasRef" :width="W" :height="H" class="dt-canvas"></canvas>
+      <!-- 렌더 전용(화면 비표시). 실제 표시는 아래 <img> (모바일 길게눌러 저장 지원) -->
+      <canvas ref="canvasRef" :width="W" :height="H" class="dt-canvas-hidden"></canvas>
+      <img v-if="previewUrl" :src="previewUrl" class="dt-result-img" alt="뽑은 카드 3장" />
+      <div v-else class="dt-placeholder">뽑는 중…</div>
     </div>
+
+    <p class="dt-hint">💡 이미지를 길게 눌러 저장하거나, 아래 [공유·저장] 버튼을 쓰세요.</p>
 
     <pre v-if="summary" class="dt-summary">{{ summary }}</pre>
 
     <div class="dt-actions">
-      <button class="dt-btn" @click="onSave">이미지 저장</button>
+      <button class="dt-btn" @click="onSave">공유 · 저장</button>
       <button class="dt-btn dt-btn--ghost" @click="copySummary">카드 정보 복사</button>
     </div>
   </div>
@@ -375,11 +393,36 @@ onMounted(() => {
   border-radius: 14px;
   overflow: hidden;
   box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
+  background: #05070d;
+  aspect-ratio: 1 / 1;
 }
-.dt-canvas {
+.dt-canvas-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+.dt-result-img {
   width: 100%;
   height: auto;
   display: block;
+}
+.dt-placeholder {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #7e8aa8;
+  font-size: 14px;
+}
+.dt-hint {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #7e8aa8;
+  text-align: center;
+  line-height: 1.6;
 }
 .dt-summary {
   margin-top: 16px;
