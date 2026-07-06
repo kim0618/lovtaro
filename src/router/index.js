@@ -127,6 +127,12 @@ const routes = [
     component: () => import('../pages/PremiumPage.vue'),
   },
   {
+    // 운영자 전용 카드 뽑기 도구 (검색 비노출·sitemap 제외·미링크)
+    path: '/rt-draw-k39f2',
+    name: 'draw-tool',
+    component: () => import('../pages/DrawToolPage.vue'),
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'not-found',
     component: () => import('../pages/NotFoundPage.vue'),

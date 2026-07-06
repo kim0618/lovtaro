@@ -78,6 +78,13 @@ const ROUTES = [
     description: '사연을 깊이 풀어 PDF 편지로 보내드리는 러브타로 1:1 정밀 리딩. 카드 3장 심층 해석, 48시간 이내 회신.',
   },
   {
+    // 운영자 전용 카드 뽑기 도구 - 검색 비노출 (sitemap 미등록)
+    path: '/rt-draw-k39f2',
+    title: '카드 뽑기',
+    description: '',
+    noindex: true,
+  },
+  {
     path: '/reading/mind',
     title: '상대방 속마음 타로 - 그 사람의 마음 읽기 | Lovtaro',
     description: '그 사람이 지금 나를 어떻게 생각하는지, 상대의 속마음을 타로 카드로 읽어봅니다. 무료 상대방 마음 타로 리딩.',
