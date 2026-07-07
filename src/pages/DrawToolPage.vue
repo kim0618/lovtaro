@@ -263,19 +263,7 @@ function fileName() {
 
 function onSave() {
   const canvas = canvasRef.value
-  canvas.toBlob(async (blob) => {
-    const file = new File([blob], fileName(), { type: 'image/png' })
-    // 1) 모바일: 네이티브 공유 (카톡으로 바로 전송 / 사진 저장)
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      try {
-        await navigator.share({ files: [file], title: '카드 뽑기' })
-        return
-      } catch (e) {
-        if (e.name === 'AbortError') return // 사용자가 공유창 닫음
-        // 그 외 실패 시 아래 다운로드로 폴백
-      }
-    }
-    // 2) 데스크톱/폴백: 파일 다운로드
+  canvas.toBlob((blob) => {
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
@@ -283,7 +271,7 @@ function onSave() {
     document.body.appendChild(a)
     a.click()
     document.body.removeChild(a)
-    URL.revokeObjectURL(url)
+    setTimeout(() => URL.revokeObjectURL(url), 1000)
   }, 'image/png')
 }
 
@@ -326,12 +314,12 @@ onMounted(() => {
       <div v-else class="dt-placeholder">뽑는 중…</div>
     </div>
 
-    <p class="dt-hint">💡 이미지를 길게 눌러 저장하거나, 아래 [공유·저장] 버튼을 쓰세요.</p>
+    <p class="dt-hint">💡 [이미지 다운로드]가 안 되면 위 이미지를 길게 눌러 저장하세요.</p>
 
     <pre v-if="summary" class="dt-summary">{{ summary }}</pre>
 
     <div class="dt-actions">
-      <button class="dt-btn" @click="onSave">공유 · 저장</button>
+      <button class="dt-btn" @click="onSave">이미지 다운로드</button>
       <button class="dt-btn dt-btn--ghost" @click="copySummary">카드 정보 복사</button>
     </div>
   </div>

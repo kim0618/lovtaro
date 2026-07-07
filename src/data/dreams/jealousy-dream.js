@@ -84,5 +84,6 @@ export default {
   relatedDreams: [
     { slug: 'cheating-dream', label: '바람 피우는 꿈' },
     { slug: 'fight-dream', label: '싸우는 꿈' },
+    { slug: 'spider-dream', label: '거미 꿈' },
   ],
 }

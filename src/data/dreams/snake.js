@@ -84,5 +84,6 @@ export default {
   relatedDreams: [
     { slug: 'ex-lover', label: '전 애인 꿈' },
     { slug: 'crush', label: '좋아하는 사람 꿈' },
+    { slug: 'spider-dream', label: '거미 꿈' },
   ],
 }
