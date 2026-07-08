@@ -100,14 +100,13 @@
 
 ## 발행 후 기록 (최근 7편만 유지, 그 이상은 삭제)
 
+- [x] 2026-07-08 `mirror-dream` (4섹션+FAQ4, 2512자, 거울 꿈 - 큐 소진 후 자체 선정, symbol. 전통 해몽 근거("파경"의 어원 - 전쟁으로 헤어진 부부가 거울 반쪽씩 나눠 가졌다가 재회한 설화, 본래 뜻은 "이별 후 재회") WebSearch로 확인 후 작성. divorce-dream(관계 상실 전반의 역몽 프레임)과 겹치지 않게 "상대가 아니라 나 자신이 관계 안에서 어떻게 비치는지"라는 자기 인식 각도에 집중, 깨지는 거울=파경 어원 반전 서사로 심화. divorce-dream·breakup에 양방향 relatedDreams 추가)
 - [x] 2026-07-07 `spider-dream` (4섹션+FAQ4, 2515자, 거미 꿈 - 큐 소진 후 자체 선정, symbol. 전통 해몽 근거(생김새와 달리 대체로 길몽 - 큰 거미 들어오면 경사, 거미줄에 감기면 흉, 거미줄에 매달린 거미 보면 주변인의 적의) WebSearch로 확인 후 작성. snake(매력·집착)와 겹치지 않게 "겉모습과 실제 상징이 반대인 역설" 프레임 + 좋은 인연/옭아맴/질투불안/용기 4갈래에 집중. snake·jealousy-dream에 양방향 relatedDreams 추가)
 - [x] 2026-07-06 `divorce-dream` (4섹션+FAQ4, 2426자, 이혼하는 꿈 - 큐 소진 후 자체 선정, situation. 전통 해몽 근거(역몽 - 반대로 해석, 애정이 깊다는 반증) WebSearch로 확인 후 작성. wedding·pregnancy로 이미 다룬 결혼 서사의 그림자 축. breakup(연애 이별 불안)과 겹치지 않게 "기혼·장기 커플의 안정 상실 불안 + 역몽 프레임"에 집중, 부모님 이혼 꿈 분기 포함. wedding·breakup에 양방향 relatedDreams 추가)
 - [x] 2026-07-05 `letter-dream` (4섹션+FAQ4, 2618자, 편지 꿈 - 큐 소진 후 자체 선정, symbol. 전통 해몽 근거(소식·기별, 밝은 편지=길조/찢어지거나 젖은 편지=근심) WebSearch로 확인 후 작성. message-dream(문자·전화 등 즉각적 연락)과 겹치지 않게 "시간 들여 정리한 진심을 전하는 매개체" 각도에 집중. message-dream·confession-dream에 양방향 relatedDreams 추가)
 - [x] 2026-07-03 `first-love-dream` (4섹션+FAQ4, 2432자, 첫사랑 꿈 - 큐 소진 후 자체 선정, person. ex-lover(전 애인 전반)·old-friend(과거 친구 전반)와 겹치지 않게 "그 사람보다 그 시절 순수한 감정에 대한 그리움/현재 연애 비교" 각도에 집중. ex-lover·old-friend에 양방향 relatedDreams 추가)
 - [x] 2026-07-02 `ring-dream` (4섹션+FAQ4, 2424자, 반지 꿈 - 큐 소진 후 자체 선정, symbol. 전통 해몽 근거(귀인·길조·인연, 잃어버리면 약속 변화) WebSearch로 확인 후 작성. proposal-dream과 겹치지 않게 반지 자체의 상징(받다/잃다/깨지다/맞지 않다)에 집중. proposal-dream·wedding에 양방향 relatedDreams 추가)
 - [x] 2026-07-01 `haircut-dream` (4섹션+FAQ4, 2464자, 머리카락 자르는 꿈 - 큐 소진 후 자체 선정, situation. "머리 자르면 헤어진다" 미신과 꿈 해석을 분리해서 다룸)
-- [x] 2026-06-30 `sea-dream` (4섹션+FAQ4, 2481자, 바다 꿈 - 큐 소진 후 자체 선정, symbol)
-- [x] 2026-06-29 `flower-dream` (4섹션+FAQ4, 2456자, 꽃 꿈 - 큐 소진 후 자체 선정)
 
 ## 신규 큐 (2026-06-23 추가)
 

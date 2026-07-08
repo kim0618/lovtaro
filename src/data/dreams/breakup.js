@@ -84,5 +84,6 @@ export default {
     { slug: 'crying', label: '우는 꿈' },
     { slug: 'death-dream', label: '죽는 꿈' },
     { slug: 'divorce-dream', label: '이혼하는 꿈' },
+    { slug: 'mirror-dream', label: '거울 꿈' },
   ],
 }
