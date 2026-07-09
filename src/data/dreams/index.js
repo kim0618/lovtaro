@@ -56,8 +56,10 @@ import letterDream from './letter-dream.js'
 import divorceDream from './divorce-dream.js'
 import spiderDream from './spider-dream.js'
 import mirrorDream from './mirror-dream.js'
+import mealDream from './meal-dream.js'
 
 const dreams = [
+  mealDream,
   mirrorDream,
   spiderDream,
   divorceDream,

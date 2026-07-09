@@ -85,5 +85,6 @@ export default {
     { slug: 'celebrity', label: '연예인 꿈' },
     { slug: 'dog-dream', label: '강아지·개 꿈' },
     { slug: 'cat-dream', label: '고양이 꿈' },
+    { slug: 'meal-dream', label: '같이 밥 먹는 꿈' },
   ],
 }
