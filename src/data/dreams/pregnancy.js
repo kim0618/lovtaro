@@ -77,5 +77,6 @@ export default {
   relatedDreams: [
     { slug: 'wedding', label: '결혼하는 꿈' },
     { slug: 'crush', label: '좋아하는 사람 꿈' },
+    { slug: 'fish-dream', label: '물고기 꿈' },
   ],
 }
