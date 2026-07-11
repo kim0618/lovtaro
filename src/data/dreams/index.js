@@ -58,8 +58,10 @@ import spiderDream from './spider-dream.js'
 import mirrorDream from './mirror-dream.js'
 import mealDream from './meal-dream.js'
 import fishDream from './fish-dream.js'
+import blindDateDream from './blind-date-dream.js'
 
 const dreams = [
+  blindDateDream,
   fishDream,
   mealDream,
   mirrorDream,

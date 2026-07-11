@@ -87,5 +87,6 @@ export default {
     { slug: 'cat-dream', label: '고양이 꿈' },
     { slug: 'meal-dream', label: '같이 밥 먹는 꿈' },
     { slug: 'fish-dream', label: '물고기 꿈' },
+    { slug: 'blind-date-dream', label: '소개팅 꿈' },
   ],
 }

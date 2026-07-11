@@ -78,5 +78,6 @@ export default {
     { slug: 'ex-lover', label: '전 애인 꿈' },
     { slug: 'pregnancy', label: '임신 꿈' },
     { slug: 'old-friend', label: '옛 친구 꿈' },
+    { slug: 'blind-date-dream', label: '소개팅 꿈' },
   ],
 }

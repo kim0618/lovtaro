@@ -165,7 +165,7 @@ Week 1~3 날짜별 큐로 메이저 22장 + 컵 14장 + 상황/방법 글(crush-
 
 - **Swords 14장 전부 발행 완료** (2026-06-30 four-of-swords로 마감)
 - **Wands 14장 전부 발행 완료** (2026-07-09 knight-of-wands로 완주)
-- **Pentacles 나머지 (갭)**: five-of-pentacles, six-of-pentacles, seven-of-pentacles, eight-of-pentacles, nine-of-pentacles, page-of-pentacles  *(ace·ten-of-pentacles는 6/22 우선순위 큐, two-of-pentacles는 2026-07-10 발행. 다음 큐는 five-of-pentacles부터)*
+- **Pentacles 나머지 (갭)**: six-of-pentacles, seven-of-pentacles, eight-of-pentacles, nine-of-pentacles, page-of-pentacles  *(ace·ten-of-pentacles는 6/22 우선순위 큐, two-of-pentacles는 2026-07-10 발행, five-of-pentacles는 2026-07-11 발행. 다음 큐는 six-of-pentacles부터)*
 
 ### 상황별 가이드
 
@@ -202,10 +202,10 @@ Week 1~3 날짜별 큐로 메이저 22장 + 컵 14장 + 상황/방법 글(crush-
 
 ## 발행 후 기록 (최근 7편만 유지, 그 이상은 삭제)
 
+- [x] 2026-07-11 `five-of-pentacles-love-meaning` (2,884자, 카드 해석, 중장기 주제 풀 Pentacles 갭 순서대로, 다음 큐는 six-of-pentacles)
 - [x] 2026-07-10 `two-of-pentacles-love-meaning` (2,868자, 카드 해석, 중장기 주제 풀 Pentacles 갭 순서대로, 다음 큐는 five-of-pentacles)
 - [x] 2026-07-09 `knight-of-wands-love-meaning` (2,853자, 카드 해석, 중장기 주제 풀 Wands 갭 순서대로, **Wands 14장 전부 발행 완료**, 다음 큐는 Pentacles 갭)
 - [x] 2026-07-08 `page-of-wands-love-meaning` (2,859자, 카드 해석, 중장기 주제 풀 Wands 갭 순서대로, Wands 갭 나머지 1장: knight-of-wands)
 - [x] 2026-07-07 `seven-of-wands-love-meaning` (2,833자, 카드 해석, 중장기 주제 풀 Wands 갭 순서대로, Wands 갭 나머지 2장: page/knight-of-wands)
 - [x] 2026-07-06 `five-of-wands-love-meaning` (2,834자, 카드 해석, 중장기 주제 풀 Wands 갭 순서대로)
 - [x] 2026-07-05 `four-of-wands-love-meaning` (2,828자, 카드 해석, 중장기 주제 풀 Wands 갭 순서대로)
-- [x] 2026-07-03 `three-of-wands-love-meaning` (2,895자, 카드 해석, 중장기 주제 풀 Wands 갭 순서대로)
