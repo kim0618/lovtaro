@@ -85,8 +85,10 @@ import knightOfWandsLoveMeaning from './knight-of-wands-love-meaning.js'
 import twoOfPentaclesLoveMeaning from './two-of-pentacles-love-meaning.js'
 import fiveOfPentaclesLoveMeaning from './five-of-pentacles-love-meaning.js'
 import sixOfPentaclesLoveMeaning from './six-of-pentacles-love-meaning.js'
+import sevenOfPentaclesLoveMeaning from './seven-of-pentacles-love-meaning.js'
 
 const guides = [
+  sevenOfPentaclesLoveMeaning,
   sixOfPentaclesLoveMeaning,
   fiveOfPentaclesLoveMeaning,
   twoOfPentaclesLoveMeaning,

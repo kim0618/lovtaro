@@ -18,6 +18,7 @@
 
 | 갱신일 | 출처 캡처 | 큐 변경 요약 |
 |---|---|---|
+| 2026-07-10 | 검색 키워드 TOP30 + 웹문서 TOP30 (최근30일 클릭 1.1천·노출 6.2만·CTR 1.8%, 전월比 노출 +163.9%·클릭 +128% 색인 폭발 계속) | Swords·Wands 14장 전부 발행 완료로 **가이드 미발행은 Pentacles 갭 6장(five/six/seven/eight/nine/page)만 남음** = 마지막 갭. 웹문서 노출 역산으로 재정렬: six-of-pentacles(1403노출·rank28·CTR0.9) 1순위, seven-of-pentacles(1019노출)·five-of-pentacles(936노출+"펜타클5"키워드 250노출) 순. eight/nine/page는 top30 미노출→백로그 순. 6장 소진 시 78장 가이드 완주→상황/방법론 풀로 전환. 기존 가이드 역방향 보강 신호 갱신: 컵2·페이지컵·은둔자·소드3·컵4·전차 역방향 + 여사제(웹문서 rank27 priestess-love 노출), 악마+교황 조합. **꿈해몽(dreams-queue): 웹문서 상위 dream 페이지(old-friend 1713노출 전체1위·crush 1390·ex-lover 817·snake 662·jealousy 419·stranger 335·reunion 384) 전부 이미 발행됨, 신규 갭 신호 없음→dreams-queue 변동 없이 연애+꿈 롱테일 자체선정 유지** *(★five 7/11·six 7/12 발행 완료 반영됨, 다음=seven-of-pentacles)* |
 | 2026-06-22 | 검색 키워드 TOP30 + 웹문서 TOP30 (최근30일 클릭 790·노출 3.9만·CTR 2%, 전월比 노출 +717%·클릭 +908% 색인 폭발 지속) | 6/1 우선순위 15장 전부 발행 완료→아카이브. 신규 우선순위 큐를 가이드 없는 카드(갭 24장) 노출 역산으로 재구축: king-of-swords(웹문서623·"킹오브소드 해석" 검색어 1위 8클릭) 압도적 1순위, queen-of-swords(561)·ten-of-pentacles(567)·ace-of-pentacles(394·"속마음")·six-of-swords 순. 역방향 검색 뜨는 기존 가이드(empress·world·hermit·judgement·lovers·wheel·devil)는 본문 역방향 각도 보강 대상으로 분리 기재. 꿈해몽은 신호 미약("전애인 꿈" 1건·이미 발행)이라 dreams-queue 변동 없음 |
 | 2026-06-01 | 검색 키워드 TOP30 + 웹문서 TOP30 | 소드·완드·펜타클 42장 노출 역산 큐 구축 (기준 베이스라인) |
 
@@ -165,7 +166,12 @@ Week 1~3 날짜별 큐로 메이저 22장 + 컵 14장 + 상황/방법 글(crush-
 
 - **Swords 14장 전부 발행 완료** (2026-06-30 four-of-swords로 마감)
 - **Wands 14장 전부 발행 완료** (2026-07-09 knight-of-wands로 완주)
-- **Pentacles 나머지 (갭)**: seven-of-pentacles, eight-of-pentacles, nine-of-pentacles, page-of-pentacles  *(ace·ten-of-pentacles는 6/22 우선순위 큐, two-of-pentacles는 2026-07-10 발행, five-of-pentacles는 2026-07-11 발행, six-of-pentacles는 2026-07-12 발행. 다음 큐는 seven-of-pentacles부터)*
+- **Pentacles 나머지 (갭)**: eight-of-pentacles, nine-of-pentacles, page-of-pentacles  *(ace·ten-of-pentacles는 6/22 우선순위 큐, two-of-pentacles는 2026-07-10 발행, five-of-pentacles는 2026-07-11 발행, six-of-pentacles는 2026-07-12 발행, seven-of-pentacles는 2026-07-13 발행. 다음 큐는 eight-of-pentacles부터)*
+  - eight/nine/page는 7/10 top30 미노출→백로그 순(eight→nine→page). 3장 완주 시 78장 가이드 완주→상황별/방법론 풀로 전환.
+
+### 🔁 기존 가이드 역방향 보강 대상 (7/10 갱신 - 신규 발행 아님, 본문 역방향 각도 강화)
+7/10 캡처에서 역방향·조합 검색이 뜨는데 가이드는 이미 있는 카드들. /lovtaro-guide 신규 대신 해당 가이드 본문의 역방향 섹션을 보강:
+- two-of-cups(컵2 역방향 4클릭/30), page-of-cups(페이지컵 역방향 4클릭/21), hermit(은둔자 역방향 3클릭/63), three-of-swords(소드3 역방향 3클릭/30), four-of-cups(컵4 역방향 3클릭/15), chariot(전차 역방향 3클릭/10), high-priestess(여사제 카드 연애·웹문서 priestess-love rank27 144노출/CTR9), devil+hierophant(악마+교황 조합 연애 3클릭)
 
 ### 상황별 가이드
 
@@ -202,10 +208,10 @@ Week 1~3 날짜별 큐로 메이저 22장 + 컵 14장 + 상황/방법 글(crush-
 
 ## 발행 후 기록 (최근 7편만 유지, 그 이상은 삭제)
 
+- [x] 2026-07-13 `seven-of-pentacles-love-meaning` (3,018자, 카드 해석, 중장기 주제 풀 Pentacles 갭 순서대로, 다음 큐는 eight-of-pentacles)
 - [x] 2026-07-12 `six-of-pentacles-love-meaning` (2,893자, 카드 해석, 중장기 주제 풀 Pentacles 갭 순서대로, 다음 큐는 seven-of-pentacles)
 - [x] 2026-07-11 `five-of-pentacles-love-meaning` (2,884자, 카드 해석, 중장기 주제 풀 Pentacles 갭 순서대로, 다음 큐는 six-of-pentacles)
 - [x] 2026-07-10 `two-of-pentacles-love-meaning` (2,868자, 카드 해석, 중장기 주제 풀 Pentacles 갭 순서대로, 다음 큐는 five-of-pentacles)
 - [x] 2026-07-09 `knight-of-wands-love-meaning` (2,853자, 카드 해석, 중장기 주제 풀 Wands 갭 순서대로, **Wands 14장 전부 발행 완료**, 다음 큐는 Pentacles 갭)
 - [x] 2026-07-08 `page-of-wands-love-meaning` (2,859자, 카드 해석, 중장기 주제 풀 Wands 갭 순서대로, Wands 갭 나머지 1장: knight-of-wands)
 - [x] 2026-07-07 `seven-of-wands-love-meaning` (2,833자, 카드 해석, 중장기 주제 풀 Wands 갭 순서대로, Wands 갭 나머지 2장: page/knight-of-wands)
-- [x] 2026-07-06 `five-of-wands-love-meaning` (2,834자, 카드 해석, 중장기 주제 풀 Wands 갭 순서대로)
