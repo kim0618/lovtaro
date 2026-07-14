@@ -81,5 +81,6 @@ export default {
   relatedDreams: [
     { slug: 'confession-dream', label: '고백하는 꿈' },
     { slug: 'gift-dream', label: '선물 받는 꿈' },
+    { slug: 'butterfly-dream', label: '나비 꿈' },
   ],
 }

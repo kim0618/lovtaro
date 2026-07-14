@@ -83,5 +83,6 @@ export default {
     { slug: 'ex-lover', label: '전 애인 꿈' },
     { slug: 'crush', label: '좋아하는 사람 꿈' },
     { slug: 'first-love-dream', label: '첫사랑 꿈' },
+    { slug: 'butterfly-dream', label: '나비 꿈' },
   ],
 }
