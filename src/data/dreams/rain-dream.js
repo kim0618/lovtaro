@@ -84,5 +84,6 @@ export default {
     { slug: 'crying', label: '우는 꿈' },
     { slug: 'flying-dream', label: '하늘을 나는 꿈' },
     { slug: 'umbrella-dream', label: '우산 꿈' },
+    { slug: 'rainbow-dream', label: '무지개 꿈' },
   ],
 }

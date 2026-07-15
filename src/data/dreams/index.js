@@ -61,8 +61,10 @@ import fishDream from './fish-dream.js'
 import blindDateDream from './blind-date-dream.js'
 import umbrellaDream from './umbrella-dream.js'
 import butterflyDream from './butterfly-dream.js'
+import rainbowDream from './rainbow-dream.js'
 
 const dreams = [
+  rainbowDream,
   butterflyDream,
   umbrellaDream,
   blindDateDream,

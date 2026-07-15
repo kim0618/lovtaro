@@ -166,8 +166,8 @@ Week 1~3 날짜별 큐로 메이저 22장 + 컵 14장 + 상황/방법 글(crush-
 
 - **Swords 14장 전부 발행 완료** (2026-06-30 four-of-swords로 마감)
 - **Wands 14장 전부 발행 완료** (2026-07-09 knight-of-wands로 완주)
-- **Pentacles 나머지 (갭)**: nine-of-pentacles, page-of-pentacles  *(ace·ten-of-pentacles는 6/22 우선순위 큐, two-of-pentacles는 2026-07-10 발행, five-of-pentacles는 2026-07-11 발행, six-of-pentacles는 2026-07-12 발행, seven-of-pentacles는 2026-07-13 발행, eight-of-pentacles는 2026-07-14 발행. 다음 큐는 nine-of-pentacles부터)*
-  - nine/page는 7/10 top30 미노출→백로그 순(nine→page). 2장 완주 시 78장 가이드 완주→상황별/방법론 풀로 전환.
+- **Pentacles 나머지 (갭)**: page-of-pentacles  *(ace·ten-of-pentacles는 6/22 우선순위 큐, two-of-pentacles는 2026-07-10 발행, five-of-pentacles는 2026-07-11 발행, six-of-pentacles는 2026-07-12 발행, seven-of-pentacles는 2026-07-13 발행, eight-of-pentacles는 2026-07-14 발행, nine-of-pentacles는 2026-07-15 발행. 다음 큐는 page-of-pentacles, 마지막 1장)*
+  - page는 7/10 top30 미노출→백로그 순. 완주 시 78장 가이드 완주→상황별/방법론 풀로 전환.
 
 ### 🔁 기존 가이드 역방향 보강 대상 (7/10 갱신 - 신규 발행 아님, 본문 역방향 각도 강화)
 7/10 캡처에서 역방향·조합 검색이 뜨는데 가이드는 이미 있는 카드들. /lovtaro-guide 신규 대신 해당 가이드 본문의 역방향 섹션을 보강:
@@ -208,10 +208,10 @@ Week 1~3 날짜별 큐로 메이저 22장 + 컵 14장 + 상황/방법 글(crush-
 
 ## 발행 후 기록 (최근 7편만 유지, 그 이상은 삭제)
 
+- [x] 2026-07-15 `nine-of-pentacles-love-meaning` (2,948자, 카드 해석, 중장기 주제 풀 Pentacles 갭 순서대로, 다음 큐는 page-of-pentacles, Pentacles 갭 마지막 1장)
 - [x] 2026-07-14 `eight-of-pentacles-love-meaning` (2,866자, 카드 해석, 중장기 주제 풀 Pentacles 갭 순서대로, 다음 큐는 nine-of-pentacles)
 - [x] 2026-07-13 `seven-of-pentacles-love-meaning` (3,018자, 카드 해석, 중장기 주제 풀 Pentacles 갭 순서대로, 다음 큐는 eight-of-pentacles)
 - [x] 2026-07-12 `six-of-pentacles-love-meaning` (2,893자, 카드 해석, 중장기 주제 풀 Pentacles 갭 순서대로, 다음 큐는 seven-of-pentacles)
 - [x] 2026-07-11 `five-of-pentacles-love-meaning` (2,884자, 카드 해석, 중장기 주제 풀 Pentacles 갭 순서대로, 다음 큐는 six-of-pentacles)
 - [x] 2026-07-10 `two-of-pentacles-love-meaning` (2,868자, 카드 해석, 중장기 주제 풀 Pentacles 갭 순서대로, 다음 큐는 five-of-pentacles)
 - [x] 2026-07-09 `knight-of-wands-love-meaning` (2,853자, 카드 해석, 중장기 주제 풀 Wands 갭 순서대로, **Wands 14장 전부 발행 완료**, 다음 큐는 Pentacles 갭)
-- [x] 2026-07-08 `page-of-wands-love-meaning` (2,859자, 카드 해석, 중장기 주제 풀 Wands 갭 순서대로, Wands 갭 나머지 1장: knight-of-wands)
