@@ -21,7 +21,7 @@ import { colorCardBackSvg, colorCardBackDefs, CARD_WIDTH, CARD_HEIGHT, pickRando
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const rootDir = resolve(__dirname, '..')
 const cardsDir = resolve(rootDir, 'public/images/cards-png')
-const outputDir = resolve(rootDir, 'content-output/2026-07-19_sun/shortform')
+const outputDir = resolve(rootDir, 'content-output/2026-07-26_sun/shortform')
 const W = 1080, H = 1920
 
 const KO_STACK = `'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif`
@@ -31,15 +31,15 @@ const KO_STACK = `'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif`
 //   → portrait 원본(cards/*.webp 600x900 또는 mcards/{suit}/{Name}.png 1024x1536) 명시
 // 회복/결단/빛 3축 - Strength(다시 단단해짐) / Chariot(전진) / Queen of Wands(본래의 빛)
 const CARDS = [
-  { num: '①', slug: 'priestess', imageSrc: 'public/images/cards-png/high-priestess.png',
-    nameKr: '여사제', nameEn: 'The High Priestess', keywords: '직관 · 신비 · 내면의 지혜',
-    hook: ['주 초반, 서두르지 않고', '서로를 조용히 살펴봐요'] },
-  { num: '②', slug: 'queen-of-wands', imageSrc: 'public/images/mcards/wands/Queen of Wands.png',
-    nameKr: '완드의 여왕', nameEn: 'Queen of Wands', keywords: '자신감 · 카리스마 · 따뜻한 열정',
-    hook: ['주 중반, 당당하게 다가서며', '분위기가 살아나요'] },
-  { num: '③', slug: 'six-of-cups', imageSrc: 'public/images/mcards/cups/Six of Cups.png',
-    nameKr: '컵의 6', nameEn: 'Six of Cups', keywords: '추억 · 재회 · 순수한 마음',
-    hook: ['주 후반, 익숙한 온기가 돌아와', '거리가 조금씩 좁혀져요'] },
+  { num: '①', slug: 'judgement', imageSrc: 'public/images/cards-png/judgement.png',
+    nameKr: '심판', nameEn: 'Judgement', keywords: '각성 · 재평가 · 부름',
+    hook: ['주 초반, 멈춰 있던 마음이', '조용히 깨어나기 시작해요'] },
+  { num: '②', slug: 'ten-of-swords', imageSrc: 'public/images/mcards/swords/Ten of Swords.png',
+    nameKr: '소드의 10', nameEn: 'Ten of Swords', keywords: '마무리 · 전환 · 새로운 시작',
+    hook: ['주 중반, 한 매듭이 정리되며', '오히려 솔직해질 수 있어요'] },
+  { num: '③', slug: 'eight-of-cups', imageSrc: 'public/images/mcards/cups/Eight of Cups.png',
+    nameKr: '컵의 8', nameEn: 'Eight of Cups', keywords: '떠남 · 전환 · 더 깊은 곳으로',
+    hook: ['주 후반, 진짜 원하는 마음을 따라', '한 걸음 옮겨가요'] },
 ]
 
 // scene01/02/03 공통 카드 뒷면 스킴 - 한 번 픽해서 세 씬 모두 동일 색상 유지
@@ -205,8 +205,8 @@ async function scene01() {
     </g>
 
     <g filter="url(#softGlow)">
-      <text x="540" y="420" text-anchor="middle" font-family="${KO_STACK}" font-size="50" fill="#F4F8FF" letter-spacing="1" font-weight="300">다음 주, 제자리걸음이던</text>
-      <text x="540" y="505" text-anchor="middle" font-family="${KO_STACK}" font-size="56" fill="#F4F8FF" letter-spacing="2" font-weight="300">두 사람 사이에 속도가 붙을까요?</text>
+      <text x="540" y="420" text-anchor="middle" font-family="${KO_STACK}" font-size="52" fill="#F4F8FF" letter-spacing="1" font-weight="300">다음 주, 소원했던 그 사람과</text>
+      <text x="540" y="505" text-anchor="middle" font-family="${KO_STACK}" font-size="56" fill="#F4F8FF" letter-spacing="2" font-weight="300">다시 말문이 트일까요?</text>
     </g>
 
     <g opacity="0.85">
@@ -530,13 +530,13 @@ async function scene07() {
 }
 
 async function main() {
-  console.log('=== 2026-07-19 Sunday Tarot Preview - The High Priestess/Queen of Wands/Six of Cups ===')
+  console.log('=== 2026-07-26 Sunday Tarot Preview - Judgement/Ten of Swords/Eight of Cups ===')
   mkdirSync(outputDir, { recursive: true })
   await scene01()                                  // 훅 도입
   await scene02()                                  // 선택 유도
-  await revealScene(CARDS[0], 122, 'scene03.png')  // 1번 공개 (The Hermit)
-  await revealScene(CARDS[1], 222, 'scene04.png')  // 2번 공개 (Nine of Wands)
-  await revealScene(CARDS[2], 322, 'scene05.png')  // 3번 공개 (Two of Pentacles)
+  await revealScene(CARDS[0], 126, 'scene03.png')  // 1번 공개 (The Hermit)
+  await revealScene(CARDS[1], 226, 'scene04.png')  // 2번 공개 (Nine of Wands)
+  await revealScene(CARDS[2], 326, 'scene05.png')  // 3번 공개 (Two of Pentacles)
   // scene07() 함수 → scene06.png로 출력 변경. 함수 내부의 writeFileSync 경로를 직접 호출하지 않고 renameSync로 처리.
   await scene07()
   // scene07.png를 scene06.png로 변경

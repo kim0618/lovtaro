@@ -151,7 +151,7 @@ async function generateScene01() {
   const cx3 = startCX + (cardPixelW + cardGap) * 2
 
   // 7개 스킴 풀(navy/indigo/plum/teal/rose/emerald/amber)에서 랜덤 3개 픽
-  const [s1, s2, s3] = pickRandomSchemes(3)
+  const [s1, s2, s3] = ['emerald', 'amber', 'rose']  // 신호등 3색 고정 (초록/노랑/빨강)
   console.log(`🎴 schemes: ${s1} / ${s2} / ${s3}`)
 
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">

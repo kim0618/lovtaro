@@ -85,5 +85,6 @@ export default {
     { slug: 'rain-dream', label: '비 오는 꿈' },
     { slug: 'flower-dream', label: '꽃 꿈' },
     { slug: 'moon-dream', label: '달 꿈' },
+    { slug: 'star-dream', label: '별 꿈' },
   ],
 }

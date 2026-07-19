@@ -82,5 +82,6 @@ export default {
     { slug: 'crush', label: '좋아하는 사람 꿈' },
     { slug: 'ex-lover', label: '전 애인 꿈' },
     { slug: 'rainbow-dream', label: '무지개 꿈' },
+    { slug: 'star-dream', label: '별 꿈' },
   ],
 }

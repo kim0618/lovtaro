@@ -9,6 +9,7 @@
  * 전통 해몽(근거) 위에 러브타로의 연애 각도(브랜드)를 얹고, 가능성의 언어로 쓴다.
  */
 
+import starDream from './star-dream.js'
 import haircutDream from './haircut-dream.js'
 import seaDream from './sea-dream.js'
 import flowerDream from './flower-dream.js'
@@ -64,6 +65,7 @@ import butterflyDream from './butterfly-dream.js'
 import rainbowDream from './rainbow-dream.js'
 
 const dreams = [
+  starDream,
   rainbowDream,
   butterflyDream,
   umbrellaDream,
