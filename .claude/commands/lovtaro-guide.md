@@ -46,6 +46,24 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 
 **이 단계를 건너뛰면 글은 반드시 얄팍해진다.** 자료 읽기를 충분히 한 뒤에만 써라.
 
+### 0-0. ⚠️ 원격 동기화 확인 (가장 먼저, 생략 금지)
+
+**큐 파일(`guides-queue.md`)만 보고 "미발행"을 판단하지 않는다.** 여러 PC에서 작업하므로 로컬 큐는 원격보다 뒤처져 있을 수 있고, 그 상태에서 미발행으로 판단하면 **이미 발행된 글을 중복 작성하게 된다.**
+
+```bash
+cd /home/tjd618/lovtaro && git fetch origin 2>&1 && git status -sb | head -3
+```
+
+- **원격에 새 커밋이 있으면(behind/diverged) 작업을 멈추고 사용자에게 pull을 먼저 요청한다.** 그 상태로 글을 쓰면 안 된다.
+- 어떤 이유로 pull 전에 진행해야 한다면, 최소한 원격 큐와 원격 파일 목록을 직접 대조해 중복을 배제한다:
+
+```bash
+git show origin/main:.claude/guides-queue.md | grep -n "{후보 slug}"
+git ls-tree origin/main src/data/guides/ --name-only | sed 's/.*\///; s/\.js$//' | sort
+```
+
+**배경 (2026-07-20 사고)**: 원격에 `page-of-pentacles-love-meaning`이 7/19 발행돼 있었는데 로컬 큐가 갱신 전이라 "미발행 마지막 1장"으로 보였고, git 확인 없이 같은 가이드를 통째로 다시 작성했다. 병합 시 add/add 충돌이 나 하루치 작업을 폐기했다. 원격 큐에는 `page-of-pentacles는 2026-07-19 발행`이라고 정확히 적혀 있었다.
+
 ### 0-1. 기존 가이드 톤 샘플 (최소 2편)
 
 ```bash
