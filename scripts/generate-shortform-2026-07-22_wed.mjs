@@ -21,7 +21,7 @@ import { fileURLToPath } from 'url'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const rootDir = resolve(__dirname, '..')
 const cardsDir = resolve(rootDir, 'public/images/cards-png')
-const outputDir = resolve(rootDir, 'content-output/2026-07-15_wed/shortform')
+const outputDir = resolve(rootDir, 'content-output/2026-07-22_wed/shortform')
 const W = 1080, H = 1920
 
 // 마이너 카드 portrait 원본 경로 (cards-png/*.png가 OG 1200x630인 카드는 여기 추가)
@@ -30,6 +30,7 @@ const PORTRAIT_OVERRIDE = {
   'page-of-cups': 'public/images/mcards/cups/Page of Cups.png',
   'two-of-cups': 'public/images/mcards/cups/Two of Cups.png',
   'queen-of-cups': 'public/images/mcards/cups/Queen of Cups.png',
+  'eight-of-swords': 'public/images/mcards/swords/Eight of Swords.png',
   // 신규 카드 사용 시 여기 추가
 }
 
@@ -158,11 +159,11 @@ async function scene01() {
   //
   // 훅 작성 규칙: 첫 장에 카드명 노출 금지. 핵심 감정/행동 한 단어만 골드 처리.
   // 예) Page of Cups → '답장은 느린데,' / '왜 가끔 진심 같을까?'  (강조: 진심)
-  const cardSlug = 'queen-of-cups'
-  const hookLineTop = '그 사람 기분이 가라앉으면,'
-  const accentBefore = '왜 내 '
-  const accentWord = '마음까지'
-  const accentAfter = ' 무거워질까?'
+  const cardSlug = 'eight-of-swords'
+  const hookLineTop = '붙잡는 것도 놓는 것도 아닌 채,'
+  const accentBefore = '왜 이 자리에 '
+  const accentWord = '멈춰'
+  const accentAfter = ' 있을까?'
 
   const portraitW = 1080, portraitH = 1920
   const cardRaw = await loadCard(cardSlug, portraitW, portraitH)
@@ -250,7 +251,7 @@ async function scene02() {
   const cardLeft = frameX + framePad
   const cardTop = frameY + framePad
 
-  const cardRaw = await loadCard('queen-of-cups', cardW, cardH)
+  const cardRaw = await loadCard('eight-of-swords', cardW, cardH)
   const cardEnhanced = await sharp(cardRaw)
     .sharpen({ sigma: 0.7, m1: 0.5, m2: 2.2 })
     .modulate({ saturation: 1.12, brightness: 1.03 })
@@ -278,7 +279,7 @@ async function scene02() {
         <stop offset="100%" stop-color="rgba(0,0,0,0.55)"/>
       </radialGradient>
     </defs>
-    ${cosmicBody(false, 47)}
+    ${cosmicBody(false, 72)}
 
     <rect width="${W}" height="${H}" fill="url(#vignette)"/>
     <ellipse cx="${glowCX}" cy="${glowCY}" rx="${frameW * 0.82}" ry="${frameH * 0.65}" fill="url(#cardGlow)"/>
@@ -286,11 +287,11 @@ async function scene02() {
     ${drawFrame(frameX, frameY, frameW, frameH, 1.3)}
 
     <g filter="url(#softGlow)">
-      <text x="540" y="${nameKrY}" text-anchor="middle" font-family="sans-serif" font-size="58" fill="#F4F8FF" font-weight="300" letter-spacing="4">컵의 여왕</text>
-      <text x="540" y="${nameEnY}" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="30" fill="rgba(232,212,139,0.88)" letter-spacing="1">Queen of Cups</text>
+      <text x="540" y="${nameKrY}" text-anchor="middle" font-family="sans-serif" font-size="58" fill="#F4F8FF" font-weight="300" letter-spacing="4">소드의 8</text>
+      <text x="540" y="${nameEnY}" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="30" fill="rgba(232,212,139,0.88)" letter-spacing="1">Eight of Swords</text>
     </g>
 
-    <text x="540" y="${kwY}" text-anchor="middle" font-family="sans-serif" font-size="26" fill="rgba(232,212,139,0.72)" letter-spacing="4" font-weight="300">공감 · 직관 · 깊은 감정</text>
+    <text x="540" y="${kwY}" text-anchor="middle" font-family="sans-serif" font-size="26" fill="rgba(232,212,139,0.72)" letter-spacing="4" font-weight="300">속박 · 제한 · 스스로 만든 감옥</text>
 
     <text x="540" y="1860" text-anchor="middle" font-family="sans-serif" font-size="24" fill="rgba(232,212,139,0.45)" letter-spacing="4">@lovtarot_</text>
   </svg>`
@@ -313,7 +314,7 @@ async function scene03() {
   const cardLeft = frameX + framePad
   const cardTop = frameY + framePad
 
-  const cardImg = await loadCard('queen-of-cups', cardW, cardH)
+  const cardImg = await loadCard('eight-of-swords', cardW, cardH)
   const masked = await roundImg(cardImg, cardW, cardH, 6)
 
   const divideY = cardTop + cardH + 20
@@ -327,25 +328,25 @@ async function scene03() {
     <defs>
       ${cosmicDefs()}
     </defs>
-    ${cosmicBody(true, 53)}
+    ${cosmicBody(true, 78)}
 
     <g filter="url(#softGlow)">
-      <text x="540" y="${headerY}" text-anchor="middle" font-family="sans-serif" font-size="40" fill="#F4F8FF" font-weight="300" letter-spacing="6">함께 흔들리는 마음</text>
+      <text x="540" y="${headerY}" text-anchor="middle" font-family="sans-serif" font-size="40" fill="#F4F8FF" font-weight="300" letter-spacing="6">스스로 묶어둔 마음</text>
     </g>
 
     ${drawFrame(frameX, frameY, frameW, frameH, 0.95)}
 
     <line x1="${frameX + 34}" y1="${divideY}" x2="${frameX + frameW - 34}" y2="${divideY}" stroke="rgba(201,168,76,0.28)" stroke-width="1"/>
 
-    <text x="540" y="${nameKrY}" text-anchor="middle" font-family="sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="4">컵의 여왕</text>
-    <text x="540" y="${nameEnY}" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="20" fill="rgba(232,212,139,0.8)" letter-spacing="1">Queen of Cups</text>
+    <text x="540" y="${nameKrY}" text-anchor="middle" font-family="sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="4">소드의 8</text>
+    <text x="540" y="${nameEnY}" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="20" fill="rgba(232,212,139,0.8)" letter-spacing="1">Eight of Swords</text>
 
-    <text x="540" y="${kwY}" text-anchor="middle" font-family="sans-serif" font-size="22" fill="rgba(232,212,139,0.6)" letter-spacing="4" font-weight="300">공감 · 직관 · 깊은 감정</text>
+    <text x="540" y="${kwY}" text-anchor="middle" font-family="sans-serif" font-size="22" fill="rgba(232,212,139,0.6)" letter-spacing="4" font-weight="300">속박 · 제한 · 스스로 만든 감옥</text>
 
     <g filter="url(#softGlow)">
-      <text x="540" y="${interpY}" text-anchor="middle" font-family="sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="1">그 사람의 감정이 곧 내 감정처럼 스며드는 건,</text>
-      <text x="540" y="${interpY + 58}" text-anchor="middle" font-family="sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="1">그만큼 깊이 마음을 쓰고 있다는 뜻이에요.</text>
-      <text x="540" y="${interpY + 116}" text-anchor="middle" font-family="sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="1">함께 흔들리기보다 내 마음도 다정히 살펴봐 주세요.</text>
+      <text x="540" y="${interpY}" text-anchor="middle" font-family="sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="1">지금 막막해 보이는 건 길이 없어서가 아니라,</text>
+      <text x="540" y="${interpY + 58}" text-anchor="middle" font-family="sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="1">두려움이 잠시 눈을 가리고 있어서예요.</text>
+      <text x="540" y="${interpY + 116}" text-anchor="middle" font-family="sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="1">한 걸음만 물러서면 보이지 않던 문이 보일 수 있어요.</text>
     </g>
 
     <text x="540" y="${ctaY}" text-anchor="middle" font-family="sans-serif" font-size="34" fill="#F4F8FF" font-weight="300" letter-spacing="3">당신도 직접 뽑아보세요</text>
@@ -361,7 +362,7 @@ async function scene03() {
 }
 
 async function main() {
-  console.log('=== 2026-07-15 수 소개형 마이너 (Queen of Cups) ===')
+  console.log('=== 2026-07-22 수 소개형 마이너 (Eight of Swords) ===')
   mkdirSync(outputDir, { recursive: true })
   await scene01()
   await scene02()

@@ -166,7 +166,8 @@ Week 1~3 날짜별 큐로 메이저 22장 + 컵 14장 + 상황/방법 글(crush-
 
 - **Swords 14장 전부 발행 완료** (2026-06-30 four-of-swords로 마감)
 - **Wands 14장 전부 발행 완료** (2026-07-09 knight-of-wands로 완주)
-- **Pentacles 14장 전부 발행 완료** (2026-07-20 page-of-pentacles로 마감). **78장 카드 해석 가이드 전체 완주.** 다음 큐부터는 상황별 가이드·방법론·FAQ 풀로 전환.
+- **Pentacles 나머지 (갭)**: 없음 *(ace·ten-of-pentacles는 6/22 우선순위 큐, two-of-pentacles는 2026-07-10 발행, five-of-pentacles는 2026-07-11 발행, six-of-pentacles는 2026-07-12 발행, seven-of-pentacles는 2026-07-13 발행, eight-of-pentacles는 2026-07-14 발행, nine-of-pentacles는 2026-07-15 발행, page-of-pentacles는 2026-07-19 발행. **Pentacles 14장 전부 발행 완료 - 78장 가이드 전체 완주.**)*
+  - **다음 큐는 "상황별 가이드" 또는 "방법론·입문" 풀에서 선택. 네이버 서치어드바이저 재캡처로 우선순위 확인 권장.**
 
 ### 🔁 기존 가이드 역방향 보강 대상 (7/10 갱신 - 신규 발행 아님, 본문 역방향 각도 강화)
 7/10 캡처에서 역방향·조합 검색이 뜨는데 가이드는 이미 있는 카드들. /lovtaro-guide 신규 대신 해당 가이드 본문의 역방향 섹션을 보강:
@@ -207,7 +208,7 @@ Week 1~3 날짜별 큐로 메이저 22장 + 컵 14장 + 상황/방법 글(crush-
 
 ## 발행 후 기록 (최근 7편만 유지, 그 이상은 삭제)
 
-- [x] 2026-07-20 `page-of-pentacles-love-meaning` (3,082자, 카드 해석, 중장기 주제 풀 Pentacles 갭 마지막 1장, 발행당일 재검증에서 정방향 4번째 갈래(재회) 추가·정역 처방 중복 해소·FAQ 원본 재서술 교정, **Pentacles 14장 전부 발행 완료 → 78장 카드 해석 가이드 전체 완주**, 다음 큐부터 상황별/방법론/FAQ 풀로 전환)
+- [x] 2026-07-19 `page-of-pentacles-love-meaning` (2,814자, 카드 해석, 중장기 주제 풀 Pentacles 갭 마지막 1장, **78장 카드 해석 가이드 전체 완주**, 다음 큐는 상황별 가이드/방법론 풀에서 선택)
 - [x] 2026-07-15 `nine-of-pentacles-love-meaning` (2,948자, 카드 해석, 중장기 주제 풀 Pentacles 갭 순서대로, 다음 큐는 page-of-pentacles, Pentacles 갭 마지막 1장)
 - [x] 2026-07-14 `eight-of-pentacles-love-meaning` (2,866자, 카드 해석, 중장기 주제 풀 Pentacles 갭 순서대로, 다음 큐는 nine-of-pentacles)
 - [x] 2026-07-13 `seven-of-pentacles-love-meaning` (3,018자, 카드 해석, 중장기 주제 풀 Pentacles 갭 순서대로, 다음 큐는 eight-of-pentacles)

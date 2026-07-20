@@ -60,6 +60,16 @@
 - **story 마이너/메이저** (story_cards.json 30/78, 이번 주 릴스 카드 21장 전부 차단 후 픽 → 릴스와 0중복): ten-of-pentacles·chariot(월), two-of-wands·judgement(화), nine-of-pentacles·knight-of-cups(수), page-of-cups·three-of-pentacles(목), king-of-pentacles·king-of-swords(금)
 - ⚠️ 중복회피 메모: 메이저는 지난주(6/29~7/5) 사용분 전부 회피, 신선(정의·죽음·악마)+2주텀만. 마이너 13장·캐러셀 커버·본문 전부 최근 2주 미사용. 초기 story 자동픽에서 page-of-wands(금 소개형)·nine-of-wands(일 Sunday) 겹쳐 → 릴스 카드 차단 재생성으로 해소
 
+### 2026-07-13~19
+- **1·2·3 참여형 메이저 메인**: 별·운명의 수레바퀴(월), 절제(화), 매달린 사람(목), 교황·바보(토릴)
+- **1·2·3 참여형 마이너 메인**: 컵의 9(월), 완드의 3·펜타클의 9(화), 컵의 킹·완드의 7(목), 컵의 10(토릴)
+- **수·금 소개형 마이너 메인**: 컵의 여왕(수 7/15), 완드의 페이지(금 7/17, 7/10 미업로드분 재사용)
+- **토 캐러셀 커버 (메이저)**: 탑(The Tower)
+- **토 캐러셀 본문 (마이너)**: 소드의 페이지, 완드의 5, 컵의 5 (다툰 뒤 하면 안 되는 말 3가지)
+- **Sunday Preview 3장 (혼합)**: 여사제, 완드의 여왕, 컵의 6
+- **story 마이너/메이저** (story_cards.json 40/78): six-of-pentacles·ace-of-cups(월, 초기픽 page-of-wands가 금 소개형과 앞면 중복 → ace-of-cups로 스왑), seven-of-cups·wheel-of-fortune(화), moon·page-of-pentacles(수), four-of-pentacles·five-of-swords(목), world·seven-of-swords(금)
+- ⚠️ 중복회피 메모: 메이저 8장(별·수레·절제·매달린·교황·바보·탑·여사제) 전부 최근 2주 참여형/커버/Sunday 슬롯 미사용. 이번 주 내 동일카드 메인 2회 0. story 앞면은 콘텐츠 앞면 노출(수/금 소개형·캐러셀·Sunday reveal)과 대조해 page-of-wands만 겹쳐 스왑, 나머지 8장 앞면 중복 0 (참여형 릴스는 뒷면이라 front 충돌 대상 아님)
+
 ## 기록 규칙 (스킬 동일)
 - 같은 카드라도 용도(슬롯) 다르면 카운트 별도. 메이저 22장은 슬롯별 분리 안 하면 한 달 내 고갈.
 - 같은 주 내 동일 카드 2회 메인 사용 금지.
