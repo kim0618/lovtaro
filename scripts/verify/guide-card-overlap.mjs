@@ -16,11 +16,23 @@ import guides from '../../src/data/guides/index.js'
 import { CARD_DICTIONARY } from '../../src/data/cardDictionary.js'
 import { MINOR_ARCANA } from '../../src/data/minorArcana.js'
 
-const MIN_OVERLAP = 15 // 연속 n자 이상 공유 시 경고
+const MIN_OVERLAP = 13 // 연속 n자 이상 공유 시 경고 (공백·구두점 제거 기준, 2026-07-20 재보정)
 const ALL_CARDS = { ...CARD_DICTIONARY, ...MINOR_ARCANA }
 
+/**
+ * HTML 제거 + 정규화.
+ * 공백뿐 아니라 구두점까지 제거한다 (2026-07-20 보강).
+ * 배경: 공백만 정규화하면 원본 문장에 쉼표 하나만 끼워넣어도 N-gram 창이 끊겨
+ * 재서술이 검출을 우회한다. page-of-pentacles 가이드 FAQ가
+ * "상대가 나를 천천히, 진지하게 알아가는 중"으로 원본("천천히 진지하게")을
+ * 17자 재서술했는데 쉼표 때문에 통과된 사례가 있었다.
+ */
 function stripHtml(text) {
-  return text.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
+  return text
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/[,.·:;!?"'()\[\]“”‘’]/g, '')
+    .replace(/\s+/g, '')
+    .trim()
 }
 
 function extractCardId(slug) {
@@ -66,14 +78,18 @@ function findMaxSharedSubstrings(a, b, minLen = MIN_OVERLAP) {
 }
 
 function loadCardText(card) {
-  return [
-    card.upright.core,
-    card.upright.love,
-    card.upright.advice,
-    card.reversed.core,
-    card.reversed.love,
-    card.reversed.advice,
-  ].join('\n')
+  // 가이드 쪽(stripHtml)과 반드시 같은 정규화를 적용해야 한다.
+  // 한쪽만 정규화하면 비대칭 비교가 되어 겹침이 통째로 검출되지 않는다.
+  return stripHtml(
+    [
+      card.upright.core,
+      card.upright.love,
+      card.upright.advice,
+      card.reversed.core,
+      card.reversed.love,
+      card.reversed.advice,
+    ].join('\n')
+  )
 }
 
 function loadGuideBlocks(guide) {
@@ -87,7 +103,7 @@ function loadGuideBlocks(guide) {
   for (const [i, faq] of (guide.faq || []).entries()) {
     blocks.push({
       loc: `FAQ${i + 1}: ${faq.question.substring(0, 40)}...`,
-      text: faq.answer,
+      text: stripHtml(faq.answer),
     })
   }
   return blocks

@@ -79,5 +79,6 @@ export default {
     { slug: 'pregnancy', label: '임신 꿈' },
     { slug: 'old-friend', label: '옛 친구 꿈' },
     { slug: 'blind-date-dream', label: '소개팅 꿈' },
+    { slug: 'name-call-dream', label: '이름 부르는 꿈' },
   ],
 }
