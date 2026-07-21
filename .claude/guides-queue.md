@@ -18,6 +18,7 @@
 
 | 갱신일 | 출처 캡처 | 큐 변경 요약 |
 |---|---|---|
+| 2026-07-21 | 검색 키워드 TOP30 + 웹문서 TOP30 (최근30일 클릭 1.1천·노출 6.9만·CTR 1.6%, 전월比 노출 +81.1%·클릭 +45.1% 성장 지속) | **78장 카드 가이드 전부 발행 완료 후 첫 캡처 = 카드 가이드 갭 0.** 키워드 상위 카드(더문/the star/탑/temperance/magician/여사제/펜타클여왕/컵2역방향/소드에이스/킹펜타클속마음/킹오브컵스속마음/펜타클3/에이스/소드3역방향/완드페이지) **전부 대응 love-meaning 가이드 발행됨** → 신규 카드 가이드 큐 없음. 웹문서 TOP30도 전부 발행 페이지(카드·꿈·reading·guide). **/guide/priestess-love가 웹문서 rank17(234노출·CTR6.4)로 가이드 레이어 중 유일하게 TOP30 진입** = 가이드 롱테일 흡수 시작 신호. **다음 가이드 = 상황별/방법론 풀로 전환**(현 6편: crush-mind/confession/contact/reconciliation-timing·breakup-healing·reunion). 약신호로 "타로 상대방 마음 읽는 법"(29위·crush-mind-tarot 대응됨)·"타로카드 78장 해석"(30위·/cards 허브형 방법론 후보). **역방향/속마음 본문 보강 신호 갱신**: 컵2 역방향(30노출)·소드3 역방향(33)·킹펜타클 속마음(18)·킹오브컵스 속마음(9). **꿈해몽(dreams-queue): 키워드·웹문서 상위 dream 전부 발행분 매핑**(old-friend 3062노출 전체1위·crush 2514·kiss 1121·message 1212·holding-hands 964·snake 969·jealousy 929·ex-lover 1168·stranger 699·reunion 676·celebrity 999·teeth-falling 1430·crying 691·moving 334). 유일 약신호 "좋아하는 사람이 다른 사람과 꿈"(13노출)도 jealousy-dream(웹문서9위)이 커버 → **신규 갭 0, dreams-queue 변동 없이 연애+꿈 롱테일 자체선정 유지** |
 | 2026-07-10 | 검색 키워드 TOP30 + 웹문서 TOP30 (최근30일 클릭 1.1천·노출 6.2만·CTR 1.8%, 전월比 노출 +163.9%·클릭 +128% 색인 폭발 계속) | Swords·Wands 14장 전부 발행 완료로 **가이드 미발행은 Pentacles 갭 6장(five/six/seven/eight/nine/page)만 남음** = 마지막 갭. 웹문서 노출 역산으로 재정렬: six-of-pentacles(1403노출·rank28·CTR0.9) 1순위, seven-of-pentacles(1019노출)·five-of-pentacles(936노출+"펜타클5"키워드 250노출) 순. eight/nine/page는 top30 미노출→백로그 순. 6장 소진 시 78장 가이드 완주→상황/방법론 풀로 전환. 기존 가이드 역방향 보강 신호 갱신: 컵2·페이지컵·은둔자·소드3·컵4·전차 역방향 + 여사제(웹문서 rank27 priestess-love 노출), 악마+교황 조합. **꿈해몽(dreams-queue): 웹문서 상위 dream 페이지(old-friend 1713노출 전체1위·crush 1390·ex-lover 817·snake 662·jealousy 419·stranger 335·reunion 384) 전부 이미 발행됨, 신규 갭 신호 없음→dreams-queue 변동 없이 연애+꿈 롱테일 자체선정 유지** *(★five 7/11·six 7/12 발행 완료 반영됨, 다음=seven-of-pentacles)* |
 | 2026-06-22 | 검색 키워드 TOP30 + 웹문서 TOP30 (최근30일 클릭 790·노출 3.9만·CTR 2%, 전월比 노출 +717%·클릭 +908% 색인 폭발 지속) | 6/1 우선순위 15장 전부 발행 완료→아카이브. 신규 우선순위 큐를 가이드 없는 카드(갭 24장) 노출 역산으로 재구축: king-of-swords(웹문서623·"킹오브소드 해석" 검색어 1위 8클릭) 압도적 1순위, queen-of-swords(561)·ten-of-pentacles(567)·ace-of-pentacles(394·"속마음")·six-of-swords 순. 역방향 검색 뜨는 기존 가이드(empress·world·hermit·judgement·lovers·wheel·devil)는 본문 역방향 각도 보강 대상으로 분리 기재. 꿈해몽은 신호 미약("전애인 꿈" 1건·이미 발행)이라 dreams-queue 변동 없음 |
 | 2026-06-01 | 검색 키워드 TOP30 + 웹문서 TOP30 | 소드·완드·펜타클 42장 노출 역산 큐 구축 (기준 베이스라인) |
@@ -175,7 +176,7 @@ Week 1~3 날짜별 큐로 메이저 22장 + 컵 14장 + 상황/방법 글(crush-
 
 ### 상황별 가이드
 
-- 연인과 싸운 후 화해 타이밍
+- ~~연인과 싸운 후 화해 타이밍~~ (`reconciliation-timing-tarot`, 2026-07-21 발행)
 - 짝사랑 고백 시기
 - 새로운 인연 언제 올까
 - 밀당 타이밍 타로
@@ -208,10 +209,10 @@ Week 1~3 날짜별 큐로 메이저 22장 + 컵 14장 + 상황/방법 글(crush-
 
 ## 발행 후 기록 (최근 7편만 유지, 그 이상은 삭제)
 
+- [x] 2026-07-21 `reconciliation-timing-tarot` (2,810자, 상황별 가이드, 78장 카드 해석 완주 이후 상황별 가이드 풀 첫 글, 다음 큐는 짝사랑 고백 시기 등 상황별 가이드 풀에서 순서대로)
 - [x] 2026-07-19 `page-of-pentacles-love-meaning` (2,814자, 카드 해석, 중장기 주제 풀 Pentacles 갭 마지막 1장, **78장 카드 해석 가이드 전체 완주**, 다음 큐는 상황별 가이드/방법론 풀에서 선택)
 - [x] 2026-07-15 `nine-of-pentacles-love-meaning` (2,948자, 카드 해석, 중장기 주제 풀 Pentacles 갭 순서대로, 다음 큐는 page-of-pentacles, Pentacles 갭 마지막 1장)
 - [x] 2026-07-14 `eight-of-pentacles-love-meaning` (2,866자, 카드 해석, 중장기 주제 풀 Pentacles 갭 순서대로, 다음 큐는 nine-of-pentacles)
 - [x] 2026-07-13 `seven-of-pentacles-love-meaning` (3,018자, 카드 해석, 중장기 주제 풀 Pentacles 갭 순서대로, 다음 큐는 eight-of-pentacles)
 - [x] 2026-07-12 `six-of-pentacles-love-meaning` (2,893자, 카드 해석, 중장기 주제 풀 Pentacles 갭 순서대로, 다음 큐는 seven-of-pentacles)
 - [x] 2026-07-11 `five-of-pentacles-love-meaning` (2,884자, 카드 해석, 중장기 주제 풀 Pentacles 갭 순서대로, 다음 큐는 six-of-pentacles)
-- [x] 2026-07-10 `two-of-pentacles-love-meaning` (2,868자, 카드 해석, 중장기 주제 풀 Pentacles 갭 순서대로, 다음 큐는 five-of-pentacles)

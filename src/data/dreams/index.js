@@ -64,8 +64,10 @@ import umbrellaDream from './umbrella-dream.js'
 import butterflyDream from './butterfly-dream.js'
 import rainbowDream from './rainbow-dream.js'
 import nameCallDream from './name-call-dream.js'
+import keyDream from './key-dream.js'
 
 const dreams = [
+  keyDream,
   nameCallDream,
   starDream,
   rainbowDream,
