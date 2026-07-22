@@ -81,5 +81,6 @@ export default {
   relatedDreams: [
     { slug: 'flying-dream', label: '하늘을 나는 꿈' },
     { slug: 'moving-dream', label: '이사하는 꿈' },
+    { slug: 'shoes-dream', label: '신발 꿈' },
   ],
 }

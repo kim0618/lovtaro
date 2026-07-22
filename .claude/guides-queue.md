@@ -177,15 +177,17 @@ Week 1~3 날짜별 큐로 메이저 22장 + 컵 14장 + 상황/방법 글(crush-
 ### 상황별 가이드
 
 - ~~연인과 싸운 후 화해 타이밍~~ (`reconciliation-timing-tarot`, 2026-07-21 발행)
-- 짝사랑 고백 시기
-- 새로운 인연 언제 올까
+- ~~짝사랑 고백 시기~~ (초기 발행분 `confession-timing-tarot`가 이미 커버, 신규 발행 아님)
+- ~~새로운 인연 언제 올까~~ (`new-encounter-tarot`, 2026-07-22 발행)
 - 밀당 타이밍 타로
 - 결혼 상대 만남 시기
 - 장거리 연애 지속 여부
 - 관계 권태기 극복
-- 상대방이 나를 좋아하는지
+- ~~상대방이 나를 좋아하는지~~ (초기 발행분 `crush-mind-tarot`가 이미 커버, 신규 발행 아님)
 - 바람기 의심 타로
 - 삼각관계 해석
+
+> 다음 큐는 "밀당 타이밍 타로" (백로그 순서대로)
 
 ### 방법론·입문
 
@@ -209,10 +211,10 @@ Week 1~3 날짜별 큐로 메이저 22장 + 컵 14장 + 상황/방법 글(crush-
 
 ## 발행 후 기록 (최근 7편만 유지, 그 이상은 삭제)
 
-- [x] 2026-07-21 `reconciliation-timing-tarot` (2,810자, 상황별 가이드, 78장 카드 해석 완주 이후 상황별 가이드 풀 첫 글, 다음 큐는 짝사랑 고백 시기 등 상황별 가이드 풀에서 순서대로)
-- [x] 2026-07-19 `page-of-pentacles-love-meaning` (2,814자, 카드 해석, 중장기 주제 풀 Pentacles 갭 마지막 1장, **78장 카드 해석 가이드 전체 완주**, 다음 큐는 상황별 가이드/방법론 풀에서 선택)
-- [x] 2026-07-15 `nine-of-pentacles-love-meaning` (2,948자, 카드 해석, 중장기 주제 풀 Pentacles 갭 순서대로, 다음 큐는 page-of-pentacles, Pentacles 갭 마지막 1장)
-- [x] 2026-07-14 `eight-of-pentacles-love-meaning` (2,866자, 카드 해석, 중장기 주제 풀 Pentacles 갭 순서대로, 다음 큐는 nine-of-pentacles)
-- [x] 2026-07-13 `seven-of-pentacles-love-meaning` (3,018자, 카드 해석, 중장기 주제 풀 Pentacles 갭 순서대로, 다음 큐는 eight-of-pentacles)
-- [x] 2026-07-12 `six-of-pentacles-love-meaning` (2,893자, 카드 해석, 중장기 주제 풀 Pentacles 갭 순서대로, 다음 큐는 seven-of-pentacles)
-- [x] 2026-07-11 `five-of-pentacles-love-meaning` (2,884자, 카드 해석, 중장기 주제 풀 Pentacles 갭 순서대로, 다음 큐는 six-of-pentacles)
+- [x] 2026-07-22 `new-encounter-tarot` (2,840자, 상황별 가이드, 짝사랑 고백/상대방 마음은 초기 발행분이 이미 커버함을 확인해 스킵, 다음 큐는 밀당 타이밍 타로)
+- [x] 2026-07-21 `reconciliation-timing-tarot` (2,810자, 상황별 가이드, 78장 카드 해석 완주 이후 상황별 가이드 풀 첫 글)
+- [x] 2026-07-19 `page-of-pentacles-love-meaning` (2,814자, 카드 해석, 중장기 주제 풀 Pentacles 갭 마지막 1장, **78장 카드 해석 가이드 전체 완주**)
+- [x] 2026-07-15 `nine-of-pentacles-love-meaning` (2,948자, 카드 해석, 중장기 주제 풀 Pentacles 갭 순서대로)
+- [x] 2026-07-14 `eight-of-pentacles-love-meaning` (2,866자, 카드 해석, 중장기 주제 풀 Pentacles 갭 순서대로)
+- [x] 2026-07-13 `seven-of-pentacles-love-meaning` (3,018자, 카드 해석, 중장기 주제 풀 Pentacles 갭 순서대로)
+- [x] 2026-07-12 `six-of-pentacles-love-meaning` (2,893자, 카드 해석, 중장기 주제 풀 Pentacles 갭 순서대로)
