@@ -80,5 +80,6 @@ export default {
     { slug: 'ring-dream', label: '반지 꿈' },
     { slug: 'divorce-dream', label: '이혼하는 꿈' },
     { slug: 'wedding-guest-dream', label: '남의 결혼식 가는 꿈' },
+    { slug: 'parents-opposition-dream', label: '부모님이 반대하는 꿈' },
   ],
 }

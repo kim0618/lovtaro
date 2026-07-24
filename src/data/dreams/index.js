@@ -67,8 +67,10 @@ import nameCallDream from './name-call-dream.js'
 import keyDream from './key-dream.js'
 import shoesDream from './shoes-dream.js'
 import weddingGuestDream from './wedding-guest-dream.js'
+import parentsOppositionDream from './parents-opposition-dream.js'
 
 const dreams = [
+  parentsOppositionDream,
   weddingGuestDream,
   shoesDream,
   keyDream,
