@@ -45,6 +45,16 @@ async function roundImg(buf, w, h, r) {
   return sharp(buf).composite([{ input: Buffer.from(m), blend: 'dest-in' }]).png().toBuffer()
 }
 
+// 최종 저장 전 알파채널 제거(RGB 평탄화) + 최대압축.
+// 합성 결과가 RGBA로 남으면 파일이 2~4배로 부풀고(예: 2.1MB), 구글드라이브/안드로이드
+// 다운로드에서 오류가 남. 캐러셀은 풀배경이라 알파가 필요 없으므로 평탄화가 안전.
+async function finalizePng(buf) {
+  return sharp(buf)
+    .flatten({ background: { r: 6, g: 3, b: 20 } })
+    .png({ compressionLevel: 9, effort: 10 })
+    .toBuffer()
+}
+
 async function slide01() {
   const cW = 750, cH = 940
   const cardTop = 80
@@ -97,7 +107,7 @@ async function slide01() {
     base = await sharp(base).composite([{ input: Buffer.from(overlay), left: 0, top: 0 }]).png().toBuffer()
   }
 
-  writeFileSync(resolve(outputDir, 'slide01.png'), base)
+  writeFileSync(resolve(outputDir, 'slide01.png'), await finalizePng(base))
   console.log(`✅ slide01.png (${(base.length / 1024).toFixed(0)} KB)`)
 }
 
@@ -163,7 +173,7 @@ async function contentSlide(cardSlug, nameEn, subtitle, bodyText, index, filenam
 
   base = await sharp(base).composite([{ input: Buffer.from(overlay), left: 0, top: 0 }]).png().toBuffer()
 
-  writeFileSync(resolve(outputDir, filename), base)
+  writeFileSync(resolve(outputDir, filename), await finalizePng(base))
   console.log(`✅ ${filename} (${(base.length / 1024).toFixed(0)} KB)`)
 }
 
@@ -226,7 +236,7 @@ async function slide05() {
     base = await sharp(base).composite([{ input: Buffer.from(textOverlay), left: 0, top: 0 }]).png().toBuffer()
   }
 
-  writeFileSync(resolve(outputDir, 'slide05.png'), base)
+  writeFileSync(resolve(outputDir, 'slide05.png'), await finalizePng(base))
   console.log(`✅ slide05.png (${(base.length / 1024).toFixed(0)} KB)`)
 }
 

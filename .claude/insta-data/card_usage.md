@@ -70,6 +70,16 @@
 - **story 마이너/메이저** (story_cards.json 40/78): six-of-pentacles·ace-of-cups(월, 초기픽 page-of-wands가 금 소개형과 앞면 중복 → ace-of-cups로 스왑), seven-of-cups·wheel-of-fortune(화), moon·page-of-pentacles(수), four-of-pentacles·five-of-swords(목), world·seven-of-swords(금)
 - ⚠️ 중복회피 메모: 메이저 8장(별·수레·절제·매달린·교황·바보·탑·여사제) 전부 최근 2주 참여형/커버/Sunday 슬롯 미사용. 이번 주 내 동일카드 메인 2회 0. story 앞면은 콘텐츠 앞면 노출(수/금 소개형·캐러셀·Sunday reveal)과 대조해 page-of-wands만 겹쳐 스왑, 나머지 8장 앞면 중복 0 (참여형 릴스는 뒷면이라 front 충돌 대상 아님)
 
+### 2026-07-20~26
+- **1·2·3 참여형 메이저 메인**: 마법사·황제(월), 전차(화), 세계·힘(목) / 교황·바보(토릴 재발행 7/18)
+- **1·2·3 참여형 마이너 메인**: 펜타클의 8(월), 소드의 6·컵의 3(화), 완드의 9(목) / 컵의 10(토릴 재발행 7/18)
+- **수·금 소개형 마이너 메인**: 소드의 8(수 7/22), 완드의 페이지(금 7/24, 7/17 미발행분 재발행)
+- **토 캐러셀 커버 (메이저)**: 탑(The Tower, 7/18 재발행)
+- **토 캐러셀 본문 (마이너)**: 소드의 페이지·완드의 5·컵의 5 (7/18 재발행, 다툰 뒤 하면 안 되는 말)
+- **Sunday Preview 3장 (혼합)**: 심판, 소드의 10, 컵의 8
+- **story 마이너/메이저** (story_cards.json 50/78): four-of-swords·star(월), empress·hermit(화), king-of-wands·page-of-swords(수), seven-of-pentacles·three-of-cups(목), nine-of-cups·ten-of-swords(금)
+- ⚠️ 중복회피 메모: 신규 메이저 6장(마법사·황제·전차·세계·힘·심판) 전부 6/29~7/4 이후 최근 2주 미사용(3주텀). 마이너 신규 7장 최근 2주 미사용. 주 내 동일카드 2회 메인 0. 금·토는 7/17·7/18 미발행분 재발행이라 카드 신규 아님(재사용 표기). story 앞장은 콘텐츠 앞면 노출과 0충돌, 뒷장(기울어 일부 가림)만 page-of-swords(토캐러셀 본문·7/25)·ten-of-swords(Sunday reveal·7/26)와 겹치나 다른 날 24h 소멸이라 허용
+
 ## 기록 규칙 (스킬 동일)
 - 같은 카드라도 용도(슬롯) 다르면 카운트 별도. 메이저 22장은 슬롯별 분리 안 하면 한 달 내 고갈.
 - 같은 주 내 동일 카드 2회 메인 사용 금지.
