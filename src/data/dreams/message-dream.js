@@ -85,5 +85,6 @@ export default {
     { slug: 'crush', label: '좋아하는 사람 꿈' },
     { slug: 'moving-dream', label: '이사하는 꿈' },
     { slug: 'letter-dream', label: '편지 꿈' },
+    { slug: 'name-call-dream', label: '이름 부르는 꿈' },
   ],
 }

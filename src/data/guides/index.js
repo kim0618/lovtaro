@@ -89,8 +89,16 @@ import sevenOfPentaclesLoveMeaning from './seven-of-pentacles-love-meaning.js'
 import eightOfPentaclesLoveMeaning from './eight-of-pentacles-love-meaning.js'
 import nineOfPentaclesLoveMeaning from './nine-of-pentacles-love-meaning.js'
 import pageOfPentaclesLoveMeaning from './page-of-pentacles-love-meaning.js'
+import reconciliationTimingTarot from './reconciliation-timing-tarot.js'
+import newEncounterTarot from './new-encounter-tarot.js'
+import pushPullTimingTarot from './push-pull-timing-tarot.js'
+import marriageTimingTarot from './marriage-timing-tarot.js'
 
 const guides = [
+  marriageTimingTarot,
+  pushPullTimingTarot,
+  newEncounterTarot,
+  reconciliationTimingTarot,
   pageOfPentaclesLoveMeaning,
   nineOfPentaclesLoveMeaning,
   eightOfPentaclesLoveMeaning,

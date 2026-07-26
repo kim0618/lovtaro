@@ -40,9 +40,23 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash, WebSearch
 
 이 단계를 건너뛰면 글은 반드시 얄팍해진다.
 
+0. **⚠️ 원격 동기화 확인 (가장 먼저, 생략 금지)** - 큐 파일(`dreams-queue.md`)과 로컬 파일 목록만 보고 "미발행"을 판단하지 않는다. 여러 PC에서 작업하므로 로컬이 원격보다 뒤처져 있으면 **이미 발행된 주제를 중복 작성**하게 된다.
+
+   ```bash
+   cd /home/tjd618/lovtaro && git fetch origin 2>&1 && git status -sb | head -3
+   ```
+
+   원격에 새 커밋이 있으면(behind/diverged) **작업을 멈추고 사용자에게 pull을 먼저 요청한다.** 부득이 진행해야 하면 원격 목록을 직접 대조한다:
+
+   ```bash
+   git ls-tree origin/main src/data/dreams/ --name-only | sed 's/.*\///; s/\.js$//' | sort
+   ```
+
+   *배경 (2026-07-20 사고)*: 같은 날 `/lovtaro-guide`에서 원격에 이미 발행된 가이드를 로컬 큐만 믿고 중복 작성해 하루치 작업을 폐기했다. 꿈해몽도 큐 소진 후 자체 선정 방식이라 동일한 위험이 있다.
+
 1. **기존 꿈해몽 톤 샘플 2편** - `src/data/dreams/`의 최근 글 2편을 읽어 톤·구조·어휘를 체화한다. 시드 3편(ex-lover, crush, kiss)이 기준 템플릿이다. 새 글이 같은 감정 온도를 가져야 한다.
 2. **전통 해몽 근거 확인** - 그 꿈의 표준 통념을 파악. 불확실하면 `WebSearch`로 확인. (예: 뱀=재물·이성운, 이빨=가족·구설, 태몽=새 생명·변화)
-3. **중복 회피** - `ls src/data/dreams/ | grep -v '^index.js$' | sed 's/\.js$//'`로 미발행 확인.
+3. **중복 회피** - `ls src/data/dreams/ | grep -v '^index.js$' | sed 's/\.js$//'`로 미발행 확인. **위 0번에서 원격까지 대조한 뒤에만 유효하다.**
 
 ## 1단계. 주제 선정
 

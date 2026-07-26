@@ -80,5 +80,7 @@ export default {
     { slug: 'cheating-dream', label: '바람 피우는 꿈' },
     { slug: 'first-love-dream', label: '첫사랑 꿈' },
     { slug: 'meal-dream', label: '같이 밥 먹는 꿈' },
+    { slug: 'name-call-dream', label: '이름 부르는 꿈' },
+    { slug: 'wedding-guest-dream', label: '남의 결혼식 가는 꿈' },
   ],
 }
