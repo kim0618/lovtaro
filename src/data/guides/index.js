@@ -93,8 +93,10 @@ import reconciliationTimingTarot from './reconciliation-timing-tarot.js'
 import newEncounterTarot from './new-encounter-tarot.js'
 import pushPullTimingTarot from './push-pull-timing-tarot.js'
 import marriageTimingTarot from './marriage-timing-tarot.js'
+import longDistanceRelationshipTarot from './long-distance-relationship-tarot.js'
 
 const guides = [
+  longDistanceRelationshipTarot,
   marriageTimingTarot,
   pushPullTimingTarot,
   newEncounterTarot,

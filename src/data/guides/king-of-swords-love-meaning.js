@@ -102,6 +102,6 @@ export default {
     { id: 'king-of-swords', name: '소드의 킹' },
     { id: 'queen-of-swords', name: '소드의 퀸' },
     { id: 'justice', name: '정의' },
-    { id: 'queen-of-cups', name: '컵의 퀸' },
+    { id: 'queen-of-cups', name: '컵의 여왕' },
   ],
 }

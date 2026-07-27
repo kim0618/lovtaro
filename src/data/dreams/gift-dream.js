@@ -79,7 +79,7 @@ export default {
     { id: 'ace-of-cups', name: '컵의 에이스' },
     { id: 'two-of-cups', name: '컵의 2' },
     { id: 'star', name: '별' },
-    { id: 'empress', name: '여제' },
+    { id: 'empress', name: '여황제' },
   ],
   relatedDreams: [
     { slug: 'confession-dream', label: '고백하는 꿈' },

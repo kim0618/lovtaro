@@ -80,5 +80,6 @@ export default {
   relatedDreams: [
     { slug: 'fight-dream', label: '싸우는 꿈' },
     { slug: 'reunion-dream', label: '재회하는 꿈' },
+    { slug: 'bridge-dream', label: '다리 건너는 꿈' },
   ],
 }

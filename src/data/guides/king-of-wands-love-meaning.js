@@ -99,7 +99,7 @@ export default {
   relatedCards: [
     { id: 'king-of-wands', name: '완드의 킹' },
     { id: 'emperor', name: '황제' },
-    { id: 'queen-of-wands', name: '완드의 퀸' },
+    { id: 'queen-of-wands', name: '완드의 여왕' },
     { id: 'knight-of-wands', name: '완드의 나이트' },
   ],
 }

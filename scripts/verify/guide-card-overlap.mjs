@@ -1,18 +1,28 @@
 /**
- * 가이드-카드 본문 의미 중복 감지 스크립트
+ * 가이드·꿈해몽 ↔ 카드 본문 의미 중복 감지 스크립트
  *
- * 카드 해석 가이드(category: card-interpretation)의 본문/FAQ와
- * 해당 카드 cardDictionary.js / minorArcana.js 블록의 본문을 N-gram으로 비교해
- * 연속 15자 이상 공유하는 문자열을 리포트한다.
+ * 글의 본문/FAQ와 카드 cardDictionary.js / minorArcana.js 블록의 본문을
+ * N-gram으로 비교해 연속 n자 이상 공유하는 문자열을 리포트한다.
+ *
+ * 카드 출처 결정 (2026-07-27 확장):
+ *   - 카드 해석 가이드(category: card-interpretation): slug에서 카드 id를 뽑아 그 카드와 대조
+ *   - 그 외 가이드(situation/method/faq) + 꿈해몽 전체: relatedCards 배열의 카드들과 대조
+ *
+ * 배경 (2026-07-27 회고): 이전 버전은 slug에서 카드 id를 못 뽑으면 SKIP했다.
+ * 그 결과 ①상황·방법론 가이드 전부가 검사 밖이었고 ②꿈해몽 60편은 import조차 되지
+ * 않아 단 한 번도 측정된 적이 없었다. 두 유형 모두 relatedCards를 갖고 있으므로
+ * 이를 카드 출처로 삼아 사각지대를 없앤다. 실제로 이 확장으로 기존 발행분
+ * reunion-tarot-cards에서 eight-of-cups와 22자 겹침이 뒤늦게 발견됐다.
  *
  * 사용:
- *   node scripts/verify/guide-card-overlap.mjs              # 전체 가이드 전수
+ *   node scripts/verify/guide-card-overlap.mjs              # 가이드+꿈해몽 전수
  *   node scripts/verify/guide-card-overlap.mjs star         # 특정 슬러그 (부분 매치)
  *
  * 출력: 중복 의심 구간만. 문제 없으면 OK만 출력.
  */
 
 import guides from '../../src/data/guides/index.js'
+import dreams from '../../src/data/dreams/index.js'
 import { CARD_DICTIONARY } from '../../src/data/cardDictionary.js'
 import { MINOR_ARCANA } from '../../src/data/minorArcana.js'
 
@@ -94,6 +104,10 @@ function loadCardText(card) {
 
 function loadGuideBlocks(guide) {
   const blocks = []
+  // 꿈해몽의 summary는 AI 인용 자리라 중복이 특히 치명적 → 검사에 포함
+  if (guide.summary) {
+    blocks.push({ loc: 'summary', text: stripHtml(guide.summary) })
+  }
   for (const section of guide.sections || []) {
     blocks.push({
       loc: `section: ${section.heading}`,
@@ -109,47 +123,71 @@ function loadGuideBlocks(guide) {
   return blocks
 }
 
-function checkGuide(guide) {
-  if (guide.category !== 'card-interpretation') return { skipped: true, reason: 'not card-interpretation' }
-  const cardId = extractCardId(guide.slug)
-  if (!cardId) return { skipped: true, reason: 'no card id from slug' }
-  const card = ALL_CARDS[cardId]
-  if (!card) return { skipped: true, reason: `card '${cardId}' not found` }
-
-  const cardText = loadCardText(card)
-  const blocks = loadGuideBlocks(guide)
-
-  const findings = []
-  for (const b of blocks) {
-    const overlaps = findMaxSharedSubstrings(b.text, cardText)
-    if (overlaps.length > 0) {
-      findings.push({ loc: b.loc, overlaps })
+/**
+ * 대조할 카드 목록을 결정한다.
+ * 카드 해석 가이드는 slug의 주 카드 1장(깊은 대조),
+ * 그 외 글은 relatedCards 전부(사각지대 방지).
+ */
+function resolveCards(item) {
+  if (item.category === 'card-interpretation') {
+    const cardId = extractCardId(item.slug)
+    if (cardId && ALL_CARDS[cardId]) {
+      return { mode: 'slug', cards: [{ id: cardId, card: ALL_CARDS[cardId] }] }
     }
   }
-  return { cardId, findings }
+  const cards = (item.relatedCards || [])
+    .filter(c => ALL_CARDS[c.id])
+    .map(c => ({ id: c.id, card: ALL_CARDS[c.id] }))
+  return { mode: 'relatedCards', cards }
+}
+
+function checkGuide(guide) {
+  const { mode, cards } = resolveCards(guide)
+  if (cards.length === 0) {
+    return { skipped: true, reason: '대조할 카드 없음 (relatedCards 비어 있음)' }
+  }
+
+  const blocks = loadGuideBlocks(guide)
+  const findings = []
+  for (const { id, card } of cards) {
+    const cardText = loadCardText(card)
+    for (const b of blocks) {
+      const overlaps = findMaxSharedSubstrings(b.text, cardText)
+      if (overlaps.length > 0) {
+        findings.push({ cardId: id, loc: b.loc, overlaps })
+      }
+    }
+  }
+  return { mode, cardIds: cards.map(c => c.id), findings }
 }
 
 const arg = process.argv[2]
-const target = arg ? guides.filter(g => g.slug.includes(arg)) : guides
+const ALL_ITEMS = [
+  ...guides.map(g => ({ kind: 'guide', item: g })),
+  ...dreams.map(d => ({ kind: 'dream', item: d })),
+]
+const target = arg ? ALL_ITEMS.filter(x => x.item.slug.includes(arg)) : ALL_ITEMS
 
 let totalIssues = 0
-let totalGuides = 0
+let totalChecked = 0
+const skipped = []
+const quiet = !arg // 전수 실행 시엔 OK 항목을 일일이 찍지 않는다 (148편이라 노이즈)
 
-for (const guide of target) {
-  const result = checkGuide(guide)
+for (const { kind, item } of target) {
+  const result = checkGuide(item)
   if (result.skipped) {
-    console.log(`[SKIP] ${guide.slug}: ${result.reason}`)
+    skipped.push(`${kind}:${item.slug} (${result.reason})`)
     continue
   }
-  totalGuides++
-  console.log(`\n=== ${guide.slug} (card: ${result.cardId}) ===`)
+  totalChecked++
   if (result.findings.length === 0) {
-    console.log(`  OK - 중복 없음`)
+    if (!quiet) console.log(`\n=== [${kind}] ${item.slug} (${result.cardIds.join(', ')}) ===\n  OK - 중복 없음`)
     continue
   }
+  console.log(`\n=== [${kind}] ${item.slug} (${result.mode}) ===`)
   for (const f of result.findings) {
     totalIssues++
-    console.log(`  [${f.loc}]`)
+    console.log(`  [${f.cardId}] ${f.loc}`)
     for (const o of f.overlaps) {
       console.log(`    겹침 ${o.len}자: "${o.text}"`)
     }
@@ -157,7 +195,11 @@ for (const guide of target) {
 }
 
 console.log(`\n--- 요약 ---`)
-console.log(`검사 대상: ${totalGuides}개 가이드`)
+console.log(`검사 대상: ${totalChecked}편 (가이드 ${guides.length} + 꿈해몽 ${dreams.length} 중)`)
+if (skipped.length) {
+  console.log(`대조 카드 없어 건너뜀: ${skipped.length}편`)
+  skipped.forEach(s => console.log(`  - ${s}`))
+}
 console.log(`중복 의심 문단: ${totalIssues}건`)
 if (totalIssues > 0) {
   console.log(`\n→ 겹침이 감지된 문단을 심화·사례·다른 관점으로 재작성 권장`)

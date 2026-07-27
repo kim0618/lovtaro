@@ -99,7 +99,7 @@ export default {
     { label: '러브타로 3장', path: '/reading/love/' },
   ],
   relatedCards: [
-    { id: 'king-of-wands', name: '완드의 왕' },
+    { id: 'king-of-wands', name: '완드의 킹' },
     { id: 'sun', name: '태양' },
     { id: 'strength', name: '힘' },
     { id: 'queen-of-cups', name: '컵의 여왕' },

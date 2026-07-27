@@ -72,7 +72,7 @@ export default {
     { id: 'lovers', name: '연인' },
     { id: 'ten-of-cups', name: '컵의 10' },
     { id: 'hierophant', name: '교황' },
-    { id: 'four-of-wands', name: '지팡이의 4' },
+    { id: 'four-of-wands', name: '완드의 4' },
   ],
   relatedDreams: [
     { slug: 'kiss', label: '키스하는 꿈' },

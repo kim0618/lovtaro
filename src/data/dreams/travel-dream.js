@@ -82,5 +82,6 @@ export default {
     { slug: 'flying-dream', label: '하늘을 나는 꿈' },
     { slug: 'moving-dream', label: '이사하는 꿈' },
     { slug: 'shoes-dream', label: '신발 꿈' },
+    { slug: 'bridge-dream', label: '다리 건너는 꿈' },
   ],
 }

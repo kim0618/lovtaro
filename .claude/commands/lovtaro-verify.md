@@ -216,6 +216,8 @@ diff /tmp/lt-files.txt /tmp/lt-sitemap.txt
 
 ```bash
 # relatedCards[].id가 실제 cardDictionary.js + minorArcana.js에 존재하는지
+# + relatedDreams[].slug가 실제 발행된 꿈해몽인지 (2026-07-27 추가)
+# + 카드 표시명(name)이 사전의 공식 name과 일치하는지 (2026-07-27 추가)
 # CARD_DICTIONARY, MINOR_ARCANA 둘 다 객체이므로 Object.keys()로 id 추출
 # guides + dreams 둘 다 검사 (2026-06-15 dreams 누락 사각지대 보강)
 node --input-type=module -e "
@@ -223,21 +225,34 @@ import guides from '/home/tjd618/lovtaro/src/data/guides/index.js'
 import dreams from '/home/tjd618/lovtaro/src/data/dreams/index.js'
 import { CARD_DICTIONARY } from '/home/tjd618/lovtaro/src/data/cardDictionary.js'
 import { MINOR_ARCANA } from '/home/tjd618/lovtaro/src/data/minorArcana.js'
-const ids = new Set([...Object.keys(CARD_DICTIONARY), ...Object.keys(MINOR_ARCANA)])
+const ALL = { ...CARD_DICTIONARY, ...MINOR_ARCANA }
+const ids = new Set(Object.keys(ALL))
+const dreamSlugs = new Set(dreams.map(d => d.slug))
 let n = 0
 for (const [kind, list] of [['guide', guides], ['dream', dreams]]) {
   list.forEach(g => {
     (g.relatedCards || []).forEach(c => {
       if (!ids.has(c.id)) { console.log('MISSING-CARD:', '['+kind+']', g.slug, '→', c.id); n++ }
+      else if (ALL[c.id].name && c.name && ALL[c.id].name !== c.name) {
+        console.log('NAME-MISMATCH:', '['+kind+']', g.slug, c.id, '칩=\"'+c.name+'\" 사전=\"'+ALL[c.id].name+'\"'); n++
+      }
+    })
+    ;(g.relatedDreams || []).forEach(r => {
+      if (!dreamSlugs.has(r.slug)) { console.log('DEAD-DREAM-LINK:', '['+kind+']', g.slug, '→', r.slug); n++ }
+      if (r.slug === g.slug) { console.log('SELF-LINK:', '['+kind+']', g.slug); n++ }
     })
   })
 }
-console.log(n===0 ? '  ✅ relatedCards 전수 실존 (guides+dreams)' : '  ⚠ '+n+'건 죽은 카드 링크')
+console.log(n===0 ? '  ✅ relatedCards/relatedDreams 전수 실존 + 표시명 일치' : '  ⚠ '+n+'건')
 "
 ```
 
 (2026-04-24 수정: 이전 버전은 require + .map() 사용했는데 두 데이터가 객체라 TypeError. ESM + Object.keys()로 수정.)
 (2026-06-15 보강: M이 guides만 검사하던 사각지대로 moving-dream의 `wheel-of-fortune`(실제 id는 `wheel`) 죽은 링크가 통과됨. dreams까지 확장. 메이저 카드 id는 cardDictionary 키에 있음 - `wheel`/`high-priestess`/`hanged`/`wheel` 등 슬러그 불일치 주의.)
+
+**(2026-07-27 보강 2건)**:
+- **`relatedDreams` 죽은 링크가 검사 밖이었음.** 꿈해몽끼리의 내부링크(토픽 클러스터)는 184건인데 한 번도 검증된 적이 없었다. 위 스크립트에 추가. 자기 자신을 가리키는 self-link도 함께 검출.
+- **카드 표시명(`name`) 불일치가 검사 밖이었음.** `long-distance-relationship-tarot`이 `knight-of-wands`의 name을 '완드의 기사'로 적었는데, 사전 공식명과 기존 글 58곳은 전부 '완드의 나이트'였다. `relatedCards`의 name은 `GuideDetailPage.vue`에서 **칩 라벨로 그대로 렌더링**되므로, 칩을 눌러 들어간 카드 상세 페이지 제목과 다르게 보이는 사용자 화면 결함이 된다. id만 맞으면 통과하던 구멍이라 name 대조를 추가.
 
 관련 리딩 `path`가 실존 라우트인지 (`/reading/love`, `/reading/mind`, `/reading/reunion`, `/reading/contact`, `/reading/yesno`, `/reading/compatibility`, `/reading/three`, `/today`):
 
@@ -302,28 +317,50 @@ thin.slice(0,10).forEach(x => console.log(' ', x.id, x.sum, '자'))
 
 보강 완료 명단(`/home/tjd618/.claude/commands/lovtaro-card-expand.md` 진행률)에 있는데 얇은 카드는 **최우선 재보강 대상**. 리포트에만 올리고 자동 수정은 하지 않는다 (보강은 `/lovtaro-card-expand` 스킬의 역할).
 
-### P. 가이드-카드 본문 의미 중복 검사 (2026-04-22 추가)
+### P. 글-카드 본문 의미 중복 검사 (2026-04-22 추가, 2026-07-27 전면 확장)
 
-카드 해석 가이드(category: card-interpretation)의 본문/FAQ와 해당 카드 cardDictionary.js / minorArcana.js 블록의 본문을 N-gram으로 비교해 연속 15자 이상 공유하는 문자열을 찾는다. 정규식 기반 감사(A~O)로는 잡히지 않는 **의미 레벨 중복**을 감지하는 유일한 단계.
+글의 본문/FAQ/summary와 카드 cardDictionary.js / minorArcana.js 블록의 본문을 N-gram으로 비교해 연속 공유 문자열을 찾는다. 정규식 기반 감사(A~O)로는 잡히지 않는 **의미 레벨 중복**을 감지하는 유일한 단계.
+
+**대조할 카드를 정하는 방식** (2026-07-27 확장으로 사각지대 제거):
+
+| 글 유형 | 대조 카드 출처 |
+|---|---|
+| 카드 해석 가이드 (`card-interpretation`) | slug에서 뽑은 주 카드 1장 |
+| 그 외 가이드 (`situation`/`method`/`faq`) | `relatedCards` 배열 전부 |
+| 꿈해몽 전체 | `relatedCards` 배열 전부 |
 
 **배경 (2026-04-22 회고)**: star 가이드 FAQ가 cardDictionary.js star 블록의 문장을 거의 그대로 재서술한 사례 발생. 작성자(AI)의 주관적 판단으로는 "심화"했다고 느꼈지만 실제로 32자 연속 겹침이 있었음. 객관적 측정이 필요해 이 스크립트를 도입.
 
+**⚠️ 배경 (2026-07-27 회고) - 검사 대상이 88편 → 148편으로 늘어난 이유**:
+이전 버전은 slug에서 카드 id를 못 뽑으면 그 글을 통째로 SKIP했다. 그 결과 **두 개의 사각지대**가 있었다.
+1. **상황·방법론·FAQ 가이드 전부가 검사 밖**이었다. 이 글들은 slug에 카드명이 없어 `[SKIP] not card-interpretation`으로 조용히 넘어갔다.
+2. **꿈해몽 60편은 아예 import조차 되지 않아** 단 한 번도 측정된 적이 없었다.
+
+두 유형 모두 `relatedCards`를 갖고 있으므로 이를 카드 출처로 삼아 사각지대를 없앴다. 확장 즉시 기존 발행분에서 **reunion-tarot-cards ↔ eight-of-cups 22자 겹침**(카드 사전 두 문장을 어미만 바꿔 옮김)과 **sea-dream ↔ star 19자 겹침**이 발견돼 수정됐다. 상황 글은 독자가 카드 페이지를 본 뒤 읽는 동선이라 체감 중복도가 오히려 높다.
+
+또한 꿈해몽의 `summary`는 **AI(ChatGPT·Perplexity)가 그대로 인용해 가는 자리**라 중복이 특히 치명적이므로 검사 블록에 포함시켰다.
+
 ```bash
-# 전체 가이드 전수 검사
+# 가이드 88편 + 꿈해몽 60편 전수 검사
 cd /home/tjd618/lovtaro && node scripts/verify/guide-card-overlap.mjs
 
-# 특정 슬러그만 (부분 매치 가능)
+# 특정 슬러그만 (부분 매치 가능, 이때는 OK 항목도 출력)
 cd /home/tjd618/lovtaro && node scripts/verify/guide-card-overlap.mjs star
+
+# 15자 이상만 추려 보기 (전수 실행 시 13-14자 정형구 노이즈가 많음)
+cd /home/tjd618/lovtaro && node scripts/verify/guide-card-overlap.mjs 2>&1 | awk '
+/^=== / {hdr=$0}
+/겹침 1[5-9]자|겹침 [2-9][0-9]자/ {if(hdr!=last){print ""; print hdr; last=hdr} print "   " $0}'
 ```
 
 **판정 기준**:
-- 연속 **20자 이상 겹침**: 거의 확실한 의미 중복. 해당 문단을 심화·사례·다른 관점으로 재작성.
+- 연속 **20자 이상 겹침**: 거의 확실한 의미 중복. 해당 문단을 심화·사례·다른 관점으로 재작성. **예외 없이 수정.**
 - 연속 **15-19자 겹침**: 문맥 확인 필요. 정형 표현("~경우가 많아요", "~도움이 돼요" 등)이면 허용, 카드 고유 관점 재서술이면 수정.
-- **15자 미만**: 자연스러운 한국어 연결어 수준. 무시.
+- **13-14자**: 전수 실행 시 다수 발생하나 대부분 구조적 표현("이 카드가 역방향으로 나왔다면", "~카드가 나왔을 때"). 글이 카드를 이름으로 논하는 이상 불가피하므로 무시.
 
-**자동 수정하지 않는다.** 중복은 의미를 재구성해야 하므로 수작업이 안전. 리포트만 내고 담당 가이드를 Edit.
+**자동 수정하지 않는다.** 중복은 의미를 재구성해야 하므로 수작업이 안전. 리포트만 내고 담당 글을 Edit.
 
-**수정 후 동기화**: 가이드 파일을 수정하면 `scripts/prerender.mjs`의 GUIDES[].faq도 동일하게 수정해야 JSON-LD 일치 유지.
+**수정 후 동기화**: **가이드** 파일의 FAQ를 수정하면 `scripts/prerender.mjs`의 GUIDES[].faq도 동일하게 수정해야 JSON-LD 일치 유지(N 검사로 재확인). **꿈해몽은 prerender 동기화 불필요**(prerender가 dreams/index.js를 직접 import).
 
 ### Q. 가이드 본문 정적 주입 전수 확인 (2026-05-29 추가)
 
@@ -455,13 +492,47 @@ console.log(hits===0?'  ✅ 리딩 데이터와 15자 이상 겹침 없음':'  �
 
 **판정**: 연속 **15자 이상** 겹침이면 문맥 확인 후 재서술. 짧은 정형 표현은 허용. **카드 해석 글에는 적용하지 않는다**(리딩 데이터는 상황 글 주제와만 직접 연결됨). 주제↔리딩 매핑: 재회→`reunion.js`, 썸·짝사랑·속마음→`mind.js`, 연락→`contact.js`, 이별→해당 없음(reunion/mind 보조 참고).
 
+### T. 정량 스펙 준수 검사 (2026-07-27 추가)
+
+`/lovtaro-guide`·`/lovtaro-dream` 스킬이 정해둔 **숫자 기준**을 실제로 지켰는지 기계적으로 확인한다. 기준이 문서에만 있고 검사 항목이 없으면 작성자(AI)가 "충분해 보인다"고 자평하고 넘어간다.
+
+**배경 (2026-07-27 회고)**: `long-distance-relationship-tarot` 발행 시 FAQ 답변 5개 중 **3개가 기준(150-250자) 미달**(134/149/117자)이었는데 A~S 전 항목을 통과했다. 가이드 스킬 5단계에 "각 답변 2-4문장, 150-250자, 너무 짧으면 JSON-LD 노출 감점"이 명시돼 있었는데도 검증 단계에 대응 항목이 없어 그대로 발행될 뻔했다. 같은 날 본문 분량은 재빌드 때마다 쟀으면서 FAQ 길이는 한 번도 재지 않았다.
+
+```bash
+cd /home/tjd618/lovtaro && node --input-type=module -e "
+import guides from './src/data/guides/index.js'
+import dreams from './src/data/dreams/index.js'
+let n = 0
+// 가이드: 본문 2800-4200자, FAQ 4-6개 각 150-250자, title 25-40자, desc 70-120자
+for (const g of guides) {
+  const body = (g.sections||[]).map(s=>s.content.replace(/<[^>]*>/g,'')).join('').replace(/\s+/g,'').length
+  if (body < 2800 || body > 4200) { console.log('[guide]', g.slug, '본문', body, '자 (2800-4200)'); n++ }
+  if (g.title.length < 25 || g.title.length > 40) { console.log('[guide]', g.slug, 'title', g.title.length, '자 (25-40)'); n++ }
+  if (g.description.length < 70 || g.description.length > 120) { console.log('[guide]', g.slug, 'desc', g.description.length, '자 (70-120)'); n++ }
+  if ((g.faq||[]).length < 4 || (g.faq||[]).length > 6) { console.log('[guide]', g.slug, 'FAQ', (g.faq||[]).length, '개 (4-6)'); n++ }
+  ;(g.faq||[]).forEach((f,i) => {
+    if (f.answer.length < 150 || f.answer.length > 250) { console.log('[guide]', g.slug, 'FAQ'+(i+1), f.answer.length, '자 (150-250)'); n++ }
+  })
+}
+// 꿈해몽: 본문 2400-3600자, 4섹션, FAQ 4개, summary 필수
+for (const d of dreams) {
+  const body = (d.sections||[]).map(s=>s.content.replace(/<[^>]*>/g,'')).join('').replace(/\s+/g,'').length
+  if (body < 2400 || body > 3600) { console.log('[dream]', d.slug, '본문', body, '자 (2400-3600)'); n++ }
+  if (!d.summary) { console.log('[dream]', d.slug, 'summary 없음'); n++ }
+}
+console.log(n===0 ? '  ✅ 정량 스펙 전수 준수' : '  ⚠ '+n+'건 기준 이탈')
+"
+```
+
+**판정**: 신규 발행 글은 **전부 기준 안에 들어와야 한다.** 기존 발행분의 이탈은 리포트만 하고 즉시 고치지 않는다(발행 후 본문 변경은 별도 판단). FAQ 답변이 짧으면 JSON-LD FAQPage 리치 결과 노출에서 불리하므로 특히 신규 글에서 엄격히 본다.
+
 ## 실행 순서
 
 1. **대상 범위 확인**
    - 인자로 파일 지정되면 해당 파일만 (`/lovtaro-verify moon-love-meaning`)
    - 인자 없으면 전수 스캔
 
-2. **A~S 순서대로 실행** (R = FAQ-본문 자체중복, S = 상황 글-리딩 데이터 겹침)
+2. **A~T 순서대로 실행** (R = FAQ-본문 자체중복, S = 상황 글-리딩 데이터 겹침, T = 정량 스펙 준수)
 
 3. **자동 수정 가능한 건 즉시 Edit**
    - em dash → 하이픈 (문맥 판단)

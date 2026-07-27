@@ -77,7 +77,7 @@ export default {
     { id: 'priestess', name: '여사제' },
     { id: 'moon', name: '달' },
     { id: 'two-of-swords', name: '소드의 2' },
-    { id: 'queen-of-wands', name: '완드의 퀸' },
+    { id: 'queen-of-wands', name: '완드의 여왕' },
   ],
   relatedDreams: [
     { slug: 'stranger-dream', label: '모르는 이성 꿈' },

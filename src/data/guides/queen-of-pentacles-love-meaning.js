@@ -99,7 +99,7 @@ export default {
     { label: '궁합 보기', path: '/reading/compatibility/' },
   ],
   relatedCards: [
-    { id: 'empress', name: '여제' },
+    { id: 'empress', name: '여황제' },
     { id: 'king-of-pentacles', name: '펜타클의 킹' },
     { id: 'ten-of-pentacles', name: '펜타클의 10' },
     { id: 'queen-of-cups', name: '컵의 여왕' },
