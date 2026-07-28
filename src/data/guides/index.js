@@ -94,8 +94,10 @@ import newEncounterTarot from './new-encounter-tarot.js'
 import pushPullTimingTarot from './push-pull-timing-tarot.js'
 import marriageTimingTarot from './marriage-timing-tarot.js'
 import longDistanceRelationshipTarot from './long-distance-relationship-tarot.js'
+import relationshipRutTarot from './relationship-rut-tarot.js'
 
 const guides = [
+  relationshipRutTarot,
   longDistanceRelationshipTarot,
   marriageTimingTarot,
   pushPullTimingTarot,

@@ -69,8 +69,10 @@ import shoesDream from './shoes-dream.js'
 import weddingGuestDream from './wedding-guest-dream.js'
 import parentsOppositionDream from './parents-opposition-dream.js'
 import bridgeDream from './bridge-dream.js'
+import snowDream from './snow-dream.js'
 
 const dreams = [
+  snowDream,
   bridgeDream,
   parentsOppositionDream,
   weddingGuestDream,
