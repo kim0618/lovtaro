@@ -66,7 +66,11 @@ useHead({
 
 ## sitemap / robots
 
-- `public/sitemap.xml` 수동 관리 — 라우트 추가 시 수동 업데이트 필수 (자동 생성 아님)
+- **`public/sitemap.xml`은 자동 생성이다 (2026-07-28 전환). 손으로 고치지 말 것** — `scripts/prerender.mjs`가 `ROUTES`(= 실제로 찍는 페이지 전체)에서 빌드마다 `dist/sitemap.xml`과 `public/sitemap.xml`을 함께 다시 쓴다. 라우트를 추가하면 sitemap은 저절로 따라온다
+  - `noindex: true` 라우트(`/history`, `/rt-draw-k39f2`)는 자동 제외
+  - `<lastmod>`는 그 페이지 내용을 담은 소스 파일의 **git 마지막 커밋 날짜**. 글 하나가 파일 하나인 가이드·꿈해몽은 정확하고, 카드 78장은 데이터 파일 2개를 공유해 파일 단위 해상도
+  - changefreq·priority는 손관리 시절 값을 그대로 유지 (`sitemapHints()`)
+  - **전환 배경**: 손관리 탓에 lastmod가 0개였고 서치콘솔이 6/17 이후 6주간 sitemap을 재처리하지 않아, URL Inspection 기준 253개 중 133개가 "Google에 아직 알려지지 않은 URL"이었다(가이드 18%·꿈해몽 5% 색인). lastmod가 없으면 구글이 다시 읽을 이유가 생기지 않는다
 - `public/robots.txt` 수정 시 `/print/` 같은 내부 경로 제외 규칙 유지
 - 네이버 인증: `index.html`의 `naver-site-verification` 메타 유지
 

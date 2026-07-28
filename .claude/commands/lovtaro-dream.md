@@ -125,13 +125,14 @@ export default {
 - **summary (필수)**: 그 꿈의 핵심을 1문장으로. "~인 경우가 많아요/~신호에 가까워요" 가능성 어법. 본문 첫 섹션 첫 문장과 중복되지 않게 더 압축. AI(ChatGPT·Perplexity)가 그대로 인용해 가는 자리다.
 - **relatedDreams (2개 내외)**: 토픽이 통하는 **이미 발행된** 꿈 slug만. 존재하지 않는 slug 금지(죽은 링크). 새 글 발행 시, 기존 관련 글의 relatedDreams에도 이 글을 역으로 추가해 양방향 연결하면 더 좋다.
 
-## 8단계. 동기화 (3곳)
+## 8단계. 동기화 (2곳)
 
 1. **파일 생성**: `src/data/dreams/{slug}.js`
 2. **레지스트리 등록**: [src/data/dreams/index.js](/home/tjd618/lovtaro/src/data/dreams/index.js)에 `import` + `dreams` 배열에 추가 (최신이 위로)
-3. **sitemap**: [public/sitemap.xml](/home/tjd618/lovtaro/public/sitemap.xml)의 Dream section에 `<loc>https://lovtaro.kr/dream/{slug}/</loc>` 블록 추가 (**trailingSlash 필수**, changefreq monthly / priority 0.7)
 
-prerender.mjs는 건드리지 않는다 (자동).
+prerender.mjs와 sitemap은 건드리지 않는다 (둘 다 자동).
+
+**sitemap은 2026-07-28부터 자동 생성이다.** prerender가 빌드마다 `ROUTES`에서 `dist/sitemap.xml`과 `public/sitemap.xml`을 다시 쓴다. 손으로 넣은 URL은 다음 빌드에서 덮어써진다. 레지스트리에 등록만 하면 URL과 `<lastmod>`(= `{slug}.js`의 git 커밋 날짜)가 함께 붙는다. 빌드 후 `grep -c "dream/{slug}/" public/sitemap.xml` 이 1인지만 확인한다.
 
 ## 9단계. 빌드 검증
 

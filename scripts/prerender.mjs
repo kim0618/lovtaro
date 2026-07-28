@@ -13,6 +13,7 @@
 
 import fs from 'fs'
 import path from 'path'
+import { execFileSync } from 'child_process'
 import { fileURLToPath } from 'url'
 import { getCardSeoOverride } from '../src/data/cardSeoOverrides.js'
 import { TESTS } from '../src/data/tests/index.js'
@@ -3366,6 +3367,124 @@ function injectMeta(html, { path: urlPath, title, description, ogImage, jsonLd, 
   return html
 }
 
+// ── Sitemap ───────────────────────────────────────────────────────────────
+// 2026-07-28까지 public/sitemap.xml은 손으로 관리했다. 그 결과 lastmod가 한 건도
+// 없었고, 서치콘솔이 6/17 이후 6주 동안 sitemap을 다시 읽지 않아 URL Inspection
+// 기준 133개가 "Google에 아직 알려지지 않은 URL" 상태로 남았다(가이드 18%·꿈해몽 5%
+// 색인). lastmod는 구글이 재크롤 우선순위를 정하는 신호라, 없으면 새 글이 목록에
+// 들어가도 다시 읽힐 이유가 생기지 않는다.
+//
+// 이제 ROUTES(= prerender가 실제로 찍는 페이지 전체)에서 sitemap을 생성한다.
+// 손으로 안 고치니 라우트와 sitemap이 어긋날 수 없고, noindex 라우트는 자동 제외된다.
+
+// 파일별 마지막 커밋 날짜. git log 한 번으로 전부 모은다(파일마다 호출하면 느림).
+function gitLastModifiedMap() {
+  const map = new Map()
+  try {
+    const out = execFileSync('git', ['log', '--pretty=format:%cs', '--name-only'], {
+      cwd: path.resolve(__dirname, '..'),
+      encoding: 'utf8',
+      maxBuffer: 64 * 1024 * 1024,
+    })
+    let date = null
+    for (const line of out.split('\n')) {
+      const t = line.trim()
+      if (!t) continue
+      if (/^\d{4}-\d{2}-\d{2}$/.test(t)) { date = t; continue }
+      if (date && !map.has(t)) map.set(t, date) // git log는 최신순 → 첫 등장이 최신
+    }
+  } catch (e) {
+    console.warn(`[sitemap] git 이력을 못 읽어 lastmod를 생략합니다: ${e.message}`)
+  }
+  return map
+}
+
+// 메이저와 마이너를 갈라둔다. cardDictionary.js가 minorArcana.js를 import해 ALL_CARDS를
+// 합치긴 하지만, minorArcana.js가 바뀌어도 메이저 22장의 내용은 그대로다. 한 덩어리로
+// 묶으면 마이너 한 줄 고친 날 메이저 카드까지 "오늘 수정됨"이라고 신고하게 되고,
+// 실제와 다른 lastmod는 구글이 신호 자체를 무시하게 만든다.
+//
+// 남는 한계: 카드 78장의 본문이 파일 2개에 몰려 있어 lastmod 해상도가 파일 단위다.
+// 마이너 카드 한 장을 고치면 마이너 56장이 같은 날짜를 달게 된다. 카드는 이미 99%
+// 색인돼 있어 실익이 없으므로 파일 단위로 둔다. 정작 색인이 비어 있는 가이드(18%)와
+// 꿈해몽(5%)은 글 하나가 파일 하나라 날짜가 정확하다.
+const CARD_COMMON_FILES = ['src/data/cardDictionary.js', 'src/data/cardSeoOverrides.js']
+const MAJOR_CARD_FILES = [...CARD_COMMON_FILES, 'src/data/tarotCards.js']
+const MINOR_CARD_FILES = [...CARD_COMMON_FILES, 'src/data/minorArcana.js']
+const ALL_CARD_FILES = [...new Set([...MAJOR_CARD_FILES, ...MINOR_CARD_FILES])]
+
+// 라우트 → 그 페이지 내용을 결정하는 소스 파일들. 여러 개면 가장 최근 날짜를 쓴다.
+function sourceFilesFor(routePath) {
+  const seg = routePath.split('/').filter(Boolean)
+  if (routePath === '/') return ['src/pages/HomePage.vue']
+  if (seg[0] === 'guide') return seg[1] ? [`src/data/guides/${seg[1]}.js`] : ['src/data/guides/index.js']
+  if (seg[0] === 'dream') return seg[1] ? [`src/data/dreams/${seg[1]}.js`] : ['src/data/dreams/index.js']
+  if (seg[0] === 'test') return seg[1] ? [`src/data/tests/${seg[1]}.js`] : ['src/data/tests/index.js']
+  if (seg[0] === 'cards') {
+    if (!seg[1]) return ALL_CARD_FILES
+    return MINOR_CARDS.some((c) => c.id === seg[1]) ? MINOR_CARD_FILES : MAJOR_CARD_FILES
+  }
+  if (seg[0] === 'today') return ['src/pages/TodayPage.vue', 'src/data/readings/today.js']
+  if (seg[0] === 'reading') {
+    const file = seg[1] === '3cards' ? 'threecards' : seg[1]
+    return [`src/data/readings/${file}.js`]
+  }
+  const PAGE = {
+    link: 'LinkPage', premium: 'PremiumPage', about: 'AboutPage', contact: 'ContactPage',
+    privacy: 'PrivacyPage', disclaimer: 'DisclaimerPage', 'editorial-policy': 'EditorialPolicyPage',
+  }
+  return PAGE[seg[0]] ? [`src/pages/${PAGE[seg[0]]}.vue`] : []
+}
+
+// 기존 손관리 sitemap이 쓰던 값 그대로. 바꾸면 구글이 보는 신호가 달라지므로 유지한다.
+function sitemapHints(routePath) {
+  const seg = routePath.split('/').filter(Boolean)
+  if (routePath === '/') return { changefreq: 'daily', priority: '1.0' }
+  if (seg[0] === 'today') return { changefreq: 'daily', priority: '0.9' }
+  if (seg[0] === 'link') return { changefreq: 'weekly', priority: '0.9' }
+  if (seg[0] === 'reading') return { changefreq: 'weekly', priority: '0.8' }
+  if (seg[0] === 'test') return { changefreq: 'weekly', priority: '0.8' }
+  if (seg[0] === 'guide') return seg[1] ? { changefreq: 'monthly', priority: '0.7' } : { changefreq: 'weekly', priority: '0.8' }
+  if (seg[0] === 'dream') return seg[1] ? { changefreq: 'monthly', priority: '0.7' } : { changefreq: 'weekly', priority: '0.8' }
+  if (seg[0] === 'cards') return seg[1] ? { changefreq: 'monthly', priority: '0.6' } : { changefreq: 'monthly', priority: '0.7' }
+  if (seg[0] === 'premium') return { changefreq: 'monthly', priority: '0.8' }
+  if (seg[0] === 'about') return { changefreq: 'monthly', priority: '0.5' }
+  if (seg[0] === 'contact' || seg[0] === 'editorial-policy') return { changefreq: 'monthly', priority: '0.4' }
+  return { changefreq: 'monthly', priority: '0.3' }
+}
+
+function buildSitemap(routes) {
+  const gitDates = gitLastModifiedMap()
+  const indexable = routes.filter((r) => !r.noindex)
+  let withLastmod = 0
+
+  const body = indexable.map((r) => {
+    const { changefreq, priority } = sitemapHints(r.path)
+    const dates = sourceFilesFor(r.path).map((f) => gitDates.get(f)).filter(Boolean)
+    const lastmod = dates.length ? dates.sort().at(-1) : null
+    if (lastmod) withLastmod++
+    return [
+      '  <url>',
+      `    <loc>${canonicalUrl(r.path)}</loc>`,
+      lastmod ? `    <lastmod>${lastmod}</lastmod>` : null,
+      `    <changefreq>${changefreq}</changefreq>`,
+      `    <priority>${priority}</priority>`,
+      '  </url>',
+    ].filter(Boolean).join('\n')
+  }).join('\n')
+
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${body}\n</urlset>\n`
+  return { xml, total: indexable.length, withLastmod, skipped: routes.length - indexable.length }
+}
+
+function writeSitemap(routes) {
+  const { xml, total, withLastmod, skipped } = buildSitemap(routes)
+  fs.writeFileSync(path.join(DIST, 'sitemap.xml'), xml, 'utf8')
+  // 저장소 사본도 같이 갱신해 dist와 어긋나지 않게 한다.
+  fs.writeFileSync(path.resolve(__dirname, '../public/sitemap.xml'), xml, 'utf8')
+  console.log(`\n[sitemap] ${total} URLs (lastmod ${withLastmod}, noindex 제외 ${skipped})`)
+}
+
 // ── Main ──────────────────────────────────────────────────────────────────
 async function run() {
   const indexPath = path.join(DIST, 'index.html')
@@ -3426,6 +3545,8 @@ async function run() {
   }
 
   console.log(`\n[prerender] ${success} pages written`)
+
+  writeSitemap(ROUTES)
 }
 
 run()

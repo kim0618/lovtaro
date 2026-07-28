@@ -596,17 +596,13 @@ console.log(mm===0 ? '  ✅ 전수 일치' : '  ⚠ '+mm+'건 불일치 - preren
 
 불일치 감지 시 prerender.mjs 해당 블록을 guide 파일 기준으로 재Edit.
 
-### 9-4. sitemap.xml URL 추가
+### 9-4. sitemap.xml - 손대지 않는다
 
-```xml
-<url>
-  <loc>https://lovtaro.kr/guide/{slug}</loc>
-  <changefreq>monthly</changefreq>
-  <priority>0.7</priority>
-</url>
-```
+2026-07-28부터 sitemap은 **자동 생성**이다. `scripts/prerender.mjs`가 빌드마다 `ROUTES`에서 `dist/sitemap.xml`과 `public/sitemap.xml`을 다시 쓴다. 손으로 URL을 넣으면 다음 빌드에서 어차피 덮어써진다.
 
-`/guide` 인덱스 근처에 삽입.
+`src/data/guides/index.js`에 등록만 하면 sitemap에 자동으로 들어가고, `<lastmod>`도 `src/data/guides/{slug}.js`의 git 커밋 날짜로 자동 부여된다.
+
+**빌드 후 확인만 한다**: `grep -c "guide/{slug}/" public/sitemap.xml` 이 1이면 정상.
 
 ---
 
@@ -737,7 +733,7 @@ grep -nE '반드시|100%|절대|무조건|확실히' /home/tjd618/lovtaro/src/da
 □ JSON-LD 주입 확인
 □ index.js import + 배열 등록
 □ prerender.mjs GUIDES[].faq 본문과 정확 일치
-□ sitemap.xml URL 추가
+□ sitemap.xml에 URL·lastmod 자동 반영됐는지 확인 (빌드 후 grep. 손으로 넣지 말 것)
 □ 자체 검증 3문항 전부 Pass
 ```
 
@@ -756,7 +752,7 @@ grep -nE '반드시|100%|절대|무조건|확실히' /home/tjd618/lovtaro/src/da
 - `src/data/guides/{new-slug}.js` 신규 생성
 - `src/data/guides/index.js`의 `const guides = [...]`
 - `scripts/prerender.mjs`의 `const GUIDES = [...]`
-- `public/sitemap.xml` URL 추가
+- `public/sitemap.xml`은 **자동 생성물이라 손대지 않는다** (prerender가 빌드마다 재작성)
 
 ## 금지 (재확인)
 
