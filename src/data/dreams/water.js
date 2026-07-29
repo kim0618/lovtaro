@@ -82,5 +82,6 @@ export default {
   relatedDreams: [
     { slug: 'crying', label: '우는 꿈' },
     { slug: 'cheating-dream', label: '바람 피우는 꿈' },
+    { slug: 'bath-dream', label: '목욕하는 꿈' },
   ],
 }

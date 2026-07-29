@@ -526,13 +526,61 @@ console.log(n===0 ? '  ✅ 정량 스펙 전수 준수' : '  ⚠ '+n+'건 기준
 
 **판정**: 신규 발행 글은 **전부 기준 안에 들어와야 한다.** 기존 발행분의 이탈은 리포트만 하고 즉시 고치지 않는다(발행 후 본문 변경은 별도 판단). FAQ 답변이 짧으면 JSON-LD FAQPage 리치 결과 노출에서 불리하므로 특히 신규 글에서 엄격히 본다.
 
+### U. 글 ↔ 글 문장 골격 복제 검사 (2026-07-29 추가, 신규 글 필수)
+
+신규 글이 **다른 한 편의 문장 뼈대를 명사만 바꿔 복제**했는지 전수 대비 이상치로 판정한다. A~T 어디에도 대응 항목이 없던 사각지대다. P는 외부 카드 데이터와의 겹침만, R-1/R-2는 글 **내부** 자체중복만 본다.
+
+**배경 (2026-07-29 회고, 연쇄 재발)**: `/lovtaro-guide`·`/lovtaro-dream` 0단계가 "최근 글 2편을 읽어 톤을 체화"하라고 지시하는데, 이 단계가 직전 글의 문장 골격을 통째로 흡수하는 부작용을 낳는다. 2026-07-27 `bridge-dream`이 `travel-dream` 복제로 전면 재구성 판정을 받았는데, 이틀 뒤 `bath-dream`이 이번엔 그 `bridge-dream`을 복제했다(§3·§4·FAQ 본문까지). 작성자(AI)는 "톤을 맞췄다"고 느껴 자각하지 못하므로 기계 측정이 유일한 방어선이다.
+
+**핵심**: 한 쌍씩 비교하면 개별 문구가 15~20자라 사이트 정형구와 구분되지 않아 "관행"으로 오판한다. **반드시 전편 순위표를 뽑아 1위와 2위의 격차**를 본다.
+
+```bash
+cd /home/tjd618/lovtaro && node --input-type=module -e "
+import guides from './src/data/guides/index.js'
+import dreams from './src/data/dreams/index.js'
+const TARGET = process.env.SLUG   // 검사할 신규 글 slug
+const all = [...guides, ...dreams]
+const norm = s => s.replace(/<[^>]*>/g,'').replace(/\s+/g,'')
+const txt = d => norm((d.sections||[]).map(s=>s.content).join('') + (d.faq||[]).map(f=>f.question+f.answer).join(''))
+const me = all.find(d => d.slug === TARGET)
+if (!me) { console.log('slug 없음:', TARGET); process.exit(1) }
+const B = txt(me), rows = []
+for (const d of all) {
+  if (d.slug === TARGET) continue
+  const T = txt(d), W = 14, seen = new Set(); let tot=0, mx=0, ex=''
+  for (let i=0;i+W<=B.length;i++){
+    const sub = B.slice(i,i+W)
+    if (T.includes(sub) && !seen.has(sub)) {
+      let len=W; while(i+len<B.length && T.includes(B.slice(i,i+len+1))) len++
+      const s=B.slice(i,i+len); seen.add(s); tot++; if(len>mx){mx=len;ex=s}
+    }
+  }
+  if (tot) rows.push({slug:d.slug, tot, mx, ex})
+}
+rows.sort((a,b)=>b.tot-a.tot)
+rows.slice(0,6).forEach(r=>console.log('  ', r.slug.padEnd(26), r.tot+'건', '최장', r.mx+'자', '|', r.ex))
+const top=rows[0], second=rows[1]
+if (top && second && top.tot >= second.tot*3 && top.tot >= 20)
+  console.log('  ⚠ 골격 복제 의심:', top.slug, '(2위의', (top.tot/second.tot).toFixed(1)+'배) → 재집필 검토')
+else console.log('  ✅ 특정 1편 쏠림 없음')
+"
+```
+
+**판정 기준** (bath-dream 실측 기준):
+- 정상: 최다 **5~6건** (사이트 정형구 "~경우가 많아요. 연애 각도로 보면" 등)
+- 복제: **80건 최장 32자** ← 재집필 대상. 2위와 자릿수가 다르면 무조건 의심.
+
+**heading도 함께 대조한다**: `grep -h "heading:" src/data/dreams/*.js | sort | uniq -c | sort -rn`으로 관행을 확인하고, 특정 1~2편에만 있는 틀(`누구와, 어떤 X였는지에 따라 달라지는 결`)을 가져다 쓰지 않았는지 본다. 소재 고유어로 바꾼다.
+
+**수정 방법**: 부분 문구 치환으로는 해결되지 않는다(치환해도 뼈대가 남는다). 그 소재 고유의 앵커로 **논지 자체를 갈아끼워 재집필**한다. 예: 목욕=물을 다시 받을 수 있음·씻는 순서·목욕탕이라는 공용 공간, 다리=건넌 지점·다리의 상태. 재집필 후 위 스크립트를 다시 돌려 정상 범위(한 자릿수)로 내려왔는지 확인한다.
+
 ## 실행 순서
 
 1. **대상 범위 확인**
    - 인자로 파일 지정되면 해당 파일만 (`/lovtaro-verify moon-love-meaning`)
    - 인자 없으면 전수 스캔
 
-2. **A~T 순서대로 실행** (R = FAQ-본문 자체중복, S = 상황 글-리딩 데이터 겹침, T = 정량 스펙 준수)
+2. **A~U 순서대로 실행** (R = FAQ-본문 자체중복, S = 상황 글-리딩 데이터 겹침, T = 정량 스펙 준수, U = 글↔글 골격 복제)
 
 3. **자동 수정 가능한 건 즉시 Edit**
    - em dash → 하이픈 (문맥 판단)

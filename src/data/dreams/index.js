@@ -70,8 +70,10 @@ import weddingGuestDream from './wedding-guest-dream.js'
 import parentsOppositionDream from './parents-opposition-dream.js'
 import bridgeDream from './bridge-dream.js'
 import snowDream from './snow-dream.js'
+import bathDream from './bath-dream.js'
 
 const dreams = [
+  bathDream,
   snowDream,
   bridgeDream,
   parentsOppositionDream,

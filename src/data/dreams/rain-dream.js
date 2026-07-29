@@ -86,5 +86,6 @@ export default {
     { slug: 'umbrella-dream', label: '우산 꿈' },
     { slug: 'rainbow-dream', label: '무지개 꿈' },
     { slug: 'snow-dream', label: '눈 오는 꿈' },
+    { slug: 'bath-dream', label: '목욕하는 꿈' },
   ],
 }

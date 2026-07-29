@@ -95,8 +95,10 @@ import pushPullTimingTarot from './push-pull-timing-tarot.js'
 import marriageTimingTarot from './marriage-timing-tarot.js'
 import longDistanceRelationshipTarot from './long-distance-relationship-tarot.js'
 import relationshipRutTarot from './relationship-rut-tarot.js'
+import infidelitySuspicionTarot from './infidelity-suspicion-tarot.js'
 
 const guides = [
+  infidelitySuspicionTarot,
   relationshipRutTarot,
   longDistanceRelationshipTarot,
   marriageTimingTarot,
