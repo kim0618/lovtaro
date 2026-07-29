@@ -1,5 +1,5 @@
 ---
-description: lovtaro.kr 가이드 글 1편 자동 작성 + 파일 생성 + index/prerender/sitemap 동기화 (애드센스 신청 8주 콘텐츠 엔진)
+description: lovtaro.kr 가이드 글 1편 자동 작성 + 파일 생성 + index/prerender/sitemap 동기화 (SEO·프리미엄 유입 콘텐츠 엔진)
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 
@@ -21,8 +21,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 
 - **시작일**: 2026-04-19 (일) - Phase 2 Day 1
 - **진행 속도**: 사용자 명시 없으면 **하루 1편만**
-- **신청 목표**: 2026-06-12 (금)
-- **누적 목표**: 약 8주간 35-49편
+- **목적**: 네이버 SEO + 프리미엄 리딩 유입. (당초 목표였던 애드센스 신청은 2026-06-01 보류 확정 - CLAUDE.md 참조. 초기 누적 목표 35-49편은 이미 초과 달성, 엔진은 SEO·유입용으로 계속 가동)
 
 ## 편수 원칙 (절대)
 
@@ -704,8 +703,7 @@ grep -nE '반드시|100%|절대|무조건|확실히' /home/tjd618/lovtaro/src/da
 - canonical: https://lovtaro.kr/guide/moon-love-meaning
 
 ### 진행 현황
-- 누적 N편 / 목표 35-49편 (X%)
-- AdSense 신청 (2026-06-12) D-?
+- 누적 N편
 ```
 
 ---
@@ -767,10 +765,13 @@ grep -nE '반드시|100%|절대|무조건|확실히' /home/tjd618/lovtaro/src/da
 
 ## 완료 후 로그 기록
 
-스킬 실행이 완료되면 반드시 아래 명령으로 `skill-log.json`에 기록한다:
+**수동 기록 불필요.** `~/.claude/log-skill.sh`(PostToolUse 훅)가 스킬 호출 시 **자동으로** 두 곳에 기록한다:
 
-```bash
-python3 -c "import json,datetime; logs=json.load(open('/home/tjd618/skill-log.json')); now=datetime.datetime.now(); logs.insert(0,{'date':now.strftime('%Y-%m-%d'),'time':now.strftime('%H:%M'),'project':'lovtaro','skill':'lovtaro-guide'}); open('/home/tjd618/skill-log.json','w').write(json.dumps(logs,ensure_ascii=False,indent=2))"
-```
+- `~/skill-log.json` - 로컬 대시보드용 (홈 디렉토리라 **PC 간 동기화 안 됨**)
+- `.claude/skill-log.md` - **git 추적 = PC 간 동기화됨.** 다른 PC에서 무엇을 돌렸는지 아는 유일한 근거
+
+⚠️ 이 로그는 **"스킬을 호출했다"만** 기록한다(중간에 멈춰도 행이 남음). 산출물이 실제로 만들어졌는지는 각 스킬의 전용 대장·큐 파일로 판단할 것.
+
+`.claude/skill-log.md`는 사용자가 커밋해야 다른 PC에 전파되므로, 작업 완료 보고 시 **커밋 대상에 포함**하라고 안내할 것.
 
 $ARGUMENTS

@@ -1,5 +1,6 @@
 <script setup>
 import { useHead, SITE_URL } from '../composables/useHead.js'
+import { PRICE_FROM } from '../data/kmong.js'
 import AppShell from '../components/common/AppShell.vue'
 
 useHead({
@@ -27,8 +28,8 @@ import TrustNoticeBlock from '../components/home/TrustNoticeBlock.vue'
 
 const readingItems = [
   {
-    title: '1:1 정밀 리딩',
-    description: '사연을 카드 3장으로 풀어 편지로 · 19,900원',
+    title: '1:1 편지 리딩',
+    description: `사연을 카드 3장으로 풀어 편지로 · ${PRICE_FROM}`,
     to: '/premium/',
     tag: '프리미엄',
     premium: true,

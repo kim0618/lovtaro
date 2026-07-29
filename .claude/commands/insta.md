@@ -36,6 +36,11 @@ content-output/{YYYY-MM-DD_day}/
 > 날짜를 먼저 묻지 말 것. 훅 승인 없이 파일 생성하지 말 것. 유튜브를 인스타보다 먼저 만들지 말 것(유튜브가 인스타 자산을 가져다 씀).
 
 ### 0. 현황 갱신 (가장 먼저)
+- **⚠️ 실행 대장 먼저 Read: `.claude/insta-data/run_log.md`** — PC를 두 대 이상 쓰기 때문에 **다른 PC에서 이미 만든 주차를 또 만드는 사고**가 실제로 발생했다(2026-07-29). 시작 전 `git pull` 후 이 파일 + `git log --oneline -5 -- .claude/insta-data/`로 원격 대조할 것.
+  - `content-output/` 폴더 유무는 근거가 안 된다 (gitignore라 PC 간 동기화 안 됨).
+  - `~/skill-log.json`(PostToolUse 훅 자동 기록)도 근거가 안 된다. **홈 디렉토리라 PC 간 공유 안 됨 + 스킬 호출만 기록**해서 훅 승인 단계에서 중단해도 기록이 남는다.
+  - **생성 여부의 유일한 크로스 PC 근거 = `run_log.md`.** 만들려는 날짜 범위가 이미 대장에 있으면 생성하지 말고 사용자에게 먼저 확인한다.
+
 - **사용자 인사이트 스크린샷 확인 → 훅 메모리 갱신 (필수 선행 단계)**
   - 사용자가 직전 주 콘텐츠의 인스타 인사이트(조회수) 스크린샷을 첨부했으면 `.claude/insta-data/hook_history.md`의 해당 행 도달 수치를 즉시 갱신
   - 도달 등급 변동 시 🥇(1,000+) / 🥈(500-999) / 🥉(<500) 섹션 간 재배치
@@ -50,7 +55,8 @@ content-output/{YYYY-MM-DD_day}/
 폴더명은 `YYYY-MM-DD_day` 형식 (예: `2026-04-20_mon`).
 
 ### 1-1. 사전 확인 (날짜 확정 후)
-- `content-output/` 기존 폴더 확인 (중복 방지). ⚠️ 큐 파일만 믿고 미발행이라 판단하지 말고 원격 대조할 것
+- **`.claude/insta-data/run_log.md`에 그 날짜 범위가 이미 있는지 재확인** (0단계에서 읽었어도 확정된 날짜 기준으로 한 번 더). 있으면 중복이므로 생성 중단하고 사용자 확인.
+- `content-output/` 기존 폴더 확인 (중복 방지). ⚠️ 큐 파일만 믿고 미발행이라 판단하지 말고 원격 대조할 것. 폴더가 **없어도** 다른 PC에서 만들었을 수 있으므로 `run_log.md`가 상위 근거다
 - `public/images/cards-png/` 메이저 아르카나 목록 확인
 - `public/images/mcards/` 마이너 아르카나 목록 확인
 - **메모리 `.claude/insta-data/card_usage.md` 반드시 Read** — 누적 사용 카드 목록 확인 후 미사용 카드 풀에서 배정
@@ -100,6 +106,12 @@ content-output/{YYYY-MM-DD_day}/
 
 11. **`.claude/insta-data/card_usage.md` 메모리 업데이트** — 이번 주에 사용한 메이저/마이너 카드(커버+본문+참여 전부) 추가 기록
 12. **`.claude/insta-data/hook_history.md` 메모리 업데이트** — 이번 주에 사용한 모든 훅 추가 기록 (훅 텍스트 + 슬롯 + 카드 + 날짜). 도달 수치는 "미기록"으로 두고 **다음 주 스킬 실행 시 사용자가 보여줄 인사이트로 갱신** (위 0단계 워크플로)
+13. **⚠️ `.claude/insta-data/run_log.md` 실행 대장에 행 추가 (필수, 생략 금지)** — 형식 `| 주차(생성 범위) | 실행일 | PC | 생성 슬롯 | 영상 | 비고 |`. 이 파일이 **다른 PC에서 "이 주차 만들었나?"를 판단하는 유일한 근거**다. 부분 생성·중단도 그대로 적는다(비고에 명시).
+14. **사용자에게 커밋 요청** — `.claude/insta-data/` 4개 파일(run_log·hook_history·card_usage·story_*)은 **커밋·푸시되어야 다른 PC에 반영**된다. 작업 완료 보고 시 아래를 함께 안내:
+    ```bash
+    cd ~/lovtaro && git add .claude/insta-data/ && git commit -m "insta {주차} 트래커" && git push
+    ```
+    커밋은 사용자가 직접 (git은 사용자 관리 영역). 안내를 빠뜨리면 다음 주 다른 PC에서 중복 생성 사고가 난다.
 
 ---
 
@@ -826,6 +838,8 @@ const svg = carouselShortformSlide({
 - [ ] carousel 커버는 메이저 아르카나인가
 - [ ] Sunday Preview는 7컷 구조 + 시리즈명 "Sunday Tarot Preview" 포함되었는가
 - [ ] `.claude/insta-data/card_usage.md` 슬롯별로 업데이트했는가 (특히 슬롯 5 메이저 + 5b 마이너)
+- [ ] **`.claude/insta-data/run_log.md`에 이번 주차 행을 추가했는가** (PC 간 중복 생성 방지의 유일한 근거)
+- [ ] **사용자에게 `.claude/insta-data/` 커밋·푸시를 안내했는가**
 - [ ] **심리테스트 스토리 5개**를 평일(월~금)에 생성했는가 (`generate-story-tests.mjs week <월요일>`), 각 폴더에 story01.png + story.txt 있고 카드 앞면·앰비언트 빛 디자인 유지, story01.png 시각 검증했는가
 - [ ] 스토리 질문 중복 없는가(`story_questions.md` 테스트별 [x] 1개씩) + 카드 78장 no-dup 순환되는가(`story_cards.json`)
 
@@ -873,8 +887,11 @@ const svg = carouselShortformSlide({
 
 ## 완료 후 로그 기록
 
-스킬 실행이 완료되면 반드시 아래 명령으로 `skill-log.json`에 기록한다:
+**수동 기록 불필요.** `~/.claude/log-skill.sh`(PostToolUse 훅)가 스킬 호출 시 **자동으로** 두 곳에 기록한다:
 
-```bash
-python3 -c "import json,datetime; logs=json.load(open('/home/tjd618/skill-log.json')); now=datetime.datetime.now(); logs.insert(0,{'date':now.strftime('%Y-%m-%d'),'time':now.strftime('%H:%M'),'project':'lovtaro','skill':'insta'}); open('/home/tjd618/skill-log.json','w').write(json.dumps(logs,ensure_ascii=False,indent=2))"
-```
+- `~/skill-log.json` - 로컬 대시보드용 (홈 디렉토리라 **PC 간 동기화 안 됨**)
+- `.claude/skill-log.md` - **git 추적 = PC 간 동기화됨.** 다른 PC에서 무엇을 돌렸는지 아는 유일한 근거
+
+⚠️ 이 로그는 **"스킬을 호출했다"만** 기록한다(중간에 멈춰도 행이 남음). 산출물이 실제로 만들어졌는지는 각 스킬의 전용 대장·큐 파일로 판단할 것.
+
+`.claude/skill-log.md`는 사용자가 커밋해야 다른 PC에 전파되므로, 작업 완료 보고 시 **커밋 대상에 포함**하라고 안내할 것.

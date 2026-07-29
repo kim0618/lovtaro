@@ -2,6 +2,7 @@
 import { useRouter } from 'vue-router'
 import { useHead } from '../composables/useHead.js'
 import { trackEvent } from '../utils/gtag.js'
+import { PRICE_FROM } from '../data/kmong.js'
 
 useHead({
   title: 'Lovtaro | 무료 연애 타로 리딩',
@@ -11,7 +12,7 @@ useHead({
 const router = useRouter()
 
 const links = [
-  { label: '1:1 정밀 리딩', desc: '사연을 카드 3장으로 풀어 편지로 · 19,900원', to: '/premium/', premium: true },
+  { label: '1:1 편지 리딩', desc: `사연을 카드 3장으로 풀어 편지로 · ${PRICE_FROM}`, to: '/premium/', premium: true },
   { label: '연애 심리테스트', desc: '이상형 · 전생 · 짝사랑 타로 테스트', to: '/test/', tag: 'NEW', featured: true },
   { label: '상대방 속마음 타로', desc: '그 사람의 진짜 마음 읽기', to: '/reading/mind/', hot: true, featured: true },
   { label: '러브타로 스프레드', desc: '나의 마음 · 상대의 에너지 · 관계의 방향', to: '/reading/love/', featured: true },

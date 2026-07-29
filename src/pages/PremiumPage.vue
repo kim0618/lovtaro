@@ -1,28 +1,40 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useHead, SITE_URL } from '../composables/useHead.js'
 import { trackEvent } from '../utils/gtag.js'
+import {
+  activeServices,
+  formatPrice,
+  LOW_PRICE,
+  HIGH_PRICE,
+  OFFER_COUNT,
+  PRICE_FROM,
+} from '../data/kmong.js'
 import AppShell from '../components/common/AppShell.vue'
 import PageContainer from '../components/ui/PageContainer.vue'
 import SectionBlock from '../components/ui/SectionBlock.vue'
 
-const KAKAO_OPENCHAT_URL = 'https://open.kakao.com/o/sLi7dqxi'
-
-const PRICE = '19,900원'
 const REPLY_HOURS = '48시간'
 
+// 크몽 심사를 통과한 서비스만 노출. 여러 개면 종류별로 나눠 보여준다.
+const services = computed(() => activeServices)
+const primaryService = computed(() => services.value[0] || null)
+const hasMultiple = computed(() => services.value.length > 1)
+
 useHead({
-  title: '1:1 정밀 리딩 | Lovtaro',
-  description: '사연을 깊이 풀어 편지로 보내드리는 러브타로 1:1 정밀 리딩. 카드 3장 심층 해석, 48시간 이내 회신.',
+  title: '1:1 편지 리딩 | Lovtaro',
+  description: '사연을 깊이 풀어 편지로 보내드리는 러브타로 1:1 편지 리딩. 카드 3장 심층 해석, 48시간 이내 회신.',
   jsonLd: {
     '@context': 'https://schema.org',
     '@type': 'Service',
-    name: 'Lovtaro 1:1 정밀 리딩',
-    description: '연애 사연을 카드 3장으로 풀어 A4 5페이지 편지로 회신하는 1:1 타로 리딩 서비스',
+    name: 'Lovtaro 1:1 편지 리딩',
+    description: '연애 사연을 카드 3장으로 풀어 편지로 회신하는 1:1 타로 리딩 서비스',
     provider: { '@type': 'Organization', name: 'Lovtaro', url: `${SITE_URL}/` },
     offers: {
-      '@type': 'Offer',
-      price: '19900',
+      '@type': 'AggregateOffer',
+      lowPrice: String(LOW_PRICE),
+      highPrice: String(HIGH_PRICE),
+      offerCount: OFFER_COUNT,
       priceCurrency: 'KRW',
       availability: 'https://schema.org/InStock',
     },
@@ -50,44 +62,34 @@ const reasons = [
   },
 ]
 
-const deliverables = [
-  { label: '편지', value: 'A4 5페이지 · 인쇄 가능' },
-  { label: '카드', value: '3장 심층 해석 · 위치별 + 종합' },
-  { label: '실행 가이드', value: '지금부터 할 수 있는 4가지' },
+const contains = [
+  { label: '카드 해석', value: '3장 위치별 + 종합' },
+  { label: '편지', value: '인쇄해서 간직할 수 있는 파일' },
+  { label: '실행 가이드', value: '지금부터 할 수 있는 것' },
 ]
 
 const steps = [
   {
     num: '01',
-    title: '오픈채팅 입장',
-    body: '아래 버튼으로 1:1 오픈채팅에 들어와 신청 의사를 남겨주세요.',
+    title: '패키지 선택',
+    body: '아래 버튼으로 크몽에 들어가 원하는 패키지를 골라 주문해 주세요.',
   },
   {
     num: '02',
-    title: '사연 작성',
-    body: '닉네임, 사연, 궁금한 점 1~2가지를 자유롭게 보내주세요.',
+    title: '사연 남기기',
+    body: '주문 후 요청사항 창에 닉네임과 사연, 궁금한 점을 적어주세요.',
   },
   {
     num: '03',
-    title: '카드 뽑기 확인',
-    body: '사연을 토대로 카드 3장을 뽑은 모습을 사진으로 먼저 보여드려요.',
-  },
-  {
-    num: '04',
-    title: '결제 확인',
-    body: '계좌이체로 진행해요. 결제 확인 후 작성이 시작됩니다.',
-  },
-  {
-    num: '05',
-    title: '결과 회신',
-    body: '완성된 편지를 오픈채팅으로 보내드립니다.',
+    title: '편지 받기',
+    body: `보통 ${REPLY_HOURS} 이내에 완성된 편지를 크몽으로 보내드려요.`,
   },
 ]
 
 const samples = [
   {
     src: '/images/premium/card-draw.jpg',
-    alt: '러브타로 1:1 정밀 리딩 카드 3장 뽑기 미리보기',
+    alt: '러브타로 1:1 편지 리딩 카드 3장 뽑기 미리보기',
     caption: '사연을 토대로 뽑은 카드 3장',
     full: true,
     square: true,
@@ -95,7 +97,7 @@ const samples = [
 ]
 
 const applyTemplate = `닉네임:
-두 사람 관계 (예: 짝사랑 / 썸 / 연인 / 이별 후 / 재회 시도 / 친구):
+두 사람 관계 (예: 짝사랑 / 썸 / 연인 / 이별 후 / 재회 시도):
 관계 기간 (예: 6개월, 3년):
 사연:
 궁금한 점 (1~2가지):`
@@ -115,13 +117,15 @@ async function copyTemplate() {
   }
 }
 
-function openKakao(location) {
+function openKmong(service, location) {
+  if (!service) return
   trackEvent('cta_click', {
-    cta_id: 'premium_kakao',
-    destination: 'kakao_openchat',
+    cta_id: 'premium_kmong',
+    destination: 'kmong',
     location: location || 'unknown',
+    service: service.id,
   })
-  window.open(KAKAO_OPENCHAT_URL, '_blank', 'noopener')
+  window.open(service.url, '_blank', 'noopener')
 }
 </script>
 
@@ -152,11 +156,16 @@ function openKakao(location) {
 
         <div class="premium-hero__divider" aria-hidden="true" />
 
-        <button class="premium-hero__cta" type="button" @click="openKakao('hero')">
-          오픈채팅으로 신청하기
+        <button
+          v-if="primaryService"
+          class="premium-hero__cta"
+          type="button"
+          @click="openKmong(primaryService, 'hero')"
+        >
+          {{ primaryService.ctaLabel }}
         </button>
 
-        <p class="premium-hero__meta">{{ PRICE }} · {{ REPLY_HOURS }} 이내 회신</p>
+        <p class="premium-hero__meta">{{ PRICE_FROM }} · {{ REPLY_HOURS }} 이내 회신</p>
       </div>
 
       <!-- ── 이런 분께 추천 ───────────────────────────── -->
@@ -173,12 +182,53 @@ function openKakao(location) {
         </ul>
       </SectionBlock>
 
-      <!-- ── 무엇을 받으시나요 ────────────────────────── -->
+      <!-- ── 리딩 종류와 가격 ─────────────────────────── -->
       <SectionBlock spacing="md">
-        <h2 class="section-title">무엇을 받으시나요</h2>
+        <h2 class="section-title">리딩 종류와 가격</h2>
+        <p class="section-sub">
+          {{ hasMultiple ? '고민에 맞는 리딩을 골라주세요' : '깊이에 따라 세 가지 중에 골라주세요' }}
+        </p>
+
+        <div class="service-stack">
+          <div v-for="s in services" :key="s.id" class="service-card">
+            <div v-if="hasMultiple" class="service-card__head">
+              <p class="service-card__label">{{ s.label }}</p>
+              <p class="service-card__tagline">{{ s.tagline }}</p>
+            </div>
+
+            <ul class="pkg-list">
+              <li
+                v-for="p in s.packages"
+                :key="p.name"
+                class="pkg-list__item"
+                :class="{ 'pkg-list__item--featured': p.featured }"
+              >
+                <div class="pkg-list__copy">
+                  <p class="pkg-list__name">
+                    {{ p.name }}
+                    <span v-if="p.featured" class="pkg-list__badge">추천</span>
+                  </p>
+                  <p class="pkg-list__spec">{{ p.spec }}</p>
+                </div>
+                <p class="pkg-list__price">{{ formatPrice(p.price) }}</p>
+              </li>
+            </ul>
+
+            <button class="service-card__btn" type="button" @click="openKmong(s, 'packages')">
+              {{ s.ctaLabel }}
+            </button>
+          </div>
+        </div>
+
+        <p class="service-note">결제와 전달은 크몽에서 진행돼요. 카드 결제와 안전 거래를 이용하실 수 있어요.</p>
+      </SectionBlock>
+
+      <!-- ── 편지에 담기는 것 ─────────────────────────── -->
+      <SectionBlock spacing="md">
+        <h2 class="section-title">편지에 담기는 것</h2>
         <div class="deliver-card">
           <dl class="deliver-list">
-            <div v-for="(d, i) in deliverables" :key="i" class="deliver-list__row">
+            <div v-for="(d, i) in contains" :key="i" class="deliver-list__row">
               <dt class="deliver-list__label">{{ d.label }}</dt>
               <dd class="deliver-list__value">{{ d.value }}</dd>
             </div>
@@ -219,10 +269,10 @@ function openKakao(location) {
         </div>
       </SectionBlock>
 
-      <!-- ── 신청 양식 ────────────────────────────────── -->
+      <!-- ── 사연 양식 ────────────────────────────────── -->
       <SectionBlock spacing="md">
-        <h2 class="section-title">신청 양식</h2>
-        <p class="section-sub">오픈채팅 입장 후, 아래 양식을 복사해 보내주세요</p>
+        <h2 class="section-title">사연 양식</h2>
+        <p class="section-sub">주문 후 크몽 요청사항 창에 아래 양식을 붙여넣어 주세요</p>
         <div class="apply-box">
           <pre class="apply-box__template">{{ applyTemplate }}</pre>
           <button class="apply-box__copy" type="button" @click="copyTemplate">
@@ -244,9 +294,14 @@ function openKakao(location) {
         <div class="final-cta">
           <p class="final-cta__eyebrow">READY?</p>
           <h2 class="final-cta__title">사연을 들려주세요</h2>
-          <p class="final-cta__body">결제는 사연을 받은 뒤 안내해 드려요.<br>부담 없이 들러주셔도 괜찮습니다.</p>
-          <button class="final-cta__btn" type="button" @click="openKakao('final')">
-            오픈채팅으로 신청하기
+          <p class="final-cta__body">패키지를 고르고 사연을 남겨주시면<br>차분히 읽고 편지를 씁니다.</p>
+          <button
+            v-if="primaryService"
+            class="final-cta__btn"
+            type="button"
+            @click="openKmong(primaryService, 'final')"
+          >
+            {{ primaryService.ctaLabel }}
           </button>
         </div>
       </SectionBlock>
@@ -254,7 +309,7 @@ function openKakao(location) {
       <!-- ── 면책 / 정책 ──────────────────────────────── -->
       <SectionBlock spacing="md">
         <div class="notice-block">
-          <p class="notice-block__line"><strong>환불</strong> 결제 후 작성 시작 전까지 100% 환불, 작성 시작 후에는 환불이 어렵습니다.</p>
+          <p class="notice-block__line"><strong>결제·환불</strong> 결제와 환불은 크몽을 통해 진행되며, 크몽의 취소·환불 정책을 따릅니다.</p>
           <p class="notice-block__line"><strong>개인정보</strong> 보내주신 사연과 결과물은 동의 없이 외부에 공개되지 않습니다.</p>
           <p class="notice-block__line"><strong>면책</strong> 타로 리딩은 자기 성찰을 위한 참고 자료이며, 중요한 결정은 신중히 판단해 주세요. 자세한 내용은 <router-link to="/disclaimer/">면책 조항</router-link>을 참고해 주세요.</p>
         </div>
@@ -470,6 +525,146 @@ function openKakao(location) {
   color: var(--lt-text-sub);
   line-height: 1.6;
   margin: 0;
+}
+
+/* ── Service / packages ───────────────────────────── */
+.service-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lt-space-lg);
+}
+
+.service-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lt-space-md);
+  padding: var(--lt-space-md);
+  border: 1px solid rgba(200, 169, 110, 0.18);
+  border-radius: var(--lt-radius-md);
+  box-shadow: var(--lt-shadow-card);
+}
+
+.service-card__head {
+  text-align: center;
+}
+
+.service-card__label {
+  font-size: 0.92rem;
+  color: var(--lt-text-strong);
+  letter-spacing: 0.02em;
+  margin: 0 0 4px;
+}
+
+.service-card__tagline {
+  font-size: 0.74rem;
+  color: var(--lt-text-muted);
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+
+.pkg-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.pkg-list__item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 10px;
+  border-bottom: 1px solid var(--lt-border-soft);
+}
+
+.pkg-list__item:last-child {
+  border-bottom: none;
+}
+
+.pkg-list__item--featured {
+  background: rgba(200, 169, 110, 0.05);
+  border-radius: var(--lt-radius-sm);
+}
+
+.pkg-list__copy {
+  min-width: 0;
+}
+
+.pkg-list__name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  font-size: 0.86rem;
+  color: var(--lt-text-strong);
+  font-weight: 400;
+  margin: 0 0 3px;
+}
+
+/* 페이지의 다른 골드 요소(양식 복사 버튼·구분선)와 같은 아웃라인 문법.
+   채움 배지는 이 페이지에서 유일한 solid 요소라 가격보다 먼저 읽혔다. */
+.pkg-list__badge {
+  font-size: 0.58rem;
+  font-weight: 400;
+  color: rgba(200, 169, 110, 0.9);
+  background: transparent;
+  border: 1px solid rgba(200, 169, 110, 0.45);
+  letter-spacing: 0.12em;
+  padding: 2px 8px 3px;
+  border-radius: 999px;
+  line-height: 1;
+  transform: translateY(-1px);
+}
+
+.pkg-list__spec {
+  font-size: 0.72rem;
+  color: var(--lt-text-muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.pkg-list__price {
+  font-size: 0.86rem;
+  color: rgba(200, 169, 110, 0.95);
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  /* nowrap 상태에서 축소되면 가격이 카드 밖으로 밀려 잘린다 */
+  flex-shrink: 0;
+  margin: 0;
+}
+
+.service-card__btn {
+  padding: 12px 0;
+  background: var(--lt-btn-primary-bg);
+  color: #F4F8FF;
+  border: 1px solid var(--lt-btn-primary-border);
+  border-radius: var(--lt-radius-sm);
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(45, 108, 223, 0.18);
+  transition: background var(--lt-transition), box-shadow var(--lt-transition), transform var(--lt-transition);
+}
+
+.service-card__btn:hover {
+  background: var(--lt-btn-primary-hover);
+  box-shadow: 0 6px 28px rgba(45, 108, 223, 0.28);
+  transform: translateY(-1px);
+}
+
+.service-card__btn:active {
+  transform: scale(0.98);
+}
+
+.service-note {
+  font-size: 0.72rem;
+  color: var(--lt-text-muted);
+  text-align: center;
+  line-height: 1.6;
+  margin: var(--lt-space-md) 0 0;
 }
 
 /* ── Deliverables ─────────────────────────────────── */
@@ -773,6 +968,7 @@ function openKakao(location) {
 
 /* ── 모든 섹션 박스: image#1 우주 배경 느낌 (깊은 네이비 + 골드 글로우) ── */
 .reason-list__item,
+.service-card,
 .deliver-card,
 .apply-box,
 .final-cta,
