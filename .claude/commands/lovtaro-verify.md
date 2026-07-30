@@ -535,44 +535,70 @@ console.log(n===0 ? '  ✅ 정량 스펙 전수 준수' : '  ⚠ '+n+'건 기준
 **핵심**: 한 쌍씩 비교하면 개별 문구가 15~20자라 사이트 정형구와 구분되지 않아 "관행"으로 오판한다. **반드시 전편 순위표를 뽑아 1위와 2위의 격차**를 본다.
 
 ```bash
-cd /home/tjd618/lovtaro && node --input-type=module -e "
+cd /home/tjd618/lovtaro && SLUG={검사할 slug} node --input-type=module -e "
 import guides from './src/data/guides/index.js'
 import dreams from './src/data/dreams/index.js'
 const TARGET = process.env.SLUG   // 검사할 신규 글 slug
 const all = [...guides, ...dreams]
 const norm = s => s.replace(/<[^>]*>/g,'').replace(/\s+/g,'')
 const txt = d => norm((d.sections||[]).map(s=>s.content).join('') + (d.faq||[]).map(f=>f.question+f.answer).join(''))
+// 최대 구절 단위로만 센다. 매치되면 그 구간 끝으로 점프해야 한 문장이 여러 건으로 부풀지 않는다
+const maximal = (B, T, W=14) => {
+  const out = []
+  for (let i=0; i+W<=B.length; ) {
+    if (T.includes(B.slice(i,i+W))) {
+      let len=W; while(i+len<B.length && T.includes(B.slice(i,i+len+1))) len++
+      out.push(B.slice(i,i+len)); i += len            // ← 핵심: i++ 가 아니라 i+=len
+    } else i++
+  }
+  return out
+}
 const me = all.find(d => d.slug === TARGET)
 if (!me) { console.log('slug 없음:', TARGET); process.exit(1) }
 const B = txt(me), rows = []
 for (const d of all) {
   if (d.slug === TARGET) continue
-  const T = txt(d), W = 14, seen = new Set(); let tot=0, mx=0, ex=''
-  for (let i=0;i+W<=B.length;i++){
-    const sub = B.slice(i,i+W)
-    if (T.includes(sub) && !seen.has(sub)) {
-      let len=W; while(i+len<B.length && T.includes(B.slice(i,i+len+1))) len++
-      const s=B.slice(i,i+len); seen.add(s); tot++; if(len>mx){mx=len;ex=s}
-    }
-  }
-  if (tot) rows.push({slug:d.slug, tot, mx, ex})
+  const m = maximal(B, txt(d))
+  if (m.length) rows.push({slug:d.slug, n:m.length, mx:Math.max(...m.map(x=>x.length)), ex:m.sort((a,b)=>b.length-a.length)[0]})
 }
-rows.sort((a,b)=>b.tot-a.tot)
-rows.slice(0,6).forEach(r=>console.log('  ', r.slug.padEnd(26), r.tot+'건', '최장', r.mx+'자', '|', r.ex))
-const top=rows[0], second=rows[1]
-if (top && second && top.tot >= second.tot*3 && top.tot >= 20)
-  console.log('  ⚠ 골격 복제 의심:', top.slug, '(2위의', (top.tot/second.tot).toFixed(1)+'배) → 재집필 검토')
-else console.log('  ✅ 특정 1편 쏠림 없음')
+rows.sort((a,b)=>b.n-a.n||b.mx-a.mx)
+rows.slice(0,6).forEach(r=>console.log('  ', r.slug.padEnd(30), r.n+'구절', '최장', r.mx+'자', '|', r.ex))
+const top = rows[0]
+if (!top) console.log('  ✅ 겹침 없음')
+else if (top.n >= 12 || top.mx >= 30) console.log('  ⚠ 골격 복제 의심:', top.slug, '→ 재집필 검토')
+else if (top.n >= 8 || top.mx >= 22) console.log('  ⚠ 문장 단위 재사용:', top.slug, '→ 최장 구절 3~5개 치환')
+else console.log('  ✅ 정상 범위')
 "
 ```
 
-**판정 기준** (bath-dream 실측 기준):
-- 정상: 최다 **5~6건** (사이트 정형구 "~경우가 많아요. 연애 각도로 보면" 등)
-- 복제: **80건 최장 32자** ← 재집필 대상. 2위와 자릿수가 다르면 무조건 의심.
+**판정 기준** (2026-07-30 전면 재측정. 이전 "건수" 기준은 폐기)
+
+⚠️ **이전 버전의 계측 결함 2개를 고친 값이다. 옛 기준선(정상 5~6건 / 복제 80건)과 섞어 쓰지 말 것.**
+
+1. **건수 부풀림**: 옛 스크립트는 `i++`로 훑어 26자 한 문장을 26자·25자·24자···14자로 **13건**으로 셌다. 그래서 "80건"은 실제로 대여섯 구절이었을 수 있다. 지금은 최대 구절 단위로 1건이다.
+2. **클러스터 통과**: 옛 판정은 "1위가 2위의 3배 + 20건 이상"이라 서로 겹치는 3~4편 클러스터는 비율이 희석돼 통과했다. 실제로 confession-timing ↔ reunion 같은 **한 쌍**을 두고 confession 쪽은 ⚠, reunion 쪽은 ✅로 갈렸다. 지금은 비율이 아니라 **절대 구절수·최장 길이**로 본다.
+
+실측 기준선 (전부 최대 구절 기준):
+
+| 구간 | 실측 | 판정 |
+|---|---|---|
+| 무관한 같은 카테고리 (moon↔sun, snake↔kiss) | 0~1구절 / 0~17자 | 정상 |
+| 유사 소재 자연 겹침 (cat↔dog 4구절, ex-lover↔reunion-dream 7구절 28자) | 4~7구절 | 정상. 소재가 겹치면 어휘도 겹친다 |
+| 문장 단위 재사용 (상황별 timing 글 클러스터) | 8~11구절 / 22~26자 | **최장 구절 3~5개만 치환.** 재집필 아님 |
+| 골격 복제 (bath↔bridge 수정 전) | 12구절 이상 또는 최장 30자 이상 | **재집필** |
+| 수정 완료 후 (bath↔bridge, infidelity↔rut) | 0구절 | 정상 복귀 확인값 |
+
+- **최장 길이가 구절수보다 중요하다.** 30자 이상 한 방은 6구절짜리 정형구 다발보다 훨씬 나쁘다(문장을 통째로 옮긴 증거).
+- 겹침 문구가 FAQ **질문** 골격이면 반드시 고친다. 질문은 검색 쿼리와 직결돼 중복 신호가 가장 크게 잡히는 자리다.
 
 **heading도 함께 대조한다**: `grep -h "heading:" src/data/dreams/*.js | sort | uniq -c | sort -rn`으로 관행을 확인하고, 특정 1~2편에만 있는 틀(`누구와, 어떤 X였는지에 따라 달라지는 결`)을 가져다 쓰지 않았는지 본다. 소재 고유어로 바꾼다.
 
-**수정 방법**: 부분 문구 치환으로는 해결되지 않는다(치환해도 뼈대가 남는다). 그 소재 고유의 앵커로 **논지 자체를 갈아끼워 재집필**한다. 예: 목욕=물을 다시 받을 수 있음·씻는 순서·목욕탕이라는 공용 공간, 다리=건넌 지점·다리의 상태. 재집필 후 위 스크립트를 다시 돌려 정상 범위(한 자릿수)로 내려왔는지 확인한다.
+**수정 방법 - 판정에 따라 갈린다** (2026-07-30 분리)
+
+- **골격 복제(12구절↑ 또는 30자↑)**: 부분 문구 치환으로 해결되지 않는다(치환해도 뼈대가 남는다). 그 소재 고유의 앵커로 **논지 자체를 갈아끼워 재집필**한다. 예: 목욕=물을 다시 받을 수 있음·씻는 순서·목욕탕이라는 공용 공간, 다리=건넌 지점·다리의 상태.
+- **문장 단위 재사용(8~11구절 / 22~26자)**: 재집필하지 않는다. **최장 구절 3~5개만** 그 글 고유의 표현으로 바꾼다. 논지는 이미 다르고 문장만 돌려 쓴 상태라 치환으로 충분하다. 여기서 재집필을 하면 멀쩡한 논지를 흔들어 오히려 검증 항목이 늘어난다.
+
+어느 쪽이든 수정 후 위 스크립트를 다시 돌려 내려왔는지 확인한다. FAQ 문구를 고쳤으면 `prerender.mjs`의 GUIDES[].faq 동기화(N 검사).
 
 ## 실행 순서
 

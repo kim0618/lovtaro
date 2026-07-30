@@ -66,14 +66,21 @@ cd /home/tjd618/lovtaro && npm run build && npx wrangler pages deploy dist --pro
 - 가이드 글은 `src/data/guides/{slug}.js` + `src/data/guides/index.js` 배열 등록 + `prerender.mjs`의 `GUIDES` 배열 **3군데 동시 수정**(sitemap 자동, 스킬이 처리)
 - JSON-LD: prerender가 정적 주입 (Organization/WebSite/Article/FAQPage/CollectionPage/BreadcrumbList). Vue `useHead`는 SPA 네비 후 단일 스키마 덮어쓰기 (덜 풍부). 후속 과제: 공용 빌더 `scripts/seo/jsonld.mjs` 추출
 
-## 하루 작업 (Phase 2: 2026-04-19 ~ 06-10)
+## 콘텐츠 발행 주기 (2026-07-30 개정)
 
-**매일 (고정 순서)**:
-1. `/lovtaro-guide` - 가이드 1편 (하드 캡)
-2. `/lovtaro-card-expand` - 카드 본문 2장 보강 (하드 캡, 78장 완료 시 자동 삭제, 5/27경 예상)
-3. `/lovtaro-verify` - 위 두 작업 묶어 전수 검증
+| 스킬 | 주기 | 비고 |
+|---|---|---|
+| `/lovtaro-dream` | **매일 1편** (하드 캡) | 수요 실측 최상위 레이어. 7/21 캡처 웹문서 TOP30 상위를 도배(old-friend 3062노출 전체 1위 등). 유지 |
+| `/lovtaro-guide` | **주 2편 - 월·목만** (하드 캡) | 2026-08-03(월) 시작. 이전 "매일 1편"은 폐기 |
+| `/lovtaro-verify` | 발행 있는 날 | 발행분 묶어 전수 검증 |
+| `/insta` | 주 1회 | 인스타·유튜브 1주일치 |
 
-**주 1회**: `/insta` - 인스타 1주일치 콘텐츠
+**가이드를 주 2편으로 내린 이유** (되돌리기 전 필독): 카드 78장 가이드가 2026-07-19 완주해 수요 근거가 있는 큐가 소진됐고, 편당 성과가 꿈해몽의 자릿수 아래이며(가이드 90편 중 웹문서 TOP30 진입 1개), 하루 1편 압박이 골격 복제 사고를 만들었다(7/27 10건·7/29 11건 수정, N-gram 일치 29건). 상세는 [.claude/commands/lovtaro-guide.md](.claude/commands/lovtaro-guide.md) "주 2편 전환 배경".
+
+- **화·수·금·토·일**: 가이드 신규 발행 없음. 대신 보강 슬롯(기존 가이드 역방향·속마음 각도 강화)
+- **🛑 억지 큐 정지선**: 큐가 남아 있어도 주제가 근거 없이 억지스러워지면 신규 발행을 멈추고 보강으로 대체. 현재 판정으로 **2026-08-20에 발행 대상 6편이 소진**되고 그 뒤는 보류 7개만 남는다
+- **게이트 2026-08-27**: 가이드 레이어 웹문서 TOP30 진입이 1개 → 3개 이상이면 주 2편 유지, 아니면 신규 동결
+- 2026-07-30(목)~08-02(일) 가이드 미발행은 전환 공백으로 **의도적**. 결번 아님
 
 ~~**신청 전 1회**: `/lovtaro-adsense-check` - 2026-06-11 전수 점검~~ (AdSense 보류로 미실행)
 
