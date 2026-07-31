@@ -3,6 +3,13 @@ import { useRouter } from 'vue-router'
 import { useHead } from '../composables/useHead.js'
 import { trackEvent } from '../utils/gtag.js'
 import { PRICE_FROM } from '../data/kmong.js'
+import {
+  KAKAO_OPENCHAT_URL,
+  INSTAGRAM_URL,
+  INSTAGRAM_HANDLE,
+  YOUTUBE_URL,
+  YOUTUBE_HANDLE,
+} from '../data/contact.js'
 
 useHead({
   title: 'Lovtaro | 무료 연애 타로 리딩',
@@ -11,16 +18,19 @@ useHead({
 
 const router = useRouter()
 
+// 순서는 GA4 실측 기준(2026-07-30). /link 진입 세션의 도달률에서 노이즈를 넘는 4개만 이동했다.
+// 연락 올까(9→3)·재회(8→4)는 하단 자리에서도 상위 실적, 심리테스트(2→8)·궁합(5→9)은 그 반대.
+// 중위권(러브타로·Yes/No·오늘의 카드)은 세션 차이가 표본 오차 안이라 건드리지 않는다.
 const links = [
   { label: '1:1 편지 리딩', desc: `사연을 카드 3장으로 풀어 편지로 · ${PRICE_FROM}`, to: '/premium/', premium: true },
-  { label: '연애 심리테스트', desc: '이상형 · 전생 · 짝사랑 타로 테스트', to: '/test/', tag: 'NEW', featured: true },
   { label: '상대방 속마음 타로', desc: '그 사람의 진짜 마음 읽기', to: '/reading/mind/', hot: true, featured: true },
-  { label: '러브타로 스프레드', desc: '나의 마음 · 상대의 에너지 · 관계의 방향', to: '/reading/love/', featured: true },
-  { label: '궁합 타로', desc: '두 사람의 케미와 궁합 점수 확인', to: '/reading/compatibility/' },
+  { label: '연락 올까 타로', desc: '연락의 기류가 있는지 확인', to: '/reading/contact/', hot: true, featured: true },
+  { label: '재회 가능성 타로', desc: '다시 만날 수 있을까?', to: '/reading/reunion/', hot: true, featured: true },
+  { label: '러브타로 스프레드', desc: '나의 마음 · 상대의 에너지 · 관계의 방향', to: '/reading/love/' },
   { label: 'Yes/No 타로', desc: '지금 궁금한 것, 카드가 답합니다', to: '/reading/yesno/' },
   { label: '오늘의 연애 카드', desc: '매일 한 장, 오늘의 연애 에너지', to: '/today/' },
-  { label: '재회 가능성 타로', desc: '다시 만날 수 있을까?', to: '/reading/reunion/' },
-  { label: '연락 올까 타로', desc: '연락의 기류가 있는지 확인', to: '/reading/contact/' },
+  { label: '연애 심리테스트', desc: '이상형 · 전생 · 짝사랑 타로 테스트', to: '/test/', tag: 'NEW' },
+  { label: '궁합 타로', desc: '두 사람의 케미와 궁합 점수 확인', to: '/reading/compatibility/' },
   { label: '3카드 리딩', desc: '과거 · 현재 · 미래 흐름 읽기', to: '/reading/3cards/' },
 ]
 
@@ -60,15 +70,31 @@ function go(link) {
     </div>
 
     <div class="link-page__social">
-      <a href="https://www.instagram.com/lovtarot_/" target="_blank" rel="noopener" class="link-page__social-btn link-page__social-btn--insta" @click="trackEvent('link_page_click', { label: 'instagram', to: 'instagram' })">
+      <a :href="INSTAGRAM_URL" target="_blank" rel="noopener" class="link-page__social-btn link-page__social-btn--insta" @click="trackEvent('link_page_click', { label: 'instagram', to: 'instagram' })">
         <svg class="link-page__social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
-        <span>@lovtarot_</span>
+        <span>{{ INSTAGRAM_HANDLE }}</span>
       </a>
-      <a href="https://www.youtube.com/@%EB%9F%AC%EB%B8%8C%ED%83%80%EB%A1%9C" target="_blank" rel="noopener" class="link-page__social-btn link-page__social-btn--yt" @click="trackEvent('link_page_click', { label: 'youtube', to: 'youtube' })">
+      <a :href="YOUTUBE_URL" target="_blank" rel="noopener" class="link-page__social-btn link-page__social-btn--yt" @click="trackEvent('link_page_click', { label: 'youtube', to: 'youtube' })">
         <svg class="link-page__social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="4"/><polygon points="10,8.5 16,12 10,15.5" fill="currentColor" stroke="none"/></svg>
-        <span>러브타로</span>
+        <span>{{ YOUTUBE_HANDLE }}</span>
       </a>
     </div>
+
+    <a
+      :href="KAKAO_OPENCHAT_URL"
+      target="_blank"
+      rel="noopener"
+      class="link-page__kakao"
+      @click="trackEvent('link_page_click', { label: 'kakao_openchat', to: 'kakao_openchat' })"
+    >
+      <svg class="link-page__kakao-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 3.5C6.94 3.5 2.84 6.72 2.84 10.7c0 2.53 1.68 4.75 4.2 6.02l-.9 3.3c-.08.3.25.54.51.37l3.95-2.6c.45.05.92.08 1.4.08 5.06 0 9.16-3.22 9.16-7.19S17.06 3.5 12 3.5z"/>
+      </svg>
+      <span class="link-page__kakao-text">
+        <span class="link-page__kakao-label">문의하기</span>
+        <span class="link-page__kakao-desc">카카오 오픈채팅 · 익명 가능</span>
+      </span>
+    </a>
 
     <div class="link-page__footer">
       <p class="link-page__footer-text">lovtaro.kr</p>
@@ -308,6 +334,55 @@ function go(link) {
   width: 18px;
   height: 18px;
   flex-shrink: 0;
+}
+
+/* 문의 창구. 프리미엄 골드 CTA와 경쟁하지 않도록 채도를 낮춰 보조 요소로 둔다 */
+.link-page__kakao {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 380px;
+  margin-top: 10px;
+  padding: 13px 16px;
+  border-radius: var(--lt-radius-md);
+  background: rgba(233, 199, 62, 0.05);
+  border: 1px solid rgba(233, 199, 62, 0.16);
+  text-decoration: none;
+  transition:
+    border-color 250ms ease,
+    background 250ms ease;
+}
+
+.link-page__kakao:hover {
+  background: rgba(233, 199, 62, 0.1);
+  border-color: rgba(233, 199, 62, 0.32);
+}
+
+.link-page__kakao-icon {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+  color: rgba(233, 199, 62, 0.75);
+}
+
+.link-page__kakao-text {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.link-page__kakao-label {
+  font-size: 0.78rem;
+  color: var(--lt-text);
+  letter-spacing: 0.04em;
+}
+
+.link-page__kakao-desc {
+  font-size: 0.66rem;
+  color: var(--lt-text-muted);
+  letter-spacing: 0.02em;
 }
 
 .link-page__footer {

@@ -53,8 +53,8 @@ trackEvent('reading_complete', {
 | `mini_share` | `reading_type`, `method` | [MiniShareBar.vue](../../src/components/result/MiniShareBar.vue) |
 | `mini_copy_link` | `reading_type` | MiniShareBar |
 | `streak_badge_save` | `streak` | [StreakBadge.vue](../../src/components/result/StreakBadge.vue) |
-| `link_page_click` | `label`, `to` | [LinkPage.vue](../../src/pages/LinkPage.vue) |
-| `cta_click` | `cta_id`, `destination`, `reading_type?`, `location?`, `service?` | 주요 CTA. `cta_id`: `premium_result`(무료리딩→프리미엄), `test_to_reading`(테스트 결과→무료리딩), `premium_kmong`(프리미엄→크몽 주문, `location`=`hero`/`packages`/`final`, `service`=`love`/`reunion`), `premium_copy_template`(사연양식 복사) |
+| `link_page_click` | `label`, `to` | [LinkPage.vue](../../src/pages/LinkPage.vue). `label`에 `kakao_openchat` 추가(2026-07-30) |
+| `cta_click` | `cta_id`, `destination`, `reading_type?`, `location?`, `service?` | 주요 CTA. `cta_id`: `premium_result`(무료리딩→프리미엄), `test_to_reading`(테스트 결과→무료리딩), `premium_kmong`(프리미엄→크몽 주문, `location`=`hero`/`packages`/`final`, `service`=`love`/`reunion`), `premium_copy_template`(사연양식 복사), `contact_kakao`(문의 페이지→카카오 오픈채팅) |
 
 - `premium_kakao`는 2026-07-29 결제 채널을 크몽으로 옮기며 발생 중단. 과거 데이터 조회 시에만 사용
 

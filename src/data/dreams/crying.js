@@ -84,5 +84,6 @@ export default {
     { slug: 'ex-lover', label: '전 애인 꿈' },
     { slug: 'water', label: '물 꿈' },
     { slug: 'rain-dream', label: '비 오는 꿈' },
+    { slug: 'drinking-dream', label: '술 마시는 꿈' },
   ],
 }

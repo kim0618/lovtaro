@@ -144,7 +144,7 @@ const ROUTES = [
   {
     path: '/contact',
     title: '문의하기 | Lovtaro',
-    description: 'Lovtaro 서비스 관련 문의는 이메일 또는 인스타그램 DM으로 연락해 주세요.',
+    description: 'Lovtaro 서비스 관련 문의는 카카오 오픈채팅, 인스타그램 DM, 유튜브로 연락해 주세요.',
   },
   {
     path: '/editorial-policy',

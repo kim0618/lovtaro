@@ -52,7 +52,7 @@ cd /home/tjd618/lovtaro && npm run build && npx wrangler pages deploy dist --pro
 | `/guide` | 가이드 인덱스 (AdSense 콘텐츠 섹션, Phase 2 진행 중) |
 | `/guide/:slug` | 가이드 상세 |
 | `/about` | 서비스 소개 |
-| `/contact` | 문의 (인스타 DM / 유튜브) |
+| `/contact` | 문의 (카카오 오픈채팅 / 인스타 DM / 유튜브) |
 | `/editorial-policy` | 편집 방침 |
 | `/disclaimer` | 면책 조항 |
 | `/privacy` | 개인정보처리방침 |
