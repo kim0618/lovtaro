@@ -96,8 +96,10 @@ import marriageTimingTarot from './marriage-timing-tarot.js'
 import longDistanceRelationshipTarot from './long-distance-relationship-tarot.js'
 import relationshipRutTarot from './relationship-rut-tarot.js'
 import infidelitySuspicionTarot from './infidelity-suspicion-tarot.js'
+import triangleRelationshipTarot from './triangle-relationship-tarot.js'
 
 const guides = [
+  triangleRelationshipTarot,
   infidelitySuspicionTarot,
   relationshipRutTarot,
   longDistanceRelationshipTarot,

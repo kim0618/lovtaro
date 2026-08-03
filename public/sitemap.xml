@@ -68,7 +68,7 @@
   </url>
   <url>
     <loc>https://lovtaro.kr/link/</loc>
-    <lastmod>2026-07-29</lastmod>
+    <lastmod>2026-07-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -86,7 +86,7 @@
   </url>
   <url>
     <loc>https://lovtaro.kr/contact/</loc>
-    <lastmod>2026-05-24</lastmod>
+    <lastmod>2026-07-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
@@ -107,6 +107,11 @@
     <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lovtaro.kr/guide/triangle-relationship-tarot/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://lovtaro.kr/guide/infidelity-suspicion-tarot/</loc>
@@ -134,7 +139,7 @@
   </url>
   <url>
     <loc>https://lovtaro.kr/guide/push-pull-timing-tarot/</loc>
-    <lastmod>2026-07-30</lastmod>
+    <lastmod>2026-07-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -1154,12 +1159,18 @@
   </url>
   <url>
     <loc>https://lovtaro.kr/dream/</loc>
-    <lastmod>2026-07-29</lastmod>
+    <lastmod>2026-07-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://lovtaro.kr/dream/giving-birth-dream/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://lovtaro.kr/dream/drinking-dream/</loc>
+    <lastmod>2026-07-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -1501,7 +1512,7 @@
   </url>
   <url>
     <loc>https://lovtaro.kr/dream/crying/</loc>
-    <lastmod>2026-06-21</lastmod>
+    <lastmod>2026-07-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -1519,7 +1530,7 @@
   </url>
   <url>
     <loc>https://lovtaro.kr/dream/ex-lover/</loc>
-    <lastmod>2026-07-23</lastmod>
+    <lastmod>2026-07-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>

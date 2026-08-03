@@ -38,6 +38,22 @@ useHead({
 - `Organization`과 `WebSite`는 홈에만 주입하고, 다른 페이지는 `@id` 참조(`#organization`, `#website`)만 사용 — Google에서 자동 연결
 - 카드 상세 FAQ는 `src/data/cardDictionary.js` + `src/data/minorArcana.js`의 `upright.core/love`, `reversed.core/love`를 사용. 카드 데이터 수정 시 FAQ도 자동 반영됨
 
+## #app 본문 정적 주입 (크롤러가 JS 없이 본문·내부링크를 읽도록)
+
+`prerender.mjs`가 빌드 시 빈 `<div id="app"></div>`를 실제 본문 HTML로 채운다. JS 활성 환경에서는 Vue가 마운트하며 즉시 교체하므로 사용자 화면에는 영향이 없다. 네이버처럼 JS 렌더가 약한 크롤러와 AI 크롤러(GPTBot 등) 대응이 목적.
+
+| 대상 | 빌더 함수 |
+|---|---|
+| 가이드 상세 `/guide/:slug` | `buildGuideBodyHtml` |
+| 가이드 허브 `/guide` (전 91편 링크) | `buildGuideHubBodyHtml` |
+| 꿈해몽 상세 `/dream/:slug` | `buildDreamBodyHtml` |
+| 꿈해몽 허브 `/dream` (전 64편 링크) | `buildDreamHubBodyHtml` |
+| 카드 상세 `/cards/:id` | `buildCardBodyHtml` |
+
+- **허브 주입 배경 (2026-08-03 추가)**: `/dream`만 허브 목록이 주입돼 있고 `/guide`는 `<div id="app"></div>` 빈 껍데기였다. 91편 가이드로 가는 내부링크가 허브에서 **한 줄도 나가지 않는 상태**(3.5KB)였고, 공교롭게 네이버 웹문서 상위를 도배한 레이어는 허브가 주입된 꿈해몽뿐이었다. `buildGuideHubBodyHtml`을 미러링해 91/91 링크 노출(43.8KB)로 정정
+- **아직 빈 `#app`인 라우트 25개**: `/`, `/cards`(78장 허브), `/test`, `/reading/*`, `/today` 등. 리딩·테스트는 인터랙션 페이지라 우선순위가 낮지만 **`/cards`는 78장 허브라 같은 문제**를 안고 있다. 후속 후보
+- 허브 라우트가 정적 `ROUTES`에 선언돼 있으면 `run()`에서 src 로드 후 `_guideHub` 같은 필드를 붙여야 한다(꿈해몽은 라우트 자체를 `run()`에서 push해 선언 시점에 실림)
+
 ## 클라이언트 JSON-LD 싱크 주의 (후속 작업 대상)
 
 `useHead({ jsonLd: ... })`가 클라이언트 렌더 시 `id="lovtaro-jsonld"` script를 교체함. 현재 Vue 컴포넌트의 jsonLd는 prerender가 주입한 `@graph` 버전보다 **덜 풍부한 단일 객체**([HomePage](../../src/pages/HomePage.vue), [CardsPage](../../src/pages/CardsPage.vue), [CardDetailPage](../../src/pages/CardDetailPage.vue)).

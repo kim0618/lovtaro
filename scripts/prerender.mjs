@@ -167,6 +167,35 @@ const ROUTES = [
 // { slug, title, description, createdAt, ogImage? }
 const GUIDES = [
   {
+    slug: 'triangle-relationship-tarot',
+    title: '삼각관계 타로 해석 - 두 갈래로 나뉜 마음을 읽는 법',
+    description: '짝사랑이든 기존 연인 관계든 삼각관계로 마음이 흔들릴 때 타로 리딩에 자주 오르는 카드 여섯 장과 조합, 그리고 그 마음을 실제 판단으로 옮기는 법까지 담았어요.',
+    createdAt: '2026-08-03',
+    updatedAt: '2026-08-03',
+    faq: [
+      {
+        question: '삼각관계 타로에서 소드의 2가 나왔어요. 계속 결정을 못 내리는 게 잘못된 건가요?',
+        answer: '잘못된 게 아니에요. 이 카드는 어느 쪽을 택해도 잃는 것이 생기는 상황에서 그 무게를 실감하고 있다는 신호에 가까워요. 다만 그 상태가 오래 이어질수록 세 사람 모두에게 온전히 마음을 쓰지 못하게 돼요. 더 많은 정보를 기다리기보다 지금 이미 알고 있는 것부터 인정해보는 편이 도움이 돼요.',
+      },
+      {
+        question: '좋아하는 사람에게 이미 다른 사람이 있어요. 이런 상황도 삼각관계 타로로 볼 수 있나요?',
+        answer: '네, 볼 수 있어요. 아직 관계가 시작되지 않았어도 마음속에서 두 사람 사이에 끼어 있는 감각이 있다면 같은 방식으로 접근할 수 있어요. 다만 이 경우는 컵의 7처럼 상상이 크게 자리 잡기 쉬운 상황이라, 실제로 확인된 것과 혼자 그려본 것을 구분하는 게 더 중요해요.',
+      },
+      {
+        question: '정의 카드가 나오면 지금 관계를 무조건 정리해야 하나요?',
+        answer: '그렇지 않아요. 정의 카드가 요구하는 건 결론이 아니라 치우치지 않은 눈으로 지금을 다시 보는 일이에요. 새로운 사람을 실제보다 좋게, 지금 관계를 실제보다 나쁘게 보고 있었던 건 아닌지 확인해보는 과정이에요. 그 확인을 거친 뒤에도 지금 관계를 지키는 쪽이 맞다는 결론이 나올 수 있어요.',
+      },
+      {
+        question: '컵의 7이 나왔어요. 지금 이 설렘이 진짜가 아니라는 뜻인가요?',
+        answer: '그런 뜻은 아니에요. 이 카드는 감정 자체를 부정하지 않고, 다만 그 안에 상상이 섞여 있을 가능성을 보여줘요. 실제로 만나고 대화하는 과정에서도 이 마음이 유지되는지 확인해보면 진짜와 상상을 가려낼 수 있어요. 설렘을 억지로 눌러둘 필요는 없어요. 다만 그 설렘이 그 사람 자체를 향하는지, 지금 상황에서 벗어나고 싶은 마음이 그쪽으로 흐른 건지 시간을 두고 지켜보면 더 선명해져요.',
+      },
+      {
+        question: '연인 카드가 역방향으로 나왔어요. 세 사람 모두에게 잘못된 선택이라는 뜻인가요?',
+        answer: '아니에요. 역방향 연인은 감정의 크기와 관계의 방향이 아직 같은 곳을 가리키지 않는 상태를 말해요. 끌림이 강하다는 것만으로는 답이 나오지 않는 지점이 있다는 신호지, 세 사람 중 누구에게 잘못을 묻는 카드가 아니에요. 두 관계가 나에게 요구하는 것이 어떻게 다른지부터 갈라보는 것이 다음 걸음이고, 그 걸음을 언제 뗄지는 서두르지 않아도 괜찮아요.',
+      },
+    ],
+  },
+  {
     slug: 'infidelity-suspicion-tarot',
     title: '바람기 의심 타로 - 불안과 신호를 구분하는 법',
     description: '연애 타로에서 바람기 의심이 들 때 자주 올라오는 카드 일곱 장과 조합, 그리고 불안과 실제 신호를 구분하는 실전 판단 기준까지 담았어요.',
@@ -3177,6 +3206,22 @@ function buildDreamHubBodyHtml(dreams) {
   return `<div class="dream-index"><div class="dream-index__header"><h1 class="dream-index__title">꿈해몽 사전</h1><p class="dream-index__desc">연애 관점으로 풀어보는 꿈 해석</p></div>${intro}<ul class="dream-index__list">${items}</ul></div>`
 }
 
+// 가이드 허브(/guide) 본문을 정적 주입 - 크롤러/AI가 인트로 텍스트 + 전체 가이드 내부링크를 읽도록.
+// GuideIndexPage.vue의 클래스 구조를 미러링한다(탭은 JS 인터랙션이라 제외, 목록은 전편 노출).
+const GUIDE_CATEGORY_LABEL = {
+  'card-interpretation': '카드 해석',
+  situation: '상황별 가이드',
+  method: '타로 기초',
+  faq: '자주 묻는 질문',
+}
+function buildGuideHubBodyHtml(guides) {
+  const intro = `<p class="guide-index__intro">연애 타로 가이드는 카드 한 장의 뜻을 외우는 곳이 아니라, 그 카드가 지금 내 관계에서 무엇을 가리키는지 읽는 법을 다루는 곳이에요. 메이저와 마이너 78장의 연애 해석부터 재회·연락·고백처럼 실제로 자주 묻는 상황별 리딩까지, 단정이 아닌 가능성의 언어로 풀어요.</p>`
+  const items = (guides || []).map(g =>
+    `<li class="guide-index__item"><div class="guide-index__item-meta"><span class="guide-index__item-category">${escapeHtml(GUIDE_CATEGORY_LABEL[g.category] || '가이드')}</span><time class="guide-index__item-date">${escapeHtml(g.createdAt || '')}</time></div><h2 class="guide-index__item-title"><a href="/guide/${g.slug}/">${escapeHtml(g.title)}</a></h2><p class="guide-index__item-desc">${escapeHtml(g.description)}</p></li>`
+  ).join('')
+  return `<div class="guide-index"><div class="guide-index__header"><h1 class="guide-index__title">연애 타로 가이드</h1><p class="guide-index__desc">카드 해석부터 상황별 리딩까지</p></div>${intro}<ul class="guide-index__list">${items}</ul></div>`
+}
+
 // 카드 상세 본문을 #app에 정적으로 주입할 HTML로 생성.
 // CardDetailPage.vue 템플릿 구조/클래스를 미러링하며, 크롤러(특히 JS 렌더가
 // 약한 네이버)가 정방향·역방향 본문 전체를 JS 없이 읽도록 한다.
@@ -3291,7 +3336,7 @@ function escapeHtml(str) {
   return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 }
 
-function injectMeta(html, { path: urlPath, title, description, ogImage, jsonLd, noindex, _guide, _dream, _dreamHub, _card }) {
+function injectMeta(html, { path: urlPath, title, description, ogImage, jsonLd, noindex, _guide, _guideHub, _dream, _dreamHub, _card }) {
   const url = canonicalUrl(urlPath)
   const safeTitle = escapeAttr(title)
   const safeDesc = escapeAttr(description)
@@ -3372,6 +3417,12 @@ function injectMeta(html, { path: urlPath, title, description, ogImage, jsonLd, 
   // 가이드 본문을 #app에 정적 주입 (크롤러가 JS 없이 본문을 읽도록)
   if (_guide) {
     const bodyHtml = buildGuideBodyHtml(_guide)
+    html = html.replace(/<div id="app">\s*<\/div>/, `<div id="app">${bodyHtml}</div>`)
+  }
+
+  // 가이드 허브(/guide) 인트로+목록을 #app에 정적 주입
+  if (_guideHub) {
+    const bodyHtml = buildGuideHubBodyHtml(_guideHub)
     html = html.replace(/<div id="app">\s*<\/div>/, `<div id="app">${bodyHtml}</div>`)
   }
 
@@ -3530,6 +3581,11 @@ async function run() {
   // FAQ JSON-LD용이라 sections가 없으므로, 본문 정적 주입은 src 데이터를 사용.
   const { default: SRC_GUIDES } = await import('../src/data/guides/index.js')
   const srcGuideMap = new Map(SRC_GUIDES.map(g => [g.slug, g]))
+
+  // 가이드 허브(/guide)는 정적 ROUTES에 선언돼 있어, src 로드 후 목록 데이터를 붙인다.
+  // (꿈해몽 허브는 라우트 자체를 여기서 push하므로 선언 시점에 바로 실린다)
+  const guideHubRoute = ROUTES.find(r => r.path === '/guide')
+  if (guideHubRoute) guideHubRoute._guideHub = SRC_GUIDES
 
   // 꿈해몽: 단일 소스(src/data/dreams)를 직접 import해 라우트 생성.
   // 가이드와 달리 prerender 내부 미러 없이 src 객체를 그대로 _dream에 실어
