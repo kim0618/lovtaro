@@ -101,7 +101,7 @@ useHead({
                 :key="reading.path"
                 class="guide-detail__cta-btn"
                 @click.prevent="router.push(reading.path)"
-                href="#"
+                :href="reading.path"
               >{{ reading.label }}</a>
             </div>
           </div>
@@ -115,7 +115,7 @@ useHead({
                 :key="card.id"
                 class="guide-detail__related-card"
                 @click.prevent="router.push(`/cards/${card.id}/`)"
-                href="#"
+                :href="`/cards/${card.id}/`"
               >{{ card.name }}</a>
             </div>
           </div>

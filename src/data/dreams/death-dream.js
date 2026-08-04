@@ -83,5 +83,6 @@ export default {
   relatedDreams: [
     { slug: 'breakup', label: '헤어지는 꿈' },
     { slug: 'crying', label: '우는 꿈' },
+    { slug: 'accident-dream', label: '사고 나는 꿈' },
   ],
 }

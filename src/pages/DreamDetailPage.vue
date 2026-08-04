@@ -106,7 +106,7 @@ useHead({
                 :key="reading.path"
                 class="dream-detail__cta-btn"
                 @click.prevent="router.push(reading.path)"
-                href="#"
+                :href="reading.path"
               >{{ reading.label }}</a>
             </div>
           </div>
@@ -120,7 +120,7 @@ useHead({
                 :key="card.id"
                 class="dream-detail__related-card"
                 @click.prevent="router.push(`/cards/${card.id}/`)"
-                href="#"
+                :href="`/cards/${card.id}/`"
               >{{ card.name }}</a>
             </div>
           </div>
@@ -134,7 +134,7 @@ useHead({
                 :key="d.slug"
                 class="dream-detail__related-card"
                 @click.prevent="router.push(`/dream/${d.slug}/`)"
-                href="#"
+                :href="`/dream/${d.slug}/`"
               >{{ d.label }}</a>
             </div>
           </div>

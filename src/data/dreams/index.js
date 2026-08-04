@@ -73,8 +73,10 @@ import snowDream from './snow-dream.js'
 import bathDream from './bath-dream.js'
 import drinkingDream from './drinking-dream.js'
 import givingBirthDream from './giving-birth-dream.js'
+import accidentDream from './accident-dream.js'
 
 const dreams = [
+  accidentDream,
   givingBirthDream,
   drinkingDream,
   bathDream,

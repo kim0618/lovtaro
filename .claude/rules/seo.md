@@ -51,6 +51,27 @@ useHead({
 | 카드 상세 `/cards/:id` | `buildCardBodyHtml` |
 
 - **허브 주입 배경 (2026-08-03 추가)**: `/dream`만 허브 목록이 주입돼 있고 `/guide`는 `<div id="app"></div>` 빈 껍데기였다. 91편 가이드로 가는 내부링크가 허브에서 **한 줄도 나가지 않는 상태**(3.5KB)였고, 공교롭게 네이버 웹문서 상위를 도배한 레이어는 허브가 주입된 꿈해몽뿐이었다. `buildGuideHubBodyHtml`을 미러링해 91/91 링크 노출(43.8KB)로 정정
+
+### ⚠️ 관련 링크(relatedCards·relatedReadings·relatedDreams) 주입 - 2026-08-04
+
+**상세 페이지의 내부링크가 크롤러에게 사실상 전무했다.** 8/3에 허브→상세를 고쳤지만 **상세→카드/리딩 방향**은 그대로 비어 있었고, 원인이 두 겹이었다.
+
+1. `buildGuideBodyHtml`에 관련 섹션이 아예 없었고, `buildDreamBodyHtml`은 `relatedDreams`만 주입했다(카드·리딩 누락).
+2. 더 근본적으로 **`GuideDetailPage.vue`·`DreamDetailPage.vue`의 관련 링크가 전부 `href="#"` + `@click.prevent="router.push(...)"`** 였다. 즉 JS를 실행하는 크롤러조차 실제 URL을 못 봤고, 사용자도 새 탭 열기·가운데 클릭·링크 미리보기가 안 됐다.
+
+측정값(수정 전 → 후):
+
+```
+dream  /cards/   0/65 → 65/65      guide  /cards/   0/91 → 91/91
+dream  /reading/ 0/65 → 65/65      guide  /reading/ 0/91 → 91/91
+dream  /dream/  65/65 → 65/65      guide  /guide/   0/91 → 91/91
+홈(/) 복귀 링크: 0/156 → 156/156   깨진 링크 0건(146개 대상 전수 dist 대조)
+```
+
+- Vue 쪽은 `href="#"` → `:href="실제경로"`로 바꿨다. `@click.prevent`는 그대로 두어 SPA 내비게이션은 유지된다(전체 리로드 없음).
+- **브레드크럼은 정적 주입본에서만 `<a>`다.** Vue 템플릿의 브레드크럼은 `<span @click>`이라 링크가 아니고, 정적 주입본은 `#app`을 통째로 대체해 `AppShell` 네비게이션도 들어가지 않는다. 그래서 상세→허브·홈 복귀 경로를 정적 주입본에서 직접 만들어준다. 이 divergence는 의도된 것이다(정적본은 크롤러 전용).
+- `relatedReadings[].path`는 전 156편이 이미 트레일링 슬래시를 갖고 있으나, 누락 시 Cloudflare 308을 타므로 `trailingSlashPath()`로 정규화해 주입한다.
+- 새 상세 라우트를 만들 때 관련 링크가 있다면 **빌더에 `<a href>`로 주입하는 것을 기본으로 할 것.** Vue에서 `href="#"` 패턴을 새로 쓰지 말 것.
 - **아직 빈 `#app`인 라우트 25개**: `/`, `/cards`(78장 허브), `/test`, `/reading/*`, `/today` 등. 리딩·테스트는 인터랙션 페이지라 우선순위가 낮지만 **`/cards`는 78장 허브라 같은 문제**를 안고 있다. 후속 후보
 - 허브 라우트가 정적 `ROUTES`에 선언돼 있으면 `run()`에서 src 로드 후 `_guideHub` 같은 필드를 붙여야 한다(꿈해몽은 라우트 자체를 `run()`에서 push해 선언 시점에 실림)
 

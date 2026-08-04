@@ -85,5 +85,6 @@ export default {
     { slug: 'water', label: '물 꿈' },
     { slug: 'rain-dream', label: '비 오는 꿈' },
     { slug: 'drinking-dream', label: '술 마시는 꿈' },
+    { slug: 'accident-dream', label: '사고 나는 꿈' },
   ],
 }

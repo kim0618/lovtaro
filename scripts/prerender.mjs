@@ -3138,7 +3138,35 @@ function buildGuideBodyHtml(guide) {
       }</dl></div>`
     : ''
 
-  return `<div class="guide-detail"><article><header class="guide-detail__header"><h1 class="guide-detail__title">${escapeHtml(guide.title)}</h1><p class="guide-detail__desc">${escapeHtml(guide.description)}</p></header><div class="guide-detail__body">${sections}</div>${faq}</article></div>`
+  // 관련 리딩·카드를 실제 <a href>로 주입 - 크롤러가 가이드→리딩/카드 내부링크를 보도록.
+  // Vue 템플릿은 href="#" + @click.prevent라 JS 렌더 후에도 실제 URL이 남지 않으므로
+  // 정적 주입본이 이 링크들의 유일한 크롤러 노출 경로다.
+  const cta = (guide.relatedReadings && guide.relatedReadings.length)
+    ? `<div class="guide-detail__cta"><p class="guide-detail__cta-label">관련 리딩 해보기</p><div class="guide-detail__cta-list">${
+        guide.relatedReadings.map(r => `<a class="guide-detail__cta-btn" href="${escapeHtml(trailingSlashPath(r.path))}">${escapeHtml(r.label)}</a>`).join('')
+      }</div></div>`
+    : ''
+
+  const related = (guide.relatedCards && guide.relatedCards.length)
+    ? `<div class="guide-detail__related"><p class="guide-detail__related-label">관련 카드</p><div class="guide-detail__related-list">${
+        guide.relatedCards.map(c => `<a class="guide-detail__related-card" href="/cards/${encodeURIComponent(c.id)}/">${escapeHtml(c.name)}</a>`).join('')
+      }</div></div>`
+    : ''
+
+  // Vue 브레드크럼은 <span @click>이라 링크가 아니고, 정적 주입본은 #app을 통째로
+  // 대체해 사이트 네비게이션도 없다. 크롤러가 상세→허브 복귀 경로를 갖도록 여기서만 <a>로 준다.
+  const breadcrumb = `<nav class="guide-detail__breadcrumb" aria-label="breadcrumb"><a class="guide-detail__bc-item" href="/">홈</a><span class="guide-detail__bc-sep">›</span><a class="guide-detail__bc-item" href="/guide/">가이드</a><span class="guide-detail__bc-sep">›</span><span class="guide-detail__bc-current">${escapeHtml(guide.title)}</span></nav>`
+
+  return `<div class="guide-detail"><article>${breadcrumb}<header class="guide-detail__header"><h1 class="guide-detail__title">${escapeHtml(guide.title)}</h1><p class="guide-detail__desc">${escapeHtml(guide.description)}</p></header><div class="guide-detail__body">${sections}</div>${faq}${cta}${related}</article></div>`
+}
+
+// relatedReadings의 path는 데이터마다 트레일링 슬래시 유무가 섞여 있다.
+// 사이트 URL 규칙(trailingSlash 있음)에 맞춰 정규화해야 Cloudflare 308 리다이렉트를 타지 않는다.
+function trailingSlashPath(p) {
+  const s = String(p || '')
+  if (!s.startsWith('/')) return s
+  if (s.includes('#') || s.includes('?')) return s
+  return s.endsWith('/') ? s : `${s}/`
 }
 
 // ── 꿈해몽 사전 (가이드와 동일 스키마: sections/faq) ──────────────────────
@@ -3187,14 +3215,31 @@ function buildDreamBodyHtml(dream) {
       }</dl></div>`
     : ''
 
-  // 관련 꿈은 실제 <a href>로 주입 - 크롤러가 꿈↔꿈 내부링크(토픽 클러스터)를 보도록
+  // 관련 리딩·카드·꿈을 실제 <a href>로 주입 - 크롤러가 내부링크(토픽 클러스터)를 보도록.
+  // Vue 템플릿은 href="#" + @click.prevent라 JS 렌더 후에도 실제 URL이 남지 않으므로
+  // 정적 주입본이 이 링크들의 유일한 크롤러 노출 경로다.
+  const cta = (dream.relatedReadings && dream.relatedReadings.length)
+    ? `<div class="dream-detail__cta"><p class="dream-detail__cta-label">이 꿈, 타로로 마음을 비춰볼까요</p><div class="dream-detail__cta-list">${
+        dream.relatedReadings.map(r => `<a class="dream-detail__cta-btn" href="${escapeHtml(trailingSlashPath(r.path))}">${escapeHtml(r.label)}</a>`).join('')
+      }</div></div>`
+    : ''
+
+  const relatedCards = (dream.relatedCards && dream.relatedCards.length)
+    ? `<div class="dream-detail__related"><p class="dream-detail__related-label">관련 카드</p><div class="dream-detail__related-list">${
+        dream.relatedCards.map(c => `<a class="dream-detail__related-card" href="/cards/${encodeURIComponent(c.id)}/">${escapeHtml(c.name)}</a>`).join('')
+      }</div></div>`
+    : ''
+
   const related = (dream.relatedDreams && dream.relatedDreams.length)
     ? `<div class="dream-detail__related"><p class="dream-detail__related-label">관련 꿈</p><div class="dream-detail__related-list">${
         dream.relatedDreams.map(d => `<a class="dream-detail__related-card" href="/dream/${d.slug}/">${escapeHtml(d.label)}</a>`).join('')
       }</div></div>`
     : ''
 
-  return `<div class="dream-detail"><article><header class="dream-detail__header"><h1 class="dream-detail__title">${escapeHtml(dream.title)}</h1><p class="dream-detail__desc">${escapeHtml(dream.description)}</p></header>${summary}<div class="dream-detail__body">${sections}</div>${faq}${related}</article></div>`
+  // 가이드와 동일 사유로 브레드크럼만 정적 주입본에서 <a>로 준다(Vue는 <span @click>).
+  const breadcrumb = `<nav class="dream-detail__breadcrumb" aria-label="breadcrumb"><a class="dream-detail__bc-item" href="/">홈</a><span class="dream-detail__bc-sep">›</span><a class="dream-detail__bc-item" href="/dream/">꿈해몽 사전</a><span class="dream-detail__bc-sep">›</span><span class="dream-detail__bc-current">${escapeHtml(dream.title)}</span></nav>`
+
+  return `<div class="dream-detail"><article>${breadcrumb}<header class="dream-detail__header"><h1 class="dream-detail__title">${escapeHtml(dream.title)}</h1><p class="dream-detail__desc">${escapeHtml(dream.description)}</p></header>${summary}<div class="dream-detail__body">${sections}</div>${faq}${cta}${relatedCards}${related}</article></div>`
 }
 
 // 꿈해몽 허브(/dream) 본문을 정적 주입 - 크롤러/AI가 인트로 텍스트 + 전체 꿈 내부링크를 읽도록
