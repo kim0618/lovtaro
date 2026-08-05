@@ -74,8 +74,10 @@ import bathDream from './bath-dream.js'
 import drinkingDream from './drinking-dream.js'
 import givingBirthDream from './giving-birth-dream.js'
 import accidentDream from './accident-dream.js'
+import drivingDream from './driving-dream.js'
 
 const dreams = [
+  drivingDream,
   accidentDream,
   givingBirthDream,
   drinkingDream,
