@@ -28,8 +28,8 @@ export const KMONG_SERVICES = [
     tagline: '이별 원인부터 재연락 타이밍까지',
     ctaLabel: '재회 리딩 신청하기',
     url: 'https://kmong.com/gig/796377',
-    // 2026-07-29 재제출, 심사 통과 후 true로 변경
-    active: false,
+    // 2026-07-29 v2 재제출 → 2026-07-30 승인
+    active: true,
     packages: [
       { name: '재회 가능성 진단', price: 24000, spec: '3페이지 진단' },
       { name: '재회 로드맵 편지', price: 34000, spec: '5페이지 편지', featured: true },

@@ -117,6 +117,17 @@ async function copyTemplate() {
   }
 }
 
+/* 서비스가 둘 이상이면 히어로·마지막 버튼이 특정 서비스로 가면 안 된다
+   (재회 때문에 온 사람이 연애 상품으로 떨어짐). 대신 선택 섹션으로 보낸다. */
+function goPackages(location) {
+  trackEvent('cta_click', {
+    cta_id: 'premium_see_packages',
+    destination: '#packages',
+    location: location || 'unknown',
+  })
+  document.getElementById('packages')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
+
 function openKmong(service, location) {
   if (!service) return
   trackEvent('cta_click', {
@@ -157,7 +168,15 @@ function openKmong(service, location) {
         <div class="premium-hero__divider" aria-hidden="true" />
 
         <button
-          v-if="primaryService"
+          v-if="hasMultiple"
+          class="premium-hero__cta"
+          type="button"
+          @click="goPackages('hero')"
+        >
+          리딩 종류 보기
+        </button>
+        <button
+          v-else-if="primaryService"
           class="premium-hero__cta"
           type="button"
           @click="openKmong(primaryService, 'hero')"
@@ -189,7 +208,7 @@ function openKmong(service, location) {
           {{ hasMultiple ? '고민에 맞는 리딩을 골라주세요' : '깊이에 따라 세 가지 중에 골라주세요' }}
         </p>
 
-        <div class="service-stack">
+        <div id="packages" class="service-stack">
           <div v-for="s in services" :key="s.id" class="service-card">
             <div v-if="hasMultiple" class="service-card__head">
               <p class="service-card__label">{{ s.label }}</p>
@@ -296,7 +315,15 @@ function openKmong(service, location) {
           <h2 class="final-cta__title">사연을 들려주세요</h2>
           <p class="final-cta__body">패키지를 고르고 사연을 남겨주시면<br>차분히 읽고 편지를 씁니다.</p>
           <button
-            v-if="primaryService"
+            v-if="hasMultiple"
+            class="final-cta__btn"
+            type="button"
+            @click="goPackages('final')"
+          >
+            리딩 종류 보기
+          </button>
+          <button
+            v-else-if="primaryService"
             class="final-cta__btn"
             type="button"
             @click="openKmong(primaryService, 'final')"
