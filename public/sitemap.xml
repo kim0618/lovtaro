@@ -20,7 +20,7 @@
   </url>
   <url>
     <loc>https://lovtaro.kr/premium/</loc>
-    <lastmod>2026-07-29</lastmod>
+    <lastmod>2026-08-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -107,6 +107,11 @@
     <lastmod>2026-08-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lovtaro.kr/guide/card-combination-reading-tarot/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://lovtaro.kr/guide/triangle-relationship-tarot/</loc>
@@ -1163,6 +1168,11 @@
     <lastmod>2026-08-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lovtaro.kr/dream/earthquake-dream/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://lovtaro.kr/dream/driving-dream/</loc>

@@ -83,5 +83,6 @@ export default {
   relatedDreams: [
     { slug: 'travel-dream', label: '여행하는 꿈' },
     { slug: 'moving-dream', label: '이사하는 꿈' },
+    { slug: 'earthquake-dream', label: '지진 나는 꿈' },
   ],
 }

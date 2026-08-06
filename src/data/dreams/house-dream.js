@@ -82,5 +82,6 @@ export default {
     { slug: 'moving-dream', label: '이사하는 꿈' },
     { slug: 'wedding', label: '결혼하는 꿈' },
     { slug: 'key-dream', label: '열쇠 꿈' },
+    { slug: 'earthquake-dream', label: '지진 나는 꿈' },
   ],
 }
