@@ -254,14 +254,27 @@ console.log(n===0 ? '  ✅ relatedCards/relatedDreams 전수 실존 + 표시명 
 - **`relatedDreams` 죽은 링크가 검사 밖이었음.** 꿈해몽끼리의 내부링크(토픽 클러스터)는 184건인데 한 번도 검증된 적이 없었다. 위 스크립트에 추가. 자기 자신을 가리키는 self-link도 함께 검출.
 - **카드 표시명(`name`) 불일치가 검사 밖이었음.** `long-distance-relationship-tarot`이 `knight-of-wands`의 name을 '완드의 기사'로 적었는데, 사전 공식명과 기존 글 58곳은 전부 '완드의 나이트'였다. `relatedCards`의 name은 `GuideDetailPage.vue`에서 **칩 라벨로 그대로 렌더링**되므로, 칩을 눌러 들어간 카드 상세 페이지 제목과 다르게 보이는 사용자 화면 결함이 된다. id만 맞으면 통과하던 구멍이라 name 대조를 추가.
 
-관련 리딩 `path`가 실존 라우트인지 (`/reading/love`, `/reading/mind`, `/reading/reunion`, `/reading/contact`, `/reading/yesno`, `/reading/compatibility`, `/reading/three`, `/today`):
+**관련 리딩 `path` 실존 검사 - 하드코딩 리스트와 눈으로 대조하지 말고 `dist`와 직접 대조한다** (2026-08-07 전환).
 
 ```bash
-grep -E "path: '/reading|path: '/today" /home/tjd618/lovtaro/src/data/guides/*.js \
-  | grep -oE "path: '[^']+'" | sort -u
+cd /home/tjd618/lovtaro && node --input-type=module -e "
+import fs from 'fs'
+import guides from './src/data/guides/index.js'
+import dreams from './src/data/dreams/index.js'
+let bad = 0
+for (const [kind, list] of [['guide', guides], ['dream', dreams]])
+  for (const g of list)
+    for (const r of (g.relatedReadings || []))
+      if (!fs.existsSync('./dist' + r.path + 'index.html')) { console.log('  DEAD-READING-LINK:', kind + ':' + g.slug, r.path); bad++ }
+console.log(bad ? '  ⚠ ' + bad + '건' : '  ✅ relatedReadings 전수 실존 (dist 대조)')
+"
 ```
 
-리스트 외 경로 있으면 수정.
+`npm run build` 이후에 실행해야 한다(dist 기준). 죽은 경로가 나오면 `src/router/index.js`에서 실제 라우트를 확인해 고친다.
+
+**⚠️ 배경 (2026-08-07 사고)**: 이 자리에 원래 "실존 라우트 리스트를 적어두고 grep 결과를 눈으로 대조하라"고 돼 있었는데, **그 리스트 자체가 틀려 있었다**(`/reading/three`로 적혀 있었으나 실제 라우트는 `/reading/3cards`). 그 결과 `card-combination-reading-tarot`(8/6 발행)이 죽은 링크를 단 채 배포됐고, 다음 날 `stairs-dream`이 같은 문서를 보고 같은 오류를 반복했다. CLAUDE.md 라우트표와 `lovtaro-guide.md` 2곳도 같이 틀려 있었다(전부 정정 완료).
+
+교훈: **경로 검증을 문서에 적힌 리스트에 의존하면, 문서가 틀렸을 때 검사기가 오류를 재생산한다.** 실존 여부는 항상 빌드 산출물이나 라우터 정의 같은 1차 소스와 대조할 것. 같은 이유로 `relatedCards`·`relatedDreams`도 위 스크립트에서 데이터 원본과 직접 대조한다.
 
 ### N. FAQ 본문 ↔ prerender.mjs GUIDES[].faq 일치
 
@@ -514,17 +527,39 @@ for (const g of guides) {
     if (f.answer.length < 150 || f.answer.length > 250) { console.log('[guide]', g.slug, 'FAQ'+(i+1), f.answer.length, '자 (150-250)'); n++ }
   })
 }
-// 꿈해몽: 본문 2400-3600자, 4섹션, FAQ 4개, summary 필수
+// 꿈해몽: 본문 2400-3600자, FAQ 4개 각 150-250자, summary 필수 + 전통 근거층, 소재어 밀도
 for (const d of dreams) {
   const body = (d.sections||[]).map(s=>s.content.replace(/<[^>]*>/g,'')).join('').replace(/\s+/g,'').length
   if (body < 2400 || body > 3600) { console.log('[dream]', d.slug, '본문', body, '자 (2400-3600)'); n++ }
   if (!d.summary) { console.log('[dream]', d.slug, 'summary 없음'); n++ }
+  else {
+    if (d.summary.length < 90) { console.log('[dream]', d.slug, 'summary', d.summary.length, '자 (90+ 권장, 사이트 중앙값 102)'); n++ }
+    if (!/전통|옛 풀이|예로부터|해몽에서/.test(d.summary)) { console.log('[dream]', d.slug, 'summary에 전통 근거층 없음'); n++ }
+  }
+  ;(d.faq||[]).forEach((f,i) => {
+    if (f.answer.length < 150 || f.answer.length > 250) { console.log('[dream]', d.slug, 'FAQ'+(i+1), f.answer.length, '자 (150-250)'); n++ }
+  })
 }
 console.log(n===0 ? '  ✅ 정량 스펙 전수 준수' : '  ⚠ '+n+'건 기준 이탈')
 "
 ```
 
 **판정**: 신규 발행 글은 **전부 기준 안에 들어와야 한다.** 기존 발행분의 이탈은 리포트만 하고 즉시 고치지 않는다(발행 후 본문 변경은 별도 판단). FAQ 답변이 짧으면 JSON-LD FAQPage 리치 결과 노출에서 불리하므로 특히 신규 글에서 엄격히 본다.
+
+**⚠️ 꿈해몽 항목 보강 (2026-08-07)**: 원래 꿈해몽은 본문 길이와 summary 유무만 검사해 **FAQ 답변 길이·summary 품질이 통째로 사각지대**였다. `stairs-dream` 초판이 FAQ 평균 147자(최근 8편 중 최하, 비교군 165~185자)에 summary 68자·전통 근거층 없음으로 이 검사를 통과했다. summary는 스킬이 "AI(ChatGPT·Perplexity)가 그대로 인용해 가는 자리"로 규정한 곳이고, 전통층 부재는 bridge(7/27)·drinking(7/31)에 이어 3번째 재발이라 기계 검사로 옮겼다.
+
+**소재어 과밀 검사 (신규 글 수동 실행)** - 소재 명사가 과하게 반복되면 목록이 한 단어로 도배된다. `stairs-dream` 초판 `계단` 38회 = **79자당 1회**(driving `운전` 217자·earthquake `지진` 465자 대비 2.7~5.9배)로 적발됐다. 기준: **150자당 1회보다 조밀하면 대명사·동의어로 분산**.
+
+```bash
+cd /home/tjd618/lovtaro && SLUG={slug} WORD={소재어} node --input-type=module -e "
+const m = await import('./src/data/dreams/'+process.env.SLUG+'.js')   // 동적 경로라 await import 필수
+const d = m.default
+const t = ((d.sections||[]).map(s=>s.content.replace(/<[^>]*>/g,'')).join('')+(d.faq||[]).map(f=>f.question+f.answer).join('')).replace(/\s+/g,'')
+const c = (t.match(new RegExp(process.env.WORD,'g'))||[]).length
+const per = Math.round(t.length/c)
+console.log('  '+process.env.WORD, c+'회 /', t.length+'자 =', per+'자당 1회', per<150?'⚠ 과밀':'✅')
+"
+```
 
 ### U. 글 ↔ 글 문장 골격 복제 검사 (2026-07-29 추가, 신규 글 필수)
 
@@ -592,6 +627,36 @@ else console.log('  ✅ 정상 범위')
 - 겹침 문구가 FAQ **질문** 골격이면 반드시 고친다. 질문은 검색 쿼리와 직결돼 중복 신호가 가장 크게 잡히는 자리다.
 
 **heading은 U가 보지 않는다. 아래 V 항목으로 따로 검사한다.** (2026-07-31 스크립트화)
+
+---
+
+### ⚠️ U의 "✅ 정상 범위"는 골격 복제의 무죄 증명이 아니다 (2026-08-07 추가, 신규 글 필수)
+
+**U를 통과했다고 골격이 다르다는 뜻이 아니다.** 어휘를 치환하면 n-gram은 얼마든지 내려간다. `stairs-dream`은 직전 발행분 `earthquake-dream`과 130구절/최장 43자였던 것을 하루치 어휘 치환으로 **7구절까지 내려 U를 통과**했지만, 실제로는 §2 갈래 구성·§3 힌지·§4 착지점이 그대로인 1:1 클론이었다. 의미중복 정독으로만 잡혔다.
+
+**골격은 n-gram이 아니라 갈래 구성표를 나란히 놓고 봐야 잡힌다.** 신규 글과 **직전 발행분 2~3편**의 `§2 갈래 제목만` 뽑아 표로 세우고 슬롯 대응을 직접 읽는다.
+
+```bash
+cd /home/tjd618/lovtaro && node --input-type=module -e "
+import dreams from './src/data/dreams/index.js'
+const pick = dreams.slice(0, 3)   // 최신 3편 (신규 글 포함)
+for (const d of pick) {
+  console.log('=== ' + d.slug + ' ===')
+  const sec = d.sections.find(s => (s.content||'').includes('<li>')) || d.sections[1]
+  ;[...(sec.content||'').matchAll(/<strong>(.*?)<\/strong>/g)].forEach((m,i) => console.log('  ' + (i+1) + '. ' + m[1]))
+}
+"
+```
+
+**적발 신호** (하나라도 해당하면 골격 복제):
+- 1번 슬롯과 마지막 슬롯이 **소재 명사만 바뀐 동일 갈래**다 (실제 사고: 지진 `연인과 손 잡고 대피` ↔ 계단 `연인과 손 잡고 오르기` / 지진 `전 애인과 함께 겪음` ↔ 계단 `전 애인과 함께 있음`)
+- 슬롯 개수와 **긍정→부정→모호→고립→과거** 배치 순서가 같다
+- §3의 "옛 풀이가 짚은 건 [미래사건]이 아니라 지금 [X]" 힌지가 직전 편에도 있다 (driving 8/5 → earthquake 8/6 → stairs 8/7 **3일 연속** 발생)
+- §4 마지막 문단의 착지가 같다 (예: "그 사람이 그리운지 그때의 느낌이 그리운지 구분하라"는 68편 중 6편이 쓰는 블록인데 최근 편에 몰림)
+
+**적발 시**: 어휘 치환으로 해결되지 않는다. **판독 축 자체를 그 소재만 가질 수 있는 것으로 교체하고 갈래를 재분할**한다. 축이 "흔들림 세기"(지진)·"핸들 주체"(운전)·"오르내림 방향"(계단 초판)처럼 **1축 이항/연속 변수**면 소재를 바꿔도 같은 글이 된다. 계단 재집필에서는 축을 "걸음의 폭"(한 칸씩 / 여러 칸 건너뛰기 / 헛디딤)으로 바꿨는데, 이는 딛는 자리가 칸으로 나뉜 소재에서만 성립하고 전통 사전도 이 셋을 각각 다른 항목으로 나눠 둬서 근거와 고유성이 동시에 확보됐다.
+
+**하우스 공식 카운트도 함께 본다.** 이 글만의 관점인 척하는 프레임이 실제로는 사이트 다수가 쓰는 공용 블록인지 세어본다(실측: "예언이 아니라 지금 내 마음" 34/68, "꿈은 나를 비추는 거울" 67/68, "전 애인=재회 예고 아니라 미정리" 26/68). 공용 블록을 쓰는 것 자체는 문제가 아니지만, **그것을 글의 결론 자리에 놓으면 그 글은 새로 주는 것이 없다.**
 
 **수정 방법 - 판정에 따라 갈린다** (2026-07-30 분리)
 

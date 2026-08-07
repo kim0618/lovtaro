@@ -177,7 +177,7 @@ Read /home/tjd618/lovtaro/src/data/cardDictionary.js  (해당 카드 블록 전�
 
 ### 0-4. 방법론 글이면 - 타로 스프레드 실제 구현 확인
 
-`/reading/three` (3장), `/reading/love` (러브타로) 등에서 실제로 어떤 위치·해석 흐름을 쓰는지 본 뒤 글에 반영. 실제 서비스와 설명이 맞아야 신뢰가 생긴다.
+`/reading/3cards` (3장), `/reading/love` (러브타로) 등에서 실제로 어떤 위치·해석 흐름을 쓰는지 본 뒤 글에 반영. 실제 서비스와 설명이 맞아야 신뢰가 생긴다.
 
 ### 0-5. 미발행 주제 확인 (중복 회피)
 
@@ -429,7 +429,7 @@ FAQ는 JSON-LD `FAQPage`로 들어가고 Google Rich Result에 노출된다. 퀄
 | 궁합 | `/reading/compatibility` |
 | 빠른 판단 | `/reading/yesno` |
 | 오늘 기류 | `/today` |
-| 방법론 글 | `/reading/three` (3장 리딩) |
+| 방법론 글 | `/reading/3cards` (3장 리딩) |
 
 ### relatedCards (3-5장)
 

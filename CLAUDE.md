@@ -44,7 +44,7 @@ cd /home/tjd618/lovtaro && npm run build && npx wrangler pages deploy dist --pro
 | `/reading/contact` | 연락 올까 |
 | `/reading/yesno` | Yes/No |
 | `/reading/compatibility` | 궁합 |
-| `/reading/three` | 3장 리딩 |
+| `/reading/3cards` | 3장 리딩 |
 | `/cards` | 카드 목록 (78장) |
 | `/cards/:id` | 카드 상세 (Major 22 + Minor 56) |
 | `/test` | 연애 심리테스트 허브 |

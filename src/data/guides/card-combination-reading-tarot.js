@@ -86,7 +86,7 @@ export default {
   ],
   relatedReadings: [
     { label: '러브타로 3장', path: '/reading/love/' },
-    { label: '3장 리딩', path: '/reading/three/' },
+    { label: '3장 리딩', path: '/reading/3cards/' },
   ],
   relatedCards: [
     { id: 'hierophant', name: '교황' },
