@@ -104,12 +104,13 @@
   </url>
   <url>
     <loc>https://lovtaro.kr/guide/</loc>
-    <lastmod>2026-08-03</lastmod>
+    <lastmod>2026-08-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://lovtaro.kr/guide/card-combination-reading-tarot/</loc>
+    <lastmod>2026-08-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -1165,18 +1166,24 @@
   </url>
   <url>
     <loc>https://lovtaro.kr/dream/</loc>
-    <lastmod>2026-08-05</lastmod>
+    <lastmod>2026-08-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://lovtaro.kr/dream/stairs-dream/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://lovtaro.kr/dream/earthquake-dream/</loc>
+    <lastmod>2026-08-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://lovtaro.kr/dream/driving-dream/</loc>
-    <lastmod>2026-08-05</lastmod>
+    <lastmod>2026-08-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -1362,7 +1369,7 @@
   </url>
   <url>
     <loc>https://lovtaro.kr/dream/house-dream/</loc>
-    <lastmod>2026-07-21</lastmod>
+    <lastmod>2026-08-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
