@@ -86,5 +86,6 @@ export default {
     { slug: 'moving-dream', label: '이사하는 꿈' },
     { slug: 'letter-dream', label: '편지 꿈' },
     { slug: 'name-call-dream', label: '이름 부르는 꿈' },
+    { slug: 'military-dream', label: '군대 꿈' },
   ],
 }

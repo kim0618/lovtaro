@@ -98,8 +98,10 @@ import relationshipRutTarot from './relationship-rut-tarot.js'
 import infidelitySuspicionTarot from './infidelity-suspicion-tarot.js'
 import triangleRelationshipTarot from './triangle-relationship-tarot.js'
 import cardCombinationReadingTarot from './card-combination-reading-tarot.js'
+import tarot78CardsGuide from './tarot-78-cards-guide.js'
 
 const guides = [
+  tarot78CardsGuide,
   cardCombinationReadingTarot,
   triangleRelationshipTarot,
   infidelitySuspicionTarot,
