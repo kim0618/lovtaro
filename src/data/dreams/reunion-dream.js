@@ -84,5 +84,6 @@ export default {
     { slug: 'moving-dream', label: '이사하는 꿈' },
     { slug: 'breakup', label: '헤어지는 꿈' },
     { slug: 'military-dream', label: '군대 꿈' },
+    { slug: 'bird-dream', label: '새 꿈' },
   ],
 }
