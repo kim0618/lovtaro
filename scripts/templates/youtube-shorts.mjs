@@ -105,15 +105,18 @@ function cosmicDefs() {
   `
 }
 
+// moon: true|'left' 좌상단(기본) · 'right' 우상단 · false|'none' 없음
 function body(starSeed = 711, moon = true) {
+  const showMoon = moon && moon !== 'none'
+  const mx = moon === 'right' ? 955 : 125
   return `
     <rect width="${W}" height="${H}" fill="url(#cosmicBg)"/>
     <ellipse cx="900" cy="1700" rx="500" ry="350" fill="url(#neb3)"/>
     <ellipse cx="180" cy="1550" rx="400" ry="300" fill="url(#neb2)"/>
     ${genStars(260, starSeed)}
     ${genStars(70, starSeed + 11, true)}
-    ${moon ? `<circle cx="125" cy="205" r="80" fill="url(#moonGlow)"/>
-    <rect x="70" y="150" width="120" height="120" fill="rgba(248,230,185,0.9)" mask="url(#moonMaskSmall)"/>` : ''}
+    ${showMoon ? `<circle cx="${mx}" cy="205" r="80" fill="url(#moonGlow)"/>
+    <rect x="${mx - 55}" y="150" width="120" height="120" fill="rgba(248,230,185,0.9)" mask="url(#moonMaskSmall)"/>` : ''}
   `
 }
 
@@ -138,61 +141,139 @@ async function roundImg(buf, w, h, r) {
   return sharp(buf).composite([{ input: Buffer.from(m), blend: 'dest-in' }]).png().toBuffer()
 }
 
-const schemes = [SCHEME_KEYS[0], SCHEME_KEYS[1], SCHEME_KEYS[2]]
+// 카드 뒷면 색은 날짜 시드로 뽑는다. 고정 3색이던 시절엔 7일이 같아 보여서
+// 인스타 scene01을 복사해 쓰는 우회책이 필요했다.
+function pickSchemesSeeded(seed, count = 3) {
+  const rnd = mulberry32(seed * 7919 + 13)
+  const keys = [...SCHEME_KEYS]
+  for (let i = keys.length - 1; i > 0; i--) {
+    const j = Math.floor(rnd() * (i + 1))
+    ;[keys[i], keys[j]] = [keys[j], keys[i]]
+  }
+  return keys.slice(0, count)
+}
+
+// ── 요일별 훅 배치
+// 첫 3초의 실루엣(텍스트 위치·카드 배치·달 위치)을 요일마다 바꾼다.
+// 매일 같은 실루엣이면 시청자에게도 알고리즘에게도 같은 영상으로 읽힌다.
+const HOOK_LAYOUT = {
+  mon: { arrange: 'row', textY: 378, moon: 'left', guideY: 1640 },
+  tue: { arrange: 'fan', textY: 330, moon: 'none', guideY: 1660 },
+  wed: { arrange: 'art', textY: 330, moon: 'left' },
+  thu: { arrange: 'stair', textY: 330, moon: 'right', guideY: 1700 },
+  fri: { arrange: 'art', textY: 1380, moon: 'none' },
+  sat: { arrange: 'stack', textY: 378, moon: 'none', guideY: 1660 },
+  sun: {
+    arrange: 'triangle', textY: 300, moon: 'left', guideY: 1740,
+    sub: ['Sunday Tarot Preview', '지금 고른 카드가 다음 주 흐름을 열어줘요'],
+  },
+}
+const layoutOf = (day) => HOOK_LAYOUT[day.date.slice(-3)] ?? HOOK_LAYOUT.mon
+
+// 배치별 카드 좌표 [cx, cy, 회전각]. drawOrder는 겹치는 배치에서 위로 올릴 순서
+function pickSlots(arrange) {
+  switch (arrange) {
+    case 'fan':
+      return { scale: 2.5, slots: [[215, 1050, -13], [540, 950, 0], [865, 1050, 13]], drawOrder: [0, 2, 1] }
+    case 'stair':
+      return { scale: 2.35, slots: [[215, 1150, -7], [540, 1000, 0], [865, 850, 7]], drawOrder: [0, 1, 2] }
+    case 'stack':
+      return { scale: 2.6, slots: [[330, 1010, -11], [540, 965, 0], [750, 1010, 11]], drawOrder: [0, 2, 1] }
+    case 'triangle':
+      return { scale: 2.15, slots: [[540, 800, 0], [330, 1265, -9], [750, 1265, 9]], drawOrder: [1, 2, 0] }
+    default:
+      return { scale: 2.5, slots: [[190, 980, 0], [540, 980, 0], [890, 980, 0]], drawOrder: [0, 1, 2] }
+  }
+}
 
 // ── 훅 (참여형: 카드 3장)
 async function sceneHook3(day) {
-  const cardScale = 2.5
-  const cw = CARD_WIDTH * cardScale, ch = CARD_HEIGHT * cardScale
-  const gap = 50
-  const startCX = (W - (cw * 3 + gap * 2)) / 2 + cw / 2
-  const cardY = 980
-  const numberY = cardY + ch / 2 + 55
-  const cxs = [startCX, startCX + cw + gap, startCX + (cw + gap) * 2]
+  const L = layoutOf(day)
+  const { scale, slots, drawOrder } = pickSlots(L.arrange)
+  const cw = CARD_WIDTH * scale, ch = CARD_HEIGHT * scale
+  const schemes = pickSchemesSeeded(day.seed)
+  const guideY = L.guideY ?? 1640
+  const glowCY = Math.round(slots.reduce((s, [, cy]) => s + cy, 0) / slots.length)
+
+  const glows = drawOrder.map((i) => {
+    const [cx, cy] = slots[i]
+    return `<ellipse cx="${cx}" cy="${cy}" rx="${cw * 0.8}" ry="${ch * 0.55}" fill="url(#colorCardGlow_${schemes[i]})" filter="url(#glowBlur)"/>`
+  }).join('')
+
+  const cards = drawOrder.map((i) => {
+    const [cx, cy, rot] = slots[i]
+    const card = colorCardBackSvg(cx, cy, scale, schemes[i])
+    return rot ? `<g transform="rotate(${rot} ${cx} ${cy})">${card}</g>` : card
+  }).join('')
+
+  const numbers = slots.map(([cx, cy], i) =>
+    `<text x="${cx}" y="${cy + ch / 2 + 55}" text-anchor="middle" font-family="${KO}" font-size="42" fill="${getSchemeAccent(schemes[i])}" font-weight="600">${i + 1}번</text>`).join('')
+
+  const sub = L.sub ? `
+      <text x="540" y="${L.textY + 175}" text-anchor="middle" font-family="Georgia, serif" font-size="30" fill="rgba(232,212,139,0.85)" letter-spacing="3" font-style="italic">${L.sub[0]}</text>
+      <text x="540" y="${L.textY + 228}" text-anchor="middle" font-family="${KO}" font-size="26" fill="rgba(244,248,255,0.62)" letter-spacing="2" font-weight="300">${L.sub[1]}</text>` : ''
 
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
     <defs>${cosmicDefs()}${colorCardBackDefs()}</defs>
-    ${body(day.seed)}
-    <ellipse cx="540" cy="${cardY}" rx="500" ry="380" fill="url(#cardAreaGlow)" filter="url(#glowBlur)"/>
+    ${body(day.seed, L.moon)}
+    <ellipse cx="540" cy="${glowCY}" rx="500" ry="380" fill="url(#cardAreaGlow)" filter="url(#glowBlur)"/>
     <g filter="url(#softGlow)">
-      <text x="540" y="378" text-anchor="middle" font-family="${KO}" font-size="46" fill="#F4F8FF" letter-spacing="2" font-weight="300">${day.hook[0]}</text>
-      <text x="540" y="458" text-anchor="middle" font-family="${KO}" font-size="48" fill="#F4F8FF" letter-spacing="3" font-weight="300">${day.hook[1]}</text>
+      <text x="540" y="${L.textY}" text-anchor="middle" font-family="${KO}" font-size="46" fill="#F4F8FF" letter-spacing="2" font-weight="300">${day.hook[0]}</text>
+      <text x="540" y="${L.textY + 80}" text-anchor="middle" font-family="${KO}" font-size="48" fill="#F4F8FF" letter-spacing="3" font-weight="300">${day.hook[1]}</text>${sub}
     </g>
-    ${cxs.map((cx, i) => `<ellipse cx="${cx}" cy="${cardY}" rx="${cw * 0.8}" ry="${ch * 0.55}" fill="url(#colorCardGlow_${schemes[i]})" filter="url(#glowBlur)"/>`).join('')}
+    ${glows}
     <g filter="url(#cardShadow)">
-      ${cxs.map((cx, i) => colorCardBackSvg(cx, cardY, cardScale, schemes[i])).join('')}
+      ${cards}
     </g>
     <g filter="url(#softGlow)">
-      ${cxs.map((cx, i) => `<text x="${cx}" y="${numberY}" text-anchor="middle" font-family="${KO}" font-size="42" fill="${getSchemeAccent(schemes[i])}" font-weight="600">${i + 1}번</text>`).join('')}
+      ${numbers}
     </g>
-    <text x="540" y="1640" text-anchor="middle" font-family="${KO}" font-size="30" fill="rgba(244,248,255,0.6)" letter-spacing="5" font-weight="300">직감으로 하나를 골라보세요</text>
+    <text x="540" y="${guideY}" text-anchor="middle" font-family="${KO}" font-size="30" fill="rgba(244,248,255,0.6)" letter-spacing="5" font-weight="300">직감으로 하나를 골라보세요</text>
     <text x="540" y="1860" text-anchor="middle" font-family="${KO}" font-size="24" fill="rgba(232,212,139,0.45)" letter-spacing="4">@lovtarot_</text>
   </svg>`
   return sharp(Buffer.from(svg)).png({ quality: 90 }).toBuffer()
 }
 
 // ── 훅 (단일형: 카드 1장)
+// 소개형은 카드 앞면 풀블리드. 수요일은 텍스트 상단, 금요일은 하단으로 갈라
+// 같은 소개형 두 편도 첫 화면이 겹치지 않게 한다.
 async function sceneHook1(day) {
-  const cardScale = 3.4
-  const cw = CARD_WIDTH * cardScale, ch = CARD_HEIGHT * cardScale
-  const cardY = 1020
+  const L = layoutOf(day)
+  const card = day.cards[0]
+  const bottom = L.textY > 900
+  const art = await sharp(`${IMAGES}/${card.file}`)
+    .resize(W, H, { fit: 'cover' })
+    .modulate({ brightness: 0.8 })
+    .toBuffer()
 
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
-    <defs>${cosmicDefs()}${colorCardBackDefs()}</defs>
-    ${body(day.seed)}
-    <ellipse cx="540" cy="${cardY}" rx="440" ry="420" fill="url(#cardAreaGlow)" filter="url(#glowBlur)"/>
+  const scrim = bottom
+    ? `<linearGradient id="hookScrim" x1="0" y1="0.30" x2="0" y2="1">
+         <stop offset="0%" stop-color="#08061a" stop-opacity="0"/>
+         <stop offset="100%" stop-color="#08061a" stop-opacity="0.93"/>
+       </linearGradient>`
+    : `<linearGradient id="hookScrim" x1="0" y1="0" x2="0" y2="0.70">
+         <stop offset="0%" stop-color="#08061a" stop-opacity="0.93"/>
+         <stop offset="100%" stop-color="#08061a" stop-opacity="0"/>
+       </linearGradient>`
+
+  const showMoon = L.moon && L.moon !== 'none'
+  const mx = L.moon === 'right' ? 955 : 125
+
+  const overlay = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
+    <defs>${cosmicDefs()}${scrim}</defs>
+    <rect width="${W}" height="${H}" fill="rgba(8,6,26,0.34)"/>
+    <rect width="${W}" height="${H}" fill="url(#hookScrim)"/>
+    <rect width="${W}" height="${H}" fill="url(#vignette)"/>
+    ${showMoon ? `<circle cx="${mx}" cy="205" r="80" fill="url(#moonGlow)"/>
+    <rect x="${mx - 55}" y="150" width="120" height="120" fill="rgba(248,230,185,0.9)" mask="url(#moonMaskSmall)"/>` : ''}
     <g filter="url(#softGlow)">
-      <text x="540" y="378" text-anchor="middle" font-family="${KO}" font-size="46" fill="#F4F8FF" letter-spacing="2" font-weight="300">${day.hook[0]}</text>
-      <text x="540" y="458" text-anchor="middle" font-family="${KO}" font-size="48" fill="#F4F8FF" letter-spacing="3" font-weight="300">${day.hook[1]}</text>
+      <text x="540" y="${L.textY}" text-anchor="middle" font-family="${KO}" font-size="46" fill="#F4F8FF" letter-spacing="2" font-weight="300">${day.hook[0]}</text>
+      <text x="540" y="${L.textY + 80}" text-anchor="middle" font-family="${KO}" font-size="48" fill="#F4F8FF" letter-spacing="3" font-weight="300">${day.hook[1]}</text>
     </g>
-    <ellipse cx="540" cy="${cardY}" rx="${cw * 0.85}" ry="${ch * 0.58}" fill="url(#colorCardGlow_${schemes[1]})" filter="url(#glowBlur)"/>
-    <g filter="url(#cardShadow)">
-      ${colorCardBackSvg(540, cardY, cardScale, schemes[1])}
-    </g>
-    <text x="540" y="1700" text-anchor="middle" font-family="${KO}" font-size="30" fill="rgba(244,248,255,0.6)" letter-spacing="5" font-weight="300">오늘의 카드를 만나보세요</text>
+    <text x="540" y="${bottom ? L.textY + 175 : 1700}" text-anchor="middle" font-family="${KO}" font-size="30" fill="rgba(244,248,255,0.6)" letter-spacing="5" font-weight="300">오늘의 카드를 만나보세요</text>
     <text x="540" y="1860" text-anchor="middle" font-family="${KO}" font-size="24" fill="rgba(232,212,139,0.45)" letter-spacing="4">@lovtarot_</text>
   </svg>`
-  return sharp(Buffer.from(svg)).png({ quality: 90 }).toBuffer()
+  return sharp(art).composite([{ input: Buffer.from(overlay), left: 0, top: 0 }]).png({ quality: 90 }).toBuffer()
 }
 
 // ── 전환
@@ -408,8 +489,10 @@ async function sceneOutro1(day) {
 
 // ═══════════════════ 콘텐츠 정의 (여기만 교체) ═══════════════════
 // type: 'pick'(참여형 3장, 월화목토일) | 'single'(소개형 1장, 수금)
-// pick  = 훅5s + 전환2s + 카드3×(리빌4s + 페이지10s×2) + 아웃트로6s = 85초
-// single= 훅4s + 리빌5s + 페이지10s×3 + 아웃트로6s = 45초
+// pick  = 훅4s + 전환2s + 카드3×(리빌3s + 페이지6s×2) + 아웃트로4s = 55초
+// single= 훅4s + 리빌4s + 페이지6s×3 + 아웃트로4s = 30초
+// 85초에서 줄인 것. 60초를 넘기면 쇼츠 피드에서 불리하고, 정지 화면이 60초씩
+// 이어지면 끝까지 보는 비율이 떨어진다. 본문 줄 수는 그대로 두고 체류만 줄였다.
 // 본문은 insta/reply_templates.txt(참여형)·copy.txt(소개형)의 해석을 유튜브용으로 6줄씩 풀어쓴 것
 
 const WEEK = [
@@ -461,23 +544,23 @@ for (const day of WEEK) {
   }
 
   if (day.type === 'pick') {
-    await save(await sceneHook3(day), 'hook', 5)
+    await save(await sceneHook3(day), 'hook', 4)
     await save(await sceneTransition(day), 'transition', 2)
     for (const card of day.cards) {
-      await save(await sceneReveal(day, card), `c${card.no}-reveal`, 4)
+      await save(await sceneReveal(day, card), `c${card.no}-reveal`, 3)
       for (let p = 0; p < card.pages.length; p++) {
-        await save(await sceneTextPage(day, card, p, card.pages.length, card.pages[p][0], card.pages[p][1]), `c${card.no}-p${p + 1}`, 10)
+        await save(await sceneTextPage(day, card, p, card.pages.length, card.pages[p][0], card.pages[p][1]), `c${card.no}-p${p + 1}`, 6)
       }
     }
-    await save(await sceneOutro3(day), 'outro', 6)
+    await save(await sceneOutro3(day), 'outro', 4)
   } else {
     await save(await sceneHook1(day), 'hook', 4)
     const card = day.cards[0]
-    await save(await sceneReveal(day, card), 'reveal', 5)
+    await save(await sceneReveal(day, card), 'reveal', 4)
     for (let p = 0; p < card.pages.length; p++) {
-      await save(await sceneTextPage(day, card, p, card.pages.length, card.pages[p][0], card.pages[p][1]), `p${p + 1}`, 10)
+      await save(await sceneTextPage(day, card, p, card.pages.length, card.pages[p][0], card.pages[p][1]), `p${p + 1}`, 6)
     }
-    await save(await sceneOutro1(day), 'outro', 6)
+    await save(await sceneOutro1(day), 'outro', 4)
   }
 
   writeFileSync(`${CONTENT}/${day.date}/youtube/scenes.txt`, scenes.join('\n') + '\n')

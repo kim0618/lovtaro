@@ -128,7 +128,13 @@ function goPackages(location) {
   document.getElementById('packages')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 
-function openKmong(service, location) {
+/* 크몽 버튼은 반드시 진짜 <a href>여야 한다. window.open으로 열면 GA4 향상된 측정이
+   아웃바운드 링크를 못 봐서 자동 click 이벤트(linkUrl·linkDomain)가 발생하지 않고,
+   매출 퍼널의 마지막 칸이 통째로 공백이 된다. cta_click의 cta_id는 맞춤측정기준
+   미등록이라 조회가 거부되므로 지금은 자동 click이 유일하게 읽히는 신호다.
+   (2026-08-11 적발. .claude/rules/analytics.md 참조)
+   여기서는 이벤트만 쏘고 이동은 앵커에 맡긴다. */
+function trackKmongClick(service, location) {
   if (!service) return
   trackEvent('cta_click', {
     cta_id: 'premium_kmong',
@@ -136,7 +142,6 @@ function openKmong(service, location) {
     location: location || 'unknown',
     service: service.id,
   })
-  window.open(service.url, '_blank', 'noopener')
 }
 </script>
 
@@ -175,14 +180,16 @@ function openKmong(service, location) {
         >
           리딩 종류 보기
         </button>
-        <button
+        <a
           v-else-if="primaryService"
           class="premium-hero__cta"
-          type="button"
-          @click="openKmong(primaryService, 'hero')"
+          :href="primaryService.url"
+          target="_blank"
+          rel="noopener"
+          @click="trackKmongClick(primaryService, 'hero')"
         >
           {{ primaryService.ctaLabel }}
-        </button>
+        </a>
 
         <p class="premium-hero__meta">{{ PRICE_FROM }} · {{ REPLY_HOURS }} 이내 회신</p>
       </div>
@@ -233,9 +240,15 @@ function openKmong(service, location) {
               </li>
             </ul>
 
-            <button class="service-card__btn" type="button" @click="openKmong(s, 'packages')">
+            <a
+              class="service-card__btn"
+              :href="s.url"
+              target="_blank"
+              rel="noopener"
+              @click="trackKmongClick(s, 'packages')"
+            >
               {{ s.ctaLabel }}
-            </button>
+            </a>
           </div>
         </div>
 
@@ -322,14 +335,16 @@ function openKmong(service, location) {
           >
             리딩 종류 보기
           </button>
-          <button
+          <a
             v-else-if="primaryService"
             class="final-cta__btn"
-            type="button"
-            @click="openKmong(primaryService, 'final')"
+            :href="primaryService.url"
+            target="_blank"
+            rel="noopener"
+            @click="trackKmongClick(primaryService, 'final')"
           >
             {{ primaryService.ctaLabel }}
-          </button>
+          </a>
         </div>
       </SectionBlock>
 
@@ -461,6 +476,11 @@ function openKmong(service, location) {
 }
 
 .premium-hero__cta {
+  /* <a>는 inline이라 padding이 줄 높이에 안 잡히고 가운데 정렬도 상속에 맡겨진다.
+     button이던 시절 모양을 그대로 유지하려면 이 두 줄이 필요하다. */
+  display: inline-block;
+  text-align: center;
+  line-height: normal;
   margin-top: var(--lt-space-xs);
   padding: 13px 36px;
   background: var(--lt-btn-primary-bg);
@@ -664,6 +684,11 @@ function openKmong(service, location) {
 }
 
 .service-card__btn {
+  /* flex column 안에서 button은 stretch로 꽉 찼다. <a>도 block이어야 같은 폭이 된다.
+     line-height는 button 기본값이 normal이라 <a>가 본문 줄간격을 상속하면 1.5px 커진다. */
+  display: block;
+  text-align: center;
+  line-height: normal;
   padding: 12px 0;
   background: var(--lt-btn-primary-bg);
   color: #F4F8FF;
@@ -940,6 +965,9 @@ function openKmong(service, location) {
 }
 
 .final-cta__btn {
+  display: inline-block;
+  text-align: center;
+  line-height: normal;
   padding: 13px 36px;
   background: var(--lt-btn-primary-bg);
   color: #F4F8FF;

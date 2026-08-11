@@ -19,10 +19,11 @@ CONTENT="$ROOT/content-output"
 MODE="$1"; shift
 
 # $1=png $2=초 $3=출력 $4=줌상한(기본 1.08) $5=페이드인(기본 1, 0이면 생략)
+# $6=프레임당 줌 증가폭(기본 0.0004). 유튜브는 정지 화면 느낌을 줄이려 더 크게 준다
 # 첫 클립은 fadein=0으로 호출 → 첫 프레임이 검은 화면이 아닌 실제 훅 이미지가 되어
 # 유튜브/인스타 자동 썸네일이 검게 잡히는 문제를 방지
 make_clip() {
-  local img="$1" dur="$2" out="$3" zmax="${4:-1.08}" fadein="${5:-1}"
+  local img="$1" dur="$2" out="$3" zmax="${4:-1.08}" fadein="${5:-1}" zstep="${6:-0.0004}"
   local frames=$((dur * 30))
   local fadeout; fadeout=$(echo "$dur - 0.35" | bc)
   local fin=0.3
@@ -31,7 +32,7 @@ make_clip() {
   [ "$fadein" -eq 0 ] && fadein_f=""
   # -nostdin 필수: 없으면 ffmpeg가 while 루프의 stdin을 삼켜 파일명이 잘림
   "$FF" -nostdin -y -loglevel error -i "$img" \
-    -vf "scale=2160:3840,zoompan=z='min(zoom+0.0004,$zmax)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=$frames:s=1080x1920:fps=30,${fadein_f}fade=t=out:st=$fadeout:d=0.35,format=yuv420p" \
+    -vf "scale=2160:3840,zoompan=z='min(zoom+$zstep,$zmax)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=$frames:s=1080x1920:fps=30,${fadein_f}fade=t=out:st=$fadeout:d=0.35,format=yuv420p" \
     -c:v libx264 -preset fast -crf 20 "$out"
 }
 
@@ -68,7 +69,7 @@ render_youtube() {
   while IFS=: read -r img dur; do
     [ -z "$img" ] && continue
     local fadein=1; [ "$idx" -eq 0 ] && fadein=0
-    make_clip "$yt/frames/$img" "$dur" "$tmp/${img%.png}.mp4" 1.10 "$fadein"
+    make_clip "$yt/frames/$img" "$dur" "$tmp/${img%.png}.mp4" 1.12 "$fadein" 0.0010
     echo "file '$tmp/${img%.png}.mp4'" >> "$tmp/list.txt"
     idx=$((idx + 1))
   done < "$yt/scenes.txt"
