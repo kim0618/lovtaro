@@ -80,5 +80,6 @@ export default {
   relatedDreams: [
     { slug: 'travel-dream', label: '여행하는 꿈' },
     { slug: 'reconcile-dream', label: '화해하는 꿈' },
+    { slug: 'lost-way-dream', label: '길 잃는 꿈' },
   ],
 }
