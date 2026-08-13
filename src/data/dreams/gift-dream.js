@@ -85,5 +85,6 @@ export default {
     { slug: 'confession-dream', label: '고백하는 꿈' },
     { slug: 'message-dream', label: '연락 오는 꿈' },
     { slug: 'shoes-dream', label: '신발 꿈' },
+    { slug: 'makeup-dream', label: '화장하는 꿈' },
   ],
 }

@@ -84,5 +84,6 @@ export default {
   relatedDreams: [
     { slug: 'divorce-dream', label: '이혼하는 꿈' },
     { slug: 'breakup', label: '헤어지는 꿈' },
+    { slug: 'makeup-dream', label: '화장하는 꿈' },
   ],
 }
