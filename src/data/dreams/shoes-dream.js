@@ -82,5 +82,6 @@ export default {
   relatedDreams: [
     { slug: 'gift-dream', label: '선물 받는 꿈' },
     { slug: 'travel-dream', label: '여행 꿈' },
+    { slug: 'clothes-dream', label: '옷 입는 꿈' },
   ],
 }

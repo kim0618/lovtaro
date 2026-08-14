@@ -87,5 +87,6 @@ export default {
   relatedDreams: [
     { slug: 'mirror-dream', label: '거울 꿈' },
     { slug: 'gift-dream', label: '선물 받는/주는 꿈' },
+    { slug: 'clothes-dream', label: '옷 입는 꿈' },
   ],
 }
