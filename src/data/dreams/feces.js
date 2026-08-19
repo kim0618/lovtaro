@@ -82,5 +82,6 @@ export default {
   relatedDreams: [
     { slug: 'wedding', label: '결혼하는 꿈' },
     { slug: 'pregnancy', label: '임신 꿈' },
+    { slug: 'pig-dream', label: '돼지 꿈' },
   ],
 }

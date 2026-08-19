@@ -109,6 +109,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://lovtaro.kr/guide/repeated-tarot-card-meaning/</loc>
+    <lastmod>2026-08-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://lovtaro.kr/guide/tarot-spread-selection-guide/</loc>
     <lastmod>2026-08-13</lastmod>
     <changefreq>monthly</changefreq>
@@ -548,7 +554,7 @@
   </url>
   <url>
     <loc>https://lovtaro.kr/guide/chariot-love-meaning/</loc>
-    <lastmod>2026-05-09</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -632,7 +638,7 @@
   </url>
   <url>
     <loc>https://lovtaro.kr/guide/star-love-meaning/</loc>
-    <lastmod>2026-04-24</lastmod>
+    <lastmod>2026-08-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -1178,18 +1184,25 @@
   </url>
   <url>
     <loc>https://lovtaro.kr/dream/</loc>
-    <lastmod>2026-08-13</lastmod>
+    <lastmod>2026-08-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://lovtaro.kr/dream/pig-dream/</loc>
+    <lastmod>2026-08-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://lovtaro.kr/dream/clothes-dream/</loc>
+    <lastmod>2026-08-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://lovtaro.kr/dream/makeup-dream/</loc>
-    <lastmod>2026-08-13</lastmod>
+    <lastmod>2026-08-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -1267,7 +1280,7 @@
   </url>
   <url>
     <loc>https://lovtaro.kr/dream/parents-opposition-dream/</loc>
-    <lastmod>2026-07-24</lastmod>
+    <lastmod>2026-07-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -1279,7 +1292,7 @@
   </url>
   <url>
     <loc>https://lovtaro.kr/dream/shoes-dream/</loc>
-    <lastmod>2026-07-22</lastmod>
+    <lastmod>2026-08-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -1309,13 +1322,13 @@
   </url>
   <url>
     <loc>https://lovtaro.kr/dream/butterfly-dream/</loc>
-    <lastmod>2026-07-14</lastmod>
+    <lastmod>2026-07-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://lovtaro.kr/dream/umbrella-dream/</loc>
-    <lastmod>2026-07-13</lastmod>
+    <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -1471,7 +1484,7 @@
   </url>
   <url>
     <loc>https://lovtaro.kr/dream/gift-dream/</loc>
-    <lastmod>2026-08-13</lastmod>
+    <lastmod>2026-08-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -1567,7 +1580,7 @@
   </url>
   <url>
     <loc>https://lovtaro.kr/dream/death-dream/</loc>
-    <lastmod>2026-08-04</lastmod>
+    <lastmod>2026-08-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>

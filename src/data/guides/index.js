@@ -100,8 +100,10 @@ import triangleRelationshipTarot from './triangle-relationship-tarot.js'
 import cardCombinationReadingTarot from './card-combination-reading-tarot.js'
 import tarot78CardsGuide from './tarot-78-cards-guide.js'
 import tarotSpreadSelectionGuide from './tarot-spread-selection-guide.js'
+import repeatedTarotCardMeaning from './repeated-tarot-card-meaning.js'
 
 const guides = [
+  repeatedTarotCardMeaning,
   tarotSpreadSelectionGuide,
   tarot78CardsGuide,
   cardCombinationReadingTarot,
