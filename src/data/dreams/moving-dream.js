@@ -87,5 +87,6 @@ export default {
     { slug: 'reunion-dream', label: '재회하는 꿈' },
     { slug: 'stranger-dream', label: '모르는 이성 꿈' },
     { slug: 'driving-dream', label: '운전하는 꿈' },
+    { slug: 'funeral-dream', label: '장례식 가는 꿈' },
   ],
 }

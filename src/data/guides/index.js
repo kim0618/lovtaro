@@ -101,8 +101,10 @@ import cardCombinationReadingTarot from './card-combination-reading-tarot.js'
 import tarot78CardsGuide from './tarot-78-cards-guide.js'
 import tarotSpreadSelectionGuide from './tarot-spread-selection-guide.js'
 import repeatedTarotCardMeaning from './repeated-tarot-card-meaning.js'
+import firstTarotReadingGuide from './first-tarot-reading-guide.js'
 
 const guides = [
+  firstTarotReadingGuide,
   repeatedTarotCardMeaning,
   tarotSpreadSelectionGuide,
   tarot78CardsGuide,
