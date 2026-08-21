@@ -10,6 +10,7 @@ import CardSymbol from '../components/cards/CardSymbol.vue'
 import { getCardDetail } from '../data/cardDictionary.js'
 import { getCardImage } from '../data/cardImages.js'
 import { getCardSeoOverride } from '../data/cardSeoOverrides.js'
+import { trackEvent } from '../utils/gtag.js'
 
 const route = useRoute()
 const card = computed(() => getCardDetail(route.params.id))
@@ -76,6 +77,17 @@ const energyLabel = { positive: '긍정적 에너지', neutral: '중립적 에�
           <div class="card-detail__advice">
             <p>{{ card.upright.advice }}</p>
           </div>
+
+          <!-- 본문 중간 리딩 진입점. 하단 CTA는 문서 75% 지점이라 도달률이 43~50%에
+               그친다(2026-08-21 실측). 정방향만 읽고 이탈하는 층에도 다리를 한 번 보인다. -->
+          <router-link
+            to="/reading/mind/"
+            class="card-detail__inline-cta"
+            @click="trackEvent('card_inline_cta', { card_id: card.id })"
+          >
+            <span class="card-detail__inline-cta-text">{{ card.name }} 카드를 찾아보셨다면,</span>
+            <span class="card-detail__inline-cta-action">지금 내 관계는 어떤 카드일까요? →</span>
+          </router-link>
         </div>
       </SectionBlock>
 
@@ -322,6 +334,48 @@ const energyLabel = { positive: '긍정적 에너지', neutral: '중립적 에�
   line-height: 1.8;
   text-align: center;
   letter-spacing: 0.02em;
+}
+
+/* 본문 중간 리딩 진입점 (하단 CTA 보완).
+   박스로 감싸지 않는다. 바로 위 조언 박스와 배경·테두리가 같은 계열이라
+   박스를 쓰면 '읽을거리 두 개'로 읽힌다(2026-08-21 픽셀 실측). 형태 자체를
+   눌리는 버튼으로 분리하고, 액션이 안내문보다 크고 굵도록 위계를 잡는다. */
+.card-detail__inline-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: var(--lt-space-lg);
+  padding: 0 var(--lt-space-md);
+  text-decoration: none;
+  text-align: center;
+}
+
+.card-detail__inline-cta-text {
+  font-size: 0.75rem;
+  color: var(--lt-text-muted);
+  letter-spacing: 0.02em;
+  line-height: 1.6;
+}
+
+.card-detail__inline-cta-action {
+  font-size: 0.86rem;
+  font-weight: 500;
+  color: var(--lt-text);
+  letter-spacing: 0.02em;
+  padding: 12px 22px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  background: var(--lt-btn-primary-bg);
+  border: 1px solid var(--lt-btn-primary-border);
+  border-radius: var(--lt-radius-full);
+  transition: background 200ms ease, border-color 200ms ease;
+}
+
+.card-detail__inline-cta:hover .card-detail__inline-cta-action {
+  background: var(--lt-btn-primary-hover);
+  border-color: var(--lt-btn-primary-hover-border);
 }
 
 /* CTA */

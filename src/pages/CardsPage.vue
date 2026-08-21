@@ -7,6 +7,7 @@ import SectionBlock from '../components/ui/SectionBlock.vue'
 import CardSymbol from '../components/cards/CardSymbol.vue'
 import { getAllCards, getMajorCards, getMinorCards } from '../data/cardDictionary.js'
 import { getCardImage } from '../data/cardImages.js'
+import { trackEvent } from '../utils/gtag.js'
 
 const allCards = getAllCards()
 
@@ -110,6 +111,18 @@ const energyBorder = {
       </button>
     </div>
 
+    <!-- 리딩 진입점. 최상단에 두면 채움 버튼 하나가 수트탭 6개를 합친 것보다
+         커져 이 페이지의 탐색 도구를 눌러버린다(2026-08-21 면적 실측 12,557 vs
+         10,762px²). 필터 아래도 여전히 첫 화면 안이라 도달은 그대로다. -->
+    <router-link
+      to="/reading/mind/"
+      class="cards-cta"
+      @click="trackEvent('cards_hub_cta', { source: 'cards_index' })"
+    >
+      <span class="cards-cta__text">찾는 카드를 봤다면,</span>
+      <span class="cards-cta__action">지금 내 관계는 어떤 카드일까요? →</span>
+    </router-link>
+
     <SectionBlock spacing="sm">
       <div class="cards-grid">
         <router-link
@@ -167,6 +180,38 @@ const energyBorder = {
   font-size: 0.82rem;
   color: var(--lt-text-muted);
   letter-spacing: 0.04em;
+}
+
+/* 리딩 진입점. 채움 버튼을 쓰지 않는다. 이 지면의 주인공은 수트탭·필터이고
+   CTA가 채움을 가지면 유일한 채움 요소가 되어 내비게이션을 눌러버린다. */
+.cards-cta {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 var(--lt-space-md) var(--lt-space-md);
+  text-decoration: none;
+}
+
+.cards-cta__text {
+  font-size: 0.75rem;
+  color: var(--lt-text-muted);
+  letter-spacing: 0.02em;
+}
+
+.cards-cta__action {
+  font-size: 0.8rem;
+  color: var(--lt-accent-2);
+  letter-spacing: 0.02em;
+  transition: opacity 200ms ease;
+}
+
+.cards-cta:hover .cards-cta__action {
+  opacity: 0.75;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 /* ── Suit tabs ── */

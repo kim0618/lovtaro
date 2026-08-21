@@ -5,6 +5,7 @@ import { useHead, SITE_URL, canonicalUrl } from '../composables/useHead.js'
 import AppShell from '../components/common/AppShell.vue'
 import PageContainer from '../components/ui/PageContainer.vue'
 import { getDream, DREAM_CATEGORIES } from '../data/dreams/index.js'
+import { trackEvent } from '../utils/gtag.js'
 
 const route = useRoute()
 const router = useRouter()
@@ -72,14 +73,26 @@ useHead({
 
           <!-- sections -->
           <div class="dream-detail__body">
-            <section
-              v-for="(section, i) in dream.sections"
-              :key="i"
-              class="dream-detail__section"
-            >
-              <h2 v-if="section.heading" class="dream-detail__section-heading">{{ section.heading }}</h2>
-              <div class="dream-detail__section-content" v-html="section.content"></div>
-            </section>
+            <template v-for="(section, i) in dream.sections" :key="i">
+              <section class="dream-detail__section">
+                <h2 v-if="section.heading" class="dream-detail__section-heading">{{ section.heading }}</h2>
+                <div class="dream-detail__section-content" v-html="section.content"></div>
+              </section>
+
+              <!-- 본문 중간 리딩 진입점 (2026-08-21 판별 실험).
+                   기존 CTA는 84% 지점이고 90% 스크롤 도달률이 72%로 전 레이어 1위인데도
+                   리딩 전환은 1.1%에 그친다. 노출 부족인지 의도 불일치인지 가리기 위해
+                   중간에 하나를 더 두고 이벤트명을 분리해 위치별로 측정한다. -->
+              <router-link
+                v-if="i === 0 && dream.relatedReadings && dream.relatedReadings.length"
+                :to="dream.relatedReadings[0].path"
+                class="dream-detail__inline-cta"
+                @click="trackEvent('dream_inline_cta', { slug: dream.slug })"
+              >
+                <span class="dream-detail__inline-cta-text">꿈이 남긴 기분이 아직 선명하다면,</span>
+                <span class="dream-detail__inline-cta-action">지금 내 관계는 어떤 카드일까요? →</span>
+              </router-link>
+            </template>
           </div>
 
           <!-- FAQ -->
@@ -105,7 +118,7 @@ useHead({
                 v-for="reading in dream.relatedReadings"
                 :key="reading.path"
                 class="dream-detail__cta-btn"
-                @click.prevent="router.push(reading.path)"
+                @click.prevent="trackEvent('dream_bottom_cta', { slug: dream.slug }); router.push(reading.path)"
                 :href="reading.path"
               >{{ reading.label }}</a>
             </div>
@@ -363,6 +376,44 @@ useHead({
   line-height: 1.8;
   margin: 0;
   letter-spacing: 0.01em;
+}
+
+/* 본문 중간 리딩 진입점 (판별 실험). 카드 상세와 같은 패턴으로 맞춘다. */
+.dream-detail__inline-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin: var(--lt-space-lg) 0;
+  text-decoration: none;
+  text-align: center;
+}
+
+.dream-detail__inline-cta-text {
+  font-size: 0.75rem;
+  color: var(--lt-text-muted);
+  letter-spacing: 0.02em;
+  line-height: 1.6;
+}
+
+.dream-detail__inline-cta-action {
+  font-size: 0.86rem;
+  font-weight: 500;
+  color: var(--lt-text);
+  letter-spacing: 0.02em;
+  padding: 12px 22px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  background: var(--lt-btn-primary-bg);
+  border: 1px solid var(--lt-btn-primary-border);
+  border-radius: var(--lt-radius-full);
+  transition: background 200ms ease, border-color 200ms ease;
+}
+
+.dream-detail__inline-cta:hover .dream-detail__inline-cta-action {
+  background: var(--lt-btn-primary-hover);
+  border-color: var(--lt-btn-primary-hover-border);
 }
 
 /* CTA */
