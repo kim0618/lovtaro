@@ -52,3 +52,23 @@ export function formatPrice(won) {
 
 /** 홈·링크페이지의 짧은 안내 문구. "9,000원부터" */
 export const PRICE_FROM = `${LOW_PRICE.toLocaleString('ko-KR')}원부터`
+
+/**
+ * 전자책 ③ 「그 사람 마음 사전」 (2026-08-21 승인·라이브).
+ *
+ * KMONG_SERVICES와 분리해 둔다. 위 배열은 1:1 리딩 상품 목록이고 프리미엄 페이지의
+ * 가격표·AggregateOffer(LOW_PRICE~HIGH_PRICE)를 만드는 데 쓰인다. 자동발송 파일 상품인
+ * 전자책을 거기 섞으면 리딩 최저가가 15,000이 아닌데도 offerCount와 가격대가 흔들린다.
+ */
+export const KMONG_EBOOK = {
+  id: 'ebook',
+  label: '그 사람 마음 사전',
+  url: 'https://kmong.com/gig/805211',
+  price: 15000,
+  pages: 86,
+  /** 78장 × 관계상태 4가지 */
+  entries: 312,
+  active: true,
+}
+
+export const EBOOK_PRICE = formatPrice(KMONG_EBOOK.price)

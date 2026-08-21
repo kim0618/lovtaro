@@ -17,6 +17,8 @@ import { execFileSync } from 'child_process'
 import { fileURLToPath } from 'url'
 import { getCardSeoOverride } from '../src/data/cardSeoOverrides.js'
 import { TESTS } from '../src/data/tests/index.js'
+import { KMONG_EBOOK, EBOOK_PRICE } from '../src/data/kmong.js'
+import { topic } from '../src/utils/josa.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const DIST = path.resolve(__dirname, '../dist')
@@ -3455,7 +3457,11 @@ function buildCardBodyHtml(card) {
   // CardDetailPage.vue의 리딩 CTA와 동일 - 크롤러가 카드→무료리딩 내부 링크를 보도록
   const cta = `<div class="card-detail__cta"><p class="card-detail__cta-text">이 카드가 지금 내 연애에선 어떤 의미일까요?</p><div class="card-detail__cta-links"><a href="/reading/love/" class="card-detail__cta-btn">러브타로</a><a href="/reading/mind/" class="card-detail__cta-btn">상대방 속마음</a><a href="/reading/contact/" class="card-detail__cta-btn">연락 올까</a><a href="/reading/reunion/" class="card-detail__cta-btn">재회 가능성</a></div></div>`
 
-  return `<div class="card-detail">${hero}${section('정방향', 'upright', card.upright)}${section('역방향', 'reversed', card.reversed)}${cta}</div>`
+  // EbookCta.vue와 동일 - 크롤러가 카드->전자책 판매 경로를 보도록. 문구가 갈라지면
+  // 프리렌더 본문과 하이드레이션 결과가 어긋나므로 한쪽만 고치지 말 것.
+  const ebook = `<a href="${KMONG_EBOOK.url}" target="_blank" rel="noopener" class="ebook-cta"><span class="ebook-cta__label">전자책 · ${escapeHtml(KMONG_EBOOK.label)}</span><span class="ebook-cta__title">${escapeHtml(topic(card.name))} 솔로 · 썸 · 연애 중 · 이별 후에 각각 다르게 읽혀요</span><span class="ebook-cta__desc">이 페이지는 카드 한 장이 가진 뜻이에요. 책에는 78장을 네 가지 관계 상태로 나눠 읽은 ${KMONG_EBOOK.entries}가지 해석을 한 권에 모았어요. 카드를 뽑을 때마다 찾아보는 사전으로 만들었어요.</span><span class="ebook-cta__foot"><span class="ebook-cta__meta">PDF ${KMONG_EBOOK.pages}페이지 · ${EBOOK_PRICE}</span></span></a>`
+
+  return `<div class="card-detail">${hero}${section('정방향', 'upright', card.upright)}${section('역방향', 'reversed', card.reversed)}${ebook}${cta}</div>`
 }
 
 function buildReadingMain(route) {

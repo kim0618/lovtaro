@@ -85,9 +85,10 @@ trackEvent('reading_complete', {
 | `mini_copy_link` | `reading_type` | MiniShareBar |
 | `streak_badge_save` | `streak` | [StreakBadge.vue](../../src/components/result/StreakBadge.vue) |
 | `link_page_click` | `label`, `to` | [LinkPage.vue](../../src/pages/LinkPage.vue). `label`에 `kakao_openchat` 추가(2026-07-30) |
-| `cta_click` | `cta_id`, `destination`, `reading_type?`, `location?`, `service?` | 주요 CTA. `cta_id`: `premium_result`(무료리딩→프리미엄), `test_to_reading`(테스트 결과→무료리딩), `premium_kmong`(프리미엄→크몽 주문, `location`=`hero`/`packages`/`final`, `service`=`love`/`reunion`), `premium_see_packages`(리딩 종류 보기→패키지 섹션 스크롤, 서비스 2개 이상일 때만 노출), `premium_copy_template`(사연양식 복사), `contact_kakao`(문의 페이지→카카오 오픈채팅) |
+| `cta_click` | `cta_id`, `destination`, `reading_type?`, `location?`, `service?` | 주요 CTA. `cta_id`: `premium_result`(무료리딩→프리미엄), `test_to_reading`(테스트 결과→무료리딩), `premium_kmong`(프리미엄→크몽 주문, `location`=`hero`/`packages`/`final`, `service`=`love`/`reunion`), `premium_see_packages`(리딩 종류 보기→패키지 섹션 스크롤, 서비스 2개 이상일 때만 노출), `premium_copy_template`(사연양식 복사), `contact_kakao`(문의 페이지→카카오 오픈채팅), `ebook_kmong`(카드상세→크몽 전자책 #805211, `location`=`card_detail`, `card_id`=카드 id) |
 
 - `premium_kakao`는 2026-07-29 결제 채널을 크몽으로 옮기며 발생 중단. 과거 데이터 조회 시에만 사용
+- `ebook_kmong`도 같은 구조다(2026-08-21 신설, `components/common/EbookCta.vue`). 앵커가 이동하고 `trackEvent`는 이벤트만 쏘므로 자동 `click`의 `linkUrl = kmong.com/gig/805211`로 전자책 이탈을 센다. **리딩(796050·796377)과 URL이 달라 등록 없이도 리딩/전자책 구분이 된다**
 - `premium_kmong`은 **2026-08-11부터 앵커 클릭**이다. `trackKmongClick()`이 `cta_click`만 쏘고 이동은 `<a href>`가 하므로, GA4 자동 `click` 이벤트(`linkUrl = kmong.com/gig/796050|796377`)가 함께 발생한다. **크몽 이탈 수는 이 자동 click으로 센다**(등록 불필요). `cta_id`가 등록되면 `location`별 분해까지 가능해진다
 
 ### 심리테스트 (TestPage.vue)

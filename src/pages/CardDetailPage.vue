@@ -7,6 +7,7 @@ import PageContainer from '../components/ui/PageContainer.vue'
 import SectionBlock from '../components/ui/SectionBlock.vue'
 import OtherReadingsNav from '../components/common/OtherReadingsNav.vue'
 import CardSymbol from '../components/cards/CardSymbol.vue'
+import EbookCta from '../components/common/EbookCta.vue'
 import { getCardDetail } from '../data/cardDictionary.js'
 import { getCardImage } from '../data/cardImages.js'
 import { getCardSeoOverride } from '../data/cardSeoOverrides.js'
@@ -109,6 +110,14 @@ const energyLabel = { positive: '긍정적 에너지', neutral: '중립적 에�
             <p>{{ card.reversed.advice }}</p>
           </div>
         </div>
+      </SectionBlock>
+
+      <!-- 전자책 CTA를 무료 리딩 CTA보다 위에 둔다. 아래 4버튼은 같은 탭 이동이라
+           누르는 순간 이 페이지를 떠나지만, 전자책은 새 탭이라 사람을 뺏지 않는다.
+           뺏지 않는 CTA를 먼저 보여야 둘 다 산다. 정/역방향을 다 읽고도 "내 상황"이
+           안 나온 지점이 책의 소구가 가장 선명한 자리이기도 하다. -->
+      <SectionBlock spacing="md">
+        <EbookCta :card-name="card.name" :card-id="card.id" location="card_detail" />
       </SectionBlock>
 
       <!-- 리딩 CTA -->
