@@ -15,7 +15,7 @@ import { fileURLToPath } from 'url'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const rootDir = resolve(__dirname, '..')
 const cardsDir = resolve(rootDir, 'public/images/cards-png')
-const outputDir = resolve(rootDir, 'content-output/2026-04-25_sat/carousel')
+const outputDir = resolve(rootDir, 'content-output/2026-08-29_sat/carousel')
 
 const W = 1080, H = 1350
 
@@ -59,7 +59,7 @@ async function slide01() {
   const cW = 750, cH = 940
   const cardTop = 80
   const cardLeft = (W - cW) / 2
-  const img = await loadCard('sun', cW, cH)
+  const img = await loadCard('strength', cW, cH)
   const masked = img ? await roundImg(img, cW, cH, 20) : null
   const stars = generateStars(10, 50, 1030, 30, 70)
 
@@ -99,9 +99,9 @@ async function slide01() {
       </linearGradient>
     </defs>
     <rect x="0" y="850" width="${W}" height="500" fill="url(#bf)"/>
-    <text x="540" y="1085" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="44" font-weight="300" fill="#F4F8FF" text-anchor="middle">이별 후에도</text>
-    <text x="540" y="1145" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="44" font-weight="300" fill="#F4F8FF" text-anchor="middle">다시 사랑받는 사람의</text>
-    <text x="540" y="1205" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="44" font-weight="300" fill="#F4F8FF" text-anchor="middle">3가지 특징</text>
+    <text x="540" y="1085" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="44" font-weight="300" fill="#F4F8FF" text-anchor="middle">먼저 연락해도 될지</text>
+    <text x="540" y="1145" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="44" font-weight="300" fill="#F4F8FF" text-anchor="middle">망설여질 때</text>
+    <text x="540" y="1205" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="44" font-weight="300" fill="#F4F8FF" text-anchor="middle">짚어봐야 할 3가지</text>
     <text x="540" y="1310" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="22" fill="rgba(180,170,220,0.45)" text-anchor="middle">스와이프해서 확인하세요 →</text>
     </svg>`
     base = await sharp(base).composite([{ input: Buffer.from(overlay), left: 0, top: 0 }]).png().toBuffer()
@@ -181,7 +181,7 @@ async function slide05() {
   const cW = 500, cH = 670
   const cardTop = 150
   const cardLeft = (W - cW) / 2
-  const img = await loadCard('sun', cW, cH)
+  const img = await loadCard('strength', cW, cH)
   let masked = null
   if (img) {
     const m = await roundImg(img, cW, cH, 18)
@@ -241,24 +241,24 @@ async function slide05() {
 }
 
 async function main() {
-  console.log('=== 2026-04-25 carousel 이미지 생성 ===')
+  console.log('=== 2026-08-29 carousel 이미지 생성 (Strength) ===')
   mkdirSync(outputDir, { recursive: true })
 
   await slide01()
 
-  await contentSlide('queen-of-cups',
-    'Queen of Cups', '감정이 따뜻한 사람',
-    '감정을 누르지 않고\n따뜻하게 받아주는 사람이에요\n\n자기 마음도 상대 마음도\n다정하게 안아줄 줄 알아요\n\n키워드: 공감 · 다정함 · 감정의 깊이',
+  await contentSlide('two-of-wands',
+    'Two of Wands', '지금 내가 어디 서 있는지',
+    '연락하고 싶은 마음보다 먼저\n지금 우리가 어디쯤인지 봐요\n\n같은 문장도 사이에 따라\n반가움도 부담도 될 수 있어요\n\n키워드: 계획 · 가능성 · 더 넓은 세계',
     1, 'slide02.png')
 
-  await contentSlide('ace-of-pentacles',
-    'Ace of Pentacles', '안정감을 주는 사람',
-    '곁에 있으면 마음이 단단해지는 사람\n감정이 튀지 않고 꾸준해요\n\n자극보다 신뢰를 쌓는 관계를\n만들 줄 아는 사람이에요\n\n키워드: 안정 · 신뢰 · 꾸준함',
+  await contentSlide('page-of-pentacles',
+    'Page of Pentacles', '작게 열어두면 충분해요',
+    '답을 요구하는 연락일수록\n상대는 대답할 자리를 잃어요\n\n가볍게 건네는 한 줄이\n다음을 남겨두는 방법이 돼요\n\n키워드: 탐구 · 배움 · 새로운 기회',
     2, 'slide03.png')
 
-  await contentSlide('star',
-    'The Star', '희망을 잃지 않는 사람',
-    '상처 속에서도\n자신을 믿는 빛을 잃지 않아요\n\n이 빛은 타인에게도 전해지고\n자연스럽게 사랑을 끌어와요\n\n키워드: 희망 · 자기 믿음 · 회복력',
+  await contentSlide('six-of-pentacles',
+    'Six of Pentacles', '주고받는 자리가 맞는지',
+    '늘 내가 먼저 건네는 쪽이라면\n연락보다 균형을 먼저 봐요\n\n한쪽만 계속 내미는 손은\n오래 버티기 어려워져요\n\n키워드: 나눔 · 균형 잡힌 관계 · 베풂',
     3, 'slide04.png')
 
   await slide05()

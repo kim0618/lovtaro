@@ -17,7 +17,7 @@ import { colorCardBackSvg, colorCardBackDefs, CARD_WIDTH, CARD_HEIGHT, pickRando
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const rootDir = resolve(__dirname, '..')
-const outputDir = resolve(rootDir, 'content-output/2026-04-21_tue/shortform')
+const outputDir = resolve(rootDir, 'content-output/2026-08-27_thu/insta')
 const W = 1080, H = 1920
 
 function mulberry32(seed) {
@@ -159,14 +159,14 @@ async function generateScene01() {
       ${cosmicDefs()}
       ${colorCardBackDefs()}
     </defs>
-    ${participationBody(3)}
+    ${participationBody(934)}
 
     <!-- Card area subtle glow -->
     <ellipse cx="540" cy="${cardY}" rx="500" ry="380" fill="url(#cardAreaGlow)" filter="url(#glowBlur)"/>
 
     <g filter="url(#softGlow)">
-      <text x="540" y="380" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="48" fill="#F4F8FF" letter-spacing="3" font-weight="300">그 사람 마음 속에서</text>
-      <text x="540" y="455" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="48" fill="#F4F8FF" letter-spacing="3" font-weight="300">나는 어떤 존재일까?</text>
+      <text x="540" y="380" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="52" fill="#F4F8FF" letter-spacing="3" font-weight="300">계속될까,</text>
+      <text x="540" y="455" text-anchor="middle" font-family="'Noto Sans KR','Apple SD Gothic Neo',NanumSquare,sans-serif" font-size="52" fill="#F4F8FF" letter-spacing="3" font-weight="300">여기까지일까?</text>
     </g>
 
     <!-- 카드별 배경 글로우 (랜덤 픽된 scheme) -->
@@ -209,7 +209,7 @@ async function generateScene02() {
         <stop offset="100%" stop-color="#c9a84c" stop-opacity="0"/>
       </linearGradient>
     </defs>
-    ${fullCosmicBody(7)}
+    ${fullCosmicBody(19)}
 
     <!-- Decorative divider lines -->
     <line x1="240" y1="820" x2="840" y2="820" stroke="#e8d48b" stroke-width="2" opacity="0.8"/>
@@ -238,7 +238,7 @@ async function generateScene02() {
 }
 
 async function main() {
-  console.log('=== 2026-04-21 참여형 shortform 이미지 생성 (코스믹 감성) ===')
+  console.log('=== 2026-08-27 참여형 shortform ===')
   await generateScene01()
   await generateScene02()
   console.log('완료!')

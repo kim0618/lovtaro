@@ -70,11 +70,18 @@ function takeQuestion(slug, items, lines, date) {
 function readCards() { try { return JSON.parse(readFileSync(CFILE, 'utf8')) } catch { return { used: [] } } }
 // 그룹: minor는 슈트(같은 슈트끼리 그림 비슷해 회피), major는 각자 고유(서로 충돌 안 함)
 const cardGroup = (slug) => MAJORS.has(slug) ? slug : slug.split('-of-')[1]
+// --block=slug1,slug2 : 최근 릴스/캐러셀/Sunday에서 앞면으로 노출된 카드를 스토리 픽에서 제외.
+// 78장 사이클(state.used)만으로는 "이번 주 콘텐츠와 겹치는가"를 못 걸러서 필요하다.
+// 차단 후 남는 풀이 2장 미만이면 차단을 무시한다(사이클이 먼저).
+const BLOCKED = (process.argv.find(a => a.startsWith('--block=')) || '').replace('--block=', '')
+  .split(',').map(s => s.trim()).filter(Boolean)
 function take2Cards(state) {
   const picked = []
   for (let k = 0; k < 2; k++) {
     let avail = ALL_CARDS.filter(s => !state.used.includes(s) && !picked.includes(s))
     if (avail.length === 0) { state.used = picked.slice(); avail = ALL_CARDS.filter(s => !picked.includes(s)) } // 한바퀴 끝 → 리셋
+    const unblocked = avail.filter(s => !BLOCKED.includes(s))
+    if (unblocked.length >= 1) avail = unblocked
     if (k === 1) { const diff = avail.filter(s => cardGroup(s) !== cardGroup(picked[0])); if (diff.length) avail = diff } // 같은 슈트 회피
     const c = pick(avail); picked.push(c); state.used.push(c)
   }
