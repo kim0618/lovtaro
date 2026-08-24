@@ -9,6 +9,8 @@ import {
   HIGH_PRICE,
   OFFER_COUNT,
   PRICE_FROM,
+  KMONG_EBOOK,
+  EBOOK_PRICE,
 } from '../data/kmong.js'
 import AppShell from '../components/common/AppShell.vue'
 import PageContainer from '../components/ui/PageContainer.vue'
@@ -143,6 +145,17 @@ function trackKmongClick(service, location) {
     service: service.id,
   })
 }
+
+/* 전자책은 KMONG_SERVICES가 아니라 KMONG_EBOOK에서 온다. 위 가격표·AggregateOffer는
+   1:1 리딩만 집계해야 하므로(섞으면 리딩 최저가가 15,000원으로 잘못 잡힌다) 섹션도
+   따로 렌더하고 이벤트도 service가 아닌 별도 cta_id로 쏜다. */
+function trackEbookClick(location) {
+  trackEvent('cta_click', {
+    cta_id: 'ebook_premium',
+    destination: 'kmong',
+    location: location || 'unknown',
+  })
+}
 </script>
 
 <template>
@@ -253,6 +266,51 @@ function trackKmongClick(service, location) {
         </div>
 
         <p class="service-note">결제와 전달은 크몽에서 진행돼요. 카드 결제와 안전 거래를 이용하실 수 있어요.</p>
+      </SectionBlock>
+
+      <!-- ── 전자책 (다른 형태의 대안) ──────────────── -->
+      <!-- 위 가격표를 보고 주문까지 가지 않은 사람이 바로 다음에 만나야 하는 블록.
+           여기 없으면 이 페이지는 "돈 낼 의향을 이미 표시한 사람"에게 대안을 하나도
+           주지 못하고 끝난다.
+           ⚠ 이건 "더 싼 것"이 아니다. 미니 3장 리딩이 9,000원이라 전자책 15,000원이
+           오히려 비싸다. 파는 축은 가격이 아니라 형태다(사연 쓰기·회신 대기 없음,
+           한 번 사서 계속 찾아보는 사전). 문구에서 싸다는 인상을 주면 안 된다.
+           리딩보다 눈에 덜 띄는 낮은 티어로 둔다. -->
+      <SectionBlock v-if="KMONG_EBOOK.active" spacing="md">
+        <h2 class="section-title">사연을 쓰기보다 직접 찾아보고 싶다면</h2>
+        <p class="section-sub">한 번 사서 계속 펼쳐보는 전자책도 있어요</p>
+        <div class="ebook-alt">
+          <p class="ebook-alt__label">전자책 · 그 사람 마음 사전</p>
+          <p class="ebook-alt__body">
+            편지는 보내주신 사연을 읽고 한 통을 씁니다.<br>
+            전자책은 78장을 솔로 · 썸 · 연애 중 · 이별 후 네 가지 관계 상태로 나눠 읽은
+            {{ KMONG_EBOOK.entries }}가지 해석을 한 권에 모은 사전이에요.<br>
+            카드를 뽑을 때마다 직접 펼쳐 찾아보는 쪽입니다.
+          </p>
+          <dl class="ebook-alt__spec">
+            <div class="ebook-alt__row">
+              <dt>분량</dt>
+              <dd>PDF {{ KMONG_EBOOK.pages }}페이지</dd>
+            </div>
+            <div class="ebook-alt__row">
+              <dt>전달</dt>
+              <dd>결제 후 자동 발송 · 회신 대기 없음</dd>
+            </div>
+            <div class="ebook-alt__row">
+              <dt>가격</dt>
+              <dd>{{ EBOOK_PRICE }}</dd>
+            </div>
+          </dl>
+          <a
+            class="ebook-alt__btn"
+            :href="KMONG_EBOOK.url"
+            target="_blank"
+            rel="noopener"
+            @click="trackEbookClick('premium_alt')"
+          >
+            전자책 보러 가기
+          </a>
+        </div>
       </SectionBlock>
 
       <!-- ── 편지에 담기는 것 ─────────────────────────── -->
@@ -719,6 +777,85 @@ function trackKmongClick(service, location) {
   margin: var(--lt-space-md) 0 0;
 }
 
+/* ── 전자책 대안 ──────────────────────────────────── */
+/* 컨테이너는 .service-card와 동일하게 맞춘다(테두리 0.18 · radius-md · shadow-card ·
+   공용 박스 배경 규칙 등재). 처음엔 "조용하게" 하려고 배경을 panel-2 단색으로 두고
+   테두리를 0.12로 낮췄는데, 이 페이지의 다른 박스는 전부 공용 그라디언트라서 혼자
+   불투명 단색이 되며 오히려 더 도드라졌다(2026-08-24 렌더 실측).
+   낮은 티어라는 신호는 박스가 아니라 버튼 하나로만 준다: service-card__btn은 파란
+   채움인데 여기는 외곽선. */
+.ebook-alt {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lt-space-xs);
+  padding: var(--lt-space-md);
+  border: 1px solid rgba(200, 169, 110, 0.18);
+  border-radius: var(--lt-radius-md);
+  box-shadow: var(--lt-shadow-card);
+}
+
+.ebook-alt__label {
+  font-size: 0.6rem;
+  letter-spacing: 0.16em;
+  color: rgba(200, 169, 110, 0.75);
+  margin: 0;
+}
+
+.ebook-alt__body {
+  font-size: 0.82rem;
+  line-height: 1.7;
+  color: var(--lt-text-muted);
+  word-break: keep-all;
+  margin: 0;
+}
+
+.ebook-alt__spec {
+  margin: var(--lt-space-xs) 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ebook-alt__row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--lt-space-sm);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.ebook-alt__row dt {
+  flex-shrink: 0;
+  width: 3.2em;
+  color: rgba(200, 169, 110, 0.7);
+  letter-spacing: 0.04em;
+}
+
+.ebook-alt__row dd {
+  margin: 0;
+  color: var(--lt-text-muted);
+}
+
+.ebook-alt__btn {
+  display: block;
+  margin-top: var(--lt-space-sm);
+  padding: 11px var(--lt-space-md);
+  text-align: center;
+  text-decoration: none;
+  font-size: 0.84rem;
+  letter-spacing: 0.04em;
+  color: rgba(200, 169, 110, 0.95);
+  border: 1px solid rgba(200, 169, 110, 0.32);
+  border-radius: var(--lt-radius-md);
+  background: transparent;
+  transition: border-color var(--lt-transition), color var(--lt-transition);
+}
+
+.ebook-alt__btn:hover {
+  border-color: rgba(200, 169, 110, 0.55);
+  color: var(--lt-text-strong);
+}
+
 /* ── Deliverables ─────────────────────────────────── */
 .deliver-card {
   background: var(--lt-panel-2);
@@ -1026,6 +1163,7 @@ function trackKmongClick(service, location) {
 .service-card,
 .deliver-card,
 .apply-box,
+.ebook-alt,
 .final-cta,
 .notice-block {
   background: linear-gradient(180deg, #0A1020 0%, #05070D 100%);

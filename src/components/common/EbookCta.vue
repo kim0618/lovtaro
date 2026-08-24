@@ -111,6 +111,7 @@ function trackClick() {
   font-size: 0.82rem;
   line-height: 1.6;
   color: var(--lt-text-muted);
+  word-break: keep-all;
   margin-top: 2px;
 }
 
