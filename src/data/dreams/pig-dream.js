@@ -87,5 +87,6 @@ export default {
     { slug: 'snake', label: '뱀 꿈' },
     { slug: 'chase-dream', label: '쫓기는 꿈' },
     { slug: 'dragon-dream', label: '용꿈' },
+    { slug: 'money-dream', label: '돈 꿈' },
   ],
 }

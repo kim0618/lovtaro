@@ -87,5 +87,6 @@ export default {
     { slug: 'shoes-dream', label: '신발 꿈' },
     { slug: 'makeup-dream', label: '화장하는 꿈' },
     { slug: 'clothes-dream', label: '옷 입는 꿈' },
+    { slug: 'money-dream', label: '돈 꿈' },
   ],
 }
