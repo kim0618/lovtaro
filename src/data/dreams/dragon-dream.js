@@ -83,6 +83,7 @@ export default {
   ],
   relatedDreams: [
     { slug: 'pig-dream', label: '돼지 꿈' },
+    { slug: 'tiger-dream', label: '호랑이 꿈' },
     { slug: 'snake', label: '뱀 꿈' },
     { slug: 'pregnancy', label: '임신 꿈 / 태몽' },
   ],
