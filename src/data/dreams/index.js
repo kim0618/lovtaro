@@ -9,6 +9,7 @@
  * 전통 해몽(근거) 위에 러브타로의 연애 각도(브랜드)를 얹고, 가능성의 언어로 쓴다.
  */
 
+import eggDream from './egg-dream.js'
 import tigerDream from './tiger-dream.js'
 import moneyDream from './money-dream.js'
 import dragonDream from './dragon-dream.js'
@@ -89,6 +90,7 @@ import stairsDream from './stairs-dream.js'
 import militaryDream from './military-dream.js'
 
 const dreams = [
+  eggDream,
   tigerDream,
   moneyDream,
   dragonDream,
