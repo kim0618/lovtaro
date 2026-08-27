@@ -83,5 +83,6 @@ export default {
   relatedDreams: [
     { slug: 'house-dream', label: '집 꿈' },
     { slug: 'ring-dream', label: '반지 꿈' },
+    { slug: 'wallet-dream', label: '지갑 꿈' },
   ],
 }
