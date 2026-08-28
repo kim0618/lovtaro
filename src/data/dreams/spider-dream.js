@@ -85,6 +85,7 @@ export default {
   ],
   relatedDreams: [
     { slug: 'snake', label: '뱀 꿈' },
+    { slug: 'insect-dream', label: '벌레 꿈' },
     { slug: 'jealousy-dream', label: '질투하는 꿈' },
   ],
 }

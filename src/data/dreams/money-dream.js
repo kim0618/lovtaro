@@ -84,5 +84,6 @@ export default {
     { slug: 'pig-dream', label: '돼지 꿈' },
     { slug: 'gift-dream', label: '선물 받는 꿈' },
     { slug: 'wallet-dream', label: '지갑 꿈' },
+    { slug: 'insect-dream', label: '벌레 꿈' },
   ],
 }
