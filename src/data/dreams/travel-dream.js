@@ -85,5 +85,6 @@ export default {
     { slug: 'bridge-dream', label: '다리 건너는 꿈' },
     { slug: 'driving-dream', label: '운전하는 꿈' },
     { slug: 'lost-way-dream', label: '길 잃는 꿈' },
+    { slug: 'missed-bus-dream', label: '버스 놓치는 꿈' },
   ],
 }
