@@ -1,5 +1,8 @@
 /**
- * 인스타 고정 게시물용 상품 안내 캐러셀 (7장, 1080×1350)
+ * 인스타 고정 게시물용 1:1 리딩 안내 캐러셀 (6장, 1080×1350)
+ *
+ * 프로필 고정 3칸 중 2번 칸. 1번 칸은 전자책(generate-carousel-ebook.mjs)이고
+ * 액자·타입 위계·색 토큰을 공유한다. 수치를 바꾸려면 양쪽을 같이 볼 것.
  *
  * ⚠️ 주간 콘텐츠 캐러셀(generate-carousel-{date}.mjs)과 의도적으로 다른 포맷이다.
  * 주간물은 "풀배경 + 중앙정렬"이 확정안이지만, 이건 프로필에 상시 걸리는 상품
@@ -30,8 +33,14 @@
  * 폰트는 premium/template/fonts 의 woff2 를 ttf 로 변환해 ~/.local/share/fonts/lovtaro
  * 에 설치해야 렌더된다(없으면 Georgia 로 조용히 폴백한다).
  *
- * 가격 출처: kmong.com/gig/796050 실제 등록가 확인(2026-07-30).
- * 재회 서비스는 심사 중(active:false)이라 제외. 가격 바뀌면 PACKAGES 만 고치고 재실행.
+ * 가격 출처: src/data/kmong.js 의 KMONG_SERVICES (연애 #796050 · 재회 #796377).
+ * 저쪽이 단일 소스이므로 가격이 바뀌면 kmong.js 를 먼저 고치고 여기 SERVICES 를 맞춘다.
+ *
+ * ⚠️ 2026-08-31 개편: 재회 서비스를 추가했다. 초판(7/31)은 재회가 심사 중(active:false)
+ * 이라 연애 3패키지만 실었는데, 재회는 2026-07-30 에 승인돼 kmong.js 가 active:true 로
+ * 바뀌었는데도 캐러셀만 한 달 동안 옛 상태로 남아 6개 중 3개만 걸려 있었다.
+ * 사이트는 이미 2트랙(hasMultiple 분기)인데 인스타만 1트랙이었던 셈이다.
+ * kmong.js 의 active 를 건드릴 때 이 파일도 같이 열 것.
  */
 import sharp from 'sharp'
 import { writeFileSync, mkdirSync } from 'fs'
@@ -194,7 +203,7 @@ async function slide01() {
   await coverSlide({ slug: 'ace-of-cups', filename: 'slide01.png', brightness: 0.94, scrimFrom: 520, body })
 }
 
-async function slide07() {
+async function slide06() {
   const body = `
   <text x="${W / 2}" y="946" font-family="${DISPLAY}" font-size="42" letter-spacing="16" fill="${GOLD}" text-anchor="middle">LOVTARO</text>
   <text x="${W / 2}" y="1002" font-family="${SERIF_KR}" font-size="25" fill="${SUB}" text-anchor="middle">감정의 흐름을 읽는 타로</text>
@@ -207,7 +216,7 @@ async function slide07() {
   // CTA 텍스트가 앉을 자리가 나온다. 의미도 "지금 자리에서 한 걸음 옮긴다" 라 CTA 와 맞다.
   // The Moon 은 달에 사람 얼굴이 크게 들어가고 늑대 머리가 워드마크 자리와 겹쳐서 뺐다.
   // focusX 0.62 = 오른쪽으로 치우친 초승달을 프레임 안으로 끌어온다(가운데면 가장자리에서 잘림)
-  await coverSlide({ slug: 'eight-of-cups', filename: 'slide07.png', brightness: 0.92, scrimFrom: 480, focusX: 0.62, body })
+  await coverSlide({ slug: 'eight-of-cups', filename: 'slide06.png', brightness: 0.92, scrimFrom: 480, focusX: 0.62, body })
 }
 
 // ── 편지 실물: 데모 지면 2장을 제품 사진처럼 겹쳐 배치 ──────────
@@ -263,17 +272,25 @@ async function slide02() {
   <line x1="${X}" y1="406" x2="${XR}" y2="406" stroke="${RULE}" stroke-width="1"/>
   <line x1="${X}" y1="1112" x2="${XR}" y2="1112" stroke="${RULE_FAINT}" stroke-width="1"/>
   <text x="${X}" y="1162" font-family="${SANS_KR}" font-size="24" font-weight="300" fill="${SUB}">표지 · 카드 3장 해석 · 관계의 흐름 · 조언 · 맺음말</text>
-  <text x="${X}" y="1206" font-family="${SANS_KR}" font-size="21" font-weight="300" fill="${MUTED}">정밀 편지 리딩 기준 5페이지 · 이름은 실제 발송본에만 들어갑니다</text>
+  <text x="${X}" y="1206" font-family="${SANS_KR}" font-size="21" font-weight="300" fill="${MUTED}">연애 · 재회 편지 리딩 기준 5페이지 · 이름은 실제 발송본에만 들어갑니다</text>
   ${frame()}
   </svg>`
 
   await write('slide02.png', await compose(withPages, overlay))
 }
 
-// ── 패키지: 상단 아트 밴드 + 하단 스펙 그리드 ──────────────────
+// ── 서비스: 상단 아트 밴드 + 패키지 3행 가격표 ─────────────────
 const BAND = 620
 
-async function packageSlide({ slug, focus, tierEn, nameKo, spec, days, price, pick, featured, index, filename }) {
+/**
+ * 한 장에 서비스 하나(패키지 3개)를 담는다.
+ *
+ * 2026-08-31 개편. 그전에는 패키지 하나가 슬라이드 하나였는데(03·04·05 = 미니·정밀·심층),
+ * 그 구조로는 재회 3패키지를 더하는 순간 슬라이드가 10장이 된다. 그리고 크몽에서
+ * 사람이 고르는 단위는 패키지가 아니라 **서비스**다(연애 gig / 재회 gig 가 별도 상품이고
+ * 패키지는 그 안의 옵션이다). 그래서 서비스 단위로 묶고 가격표를 세로로 세웠다.
+ */
+async function serviceSlide({ slug, focus, tierEn, nameKo, tagline, packages, index, total, filename }) {
   const base = await panelBase()
 
   // 아트는 선명하게 두고 밴드 하단만 패널로 녹인다
@@ -289,50 +306,44 @@ async function packageSlide({ slug, focus, tierEn, nameKo, spec, days, price, pi
     .composite([{ input: Buffer.from(fade), blend: 'dest-in' }]).png().toBuffer()
   const withArt = await sharp(base).composite([{ input: banded, left: 0, top: 0 }]).png().toBuffer()
 
-  const rows = [
-    ['분량', spec],
-    ['작업일', days],
-  ]
-  let ry = 888
-  const rowSvg = rows.map(([k, v]) => {
-    const s = `<text x="${X}" y="${ry}" font-family="${SANS_KR}" font-size="22" font-weight="300" letter-spacing="1" fill="${MUTED}">${esc(k)}</text>
-  <text x="${X + 130}" y="${ry}" font-family="${SANS_KR}" font-size="26" font-weight="300" fill="${TEXT}">${esc(v)}</text>
-  <line x1="${X}" y1="${ry + 26}" x2="${XR}" y2="${ry + 26}" stroke="${RULE_FAINT}" stroke-width="1"/>`
-    ry += 66
-    return s
+  // 3행 × 128px = 890 ~ 1208. 액자 하단(1294) 까지 86px 남는다
+  const ROW = 128
+  const rowSvg = packages.map((p, i) => {
+    const y = 890 + i * ROW
+    const mark = p.featured
+      ? `<text x="${X + nameWidth(p.name) + 22}" y="${y}" font-family="${SANS_KR}" font-size="20" font-weight="300" letter-spacing="2" fill="${GOLD}">· 대표</text>`
+      : ''
+    return `
+  <text x="${X}" y="${y}" font-family="${SANS_KR}" font-size="27" font-weight="300" fill="${TEXT}">${esc(p.name)}</text>
+  ${mark}
+  <text x="${X}" y="${y + 38}" font-family="${SANS_KR}" font-size="21" font-weight="300" fill="${MUTED}">${esc(p.spec)}</text>
+  <text x="${XR}" y="${y + 10}" font-family="${SERIF_KR}" font-size="36" fill="${GOLD}" text-anchor="end">${esc(p.price)}</text>
+  <line x1="${X}" y1="${y + 64}" x2="${XR}" y2="${y + 64}" stroke="${RULE_FAINT}" stroke-width="1"/>`
   }).join('\n  ')
 
-  const priceY = ry + 34
-  const badge = featured
-    ? `<rect x="${XR - 176}" y="694" width="176" height="42" rx="21" fill="none" stroke="${GOLD_DIM}" stroke-width="1"/>
-       <text x="${XR - 88}" y="722" font-family="${SANS_KR}" font-size="21" font-weight="300" letter-spacing="3" fill="${GOLD}" text-anchor="middle">대표 패키지</text>`
-    : ''
-
-  const pickSvg = pick.split('\n').map((l, i) =>
-    `<text x="${X}" y="${priceY + 118 + i * 42}" font-family="${SANS_KR}" font-size="25" font-weight="300" fill="${SUB}">${esc(l)}</text>`
-  ).join('\n  ')
-
   const overlay = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
-  <text x="${XR}" y="1264" font-family="${DISPLAY}" font-size="21" letter-spacing="3" fill="${GOLD_DIM}" text-anchor="end">0${index} / 03</text>
-  <text x="${X}" y="722" font-family="${LABEL}" font-size="30" font-style="italic" letter-spacing="4" fill="${GOLD}">${esc(tierEn)}</text>
-  ${badge}
-  <text x="${X}" y="792" font-family="${SERIF_KR}" font-size="46" fill="${TEXT}">${esc(nameKo)}</text>
-  <line x1="${X}" y1="${838}" x2="${XR}" y2="${838}" stroke="${RULE}" stroke-width="1"/>
+  <text x="${XR}" y="1272" font-family="${DISPLAY}" font-size="21" letter-spacing="3" fill="${GOLD_DIM}" text-anchor="end">0${index} / 0${total}</text>
+  <text x="${X}" y="700" font-family="${LABEL}" font-size="30" font-style="italic" letter-spacing="4" fill="${GOLD}">${esc(tierEn)}</text>
+  <text x="${X}" y="768" font-family="${SERIF_KR}" font-size="46" fill="${TEXT}">${esc(nameKo)}</text>
+  <text x="${X}" y="810" font-family="${SANS_KR}" font-size="23" font-weight="300" fill="${SUB}">${esc(tagline)}</text>
+  <line x1="${X}" y1="846" x2="${XR}" y2="846" stroke="${RULE}" stroke-width="1"/>
   ${rowSvg}
-  <text x="${X}" y="${priceY}" font-family="${SANS_KR}" font-size="22" font-weight="300" letter-spacing="1" fill="${MUTED}">가격</text>
-  <text x="${X + 130}" y="${priceY + 8}" font-family="${SERIF_KR}" font-size="46" fill="${GOLD}">${esc(price)}</text>
-  <line x1="${X}" y1="${priceY + 62}" x2="${XR}" y2="${priceY + 62}" stroke="${RULE_FAINT}" stroke-width="1"/>
-  ${pickSvg}
+  <text x="${X}" y="1272" font-family="${SANS_KR}" font-size="21" font-weight="300" fill="${MUTED}">작업일 2일 · 빠른작업 옵션 있어요</text>
   ${frame()}
   </svg>`
 
   await write(filename, await compose(withArt, overlay))
 }
 
+/** "대표" 표식을 패키지명 오른쪽에 붙이려고 쓰는 대략적 글자폭(27px 한글 기준) */
+function nameWidth(s) {
+  return Math.round([...s].reduce((w, ch) => w + (/[ -~]/.test(ch) ? 14 : 27), 0))
+}
+
 // ── 받는 과정 ────────────────────────────────────────────────
 // 아트를 깔지 않는다. 정보 위주 슬라이드라 카드 문양이 텍스트와 싸우고,
 // 표지(풀블리드) → 실물 → 패키지(아트 밴드) → 과정(무지) → 뒷표지 리듬도 생긴다.
-async function slide06() {
+async function slide05() {
   const base = await panelBase(stars(16, 110, 970, 150, 380) + stars(10, 110, 970, 1120, 1270))
 
   const steps = [
@@ -362,37 +373,42 @@ async function slide06() {
   ${frame()}
   </svg>`
 
-  await write('slide06.png', await compose(base, overlay))
+  await write('slide05.png', await compose(base, overlay))
 }
 
-const PACKAGES = [
+const SERVICES = [
   {
-    // 수레바퀴 = 흐름·전환. "방향만 가볍게" 와 맞고 금색이 많아 미니 슬라이드가 안 심심하다
-    // 지평선을 내다보는 구도 = "방향만 가볍게". 가로 카드(1200×630)라 밴드에 거의 딱 맞아
-    // 크롭 손실이 없다. 수레바퀴(세로)는 원형 바퀴와 중심 하트를 620 밴드에 동시에
-    // 담을 수 없어 포기했다. 티어가 깊어질수록 아트도 밝음→깊음으로 가는 순서가 된다
-    slug: 'three-of-wands', focus: 0.5, tierEn: 'MINI', nameKo: '미니 3장 리딩',
-    spec: '카드 3장 · 핵심 요약 3페이지', days: '2일', price: '9,000원',
-    pick: '길게 읽을 여유가 없거나\n방향만 가볍게 보고 싶을 때',
+    // 컵의 2 = 두 사람의 결합. 연애 리딩 전체를 대표하는 그림이고, 인물이 없고
+    // 좌우 대칭(날개 사자 + 카두케우스)이라 가격표 위에 문장처럼 놓인다.
+    // 가로 카드(1200×630)라 620 밴드에 크롭 손실이 없다
+    slug: 'two-of-cups', focus: 0.5,
+    tierEn: 'LOVE', nameKo: '연애 타로 편지 리딩',
+    tagline: '짝사랑 · 썸 · 연애 중의 고민까지',
+    packages: [
+      { name: '미니 3장 리딩', spec: '카드 3장 · 핵심 요약 3페이지', price: '9,000원' },
+      { name: '정밀 편지 리딩', spec: '카드 3장 · 편지 5페이지', price: '29,000원', featured: true },
+      { name: '정밀 편지 + 심층', spec: '편지 6페이지 · 추가 질문 3개', price: '39,000원' },
+    ],
     index: 1, filename: 'slide03.png',
   },
   {
-    // 컵의 2 = 두 사람의 결합. "두 사람 사이의 기류" 와 바로 맞는다.
-    // 인물이 없고(날개 사자 + 카두케우스) 좌우 대칭이라 대표 패키지 자리에 문장처럼 놓인다.
-    // 가로 카드(1200×630)라 밴드 크롭 손실이 없다
-    slug: 'two-of-cups', focus: 0.5, tierEn: 'SIGNATURE', nameKo: '정밀 편지 리딩',
-    spec: '카드 3장 · 편지 5페이지', days: '2일', price: '29,000원', featured: true,
-    pick: '기류와 상대의 마음, 앞으로의 방향까지\n흐름을 제대로 정리하고 싶을 때',
+    // 컵의 6 = 옛집과 창문 불빛. 전통적으로 과거의 인연·돌아감을 뜻해 재회와 바로 맞는다.
+    // 인물 얼굴이 없어 가격표와 시선이 싸우지 않고, 가로 카드라 크롭 손실이 없다.
+    // 컵의 8(뒷표지)과 같은 수트지만 그림이 완전히 달라 중복으로 안 읽힌다
+    slug: 'six-of-cups', focus: 0.5,
+    tierEn: 'REUNION', nameKo: '재회 전문 타로',
+    tagline: '이별 원인부터 재연락 타이밍까지',
+    // ⚠️ 재회 행에는 "카드 3장" 을 쓰지 않는다. 크몽 재회 등록물
+    // (premium/kmong/service-2-reunion.md 25행)이 장수를 약속하지 않기 때문이다.
+    // 실제로는 /kmong-order 가 재회도 카드 3장을 뽑지만, 리스팅에 없는 약속을
+    // 인스타가 먼저 하면 상세와 광고가 어긋난다. 연애 행에 카드 3장이 있는 건
+    // 그쪽 등록물(service-1-love-reading.md 24행)에 그렇게 적혀 있어서다.
+    packages: [
+      { name: '재회 가능성 진단', spec: '재회 가능성 · 상대 마음 3페이지', price: '24,000원' },
+      { name: '재회 로드맵 편지', spec: '로드맵 편지 5페이지', price: '34,000원', featured: true },
+      { name: '로드맵 + 심층 3문', spec: '편지 6페이지 · 추가 질문 3개', price: '44,000원' },
+    ],
     index: 2, filename: 'slide04.png',
-  },
-  {
-    // 달 = 감춰진 마음·무의식. 은자(노인)는 20~30대 여성 연애 톤에서 가장 벗어나 교체했다
-    // 컵의 7 = 여러 개의 잔. "묻고 싶은 게 여러 개 겹쳐 있을 때" 와 문자 그대로 맞고,
-    // 추가 질문 3개라는 스펙과도 이어진다. 가로 카드라 크롭 손실 없음
-    slug: 'seven-of-cups', focus: 0.5, tierEn: 'DEEP', nameKo: '정밀 편지 + 심층',
-    spec: '편지 6페이지 · 추가 질문 3개', days: '2일', price: '39,000원',
-    pick: '따로 묻고 싶은 게 여러 개 겹쳐 있어서\n하나씩 짚어보고 싶을 때',
-    index: 3, filename: 'slide05.png',
   },
 ]
 
@@ -420,14 +436,14 @@ function assertFonts() {
 }
 
 async function main() {
-  console.log('=== 인스타 고정 게시물용 캐러셀 7장 ===')
+  console.log('=== 인스타 고정 게시물용 캐러셀 6장 ===')
   assertFonts()
   mkdirSync(outputDir, { recursive: true })
   await slide01()          // 표지 - 훅
   await slide02()          // 편지 실물
-  for (const p of PACKAGES) await packageSlide(p)  // 03~05 패키지
-  await slide06()          // 받는 과정
-  await slide07()          // 뒷표지 - CTA
+  for (const s of SERVICES) await serviceSlide({ ...s, total: SERVICES.length })  // 03 연애 / 04 재회
+  await slide05()          // 받는 과정
+  await slide06()          // 뒷표지 - CTA
   console.log(`완료 → ${outputDir}`)
 }
 
