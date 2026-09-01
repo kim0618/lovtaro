@@ -36,7 +36,27 @@ content-output/{YYYY-MM-DD_day}/
 > 날짜를 먼저 묻지 말 것. 훅 승인 없이 파일 생성하지 말 것. 유튜브를 인스타보다 먼저 만들지 말 것(유튜브가 인스타 자산을 가져다 씀).
 
 ### 0. 현황 갱신 (가장 먼저)
-- **⚠️ 실행 대장 먼저 Read: `.claude/insta-data/run_log.md`** — PC를 두 대 이상 쓰기 때문에 **다른 PC에서 이미 만든 주차를 또 만드는 사고**가 실제로 발생했다(2026-07-29). 시작 전 `git pull` 후 이 파일 + `git log --oneline -5 -- .claude/insta-data/`로 원격 대조할 것.
+
+- **🔒 0-A. 트래커 동기화 — 무조건 이것부터 실행한다 (2026-09-01 신설, 생략 금지)**
+
+  ```bash
+  cd ~/lovtaro && bash scripts/insta-sync.sh sync
+  ```
+
+  이 한 줄이 하는 일:
+  1. **이 PC에 커밋 안 된 트래커 기록을 먼저 커밋**한다. 지난 실행에서 커밋을 빠뜨렸더라도 원격 병합에 휩쓸려 사라지지 않는다.
+  2. `git fetch` 후 **다른 PC 커밋을 병합**한다. `.claude/insta-data/.gitattributes`의 `merge=union` 규칙 때문에 **양쪽 PC가 추가한 행이 전부 남는다**(예전처럼 한쪽이 통째로 덮이지 않음).
+  3. `story_cards.json`은 1줄 JSON이라 union을 못 쓰므로 **`used` 배열을 합집합으로 직접 병합**한다. 두 PC에서 쓴 카드가 모두 소진 처리돼 재사용 사고가 안 난다.
+  4. **중복 행을 검사해 출력**한다. union의 대가로, 같은 행을 양쪽이 각각 고친 경우(hook_history 도달 수치 갱신이 대표적) 두 판본이 나란히 남는다.
+  5. `run_log.md` 최근 3주차를 출력한다.
+
+  **⚠️ 출력 읽는 법 — 아래 두 경우엔 생성으로 넘어가지 말 것:**
+  - `❌ 자동 병합 안 된 충돌 파일` → 스크립트가 exit 2로 멈춘다. 사용자에게 알리고 **/insta 중단**.
+  - `🚨 ... 중복` → 먼저 정리하고 진행한다. run_log 주차 중복이면 두 행을 **한 행으로 합쳐 쓰고**(양쪽 PC가 만든 슬롯을 비고에 모두 남긴다), hook_history 훅 중복이면 **도달 수치가 큰 행만 남긴다**(슬로우번이라 나중 값이 항상 크다).
+
+  스크립트는 `.claude/insta-data/` 와 `.claude/skill-log.md` **만** stage 한다. 작업 중인 다른 파일은 절대 건드리지 않는다.
+
+- **⚠️ 실행 대장 Read: `.claude/insta-data/run_log.md`** — PC를 두 대 이상 쓰기 때문에 **다른 PC에서 이미 만든 주차를 또 만드는 사고**가 실제로 발생했다(2026-07-29). 위 0-A를 돌린 **뒤에** 이 파일을 읽어야 다른 PC 기록이 반영된 상태다.
   - `content-output/` 폴더 유무는 근거가 안 된다 (gitignore라 PC 간 동기화 안 됨).
   - `~/skill-log.json`(PostToolUse 훅 자동 기록)도 근거가 안 된다. **홈 디렉토리라 PC 간 공유 안 됨 + 스킬 호출만 기록**해서 훅 승인 단계에서 중단해도 기록이 남는다.
   - **생성 여부의 유일한 크로스 PC 근거 = `run_log.md`.** 만들려는 날짜 범위가 이미 대장에 있으면 생성하지 말고 사용자에게 먼저 확인한다.
@@ -45,7 +65,7 @@ content-output/{YYYY-MM-DD_day}/
   - 사용자가 직전 주 콘텐츠의 인스타 인사이트(조회수) 스크린샷을 첨부했으면 `.claude/insta-data/hook_history.md`의 해당 행 도달 수치를 즉시 갱신
   - 도달 등급 변동 시 🥇(1,000+) / 🥈(500-999) / 🥉(<500) 섹션 간 재배치
   - 스크린샷이 없으면 사용자에게 "직전 주 인사이트 스크린샷 있어?"라고 한 번 묻고 진행 (없으면 그대로 진행)
-- **누적 데이터 위치 (2026-06-16 이전: 개인 메모리 → repo로 이전)**: `hook_history`·`card_usage`는 `.claude/insta-data/` (git 추적, PC 간 동기화됨). 시작 전 `git pull`로 최신 누적 확보, 생성 후 두 파일 갱신은 사용자가 commit하면 다른 PC에 반영됨. ⚠️ `content-output/`은 gitignore라 동기화 안 됨 - 누적 추적은 반드시 `.claude/insta-data/`에만.
+- **누적 데이터 위치 (2026-06-16 이전: 개인 메모리 → repo로 이전)**: `hook_history`·`card_usage`는 `.claude/insta-data/` (git 추적, PC 간 동기화됨). 최신 누적 확보는 위 **0-A `insta-sync.sh sync`**가 담당한다(맨손 `git pull` 금지 - union 병합·중복 검사·story_cards 합집합이 빠진다). ⚠️ `content-output/`은 gitignore라 동기화 안 됨 - 누적 추적은 반드시 `.claude/insta-data/`에만.
 
 ### 1. 날짜 확인
 현황 갱신을 마친 뒤 사용자에게 질문해라:
@@ -112,11 +132,16 @@ content-output/{YYYY-MM-DD_day}/
 11. **`.claude/insta-data/card_usage.md` 메모리 업데이트** — 이번 주에 사용한 메이저/마이너 카드(커버+본문+참여 전부) 추가 기록
 12. **`.claude/insta-data/hook_history.md` 메모리 업데이트** — 이번 주에 사용한 모든 훅 추가 기록 (훅 텍스트 + 슬롯 + 카드 + 날짜). 도달 수치는 "미기록"으로 두고 **다음 주 스킬 실행 시 사용자가 보여줄 인사이트로 갱신** (위 0단계 워크플로)
 13. **⚠️ `.claude/insta-data/run_log.md` 실행 대장에 행 추가 (필수, 생략 금지)** — 형식 `| 주차(생성 범위) | 실행일 | PC | 생성 슬롯 | 영상 | 비고 |`. 이 파일이 **다른 PC에서 "이 주차 만들었나?"를 판단하는 유일한 근거**다. 부분 생성·중단도 그대로 적는다(비고에 명시).
-14. **사용자에게 커밋 요청** — `.claude/insta-data/` 4개 파일(run_log·hook_history·card_usage·story_*)은 **커밋·푸시되어야 다른 PC에 반영**된다. 작업 완료 보고 시 아래를 함께 안내:
+14. **🔒 트래커 저장 — 반드시 실행 (2026-09-01 신설, 생략 금지)**
+
     ```bash
-    cd ~/lovtaro && git add .claude/insta-data/ && git commit -m "insta {주차} 트래커" && git push
+    cd ~/lovtaro && bash scripts/insta-sync.sh save "{주차}"    # 예: save "8/31~9/6"
     ```
-    커밋은 사용자가 직접 (git은 사용자 관리 영역). 안내를 빠뜨리면 다음 주 다른 PC에서 중복 생성 사고가 난다.
+
+    11~13번에서 고친 트래커를 커밋하고, **푸시 직전에 원격을 한 번 더 병합**한다(작업하는 사이 다른 PC가 올린 기록이 있으면 그것까지 합쳐진 상태로 저장된다). 중복 검사도 다시 돈다.
+    - stage 범위는 `.claude/insta-data/` + `.claude/skill-log.md` **뿐**이다. 같은 세션에서 만진 다른 파일은 커밋되지 않으므로 안심하고 돌려도 된다.
+    - `🚨 중복`이 뜨면 정리한 뒤 다시 `save`를 돌린다.
+    - **push는 사용자 몫**(git은 사용자 관리 영역). 작업 완료 보고 시 `cd ~/lovtaro && git push`를 **반드시 함께 안내**한다. 커밋만 하고 push를 안 하면 다음 주 다른 PC에서 중복 생성 사고가 그대로 재발한다.
 
 ---
 
@@ -848,7 +873,9 @@ const svg = carouselShortformSlide({
 - [ ] Sunday Preview는 7컷 구조 + 시리즈명 "Sunday Tarot Preview" 포함되었는가
 - [ ] `.claude/insta-data/card_usage.md` 슬롯별로 업데이트했는가 (특히 슬롯 5 메이저 + 5b 마이너)
 - [ ] **`.claude/insta-data/run_log.md`에 이번 주차 행을 추가했는가** (PC 간 중복 생성 방지의 유일한 근거)
-- [ ] **사용자에게 `.claude/insta-data/` 커밋·푸시를 안내했는가**
+- [ ] **시작할 때 `insta-sync.sh sync`를 돌렸는가** (안 돌렸으면 stale한 대장 위에 쓴 것 - 다른 PC 기록과 섞인다)
+- [ ] **끝낼 때 `insta-sync.sh save "{주차}"`를 돌렸고 중복 검사가 ✅였는가**
+- [ ] **사용자에게 `git push`를 안내했는가** (커밋만 하고 push 안 하면 다른 PC에 반영 안 됨)
 - [ ] **심리테스트 스토리 5개**를 평일(월~금)에 생성했는가 (`generate-story-tests.mjs week <월요일>`), 각 폴더에 story01.png + story.txt 있고 카드 앞면·앰비언트 빛 디자인 유지, story01.png 시각 검증했는가
 - [ ] 스토리 질문 중복 없는가(`story_questions.md` 테스트별 [x] 1개씩) + 카드 78장 no-dup 순환되는가(`story_cards.json`)
 
@@ -903,4 +930,4 @@ const svg = carouselShortformSlide({
 
 ⚠️ 이 로그는 **"스킬을 호출했다"만** 기록한다(중간에 멈춰도 행이 남음). 산출물이 실제로 만들어졌는지는 각 스킬의 전용 대장·큐 파일로 판단할 것.
 
-`.claude/skill-log.md`는 사용자가 커밋해야 다른 PC에 전파되므로, 작업 완료 보고 시 **커밋 대상에 포함**하라고 안내할 것.
+`.claude/skill-log.md`는 커밋돼야 다른 PC에 전파된다. **14단계 `insta-sync.sh save`가 이 파일까지 같이 stage 하므로 따로 안내할 필요는 없다.** 남은 건 사용자의 `git push`뿐.
