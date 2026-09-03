@@ -81,6 +81,7 @@ export default {
     { id: 'star', name: '별' },
   ],
   relatedDreams: [
+    { slug: 'call-dream', label: '전화 오는 꿈' },
     { slug: 'ex-lover', label: '전 애인 꿈' },
     { slug: 'crush', label: '좋아하는 사람 꿈' },
     { slug: 'moving-dream', label: '이사하는 꿈' },
