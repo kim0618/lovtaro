@@ -85,5 +85,6 @@ export default {
     { slug: 'ex-lover', label: '전 애인 꿈' },
     { slug: 'water', label: '물 꿈' },
     { slug: 'accident-dream', label: '사고 나는 꿈' },
+    { slug: 'fox-dream', label: '여우 꿈' },
   ],
 }

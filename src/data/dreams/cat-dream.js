@@ -82,5 +82,6 @@ export default {
   relatedDreams: [
     { slug: 'stranger-dream', label: '모르는 이성 꿈' },
     { slug: 'crush', label: '좋아하는 사람 꿈' },
+    { slug: 'fox-dream', label: '여우 꿈' },
   ],
 }
