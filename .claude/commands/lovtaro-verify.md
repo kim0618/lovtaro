@@ -530,36 +530,55 @@ console.log(hits===0?'  ✅ 리딩 데이터와 15자 이상 겹침 없음':'  �
 cd /home/tjd618/lovtaro && node --input-type=module -e "
 import guides from './src/data/guides/index.js'
 import dreams from './src/data/dreams/index.js'
-let n = 0
+let gn = 0, dn = 0
 // 가이드: 본문 2800-4200자, FAQ 4-6개 각 150-250자, title 25-40자, desc 70-120자
 for (const g of guides) {
   const body = (g.sections||[]).map(s=>s.content.replace(/<[^>]*>/g,'')).join('').replace(/\s+/g,'').length
-  if (body < 2800 || body > 4200) { console.log('[guide]', g.slug, '본문', body, '자 (2800-4200)'); n++ }
-  if (g.title.length < 25 || g.title.length > 40) { console.log('[guide]', g.slug, 'title', g.title.length, '자 (25-40)'); n++ }
-  if (g.description.length < 70 || g.description.length > 120) { console.log('[guide]', g.slug, 'desc', g.description.length, '자 (70-120)'); n++ }
-  if ((g.faq||[]).length < 4 || (g.faq||[]).length > 6) { console.log('[guide]', g.slug, 'FAQ', (g.faq||[]).length, '개 (4-6)'); n++ }
+  if (body < 2800 || body > 4200) { console.log('[guide]', g.slug, '본문', body, '자 (2800-4200)'); gn++ }
+  if (g.title.length < 25 || g.title.length > 40) { console.log('[guide]', g.slug, 'title', g.title.length, '자 (25-40)'); gn++ }
+  if (g.description.length < 70 || g.description.length > 120) { console.log('[guide]', g.slug, 'desc', g.description.length, '자 (70-120)'); gn++ }
+  if ((g.faq||[]).length < 4 || (g.faq||[]).length > 6) { console.log('[guide]', g.slug, 'FAQ', (g.faq||[]).length, '개 (4-6)'); gn++ }
   ;(g.faq||[]).forEach((f,i) => {
-    if (f.answer.length < 150 || f.answer.length > 250) { console.log('[guide]', g.slug, 'FAQ'+(i+1), f.answer.length, '자 (150-250)'); n++ }
+    if (f.answer.length < 150 || f.answer.length > 250) { console.log('[guide]', g.slug, 'FAQ'+(i+1), f.answer.length, '자 (150-250)'); gn++ }
   })
 }
 // 꿈해몽: 본문 2400-3600자, FAQ 4개 각 150-250자, summary 필수 + 전통 근거층, 소재어 밀도
 for (const d of dreams) {
   const body = (d.sections||[]).map(s=>s.content.replace(/<[^>]*>/g,'')).join('').replace(/\s+/g,'').length
-  if (body < 2400 || body > 3600) { console.log('[dream]', d.slug, '본문', body, '자 (2400-3600)'); n++ }
-  if (!d.summary) { console.log('[dream]', d.slug, 'summary 없음'); n++ }
+  if (body < 2400 || body > 3600) { console.log('[dream]', d.slug, '본문', body, '자 (2400-3600)'); dn++ }
+  if (!d.summary) { console.log('[dream]', d.slug, 'summary 없음'); dn++ }
   else {
-    if (d.summary.length < 90) { console.log('[dream]', d.slug, 'summary', d.summary.length, '자 (90+ 권장, 사이트 중앙값 102)'); n++ }
-    if (!/전통|옛 풀이|예로부터|해몽에서/.test(d.summary)) { console.log('[dream]', d.slug, 'summary에 전통 근거층 없음'); n++ }
+    if (d.summary.length < 90) { console.log('[dream]', d.slug, 'summary', d.summary.length, '자 (90+ 권장, 사이트 중앙값 102)'); dn++ }
+    if (!/전통|옛 풀이|예로부터|해몽에서/.test(d.summary)) { console.log('[dream]', d.slug, 'summary에 전통 근거층 없음'); dn++ }
   }
   ;(d.faq||[]).forEach((f,i) => {
-    if (f.answer.length < 150 || f.answer.length > 250) { console.log('[dream]', d.slug, 'FAQ'+(i+1), f.answer.length, '자 (150-250)'); n++ }
+    if (f.answer.length < 150 || f.answer.length > 250) { console.log('[dream]', d.slug, 'FAQ'+(i+1), f.answer.length, '자 (150-250)'); dn++ }
   })
 }
-console.log(n===0 ? '  ✅ 정량 스펙 전수 준수' : '  ⚠ '+n+'건 기준 이탈')
+// 레이어별 소계를 반드시 함께 찍는다. 합계만 찍으면 출력이 잘렸을 때 한 레이어가 통째로 숨는다(2026-09-09 사고)
+console.log('  --- 소계: guide ' + gn + '건 / dream ' + dn + '건 ---')
+console.log(gn+dn===0 ? '  ✅ 정량 스펙 전수 준수' : '  ⚠ 총 '+(gn+dn)+'건 기준 이탈')
 "
 ```
 
 **판정**: 신규 발행 글은 **전부 기준 안에 들어와야 한다.** 기존 발행분의 이탈은 리포트만 하고 즉시 고치지 않는다(발행 후 본문 변경은 별도 판단). FAQ 답변이 짧으면 JSON-LD FAQPage 리치 결과 노출에서 불리하므로 특히 신규 글에서 엄격히 본다.
+
+### 🛑 검사 출력을 `tail`·`head`로 자르지 마라 (2026-09-09 신설, 실제 사고)
+
+**잘린 구간은 "적발 0건"과 구분되지 않는다.** 2026-09-09 전수 스캔에서 T를 `node ... 2>&1 | tail -100`으로 돌렸는데, 이 스크립트는 **guide를 먼저 전부 출력한 뒤 dream을 출력**하므로 `tail -100`이 **guide 구간 108건을 통째로 잘라냈다.** 남은 dream 출력만 보고 리포트에 "가이드는 T 전수 통과"라고 적었는데 실제는 **guide 108 + dream 130 = 238건**이었다. 잘린 화면에는 오류가 안 보이니 통과처럼 읽힌다.
+
+- **출력이 길 것 같으면 파일로 저장한 뒤 전량 읽어라**(`node ... > /tmp/t.txt 2>&1` 후 Read). 파이프로 자르지 않는다.
+- 굳이 요약이 필요하면 **스크립트가 레이어별 소계를 직접 찍게** 고친다(위 스크립트에 반영함). 합계 한 줄만 찍는 스크립트는 잘림에 취약하다.
+- **`A && B | tail`은 A만 살고 B가 잘린다.** 헤더 echo가 그대로 보이니 "출력이 다 나왔다"고 착각하기 쉽다. 이번 사고가 정확히 이 형태였다.
+- 같은 사고의 일반형: **화면에 안 보이는 것을 "없는 것"으로 단정하지 마라.** 큐 기재 거짓(wallet 8/27 ⑩번)·"코드 대조로 확인했다" 허위 기재와 같은 계열이다.
+
+### 🛑 안 돌린 항목을 "전수 스캔"이라 적지 마라 (2026-09-09 신설, 같은 날 사고)
+
+같은 실행에서 **P·S·U·V 4개를 아예 돌리지 않은 채** 리포트 제목을 "전수 스캔"이라 적었다. 나중에 돌려보니 P 1건·S 1건·V 35건이 있었다(대부분 정형구·오탐이었으나 **그건 돌려본 뒤에야 알 수 있는 것**이다).
+
+- 리포트에 **A~V 항목을 하나씩 나열하고 실행 여부를 표시**한다. 안 돌렸으면 `미실행`이라고 쓴다. 항목을 생략하면 독자는 통과로 읽는다.
+- U는 `SLUG=` 단건 모드라 전수 실행이 사실상 불가능하다(O(n²) 전문 비교). **전수 스캔에서는 "최근 발행분 N편만 실행"이라고 범위를 명시**한다.
+- V 전수 모드는 카드 해석 가이드 78장의 의도된 병렬 heading이 대량 잡히므로, **레이어별로 분해해 보고**한다(2026-09-09 실측: 35건 중 26건이 `*-love-meaning` 오탐, 7건이 꿈해몽 레이어).
 
 **⚠️ 꿈해몽 항목 보강 (2026-08-07)**: 원래 꿈해몽은 본문 길이와 summary 유무만 검사해 **FAQ 답변 길이·summary 품질이 통째로 사각지대**였다. `stairs-dream` 초판이 FAQ 평균 147자(최근 8편 중 최하, 비교군 165~185자)에 summary 68자·전통 근거층 없음으로 이 검사를 통과했다. summary는 스킬이 "AI(ChatGPT·Perplexity)가 그대로 인용해 가는 자리"로 규정한 곳이고, 전통층 부재는 bridge(7/27)·drinking(7/31)에 이어 3번째 재발이라 기계 검사로 옮겼다.
 
@@ -734,6 +753,22 @@ cd /home/tjd618/lovtaro && SLUG={slug} node scripts/verify/heading-frame.mjs
    - 인자 없으면 전수 스캔
 
 2. **A~V 순서대로 실행** (R = FAQ-본문 자체중복, S = 상황 글-리딩 데이터 겹침, T = 정량 스펙 준수, U = 글↔글 본문 골격 복제, **V = heading 프레임 복제**)
+
+   **실행하면서 아래 표를 채운다. 빈칸을 남긴 채 리포트를 쓰지 않는다** (2026-09-09 사고 - P·S·U·V를 안 돌리고 "전수 스캔"이라 적었다). 출력은 `tail`로 자르지 말고 길면 파일로 받아 전량 읽는다.
+
+   | 항목 | 실행 | 결과 |
+   |---|---|---|
+   | A em dash / B AI패턴 / C 단정 / D 자극 / E 친근톤 / F 자가부정 | | |
+   | G 하드코딩URL / H 외부리소스 | | |
+   | I 필드구조 / J index / K prerender / L sitemap | | |
+   | M 관련링크 실존(+ dist 대조) / N FAQ↔prerender | | |
+   | O 얇은 카드 / Q 본문 정적주입 | | |
+   | P 글-카드 의미중복 (`scripts/verify/guide-card-overlap.mjs`) | | |
+   | R-1 FAQ↔본문 / R-2 섹션↔섹션 | | |
+   | S 리딩 데이터 겹침 | | |
+   | T 정량 스펙 (**guide/dream 소계 각각 기재**) | | |
+   | U 골격 복제 (전수 불가 - **실행한 slug 명시**) | | |
+   | V heading 프레임 (**레이어별 분해**) | | |
 
 3. **자동 수정 가능한 건 즉시 Edit**
    - em dash → 하이픈 (문맥 판단)
