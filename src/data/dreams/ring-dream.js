@@ -83,5 +83,6 @@ export default {
     { slug: 'proposal-dream', label: '프러포즈 꿈' },
     { slug: 'wedding', label: '결혼하는 꿈' },
     { slug: 'key-dream', label: '열쇠 꿈' },
+    { slug: 'watch-dream', label: '시계 꿈' },
   ],
 }
