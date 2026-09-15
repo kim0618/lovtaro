@@ -106,11 +106,20 @@ date +"%Y-%m-%d %u %A"   # 3번째 필드가 1(월) 또는 4(목)이어야 신�
   > 그래도 오늘 신규 1편을 쓰길 원하시면 말씀해 주세요.
 
   알린 뒤 사용자가 그래도 쓰라고 하면 쓴다(사용자 판단 우선). **알리지 않고 쓰는 것만 금지다.**
-- 이번 주에 이미 2편(월·목) 발행했으면 사용자가 명시하지 않는 한 추가 발행하지 않는다. 확인:
+- 이번 주에 이미 2편(월·목) 발행했으면 사용자가 명시하지 않는 한 추가 발행하지 않는다. **git 커밋 날짜가 아니라 파일의 `createdAt`으로 센다** (2026-09-15 변경). 사용자가 커밋을 직접 하므로 git log는 미커밋 발행분을 놓치고, 며칠치를 몰아 커밋하면 날짜가 부푼다. 보강은 기존 파일 수정이라 createdAt이 안 바뀌어 자동으로 제외된다:
 
 ```bash
-git log --since="last monday" --diff-filter=A --name-only --pretty=format: -- src/data/guides/ | grep -v '^$' | sort -u
+cd /home/tjd618/lovtaro && node --input-type=module -e "
+import guides from './src/data/guides/index.js'
+const kst=new Date(Date.now()+9*3600e3), dow=(kst.getUTCDay()+6)%7
+const f=d=>d.toISOString().slice(0,10)
+const mon=new Date(kst); mon.setUTCDate(kst.getUTCDate()-dow); const sun=new Date(mon); sun.setUTCDate(mon.getUTCDate()+6)
+const hit=guides.filter(g=>g.createdAt>=f(mon)&&g.createdAt<=f(sun))
+console.log('이번 주',f(mon),'~',f(sun),'발행', hit.length+'/2', hit.map(g=>g.createdAt+' '+g.slug).join(', '))
+"
 ```
+
+  미커밋 파일이 `index.js`에 등록되지 않았으면 이 명령에 안 잡힌다. 의심되면 `git status --porcelain src/data/guides/`로 untracked 파일도 확인한다.
 
 - **주 2편 체제 시작일: 2026-08-03(월).** 2026-07-30(목)~08-02(일)은 전환 공백으로 의도적 미발행이니, 이 구간에 발행 기록이 없는 것을 결번·누락으로 오판하지 말 것.
 

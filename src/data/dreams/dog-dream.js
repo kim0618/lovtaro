@@ -83,5 +83,6 @@ export default {
   relatedDreams: [
     { slug: 'hug-dream', label: '포옹하는 꿈' },
     { slug: 'stranger-dream', label: '모르는 이성 꿈' },
+    { slug: 'turtle-dream', label: '거북이 꿈' },
   ],
 }

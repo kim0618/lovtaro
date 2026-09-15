@@ -83,5 +83,6 @@ export default {
     { slug: 'wedding', label: '결혼하는 꿈' },
     { slug: 'key-dream', label: '열쇠 꿈' },
     { slug: 'earthquake-dream', label: '지진 나는 꿈' },
+    { slug: 'turtle-dream', label: '거북이 꿈' },
   ],
 }
