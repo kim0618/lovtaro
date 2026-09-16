@@ -82,5 +82,6 @@ export default {
   relatedDreams: [
     { slug: 'rainbow-dream', label: '무지개 꿈' },
     { slug: 'moon-dream', label: '달 꿈' },
+    { slug: 'falling-dream', label: '떨어지는 꿈' },
   ],
 }

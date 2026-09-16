@@ -10,6 +10,7 @@
  */
 
 import turtleDream from './turtle-dream.js'
+import fallingDream from './falling-dream.js'
 import watchDream from './watch-dream.js'
 import foxDream from './fox-dream.js'
 import callDream from './call-dream.js'
@@ -98,6 +99,7 @@ import stairsDream from './stairs-dream.js'
 import militaryDream from './military-dream.js'
 
 const dreams = [
+  fallingDream,
   turtleDream,
   watchDream,
   foxDream,
