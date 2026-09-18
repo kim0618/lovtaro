@@ -97,8 +97,10 @@ import drivingDream from './driving-dream.js'
 import earthquakeDream from './earthquake-dream.js'
 import stairsDream from './stairs-dream.js'
 import militaryDream from './military-dream.js'
+import deceasedDream from './deceased-dream.js'
 
 const dreams = [
+  deceasedDream,
   fallingDream,
   turtleDream,
   watchDream,
