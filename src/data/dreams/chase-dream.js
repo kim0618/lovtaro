@@ -82,5 +82,6 @@ export default {
   relatedDreams: [
     { slug: 'rejection-dream', label: '거절당하는 꿈' },
     { slug: 'fight-dream', label: '싸우는 꿈' },
+    { slug: 'ghost-dream', label: '귀신 꿈' },
   ],
 }

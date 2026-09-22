@@ -81,5 +81,6 @@ export default {
   relatedDreams: [
     { slug: 'death-dream', label: '죽는 꿈' },
     { slug: 'funeral-dream', label: '장례식 꿈' },
+    { slug: 'ghost-dream', label: '귀신 꿈' },
   ],
 }
