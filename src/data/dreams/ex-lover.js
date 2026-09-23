@@ -83,6 +83,7 @@ export default {
     { id: 'moon', name: '달' },
   ],
   relatedDreams: [
+    { slug: 'boyfriend-dream', label: '남자친구 꿈' },
     { slug: 'reunion-dream', label: '재회하는 꿈' },
     { slug: 'fight-dream', label: '싸우는 꿈' },
     { slug: 'photo-dream', label: '사진 꿈' },
