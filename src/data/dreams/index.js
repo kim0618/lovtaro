@@ -100,8 +100,10 @@ import militaryDream from './military-dream.js'
 import deceasedDream from './deceased-dream.js'
 import ghostDream from './ghost-dream.js'
 import boyfriendDream from './boyfriend-dream.js'
+import trappedDream from './trapped-dream.js'
 
 const dreams = [
+  trappedDream,
   boyfriendDream,
   ghostDream,
   deceasedDream,
