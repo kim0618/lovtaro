@@ -85,5 +85,6 @@ export default {
     { slug: 'crying', label: '우는 꿈' },
     { slug: 'accident-dream', label: '사고 나는 꿈' },
     { slug: 'deceased-dream', label: '죽은 사람 꿈' },
+    { slug: 'killing-dream', label: '사람 죽이는 꿈' },
   ],
 }

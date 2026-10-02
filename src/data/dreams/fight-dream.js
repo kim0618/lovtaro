@@ -83,5 +83,6 @@ export default {
     { slug: 'reconcile-dream', label: '화해하는 꿈' },
     { slug: 'reunion-dream', label: '재회하는 꿈' },
     { slug: 'breakup', label: '헤어지는 꿈' },
+    { slug: 'killing-dream', label: '사람 죽이는 꿈' },
   ],
 }
