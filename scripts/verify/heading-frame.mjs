@@ -35,7 +35,33 @@ const all = [...guides, ...dreams]
 const freq = {}
 all.forEach(d => (d.sections || []).forEach(s => { freq[s.heading] = (freq[s.heading] || 0) + 1 }))
 
-const stem = s => s.replace(TAIL, '').replace(/[\s,·]/g, '')
+// ' - ' 뒤 접미가 여러 편에서 공용이면 사이트 관행이므로 어간에서 떼어낸다.
+// (2026-10-10 신설) 이걸 안 떼면 카드 해석 가이드의 '정방향 {카드} - 상황별로 읽기'(19편)와
+// '{카드} + {카드} - 조합으로 읽기'(42편)가 같은 랭크 카드끼리 1:1로 짝지어져
+// freq 면제(완전일치 5편)도 SERIES_MIN 면제(어간 공유 편수)도 못 받고 26건 오탐으로 잡혔다.
+// 실측 분포: 42편 / 19편 / 2편 / 1편... 이라 임계 5로 관행과 1회성이 깨끗이 갈린다.
+// 접두도 같이 떼야 한다. '이 카드가 담은 것 - X'(19편)를 남기면 서로 무관한 X끼리도
+// 접두 8자가 얹혀 11~14자로 올라간다(ten-of-wands '열정이 짐이 되는 과정' ↔ king-of-wands
+// '열정이 방향이 될 때'는 접두를 떼면 어간 공유 3자로 정상).
+// 실측 접두 분포: 42편 / 19편 / 4편 / 4편 / 3편... 이라 접미와 같은 임계 5가 맞는다.
+const SHARED_PART_MIN = 5
+const sufFreq = {}, preFreq = {}
+all.forEach(d => (d.sections || []).forEach(s => {
+  const i = s.heading.lastIndexOf(' - ')
+  if (i > 0) { const suf = s.heading.slice(i + 3); sufFreq[suf] = (sufFreq[suf] || 0) + 1 }
+  const j = s.heading.indexOf(' - ')
+  if (j > 0) { const pre = s.heading.slice(0, j); preFreq[pre] = (preFreq[pre] || 0) + 1 }
+}))
+const stripShared = s => {
+  let out = s
+  const i = out.lastIndexOf(' - ')
+  if (i > 0 && (sufFreq[out.slice(i + 3)] || 0) >= SHARED_PART_MIN) out = out.slice(0, i)
+  const j = out.indexOf(' - ')
+  if (j > 0 && (preFreq[out.slice(0, j)] || 0) >= SHARED_PART_MIN) out = out.slice(j + 3)
+  return out
+}
+
+const stem = s => stripShared(s).replace(TAIL, '').replace(/[\s,·]/g, '')
 const lcs = (a, b) => {
   let m = 0
   for (let i = 0; i < a.length; i++) for (let j = 0; j < b.length; j++) {
