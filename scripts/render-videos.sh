@@ -54,10 +54,10 @@ render_insta() {
   : > "$tmp/list.txt"
   for i in "${!scenes[@]}"; do
     local fadein=1; [ "$i" -eq 0 ] && fadein=0
-    make_clip "${scenes[$i]}" "${durs[$i]}" "$tmp/c$i.mp4" 1.08 "$fadein"
+    make_clip "${scenes[$i]}" "${durs[$i]}" "$tmp/c$i.mp4" 1.08 "$fadein" 0.0004 26
     echo "file '$tmp/c$i.mp4'" >> "$tmp/list.txt"
   done
-  "$FF" -nostdin -y -loglevel error -f concat -safe 0 -i "$tmp/list.txt" -c copy "$src/reel.mp4"
+  "$FF" -nostdin -y -loglevel error -f concat -safe 0 -i "$tmp/list.txt" -c copy -movflags +faststart "$src/reel.mp4"
   rm -rf "$tmp"
   echo "✅ $d insta/reel.mp4 ($("$FF" -i "$src/reel.mp4" 2>&1 | grep -oP 'Duration: \K[0-9:.]+'), $(du -h "$src/reel.mp4" | cut -f1))"
 }
@@ -75,7 +75,7 @@ render_youtube() {
     echo "file '$tmp/${img%.png}.mp4'" >> "$tmp/list.txt"
     idx=$((idx + 1))
   done < "$yt/scenes.txt"
-  "$FF" -nostdin -y -loglevel error -f concat -safe 0 -i "$tmp/list.txt" -c copy "$yt/video.mp4"
+  "$FF" -nostdin -y -loglevel error -f concat -safe 0 -i "$tmp/list.txt" -c copy -movflags +faststart "$yt/video.mp4"
   rm -rf "$tmp"
   echo "✅ $d youtube/video.mp4 ($("$FF" -i "$yt/video.mp4" 2>&1 | grep -oP 'Duration: \K[0-9:.]+'), $(du -h "$yt/video.mp4" | cut -f1))"
 }
