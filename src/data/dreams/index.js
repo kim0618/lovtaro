@@ -103,8 +103,10 @@ import deceasedDream from './deceased-dream.js'
 import ghostDream from './ghost-dream.js'
 import boyfriendDream from './boyfriend-dream.js'
 import trappedDream from './trapped-dream.js'
+import motherDream from './mother-dream.js'
 
 const dreams = [
+  motherDream,
   killingDream,
   mouseDream,
   trappedDream,

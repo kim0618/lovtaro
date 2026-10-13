@@ -82,5 +82,6 @@ export default {
     { slug: 'death-dream', label: '죽는 꿈' },
     { slug: 'funeral-dream', label: '장례식 꿈' },
     { slug: 'ghost-dream', label: '귀신 꿈' },
+    { slug: 'mother-dream', label: '엄마 꿈' },
   ],
 }
