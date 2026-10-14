@@ -12,6 +12,7 @@ run_log.md          merge=union
 hook_history.md     merge=union
 card_usage.md       merge=union
 story_questions.md  merge=union
+story_history.md    merge=union
 
 # story_cards.json 은 1줄짜리 JSON이라 union을 쓰면 JSON이 깨진다.
 # insta-sync.sh 가 used 배열을 합집합으로 직접 병합한다.
