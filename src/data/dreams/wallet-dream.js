@@ -85,5 +85,6 @@ export default {
     { slug: 'money-dream', label: '돈 꿈' },
     { slug: 'key-dream', label: '열쇠 꿈' },
     { slug: 'insect-dream', label: '벌레 꿈' },
+    { slug: 'thief-dream', label: '도둑 꿈' },
   ],
 }
