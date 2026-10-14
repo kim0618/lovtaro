@@ -1,0 +1,18 @@
+{
+  "axis": "이별·재회",
+  "card": "public/images/mcards/swords/Six of Swords.png",
+  "cardName": "소드의 6",
+  "cardLine": "조금씩 건너가고 있다는 신호",
+  "source": "src/data/guides/six-of-swords-love-meaning.js 정방향 '이별 후' 단락",
+  "hook": ["헤어지고 두 달,", "[그 노래]가", "다시 나왔어요"],
+  "sub": "이번엔 왜 무너지지 않았을까",
+  "story": [
+    "같이 듣던 노래가|*카페에서* 흘러나왔어요",
+    "예전 같으면|그 자리에서 *무너졌을* 텐데",
+    "이번엔|*커피를 마저* 마셨어요",
+    "그게 *더 슬펐어요*|~정말 끝난 것 같아서"
+  ],
+  "comfort": "무너지지 않은 오늘을|*슬퍼하지 않아도*|괜찮아요",
+  "cta": ["지금 내 상황의 카드는", "프로필 링크에서 뽑아보세요"],
+  "music": "주지마 (Instrumental) - Loco, Hwa Sa"
+}

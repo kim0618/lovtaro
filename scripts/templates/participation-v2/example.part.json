@@ -1,0 +1,9 @@
+{
+  "hook": ["일요일 밤이 오기 전에,", "[읽음 표시] 아래", "답이 달릴까요?"],
+  "cards": [
+    { "img": "public/images/cards-png/temperance.png", "name": "절제", "nameEn": "TEMPERANCE" },
+    { "img": "public/images/mcards/swords/King of Swords.png", "name": "소드의 킹", "nameEn": "KING OF SWORDS" },
+    { "img": "public/images/mcards/cups/Two of Cups.png", "name": "컵의 2", "nameEn": "TWO OF CUPS" }
+  ],
+  "schemes": ["plum", "rose", "navy"]
+}

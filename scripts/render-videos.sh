@@ -41,6 +41,9 @@ make_clip() {
 render_insta() {
   local d="$1" src="$CONTENT/$1/insta"
   [ -d "$src" ] || { echo "⏭  $d: insta 폴더 없음"; return; }
+  # 사연형(수·금, 2026-10-14~)은 story-reel/render.mjs가 reel.mp4를 직접 만든다. 여기서 덮어쓰지 않는다
+  [ -f "$src/story.json" ] && { echo "⏭  $d: 사연형 - node scripts/templates/story-reel/render.mjs content-output/$d 로 생성"; return; }
+  [ -f "$src/part.json" ] && { echo "⏭  $d: 참여형 v2 - node scripts/templates/participation-v2/render.mjs content-output/$d 로 생성"; return; }
   local scenes=("$src"/scene*.png)
   local n=${#scenes[@]}
   local durs
