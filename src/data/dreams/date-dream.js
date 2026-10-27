@@ -86,5 +86,6 @@ export default {
     { slug: 'crush', label: '좋아하는 사람 꿈' },
     { slug: 'kiss', label: '키스하는 꿈' },
     { slug: 'blind-date-dream', label: '소개팅 꿈' },
+    { slug: 'late-dream', label: '지각하는 꿈' },
   ],
 }

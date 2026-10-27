@@ -84,5 +84,6 @@ export default {
     { slug: 'travel-dream', label: '여행하는 꿈' },
     { slug: 'driving-dream', label: '운전하는 꿈' },
     { slug: 'watch-dream', label: '시계 꿈' },
+    { slug: 'late-dream', label: '지각하는 꿈' },
   ],
 }
