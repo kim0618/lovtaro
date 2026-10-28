@@ -85,5 +85,6 @@ export default {
     { slug: 'ghost-dream', label: '귀신 꿈' },
     { slug: 'trapped-dream', label: '갇히는 꿈' },
     { slug: 'mouse-dream', label: '쥐 꿈' },
+    { slug: 'bear-dream', label: '곰 꿈' },
   ],
 }

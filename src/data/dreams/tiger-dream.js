@@ -83,5 +83,6 @@ export default {
     { slug: 'dragon-dream', label: '용꿈' },
     { slug: 'pig-dream', label: '돼지 꿈' },
     { slug: 'pregnancy', label: '임신 꿈 / 태몽' },
+    { slug: 'bear-dream', label: '곰 꿈' },
   ],
 }

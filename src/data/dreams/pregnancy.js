@@ -86,5 +86,6 @@ export default {
     { slug: 'fish-dream', label: '물고기 꿈' },
     { slug: 'giving-birth-dream', label: '아기 낳는 꿈' },
     { slug: 'egg-dream', label: '계란 꿈' },
+    { slug: 'bear-dream', label: '곰 꿈' },
   ],
 }
