@@ -952,13 +952,16 @@ function _drawCardFrame(ctx, img, x, y, w, h, reversed) {
  * @param {string} options.summary - Overall summary
  * @returns {Promise<string>} Data URL of the generated image
  */
-export async function generateThreeCardShareImage({ readingType, cards, summary, format = 'story' }) {
+export async function generateThreeCardShareImage({ readingType, cards, summary, headline = '', subline = '', format = 'story' }) {
+  // 신년 연애운은 4장. 3장일 때 수치는 기존 그대로
+  const count = Math.min(cards.length, 4)
+  const isFour = count === 4
   const W = format === 'square' ? SQUARE_WIDTH : format === 'feed' ? FEED_WIDTH : STORY_WIDTH
   const H = format === 'square' ? SQUARE_HEIGHT : format === 'feed' ? FEED_HEIGHT : STORY_HEIGHT
 
   // 카드 이미지 로드
   const cardImages = await Promise.all(
-    cards.slice(0, 3).map(card =>
+    cards.slice(0, count).map(card =>
       card.image
         ? new Promise((resolve) => {
             const img = new Image()
@@ -1007,12 +1010,18 @@ export async function generateThreeCardShareImage({ readingType, cards, summary,
   const isSquare = format === 'square'
   const headerLineY = isSquare ? 100 : isFeed ? 200 : 260
   const titleY = isSquare ? 200 : isFeed ? 310 : 380
-  const cardW = isSquare ? 200 : isFeed ? 280 : 240
-  const cardH = isSquare ? 320 : isFeed ? 460 : 400
-  const gap = isSquare ? 16 : isFeed ? 24 : 36
-  const totalW = cardW * 3 + gap * 2
+  // 4장 스토리는 세로가 남아 2x2로 크게, 4장 피드는 한 줄로 줄여 넣는다
+  const grid = isFour && !isFeed
+  const cols = grid ? 2 : count
+  const sizeScale = isFour && !grid ? 0.75 : 1
+  const cardW = Math.round((isSquare ? 200 : isFeed ? 280 : 240) * sizeScale)
+  const cardH = Math.round((isSquare ? 320 : isFeed ? 460 : 400) * sizeScale)
+  const gap = isFour ? (isSquare ? 12 : isFeed ? 18 : 48) : (isSquare ? 16 : isFeed ? 24 : 36)
+  const rowGap = 100 // 카드 아래 이름·시기 두 줄이 들어갈 자리
+  const totalW = cardW * cols + gap * (cols - 1)
   const startX = (W - totalW) / 2
-  const cardY = isSquare ? 200 : isFeed ? 360 : 440
+  const rows = Math.ceil(count / cols)
+  const cardY = (isSquare ? 200 : isFeed ? 360 : 440) + (subline && !isFeed ? 40 : 0)
 
   // Decorative line top
   ctx.strokeStyle = lineGrad
@@ -1030,39 +1039,56 @@ export async function generateThreeCardShareImage({ readingType, cards, summary,
 
   // Title (story only)
   if (!isFeed) {
-    ctx.font = '300 64px "Noto Sans KR", sans-serif'
+    const title = headline || (isFour ? '네 계절의 이야기' : '세 장의 이야기')
+    ctx.font = `300 ${headline ? 54 : 64}px "Noto Sans KR", sans-serif`
     ctx.fillStyle = '#F4F8FF'
-    ctx.fillText('세 장의 이야기', W / 2, titleY)
+    ctx.fillText(title, W / 2, titleY - (subline ? 10 : 0))
+  }
+  // feed는 제목 자리가 없어 상단 선 아래에 제목을 작게 둔다
+  if (isFeed && headline) {
+    ctx.font = '300 34px "Noto Sans KR", sans-serif'
+    ctx.fillStyle = '#F4F8FF'
+    ctx.textAlign = 'center'
+    ctx.fillText(headline, W / 2, headerLineY + 58)
+  }
+  // 부제(연간 카드 등)
+  if (subline) {
+    ctx.font = `400 ${isFeed ? 22 : 28}px "Noto Sans KR", sans-serif`
+    ctx.fillStyle = 'rgba(200, 169, 110, 0.85)'
+    ctx.textAlign = 'center'
+    ctx.fillText(subline, W / 2, isFeed ? headerLineY + (headline ? 104 : 58) : titleY + 44)
   }
 
   // Three card frames
-  cards.slice(0, 3).forEach((card, i) => {
-    const x = startX + i * (cardW + gap)
+  cards.slice(0, count).forEach((card, i) => {
+    const x = startX + (i % cols) * (cardW + gap)
+    const y = cardY + Math.floor(i / cols) * (cardH + rowGap)
     const img = cardImages[i]
 
-    _drawCardFrame(ctx, img, x, cardY, cardW, cardH, card.reversed)
+    _drawCardFrame(ctx, img, x, y, cardW, cardH, card.reversed)
 
     if (!img) {
       ctx.font = '300 34px "Noto Sans KR", sans-serif'
       ctx.fillStyle = '#F4F8FF'
       ctx.textAlign = 'center'
-      ctx.fillText(card.name, x + cardW / 2, cardY + cardH / 2)
+      ctx.fillText(card.name, x + cardW / 2, y + cardH / 2)
     }
 
     // Card name below
-    ctx.font = isFeed ? '300 24px "Noto Sans KR", sans-serif' : '300 28px "Noto Sans KR", sans-serif'
+    const nameSize = isFour && !grid ? (isFeed ? 20 : 22) : (isFeed ? 24 : 28)
+    ctx.font = `300 ${nameSize}px "Noto Sans KR", sans-serif`
     ctx.fillStyle = '#F4F8FF'
     ctx.textAlign = 'center'
-    ctx.fillText(card.name, x + cardW / 2, cardY + cardH + 34)
+    ctx.fillText(card.name, x + cardW / 2, y + cardH + 34)
 
     // Position label
     ctx.font = isFeed ? '400 20px "Noto Sans KR", sans-serif' : '400 22px "Noto Sans KR", sans-serif'
     ctx.fillStyle = 'rgba(77, 163, 255, 0.6)'
-    ctx.fillText(card.position, x + cardW / 2, cardY + cardH + 60)
+    ctx.fillText(card.position, x + cardW / 2, y + cardH + 60)
   })
 
   // After cards content
-  const afterCardsY = cardY + cardH + (isFeed ? 90 : 110)
+  const afterCardsY = cardY + rows * cardH + (rows - 1) * rowGap + (isFeed ? 90 : 110)
   ctx.strokeStyle = lineGrad
   ctx.lineWidth = 1
   ctx.beginPath()

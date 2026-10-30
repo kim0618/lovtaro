@@ -3,6 +3,7 @@ import { useRouter } from 'vue-router'
 import { useHead } from '../composables/useHead.js'
 import { trackEvent } from '../utils/gtag.js'
 import { PRICE_FROM } from '../data/kmong.js'
+import { NEWYEAR_LABEL } from '../data/readings/newyear.js'
 import {
   KAKAO_OPENCHAT_URL,
   INSTAGRAM_URL,
@@ -23,6 +24,7 @@ const router = useRouter()
 // 중위권(러브타로·Yes/No·오늘의 카드)은 세션 차이가 표본 오차 안이라 건드리지 않는다.
 const links = [
   { label: '1:1 편지 리딩', desc: `사연을 카드 3장으로 풀어 편지로 · ${PRICE_FROM}`, to: '/premium/', premium: true },
+  { label: NEWYEAR_LABEL, desc: '네 계절의 카드로 보는 올해 연애 흐름', to: '/reading/newyear/', tag: '시즌' },
   { label: '상대방 속마음 타로', desc: '그 사람의 진짜 마음 읽기', to: '/reading/mind/', hot: true, featured: true },
   { label: '연락 올까 타로', desc: '연락의 기류가 있는지 확인', to: '/reading/contact/', hot: true, featured: true },
   { label: '재회 가능성 타로', desc: '다시 만날 수 있을까?', to: '/reading/reunion/', hot: true, featured: true },

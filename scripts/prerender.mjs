@@ -19,6 +19,7 @@ import { getCardSeoOverride } from '../src/data/cardSeoOverrides.js'
 import { TESTS } from '../src/data/tests/index.js'
 import { KMONG_EBOOK, EBOOK_PRICE } from '../src/data/kmong.js'
 import { topic } from '../src/utils/josa.js'
+import { NEWYEAR_SEO, NEWYEAR_YEAR, NEWYEAR_LABEL, NEWYEAR_POSITIONS, NEWYEAR_POSITION_LABELS, NEWYEAR_POSITION_THEMES, NEWYEAR_FAQ } from '../src/data/readings/newyear.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const DIST = path.resolve(__dirname, '../dist')
@@ -111,6 +112,12 @@ const ROUTES = [
     path: '/reading/compatibility',
     title: '궁합 타로 - 두 사람의 케미를 카드로 확인하세요 | Lovtaro',
     description: '나와 상대의 카드를 한 장씩 뽑아 궁합을 확인합니다. 두 사람의 에너지, 케미, 궁합 점수를 무료로 리딩합니다.',
+  },
+  {
+    path: '/reading/newyear',
+    title: NEWYEAR_SEO.title,
+    description: NEWYEAR_SEO.description,
+    _newyear: true,
   },
   {
     path: '/reading/3cards',
@@ -3466,6 +3473,24 @@ function buildGuideHubBodyHtml(guides) {
   return `<div class="guide-index"><div class="guide-index__header"><h1 class="guide-index__title">연애 타로 가이드</h1><p class="guide-index__desc">카드 해석부터 상황별 리딩까지</p></div>${intro}<ul class="guide-index__list">${items}</ul></div>`
 }
 
+// 신년 연애운(/reading/newyear) 인트로를 정적 주입 - 시즌 검색 유입이 목적인 리딩이라
+// 다른 리딩과 달리 크롤러가 JS 없이도 설명·시기 구성·내부링크를 읽도록 한다.
+// 실제 리딩은 Vue가 마운트하며 교체한다.
+function buildNewYearBodyHtml() {
+  const quarters = NEWYEAR_POSITIONS.map(p =>
+    `<li class="ny-static__item"><h2 class="ny-static__item-title">${escapeHtml(NEWYEAR_POSITION_LABELS[p])} · ${escapeHtml(NEWYEAR_POSITION_THEMES[p])}</h2></li>`
+  ).join('')
+  const links = [
+    ['/reading/love/', '러브타로'],
+    ['/reading/mind/', '상대방 속마음'],
+    ['/reading/reunion/', '재회 가능성'],
+    ['/reading/contact/', '연락 올까'],
+    ['/cards/', '타로 카드 의미 사전'],
+  ].map(([href, label]) => `<li><a href="${href}">${label}</a></li>`).join('')
+  const faq = NEWYEAR_FAQ.map(f => `<h3 class="ny-static__q">${escapeHtml(f.q)}</h3><p class="ny-static__a">${escapeHtml(f.a)}</p>`).join('')
+  return `<div class="ny-static"><nav class="ny-static__crumb"><a href="/">Lovtaro</a></nav><h1 class="ny-static__title">${escapeHtml(NEWYEAR_LABEL)}</h1><p class="ny-static__desc">올해 내 연애는 어떻게 흘러갈까. 네 계절의 카드로 한 해의 흐름을 읽어봅니다.</p><p class="ny-static__intro">${NEWYEAR_YEAR}년을 1~3월, 4~6월, 7~9월, 10~12월 네 시기로 나누어 시기마다 카드 한 장씩, 모두 네 장을 뽑습니다. 네 장의 기운을 이어 읽어 올해가 어떤 모양의 해인지, 가장 빛나는 시기와 숨 고를 시기가 언제인지 짚어드려요. 솔로, 썸, 연애 중, 이별 후 가운데 지금 상태를 고르면 상태에 맞는 조언도 함께 볼 수 있어요. 금전이나 직장운이 아닌 연애의 흐름만 읽는 신년 타로예요.</p><ul class="ny-static__list">${quarters}</ul><h2 class="ny-static__h2">나의 ${NEWYEAR_YEAR} 연간 카드</h2><p class="ny-static__intro">생일의 월과 일, ${NEWYEAR_YEAR}의 숫자를 모두 더해 올해를 대표하는 메이저 아르카나 한 장을 찾아요. 연간 카드는 한 해 연애의 큰 주제를, 네 장의 카드는 그 주제가 계절마다 어떻게 흘러가는지를 보여줘요. 생일은 건너뛸 수 있고, 입력한 정보는 기기 밖으로 보내지 않아요.</p><h2 class="ny-static__h2">자주 묻는 질문</h2>${faq}<p class="ny-static__more">다른 무료 연애 타로</p><ul class="ny-static__links">${links}</ul></div>`
+}
+
 // 카드 상세 본문을 #app에 정적으로 주입할 HTML로 생성.
 // CardDetailPage.vue 템플릿 구조/클래스를 미러링하며, 크롤러(특히 JS 렌더가
 // 약한 네이버)가 정방향·역방향 본문 전체를 JS 없이 읽도록 한다.
@@ -3567,6 +3592,12 @@ function buildGraph(route, { allCards, cardDetailMap } = {}) {
     }
   } else if (isReading) {
     graph.push(buildReadingMain(route))
+    if (route._newyear) {
+      graph.push({
+        '@type': 'FAQPage',
+        mainEntity: NEWYEAR_FAQ.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+      })
+    }
   }
 
   graph.push(buildBreadcrumb(route.path, route.title))
@@ -3584,7 +3615,7 @@ function escapeHtml(str) {
   return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 }
 
-function injectMeta(html, { path: urlPath, title, description, ogImage, jsonLd, noindex, _guide, _guideHub, _dream, _dreamHub, _card }) {
+function injectMeta(html, { path: urlPath, title, description, ogImage, jsonLd, noindex, _guide, _guideHub, _dream, _dreamHub, _card, _newyear }) {
   const url = canonicalUrl(urlPath)
   const safeTitle = escapeAttr(title)
   const safeDesc = escapeAttr(description)
@@ -3690,6 +3721,10 @@ function injectMeta(html, { path: urlPath, title, description, ogImage, jsonLd, 
   if (_card) {
     const bodyHtml = buildCardBodyHtml(_card)
     html = html.replace(/<div id="app">\s*<\/div>/, `<div id="app">${bodyHtml}</div>`)
+  }
+
+  if (_newyear) {
+    html = html.replace(/<div id="app">\s*<\/div>/, `<div id="app">${buildNewYearBodyHtml()}</div>`)
   }
 
   return html

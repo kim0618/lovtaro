@@ -130,6 +130,7 @@ console.log('이번 주',from,'~',f(sun),'발행', hit.length+'/4', hit.map(d=>d
    | `heybook.net` | 독립 출처로 세지 않음 | photoguide 파생(makeup 15/15, ghost 대부분 겹침·발행 10개월 뒤) |
    | `yoonfrau.com`, `fateengineering.site`, `thinkaloudblog.com` | 근거 사용 금지 | turtle 9/15 기각(항목 균일+제휴 삽입 / 생성형 / 콘텐츠팜) |
    | `aifortunedoctor.com` | 독립 출처로 세지 않음·등급 낮음 | watch 9/14, photoguide와 특이 항목 공유(공통 원전 가공본) |
+   | `wthes.com` "N가지 총정리" 시리즈 | **근거 사용 금지** | 항목마다 "~를 의미합니다. … 다만 ~했다면 ~를 반영합니다" 3문장 균일(mouse 9/30 기각, 표 누락으로 rabbit 10/30 재확인). 같은 도메인의 2021년 '꿈풀이/꿈해몽' 글은 해몽서 전사형이라 사용 가능하나 7dream7과 겹치는 항목이 많아 겹치면 1개로 셈 |
    | `7dream7.com` ↔ `economyfactory.com` | 둘 다 사용 가능, **겹치는 항목은 1개로 셈** | bear 10/28: 7dream7 "곰꿈" 91~99번·"곰 나오는 꿈" 28~35번이 economyfactory 16~33번을 고쳐 쓴 것(흰곰 춤·죽은 검은곰 강물·쓸개·앞산 울음 등). 나머지는 방향까지 달라 독립 |
 
    - **photoguide를 A로 쓰는 글이 많으니, B 후보가 photoguide보다 늦게 나왔고 항목이 겹치면 먼저 부분집합인지 센다.** 항목명을 나란히 적어 겹치는 비율을 숫자로 남긴다.

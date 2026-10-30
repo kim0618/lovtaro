@@ -91,6 +91,12 @@ trackEvent('reading_complete', {
 - `ebook_kmong`도 같은 구조다(2026-08-21 신설, `components/common/EbookCta.vue`). 앵커가 이동하고 `trackEvent`는 이벤트만 쏘므로 자동 `click`의 `linkUrl = kmong.com/gig/805211`로 전자책 이탈을 센다. **리딩(796050·796377)과 URL이 달라 등록 없이도 리딩/전자책 구분이 된다**
 - `premium_kmong`은 **2026-08-11부터 앵커 클릭**이다. `trackKmongClick()`이 `cta_click`만 쏘고 이동은 `<a href>`가 하므로, GA4 자동 `click` 이벤트(`linkUrl = kmong.com/gig/796050|796377`)가 함께 발생한다. **크몽 이탈 수는 이 자동 click으로 센다**(등록 불필요). `cta_id`가 등록되면 `location`별 분해까지 가능해진다
 
+### 신년 연애운 (ReadingNewYearPage.vue)
+
+| 이벤트 | 파라미터 | 발생 시점 |
+|---|---|---|
+| `reading_profile` | `reading_type`, `year_card_used`(bool), `nickname_used`(bool) | 닉네임·생일 단계 제출 또는 건너뛰기. 생일·닉네임·연간 카드 번호 값은 보내지 않는다(PII) |
+
 ### 심리테스트 (TestPage.vue)
 
 | 이벤트 | 파라미터 | 발생 시점 |
@@ -115,13 +121,13 @@ trackEvent('reading_complete', {
 
 | 키 | 값 | 예시 |
 |---|---|---|
-| `reading_type` | 한국어 리딩 명칭 (기존 GA 데이터 연속성 유지) | `상대방 속마음`, `러브타로`, `재회 가능성`, `연락 올까`, `Yes/No 타로`, `궁합 타로`, `3장 리딩`, `오늘의 연애 카드` |
-| `spread_type` | 카드 배열 형태 | `single`, `three`, `pair` |
+| `reading_type` | 한국어 리딩 명칭 (기존 GA 데이터 연속성 유지) | `상대방 속마음`, `러브타로`, `재회 가능성`, `연락 올까`, `Yes/No 타로`, `궁합 타로`, `3장 리딩`, `오늘의 연애 카드`, `신년 연애운`(연도 없이 고정) |
+| `spread_type` | 카드 배열 형태 | `single`, `three`, `pair`, `four`(신년 연애운) |
 | `method` | 공유/인터랙션 채널 | `kakao`, `link`, `native`, `download` |
 | `format` | 이미지 포맷 | `instagram_story`, `instagram_feed` |
 | `card_id` | 카드 id (tarotCards.js의 id) | `fool`, `ace-of-cups` |
 | `reversed` | boolean | `true` / `false` |
-| `position` | 스프레드 내 위치 | `past`, `present`, `future`, `self`, `other`, `today`, `mind`, `reunion`, `contact`, `yesno` |
+| `position` | 스프레드 내 위치 | `past`, `present`, `future`, `self`, `other`, `today`, `mind`, `reunion`, `contact`, `yesno`, `q1`~`q4`(신년 연애운 분기) |
 
 - 자유 텍스트(사용자 질문) 금지 - 카디널리티 폭발, 개인정보 유출 위험
 - `reading_type`은 라우트 경로의 마지막 세그먼트와 일치시킬 것 (교차 분석 편해짐)

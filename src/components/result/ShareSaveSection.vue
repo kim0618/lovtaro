@@ -27,6 +27,10 @@ const props = defineProps({
   typeCode: { type: String, default: '' },
   typeName: { type: String, default: '' },
   matchLabel: { type: String, default: '' },
+  // mode 'three' 전용(신년 연애운): 이미지 상단 라벨·제목·부제를 바꾼다. 비우면 기존 문구
+  headerLabel: { type: String, default: '' },
+  headline: { type: String, default: '' },
+  subline: { type: String, default: '' },
 })
 
 const generating = ref(false)
@@ -81,9 +85,11 @@ async function generateImage(format = 'story') {
   }
   if (props.mode === 'three' && props.cards.length >= 3) {
     return generateThreeCardShareImage({
-      readingType: props.readingType,
+      readingType: props.headerLabel || props.readingType,
       cards: props.cards,
       summary: props.summary,
+      headline: props.headline,
+      subline: props.subline,
       format,
     })
   }

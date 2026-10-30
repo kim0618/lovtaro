@@ -25,6 +25,11 @@ const READING_CONFIG = {
     desc: '관계에 따라 연락의 기류가 다르게 읽힙니다.',
     statuses: ['single', 'situationship', 'breakup'],
   },
+  '신년 연애운': {
+    title: '지금 연애는 어떤 상태인가요?',
+    desc: '상태에 따라 올해의 흐름을 읽는 결이 달라집니다.',
+    statuses: ['single', 'situationship', 'dating', 'breakup'],
+  },
   '상대방 속마음': {
     title: '지금 어떤 관계인가요?',
     desc: '관계의 결에 따라 속마음의 해석이 달라집니다.',

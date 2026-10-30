@@ -45,6 +45,7 @@ cd /home/tjd618/lovtaro && npm run build && npx wrangler pages deploy dist --pro
 | `/reading/yesno` | Yes/No |
 | `/reading/compatibility` | 궁합 |
 | `/reading/3cards` | 3장 리딩 |
+| `/reading/newyear` | 신년 연애운 4장(분기별). 연도는 `src/data/readings/newyear.js`의 `NEWYEAR_YEAR` 한 곳만 매년 12월에 올린다(URL에 연도 금지) |
 | `/cards` | 카드 목록 (78장) |
 | `/cards/:id` | 카드 상세 (Major 22 + Minor 56) |
 | `/test` | 연애 심리테스트 허브 |

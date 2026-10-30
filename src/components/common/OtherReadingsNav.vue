@@ -1,5 +1,6 @@
 <script setup>
 import { useRouter } from 'vue-router'
+import { NEWYEAR_LABEL } from '../../data/readings/newyear.js'
 
 const props = defineProps({
   current: {
@@ -11,6 +12,7 @@ const props = defineProps({
 const router = useRouter()
 
 const ALL_READINGS = [
+  { id: 'newyear', label: NEWYEAR_LABEL, desc: '네 계절의 카드로 보는 올해 연애 흐름', to: '/reading/newyear/' },
   { id: 'love',    label: '러브타로',     desc: '두 사람의 마음과 관계의 방향',          to: '/reading/love/' },
   { id: 'mind',    label: '상대방 속마음', desc: '그 사람의 마음이 어디에 머무는지',      to: '/reading/mind/' },
   { id: 'reunion', label: '재회 가능성',   desc: '다시 만날 수 있는 흐름인지',           to: '/reading/reunion/' },

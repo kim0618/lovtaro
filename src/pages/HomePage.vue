@@ -1,6 +1,7 @@
 <script setup>
 import { useHead, SITE_URL } from '../composables/useHead.js'
 import { PRICE_FROM } from '../data/kmong.js'
+import { NEWYEAR_LABEL } from '../data/readings/newyear.js'
 import AppShell from '../components/common/AppShell.vue'
 
 useHead({
@@ -33,6 +34,13 @@ const readingItems = [
     to: '/premium/',
     tag: '프리미엄',
     premium: true,
+  },
+  {
+    title: NEWYEAR_LABEL,
+    description: '1~3월부터 10~12월까지, 네 계절의 카드로 올해 연애 흐름을 읽어봅니다.',
+    to: '/reading/newyear/',
+    tag: '시즌',
+    featured: true,
   },
   {
     title: '연애 심리테스트',
