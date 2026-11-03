@@ -81,5 +81,6 @@ export default {
   relatedDreams: [
     { slug: 'moon-dream', label: '달 꿈' },
     { slug: 'rain-dream', label: '비 오는 꿈' },
+    { slug: 'whale-dream', label: '고래 꿈' },
   ],
 }

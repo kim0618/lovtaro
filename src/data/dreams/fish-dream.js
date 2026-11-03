@@ -85,5 +85,6 @@ export default {
   relatedDreams: [
     { slug: 'stranger-dream', label: '모르는 이성 꿈' },
     { slug: 'pregnancy', label: '임신 꿈 / 태몽' },
+    { slug: 'whale-dream', label: '고래 꿈' },
   ],
 }

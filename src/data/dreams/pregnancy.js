@@ -84,6 +84,7 @@ export default {
     { slug: 'wedding', label: '결혼하는 꿈' },
     { slug: 'crush', label: '좋아하는 사람 꿈' },
     { slug: 'fish-dream', label: '물고기 꿈' },
+    { slug: 'whale-dream', label: '고래 꿈' },
     { slug: 'giving-birth-dream', label: '아기 낳는 꿈' },
     { slug: 'egg-dream', label: '계란 꿈' },
     { slug: 'bear-dream', label: '곰 꿈' },
