@@ -84,5 +84,6 @@ export default {
     { slug: 'stairs-dream', label: '계단 꿈' },
     { slug: 'bridge-dream', label: '다리 꿈' },
     { slug: 'star-dream', label: '별 꿈' },
+    { slug: 'horse-dream', label: '말 꿈' },
   ],
 }
