@@ -6,6 +6,9 @@ import AppShell from '../components/common/AppShell.vue'
 import PageContainer from '../components/ui/PageContainer.vue'
 import { getDream, DREAM_CATEGORIES } from '../data/dreams/index.js'
 import { trackEvent } from '../utils/gtag.js'
+import { NEWYEAR_LABEL, isNewyearPromoSeason } from '../data/readings/newyear.js'
+
+const showNewyear = isNewyearPromoSeason()
 
 const route = useRoute()
 const router = useRouter()
@@ -67,6 +70,22 @@ useHead({
           <div v-if="dream.summary" class="dream-detail__summary">
             <p class="dream-detail__summary-text">{{ dream.summary }}</p>
           </div>
+
+          <!-- 신년 연애운 시즌 진입 칸 (2026-11-09). 꿈해몽은 유입 64%인데 체류 36초·약 1쪽이라
+               기존 중간·하단 칸(4주 클릭 약 1%)보다 위, 요약 바로 아래에 둔다. 11~2월만 노출. -->
+          <router-link
+            v-if="showNewyear"
+            to="/reading/newyear/"
+            class="dream-detail__season-cta"
+            @click="trackEvent('dream_newyear_cta', { slug: dream.slug })"
+          >
+            <span class="dream-detail__season-cta-tag">시즌</span>
+            <span class="dream-detail__season-cta-body">
+              <span class="dream-detail__season-cta-title">{{ NEWYEAR_LABEL }}</span>
+              <span class="dream-detail__season-cta-desc">네 계절의 카드로 보는 올해 연애 흐름</span>
+            </span>
+            <span class="dream-detail__season-cta-arrow" aria-hidden="true">→</span>
+          </router-link>
 
           <!-- divider -->
           <div class="dream-detail__divider"></div>
@@ -376,6 +395,63 @@ useHead({
   line-height: 1.8;
   margin: 0;
   letter-spacing: 0.01em;
+}
+
+/* 신년 연애운 시즌 진입 칸 */
+.dream-detail__season-cta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: var(--lt-space-sm);
+  padding: 14px var(--lt-space-md);
+  min-height: 44px;
+  border-radius: var(--lt-radius-md);
+  border: 1px solid var(--lt-btn-primary-border);
+  background: var(--lt-btn-primary-bg);
+  text-decoration: none;
+  transition: background 200ms ease, border-color 200ms ease;
+}
+
+.dream-detail__season-cta:hover {
+  background: var(--lt-btn-primary-hover);
+  border-color: var(--lt-btn-primary-hover-border);
+}
+
+.dream-detail__season-cta-tag {
+  flex-shrink: 0;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--lt-accent);
+  padding: 3px 8px;
+  border: 1px solid var(--lt-accent);
+  border-radius: var(--lt-radius-full);
+  letter-spacing: 0.02em;
+}
+
+.dream-detail__season-cta-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.dream-detail__season-cta-title {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--lt-text);
+  letter-spacing: 0.01em;
+}
+
+.dream-detail__season-cta-desc {
+  font-size: 0.75rem;
+  color: var(--lt-text-muted);
+  line-height: 1.5;
+}
+
+.dream-detail__season-cta-arrow {
+  flex-shrink: 0;
+  color: var(--lt-text-sub);
 }
 
 /* 본문 중간 리딩 진입점 (판별 실험). 카드 상세와 같은 패턴으로 맞춘다. */

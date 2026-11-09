@@ -97,6 +97,14 @@ trackEvent('reading_complete', {
 |---|---|---|
 | `reading_profile` | `reading_type`, `year_card_used`(bool), `nickname_used`(bool) | 닉네임·생일 단계 제출 또는 건너뛰기. 생일·닉네임·연간 카드 번호 값은 보내지 않는다(PII) |
 
+### 꿈해몽 상세 진입점 (DreamDetailPage.vue)
+
+| 이벤트 | 파라미터 | 발생 시점 |
+|---|---|---|
+| `dream_inline_cta` | `slug` | 본문 첫 섹션 뒤 리딩 진입점 클릭(2026-08-21 위치 판별 실험) |
+| `dream_bottom_cta` | `slug` | 하단 "이 꿈, 타로로 마음을 비춰볼까요" 버튼 클릭 |
+| `dream_newyear_cta` | `slug` | 요약 아래 신년 연애운 시즌 칸 클릭(2026-11-09 신설, 11~2월만 노출 `isNewyearPromoSeason`). 위 두 칸과 같은 위치별 이름 체계를 따라 등록 없이 칸별 클릭이 보인다 |
+
 ### 심리테스트 (TestPage.vue)
 
 | 이벤트 | 파라미터 | 발생 시점 |

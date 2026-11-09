@@ -12,6 +12,13 @@ export const NEWYEAR_YEAR = 2027
 
 export const NEWYEAR_LABEL = `${NEWYEAR_YEAR} 신년 연애운`
 
+// 시즌 진입 칸(꿈해몽 상세 등)을 보여주는 달: 11월~2월. 그 밖의 달에는 숨긴다.
+// 브라우저 시각 기준이며 prerender 본문에는 넣지 않는다(크롤러용 본문 불변).
+export const NEWYEAR_PROMO_MONTHS = [11, 12, 1, 2]
+export function isNewyearPromoSeason(d = new Date()) {
+  return NEWYEAR_PROMO_MONTHS.includes(d.getMonth() + 1)
+}
+
 export const NEWYEAR_SEO = {
   title: `${NEWYEAR_YEAR} 신년 연애운 타로 - 올해 내 연애는 어떻게 흘러갈까 | Lovtaro`,
   description: `${NEWYEAR_YEAR}년 연애운을 1~3월, 4~6월, 7~9월, 10~12월 네 시기의 카드로 읽어봅니다. 솔로, 썸, 연애 중, 이별 후 상태별로 보는 무료 신년 연애 타로.`,
