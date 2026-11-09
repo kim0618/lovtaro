@@ -3,7 +3,8 @@
 ## 설정
 
 - GA4 측정 ID: `G-9B8C0RHKXX` (index.html 및 [utils/gtag.js](../../src/utils/gtag.js))
-- 수동 페이지뷰: `initGA()`에서 `send_page_view: false`로 꺼두고, 라우터에서 `trackPageView`를 명시 호출
+- 수동 페이지뷰: `index.html`의 `gtag('config')`와 `initGA()` 둘 다 `send_page_view: false`, 라우터에서 `trackPageView`를 명시 호출
+  - **2026-11-09 수정 전까지 첫 진입 page_view가 2회 집계됐다**(index.html config가 기본값으로 자동 발사한 뒤 라우터가 한 번 더). 배포일부터 PV·세션당 PV가 떨어지고 이탈률이 올라가 보이는 것은 정상이며, 그 전후를 같은 기준으로 비교하려면 이전 기간은 세션당 1건을 빼고 본다
 - 모든 이벤트는 `trackEvent(name, params)` 래퍼를 통과 - `window.gtag` 직접 호출 금지
 
 ## 🚨 파라미터는 맞춤측정기준에 등록해야 조회된다 (2026-08-11 적발)

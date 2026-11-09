@@ -43,7 +43,8 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-9B8C0RHKXX');
+      // page_view는 라우터(main.js trackPageView)가 보낸다. 여기서 자동 발사하면 첫 진입이 2회로 집계된다(2026-11-09 수정)
+      gtag('config', 'G-9B8C0RHKXX', { send_page_view: false });
     </script>
     <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.4/kakao.min.js" crossorigin="anonymous"></script>
   </head>
