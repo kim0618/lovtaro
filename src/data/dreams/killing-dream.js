@@ -78,5 +78,6 @@ export default {
   relatedDreams: [
     { slug: 'death-dream', label: '죽는 꿈' },
     { slug: 'fight-dream', label: '싸우는 꿈' },
+    { slug: 'shot-stabbed-dream', label: '총 맞는 꿈·칼에 찔리는 꿈' },
   ],
 }
