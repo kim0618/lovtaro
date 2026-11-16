@@ -159,7 +159,7 @@ function pickSchemesSeeded(seed, count = 3) {
 const HOOK_LAYOUT = {
   mon: { arrange: 'row', textY: 378, moon: 'left', guideY: 1640 },
   tue: { arrange: 'fan', textY: 330, moon: 'none', guideY: 1660 },
-  wed: { arrange: 'art', textY: 330, moon: 'left' },
+  wed: { arrange: 'vee', textY: 330, moon: 'right', guideY: 1720 },  // 2026-11-18~ 수요일 pick(3장), 역삼각형(일요일 삼각형의 반대)
   thu: { arrange: 'stair', textY: 330, moon: 'right', guideY: 1700 },
   fri: { arrange: 'art', textY: 1380, moon: 'none' },
   sat: { arrange: 'stack', textY: 378, moon: 'none', guideY: 1660 },
@@ -179,6 +179,8 @@ function pickSlots(arrange) {
       return { scale: 2.35, slots: [[215, 1150, -7], [540, 1000, 0], [865, 850, 7]], drawOrder: [0, 1, 2] }
     case 'stack':
       return { scale: 2.6, slots: [[330, 1010, -11], [540, 965, 0], [750, 1010, 11]], drawOrder: [0, 2, 1] }
+    case 'vee':
+      return { scale: 2.1, slots: [[320, 820, -8], [760, 820, 8], [540, 1265, 0]], drawOrder: [0, 1, 2] }
     case 'triangle':
       return { scale: 2.15, slots: [[540, 800, 0], [330, 1265, -9], [750, 1265, 9]], drawOrder: [1, 2, 0] }
     default:

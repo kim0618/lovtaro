@@ -28,6 +28,14 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#0e0d12;font-fam
 .end .y{color:#FFD84D}
 .end2{position:absolute;left:0;right:0;text-align:center;font-weight:800;color:rgba(255,255,255,.78);letter-spacing:-1px}
 .L{position:absolute;inset:0}
+.yp{position:absolute;inset:0;opacity:0}
+.yp .ci{position:absolute;left:330px;top:250px;width:420px;height:692px;border-radius:22px;overflow:hidden;box-shadow:0 30px 60px rgba(0,0,0,.8),0 0 80px rgba(255,216,77,.18)}
+.yp .ci img{width:100%;height:100%;object-fit:cover}
+.yp .lb{position:absolute;left:0;right:0;top:1000px;text-align:center;font-weight:900;font-size:64px;color:#fff;letter-spacing:-2px;text-shadow:0 4px 18px rgba(0,0,0,.85)}
+.yp .lb .y{color:#FFD84D}
+.yp .lb small{display:block;font-weight:700;font-size:26px;color:#F2C98B;margin-top:6px;letter-spacing:1px;text-transform:uppercase}
+.yp .tx{position:absolute;left:70px;right:70px;top:1170px;text-align:center;font-weight:700;font-size:50px;line-height:1.55;color:#fff;letter-spacing:-1px;text-shadow:0 3px 14px rgba(0,0,0,.9)}
+.yp .tx .y{color:#FFD84D}
 .burst{position:absolute;width:520px;height:620px;border-radius:50%;background:radial-gradient(circle,rgba(255,230,170,.75),rgba(255,190,110,.25) 40%,transparent 70%);pointer-events:none}
 </style></head><body><div id="bg"></div><div id="light"></div>
 <div class="L" id="hook"><div class="hook" style="top:270px"></div></div>
@@ -38,6 +46,7 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#0e0d12;font-fam
 <div class="pick" id="p4" style="top:735px">고른 번호를 댓글에 남겨주세요<small style="color:#fff;font-size:38px">복채는 ❤️ 좋아요와 팔로우</small></div>
 <div class="glow" id="glow"></div><div class="cnt" id="cnt"></div>
 <div id="cards"></div>
+<div id="yt"></div>
 <script>
 let DEFS='', RB={}, NAMES=[], IMGS=[], KEYS=[];
 const X=[148,418,688], TOP=900;
@@ -80,5 +89,25 @@ function render(t){
   $('cn'+i).style.opacity=eo((t-T.names-i*.1)/.4); $('cn'+i).style.transform=`translateY(${(1-eo((t-T.names-i*.1)/.4))*14}px)`;
  }
  $('bg').style.transform=`scale(${1+0.03*t/T.total})`;
+}
+// ---- 유튜브 모드 (2026-11-16): 해석을 영상 안에 넣는다. 0~8.3초는 인스타판과 동일 ----
+const TY={hold:8.3,out:8.7,per:5.5,outro:25.2,total:27.7};
+function initYT(spec){
+ $('yt').innerHTML=spec.yt.map((lines,i)=>`<div class="yp" id="yp${i}"><div class="ci"><img src="${IMGS[i]}"></div>
+<div class="lb"><span class="y">${i+1}번</span> ${NAMES[i][0]}<small>${NAMES[i][1]}</small></div>
+<div class="tx">${lines.map(l=>esc(l).replace(/\*(.+?)\*/g,'<span class="y">$1</span>')).join('<br>')}</div></div>`).join('');
+ $('end').querySelector('.end').innerHTML='고른 카드의 해석,<br><span class="y">마음에 닿았나요?</span>';
+}
+function renderYT(t){
+ render(Math.min(t,TY.hold));
+ const out=1-eo((t-TY.hold)/(TY.out-TY.hold));          // 공개 화면 퇴장
+ const back=eo((t-TY.outro)/.4);                        // 아웃트로에서 카드 복귀
+ const k=t<=TY.hold?1:Math.max(out,back);
+ $('hook').style.opacity=t<=TY.hold?$('hook').style.opacity:out;
+ $('cards').style.opacity=k; $('p3').style.opacity=t<=TY.hold?$('p3').style.opacity:out;
+ for(let i=0;i<3;i++){ const a=TY.out+i*TY.per, b=a+TY.per; const o=Math.min(cl((t-a)/.35),cl((b-t)/.35));
+   const e=$('yp'+i); e.style.opacity=o; e.style.transform=`translateY(${(1-eo((t-a)/.5))*24}px)`; }
+ $('end').style.opacity=back; $('end').style.transform=`translateY(${(1-back)*24}px)`; $('p4').style.opacity=eo((t-TY.outro-.3)/.4);
+ $('bg').style.transform=`scale(${1+0.03*t/TY.total})`;
 }
 </script></body></html>

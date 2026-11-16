@@ -1,5 +1,7 @@
 // 참여형 v2 릴스 렌더러 (화·목 슬롯 시험 적용, 2026-10-14 신설)
-// 사용법: node scripts/templates/participation-v2/render.mjs content-output/2026-10-20_tue
+// 사용법: node scripts/templates/participation-v2/render.mjs content-output/2026-10-20_tue [--youtube]
+//   --youtube : 유튜브판. 공개 뒤 1·2·3번 해석 장면(part.json의 yt, 카드당 3~4줄)을 영상 안에 넣고 끝 문구는 '구독'
+//               → youtube/video.mp4 (약 27.7초). 인스타 산출물은 건드리지 않음 (2026-11-16 신설)
 //   입력: {날짜}/insta/part.json  (스키마는 같은 폴더 example.part.json)
 //   출력: {날짜}/insta/reel.mp4 (11초, 무음, 앱에서 "아름다운 시작") + cover.png + check.png(검증용 묶음)
 // 흐름: 훅+뒷면 3장(0~2.4) -> "3초 뒤 공개"(~3.4) -> 카운트다운 3·2·1(~6.4) -> 1·2·3 차례로 뒤집힘 -> 카드명 -> 끝장 "해석은 고정댓글"
@@ -12,6 +14,7 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, '../../..');
 const HOME = os.homedir();
 const dayDir = resolve(ROOT, process.argv[2] || '');
+const YT = process.argv.includes('--youtube');
 const specPath = join(dayDir, 'insta', 'part.json');
 if (!fs.existsSync(specPath)) { console.error(`❌ ${specPath} 없음`); process.exit(1); }
 const spec = JSON.parse(fs.readFileSync(specPath, 'utf8'));
@@ -29,6 +32,7 @@ const cb = await import(pathToFileURL(join(ROOT, 'scripts/lib/color-card-back-sv
 const schemes = spec.schemes && spec.schemes.length === 3 ? spec.schemes : cb.pickRandomSchemes(3);
 const HALO = { navy: 'rgba(70,120,255,.85)', indigo: 'rgba(120,100,255,.85)', plum: 'rgba(170,80,230,.9)', teal: 'rgba(60,200,210,.8)',
   rose: 'rgba(230,70,120,.85)', emerald: 'rgba(60,200,130,.8)', amber: 'rgba(240,170,60,.8)' };
+if (YT && !(Array.isArray(spec.yt) && spec.yt.length === 3)) { console.error('❌ --youtube는 part.json에 yt(카드별 해석 줄 배열 3개)가 필요'); process.exit(1); }
 const page_spec = {
   hook: spec.hook, cards: spec.cards, schemes, halo: schemes.map(k => HALO[k] || 'rgba(200,170,255,.8)'),
   defs: cb.colorCardBackDefs(), rb: Object.fromEntries(schemes.map(k => [k, cb.colorCardBackSvg(60, 99, 1, k)])),
@@ -54,24 +58,26 @@ else if (fs.existsSync(cache)) {
 const emulib = join(HOME, '.local/emulib');
 if (fs.existsSync(emulib)) launch.env = { ...process.env, LD_LIBRARY_PATH: emulib + ':' + (process.env.LD_LIBRARY_PATH || '') };
 
-const TOTAL = 11.0;
+const TOTAL = YT ? 27.7 : 11.0;
 const browser = await chromium.launch(launch);
 const page = await browser.newPage({ viewport: { width: 1080, height: 1920 } });
 await page.goto(pathToFileURL(join(HERE, 'participation-v2.html')).href);
 await page.evaluate(s => init(s), page_spec);
 await page.evaluate(() => document.fonts.ready); await page.waitForTimeout(400);
 await page.evaluate(() => fitNames());
+if (YT) { await page.evaluate(s => { initYT(s); const sm = document.querySelector('#p4 small'); if (sm) sm.textContent = sm.textContent.replace('팔로우', '구독'); }, { yt: spec.yt }); await page.waitForTimeout(300); }
 
 const tmp = fs.mkdtempSync(join(os.tmpdir(), 'part-v2-'));
-const outInsta = join(dayDir, 'insta');
+const outInsta = join(dayDir, YT ? 'youtube' : 'insta');
+fs.mkdirSync(outInsta, { recursive: true });
 const n = Math.round(TOTAL * 30);
 for (let i = 0; i < n; i++) {
-  await page.evaluate(t => render(t), i / 30);
+  await page.evaluate(([t, yt]) => (yt ? renderYT(t) : render(t)), [i / 30, YT]);
   await page.screenshot({ path: join(tmp, String(i).padStart(5, '0') + '.jpg'), type: 'jpeg', quality: 92 });
 }
-const keys = [0.1, 2.9, 4.0, 6.75, 8.0, 10.5];
+const keys = YT ? [0.1, 4.0, 8.0, 11.5, 17.0, 22.5, 27.0] : [0.1, 2.9, 4.0, 6.75, 8.0, 10.5];
 const stills = [];
-for (const t of keys) { await page.evaluate(t => render(t), t); const p = join(tmp, `key_${t}.png`); await page.screenshot({ path: p }); stills.push(p); }
+for (const t of keys) { await page.evaluate(([t, yt]) => (yt ? renderYT(t) : render(t)), [t, YT]); const p = join(tmp, `key_${t}.png`); await page.screenshot({ path: p }); stills.push(p); }
 await browser.close();
 fs.copyFileSync(stills[0], join(outInsta, 'cover.png'));
 const cf = join(outInsta, 'check_frames'); fs.rmSync(cf, { recursive: true, force: true }); fs.mkdirSync(cf);
@@ -88,6 +94,6 @@ try { FF = execFileSync('python3', ['-c', 'import imageio_ffmpeg;print(imageio_f
 execFileSync(FF, ['-y', '-nostdin', '-loglevel', 'error', '-framerate', '30', '-i', join(tmp, '%05d.jpg'),
   '-f', 'lavfi', '-i', 'anullsrc=r=48000:cl=stereo', '-c:v', 'libx264', '-preset', 'slow', '-crf', '21',
   '-maxrate', '9M', '-bufsize', '18M', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '128k', '-shortest',
-  '-movflags', '+faststart', join(outInsta, 'reel.mp4')]);
+  '-movflags', '+faststart', join(outInsta, YT ? 'video.mp4' : 'reel.mp4')]);
 fs.rmSync(tmp, { recursive: true, force: true });
-console.log(`✅ ${outInsta}/reel.mp4 (${TOTAL}초, 뒷면 ${schemes.join('/')}) + cover.png + check.png + check_frames/`);
+console.log(`✅ ${outInsta}/${YT ? 'video' : 'reel'}.mp4 (${TOTAL}초, 뒷면 ${schemes.join('/')}) + cover.png + check.png + check_frames/`);
