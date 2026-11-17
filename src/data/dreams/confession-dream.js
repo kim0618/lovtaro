@@ -2,11 +2,11 @@ const SITE_URL = 'https://lovtaro.kr'
 
 export default {
   slug: 'confession-dream',
-  title: '고백하는 꿈 해몽 - 말하고 싶은 마음의 신호일까',
+  title: '고백하는 꿈, 고백받는 꿈 해몽 - 말하고 싶은 마음의 신호일까',
   category: 'situation',
   description: '고백하는 꿈과 고백받는 꿈의 의미를 연애 관점에서 풀어요. 좋아하는 사람에게 고백하는 꿈, 상대가 먼저 고백해주는 꿈, 거절당하는 꿈까지 상황별로 담았어요.',
   createdAt: '2026-06-13',
-  updatedAt: '2026-06-13',
+  updatedAt: '2026-11-17',
   ogImage: `${SITE_URL}/og-image.png`,
   summary: '고백하는 꿈은 현실에서 말하지 못한 감정이 꿈에서 먼저 표현되는 경우가 많아요. 실제 고백을 재촉하는 신호라기보다, 그 마음이 그만큼 선명해졌다는 신호에 가까워요.',
   sections: [

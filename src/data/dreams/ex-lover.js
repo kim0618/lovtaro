@@ -2,11 +2,11 @@ const SITE_URL = 'https://lovtaro.kr'
 
 export default {
   slug: 'ex-lover',
-  title: '전 애인 꿈 해몽 - 미련일까 정리의 신호일까',
+  title: '전 애인 꿈, 전남친 꿈 해몽 - 미련일까 정리의 신호일까',
   category: 'person',
   description: '전 애인 꿈, 전남친 전여친 꿈의 의미를 연애 관점에서 풀어요. 꿈해몽 자료에서 옛 인연 꿈이 가리키는 것, 화해·다툼·무시·우연한 마주침 등 상황별 해석, 재회 신호로 봐도 되는지까지 담았어요.',
   createdAt: '2026-06-05',
-  updatedAt: '2026-09-17',
+  updatedAt: '2026-11-17',
   ogImage: `${SITE_URL}/og-image.png`,
   summary: '꿈해몽에서는 전 애인 꿈을 대개 아직 남은 미련이나 다시 연애하고 싶어진 마음으로 읽지만, 무시당하는 장면처럼 오히려 마음이 정리됐다는 뜻으로 보는 경우도 있어요.',
   sections: [
