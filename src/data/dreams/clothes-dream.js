@@ -87,5 +87,6 @@ export default {
   relatedDreams: [
     { slug: 'makeup-dream', label: '화장하는 꿈' },
     { slug: 'shoes-dream', label: '신발 꿈' },
+    { slug: 'naked-dream', label: '알몸 꿈' },
   ],
 }
