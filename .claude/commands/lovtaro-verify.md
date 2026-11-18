@@ -794,6 +794,27 @@ cd /home/tjd618/lovtaro && SLUG={slug} node scripts/verify/heading-frame.mjs
 
 **지금 V 전수는 0건이 정상값이다.** 1건이라도 나오면 실제 결함이니 레이어별 분해로 눈감지 말 것. 회귀 확인: 2026-07-31 drinking 사고 문구는 이 수정 뒤에도 어간 11자로 임계(10)를 넘겨 여전히 잡힌다(` - `가 없어 신규 로직을 타지 않음).
 
+### V-2. title 부제 프레임 검사 (2026-11-18 신설, 신규 글 필수)
+
+**V는 heading만 보고 title은 어느 검사도 보지 않았다.** 그 사이 부제 끝 `~가 뜻을 가르는 이유`가 `shot-stabbed-dream`(11/11) → `naked-dream`(11/17) → `swimming-dream` 초판(11/18)으로 **3연속 통과**했다. swimming 초판은 톤 샘플로 읽은 naked-dream의 골격을 통째로 흡수한 글이었는데(2단계 감사 결함 17건), 제목이 그 흡수의 첫 신호였다. 같은 시기 `lion-dream`(11/10)·`horse-dream`(11/06)도 `~, X와 나 ~부터 봐요`를 공유하고 있었다.
+
+같은 스크립트(`heading-frame.mjs`)가 heading 검사 뒤에 이어서 돌린다. `' - '` 뒤 부제에서 공백·문장부호를 빼고 **공통 접미** 길이를 잰다(부제는 소재어가 앞, 틀이 끝에 온다).
+
+| 규칙 | 기준 | 잡는 것 |
+|---|---|---|
+| T1. 1:1 도용 | 공통 접미 **8자 이상** | 특정 1편 부제 틀을 통째로 쓴 경우(naked↔shot 8자, swimming 초판↔naked 10자) |
+| T2. 최근 연쇄 | 같은 레이어 createdAt 기준 **직전 5편**과 공통 접미 **5자 이상** | `가르는이유`(6자)·`부터봐요`처럼 길이만으로는 공용 끝말과 안 갈리는 짧은 틀 |
+
+- 5편 이상이 공유하는 접미(`마음의신호` 6편 등)는 사이트 관행이라 면제한다.
+- 임계는 실측 분포에서 정했다(2026-11-18, 공통 접미 길이별 쌍 수): dream `{4:14, 5:15, 6:12, 8:1, 9:2, 12:2}`, guide `{4:21, 5:4, 6:14, 7:2, 9:1}`. 6~7자대는 `신호를읽는법`·`는마음의신호` 같은 공용 끝말이라 T1에서 뺐다.
+
+**기준선: 전수 11건**(guide 3 / dream 8, 전부 기존 발행분). 이 11건은 고치지 않는다. 가이드 title은 `/lovtaro-guide` "절대 변경하지 않는 것"이고, 꿈 title 교체는 메타 변경이라 쿨다운·CTR 판단 대상이다. **신규 글은 SLUG 모드에서 title 0건이어야 발행한다.** 전수가 11건보다 늘면 차이분이 신규 유입이다.
+
+```
+dream: naked↔shot-stabbed(8) · lion↔horse(연쇄 5) · dragon↔pig(12) · flying↔proposal(9) · flying↔date(12) · proposal↔date(9) · water↔teeth-falling(연쇄 6) · feces↔snake(연쇄 6)
+guide: repeated-tarot-card-meaning↔infidelity-suspicion(9) · king-of-pentacles↔confession-timing(연쇄 6) · six-of-cups↔world(연쇄 6)
+```
+
 ## 실행 순서
 
 1. **대상 범위 확인**
@@ -817,6 +838,7 @@ cd /home/tjd618/lovtaro && SLUG={slug} node scripts/verify/heading-frame.mjs
    | T 정량 스펙 (**guide/dream 소계 각각 기재**) | | |
    | U 골격 복제 (**전수**: `scripts/verify/skeleton-clone-all.mjs`. 기준선 191쌍/복제의심 48) | | |
    | V heading 프레임 (`scripts/verify/heading-frame.mjs`. **기준선 0건**) | | |
+   | V-2 title 부제 프레임 (같은 스크립트 뒷부분. **신규 글 0건 / 전수 기준선 11건**) | | |
    | 치환했으면 → A~V **재검사** (치환이 R-1·T를 새로 깨뜨린다) | | |
 
 3. **자동 수정 가능한 건 즉시 Edit**

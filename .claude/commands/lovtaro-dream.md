@@ -309,6 +309,7 @@ console.log('이번 주',from,'~',f(sun),'발행', hit.length+'/4', hit.map(d=>d
 ## 2단계. 제목·메타 카피
 
 - **title**: `{꿈} 꿈 해몽 - {연애 각도 한 줄}` 형식. 예: `전 애인 꿈 해몽 - 미련일까 정리의 신호일까` (60자 이내 권장)
+  - **🛑 부제 끝 틀을 직전 글에서 가져오지 마라 (2026-11-18).** `~가 뜻을 가르는 이유`가 shot-stabbed → naked → swimming 초판으로 3연속 나왔고, swimming 초판은 본문까지 naked 골격을 흡수해 있었다. 제목을 정하면 `SLUG={slug} node scripts/verify/heading-frame.mjs`로 V-2(title 부제 프레임)가 0건인지 바로 본다.
 - **description**: 그 꿈의 의미 + 상황별 분기 + 연애 각도를 한 문장에. 검색 의도 키워드(전남친 꿈, 짝사랑 꿈 등)를 자연스럽게 포함. 150자 내외.
 
 ## 3단계. 구조 설계 (4섹션 + FAQ)

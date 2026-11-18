@@ -79,5 +79,6 @@ export default {
   relatedDreams: [
     { slug: 'clothes-dream', label: '옷 꿈' },
     { slug: 'bath-dream', label: '목욕하는 꿈' },
+    { slug: 'swimming-dream', label: '수영하는 꿈' },
   ],
 }
