@@ -38,10 +38,12 @@
 
 근거: 6/1 우선순위 15장 전부 발행 완료. 6/22 캡처 기준 **가이드가 아직 없는 카드(갭 24장)** 중 노출 큰 순으로 재정렬. 카드 사전 페이지(`/cards/:id`)는 노출이 큰데 가이드 레이어가 없어 롱테일·결과지향(속마음·역방향·해석) 검색을 못 먹는 중. 슬러그는 `{card-id}-love-meaning`. 메이저 22 + 컵 14 + 6/1큐 15장은 발행 완료라 중복 금지.
 
-- [ ] **연애 타로 질문 리스트 - 무엇을 물어야 답이 선명해지는지** | 슬러그 미정 | 리딩 가이드 | 2026-11-17 등록
+- [x] **연애 타로 질문 리스트 - 무엇을 물어야 답이 선명해지는지** | `love-tarot-questions-guide` | 방법론 | 2026-11-17 등록, 2026-11-19 발행
   - 근거: 키워드사운드 12개월 평균 타로 질문 360 · 타로 질문 리스트 410 · 타로 질문 추천 190(연관, 최근 한달). 억지 큐 정지선 기준③(독자 실질 질문) + 기준②(무료 리딩으로 연결)
   - 핵심: 상황별(짝사랑·썸·연애 중·이별 후·재회) 질문 예시, 예/아니오 질문 대신 열린 질문으로 바꾸는 법, 같은 질문 반복 금지
   - ⚠️ 발행 전 `first-tarot-reading-guide`·`tarot-spread-selection-guide`·`repeated-tarot-card-meaning`과 갈래 대조(질문 고르는 법 섹션이 이미 있으면 보강으로 전환)
+  - 발행 기록(2026-11-19): 갈래 대조 결과 '리딩 고르기'는 spread-selection이 이미 다뤄서 **질문 문장을 다듬는 법**(한 질문·내가 움직일 수 있는 쪽·시점 좁히기·어떤 답이든 쓸모)으로 각도를 잡음. 코드 대조: 리딩 8종에 입력칸 0(grep input/textarea), Yes/No 답 분포를 yesno.js·yesnoReversedModifiers.js로 세어 정방향 Yes13/Maybe6/No3, 역방향 Maybe13/No8/Yes1(태양), 역방향 확률 0.3(tarotCards.js:39)로 기대값 Yes≈43%·Maybe≈37%·No≈20%. 본문 2,847자·FAQ 5
+  - **11/19 심층 감사(같은 날, Opus) 수정 7건**: ①"여덟 개 리딩 어디에도" ← 10/30부터 신년 연애운 포함 무료 리딩 9개(`OtherReadingsNav.vue` ALL_READINGS 9개), 신년은 닉네임·생일 입력칸 있음 → 개수 삭제·신년 예외 명시 ②"다른 리딩들은 떠올린 채" ← 오늘의 카드는 그런 안내 없음(`TodayPage.vue` instruction) ③결과 결정 요인에 신년 생일 누락 ④짝사랑→상대방 속마음 예시인데 속마음 상태 화면은 썸·연애 중·이별 후뿐(`RelationshipStatusSelect.vue` READING_CONFIG) → 솔로 칸 없음 안내 ⑤"화면 맨 위 답 칸" ← 맨 위는 'Yes/No 타로' 라벨, 답 배지는 카드 그림 위 ⑥FAQ1 "러브타로 리딩 화면" = 3장 리딩 이름과 혼동 ⑦FAQ3 Maybe 빈도 근거를 역방향 13장만으로 설명(정방향 6장 누락), FAQ4 시기 질문에 신년 연애운(네 시기) 누락. 수정 후 본문 2,953자. **같은 결함이 기존 `first-tarot-reading-guide`·`tarot-spread-selection-guide`·`repeated-tarot-card-meaning`에도 있었음 → 11/19 사용자 승인 후 수정 완료(updatedAt 11/19, title·slug·createdAt 불변)**: 개수 표현 전부 9개 기준으로(여덟→아홉, 나머지 일곱→여덟, 상태 화면 6/8→7/9, 메이저 22장 리딩 7→8, 홈 목록 무료 리딩 6→7), 신년 연애운 서술 추가(spread: 리딩 목록 li + 고르는 순서 li, first: 닉네임·생일 선택 화면·결과 블록 이름·'카드 4장 뽑기'·'시즌' 표시). 코드 근거: `OtherReadingsNav.vue` ALL_READINGS 9개 / `HomePage.vue` readingItems 무료 7개+프리미엄+테스트 / `RelationshipStatusSelect.vue` 신년 4상태 / `NewYearProfileForm.vue` 닉네임·생일 '선택'+건너뛰기 / 신년도 `useCardDraw`→메이저 22장. prerender description·updatedAt·FAQ 동기화, N 전수 일치, U 48/142 변동 없음, V heading 0, 빌드 311p
 - [x] **소드 킹 연애 해석 - 차가운 사람의 마음 읽는 법** | `king-of-swords-love-meaning` | 2026-06-22 발행
 - [x] **소드 퀸 연애 해석 - 선을 긋는 마음 읽기** | `queen-of-swords-love-meaning` | 카드 해석 | 2026-06-23 발행
   - 근거: 웹문서 561노출 CTR2.0. 소드 코트 수요 동반 상승

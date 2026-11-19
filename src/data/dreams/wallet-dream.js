@@ -86,5 +86,6 @@ export default {
     { slug: 'key-dream', label: '열쇠 꿈' },
     { slug: 'insect-dream', label: '벌레 꿈' },
     { slug: 'thief-dream', label: '도둑 꿈' },
+    { slug: 'lost-things-dream', label: '핸드폰·가방 잃어버리는 꿈' },
   ],
 }

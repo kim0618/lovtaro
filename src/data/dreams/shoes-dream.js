@@ -83,5 +83,6 @@ export default {
     { slug: 'gift-dream', label: '선물 받는 꿈' },
     { slug: 'travel-dream', label: '여행 꿈' },
     { slug: 'clothes-dream', label: '옷 입는 꿈' },
+    { slug: 'lost-things-dream', label: '핸드폰·가방 잃어버리는 꿈' },
   ],
 }

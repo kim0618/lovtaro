@@ -115,20 +115,26 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://lovtaro.kr/guide/love-tarot-questions-guide/</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://lovtaro.kr/guide/first-tarot-reading-guide/</loc>
-    <lastmod>2026-08-20</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://lovtaro.kr/guide/repeated-tarot-card-meaning/</loc>
-    <lastmod>2026-08-19</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://lovtaro.kr/guide/tarot-spread-selection-guide/</loc>
-    <lastmod>2026-08-13</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -1196,9 +1202,15 @@
   </url>
   <url>
     <loc>https://lovtaro.kr/dream/</loc>
-    <lastmod>2026-11-17</lastmod>
+    <lastmod>2026-11-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lovtaro.kr/dream/lost-things-dream/</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://lovtaro.kr/dream/swimming-dream/</loc>
@@ -1208,7 +1220,7 @@
   </url>
   <url>
     <loc>https://lovtaro.kr/dream/naked-dream/</loc>
-    <lastmod>2026-11-17</lastmod>
+    <lastmod>2026-11-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -1604,7 +1616,7 @@
   </url>
   <url>
     <loc>https://lovtaro.kr/dream/sea-dream/</loc>
-    <lastmod>2026-11-03</lastmod>
+    <lastmod>2026-11-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -1760,7 +1772,7 @@
   </url>
   <url>
     <loc>https://lovtaro.kr/dream/water/</loc>
-    <lastmod>2026-11-16</lastmod>
+    <lastmod>2026-11-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>

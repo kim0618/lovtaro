@@ -86,5 +86,6 @@ export default {
     { slug: 'bridge-dream', label: '다리 건너는 꿈' },
     { slug: 'travel-dream', label: '여행하는 꿈' },
     { slug: 'trapped-dream', label: '갇히는 꿈' },
+    { slug: 'lost-things-dream', label: '핸드폰·가방 잃어버리는 꿈' },
   ],
 }
