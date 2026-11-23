@@ -93,5 +93,6 @@ export default {
     { slug: 'old-friend', label: '옛 친구 꿈' },
     { slug: 'mother-dream', label: '엄마 꿈' },
     { slug: 'parents-opposition-dream', label: '부모님이 반대하는 꿈' },
+    { slug: 'coworker-dream', label: '직장동료 꿈' },
   ],
 }

@@ -110,7 +110,7 @@
   </url>
   <url>
     <loc>https://lovtaro.kr/guide/</loc>
-    <lastmod>2026-08-20</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -1202,9 +1202,15 @@
   </url>
   <url>
     <loc>https://lovtaro.kr/dream/</loc>
-    <lastmod>2026-11-18</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lovtaro.kr/dream/coworker-dream/</loc>
+    <lastmod>2026-11-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://lovtaro.kr/dream/lost-things-dream/</loc>
@@ -1376,7 +1382,7 @@
   </url>
   <url>
     <loc>https://lovtaro.kr/dream/wallet-dream/</loc>
-    <lastmod>2026-10-14</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -1430,7 +1436,7 @@
   </url>
   <url>
     <loc>https://lovtaro.kr/dream/lost-way-dream/</loc>
-    <lastmod>2026-09-29</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -1514,7 +1520,7 @@
   </url>
   <url>
     <loc>https://lovtaro.kr/dream/shoes-dream/</loc>
-    <lastmod>2026-11-17</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
