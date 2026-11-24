@@ -11,6 +11,7 @@
 
 import frogDream from './frog-dream.js'
 import shotStabbedDream from './shot-stabbed-dream.js'
+import vomitingDream from './vomiting-dream.js'
 import coworkerDream from './coworker-dream.js'
 import swimmingDream from './swimming-dream.js'
 import lostThingsDream from './lost-things-dream.js'
@@ -120,6 +121,7 @@ import trappedDream from './trapped-dream.js'
 import motherDream from './mother-dream.js'
 
 const dreams = [
+  vomitingDream,
   coworkerDream,
   lostThingsDream,
   swimmingDream,

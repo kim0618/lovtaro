@@ -88,5 +88,6 @@ export default {
     { slug: 'wedding', label: '결혼하는 꿈' },
     { slug: 'pregnancy', label: '임신 꿈' },
     { slug: 'pig-dream', label: '돼지 꿈' },
+    { slug: 'vomiting-dream', label: '토하는 꿈' },
   ],
 }
