@@ -82,5 +82,6 @@ export default {
   relatedDreams: [
     { slug: 'breakup', label: '헤어지는 꿈' },
     { slug: 'ex-lover', label: '전 애인 꿈' },
+    { slug: 'hair-falling-dream', label: '머리카락 빠지는 꿈' },
   ],
 }
