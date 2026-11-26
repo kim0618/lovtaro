@@ -1202,9 +1202,15 @@
   </url>
   <url>
     <loc>https://lovtaro.kr/dream/</loc>
-    <lastmod>2026-11-24</lastmod>
+    <lastmod>2026-11-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lovtaro.kr/dream/deceased-mother-dream/</loc>
+    <lastmod>2026-11-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://lovtaro.kr/dream/hair-falling-dream/</loc>
@@ -1628,7 +1634,7 @@
   </url>
   <url>
     <loc>https://lovtaro.kr/dream/haircut-dream/</loc>
-    <lastmod>2026-07-01</lastmod>
+    <lastmod>2026-11-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -1796,7 +1802,7 @@
   </url>
   <url>
     <loc>https://lovtaro.kr/dream/teeth-falling/</loc>
-    <lastmod>2026-11-17</lastmod>
+    <lastmod>2026-11-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>

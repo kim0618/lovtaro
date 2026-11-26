@@ -85,6 +85,7 @@ export default {
   ],
   relatedDreams: [
     { slug: 'deceased-dream', label: '죽은 사람 꿈' },
+    { slug: 'deceased-mother-dream', label: '돌아가신 엄마 꿈' },
     { slug: 'parents-opposition-dream', label: '부모님이 반대하는 꿈' },
   ],
 }
